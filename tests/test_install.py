@@ -83,7 +83,7 @@ class DiagnosticInstall(unittest.TestCase):
                 old_maps,
             )
 
-    def test_locked_old_map_does_not_leave_a_new_test_map_half_installed(self):
+    def test_archive_copy_failure_leaves_old_map_and_does_not_install_new_one(self):
         data = b'new map'
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -100,9 +100,117 @@ class DiagnosticInstall(unittest.TestCase):
                 'sha256': hashlib.sha256(data).hexdigest(),
             }
             with patch.object(install_diagnostic, 'ROOT', project), patch.object(
-                install_diagnostic.shutil, 'move', side_effect=PermissionError('map is open')
+                install_diagnostic.shutil, 'copy2', side_effect=PermissionError('map is open')
             ):
-                with self.assertRaisesRegex(ValueError, '[Cc]lose Warcraft III'):
+                with self.assertRaisesRegex(ValueError, 'current build was not installed'):
                     install(manifest, maps_root=maps)
             self.assertEqual({p.name for p in maps.glob('*.w3m')}, {old.name})
             self.assertEqual(old.read_bytes(), b'old map')
+
+    def test_copy_then_unlink_lock_preserves_old_map_and_archived_copy(self):
+        data = b'new map'
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            project = root / 'project'
+            maps = root / 'Warcraft III' / 'Maps' / 'TheKingsLastStand'
+            maps.mkdir(parents=True)
+            source = root / 'build.w3m'
+            source.write_bytes(data)
+            old = maps / 'KLS-D-lockedold-Development.w3m'
+            old.write_bytes(b'old map')
+            manifest = {
+                'build_id': 'KLS-D-copylocktest',
+                'output_path': str(source),
+                'sha256': hashlib.sha256(data).hexdigest(),
+            }
+
+            real_unlink = Path.unlink
+
+            def unlink_if_locked(path, *args, **kwargs):
+                if path == old:
+                    raise PermissionError('map is open')
+                return real_unlink(path, *args, **kwargs)
+
+            with patch.object(install_diagnostic, 'ROOT', project), patch.object(
+                Path, 'unlink', new=unlink_if_locked
+            ):
+                with self.assertRaisesRegex(ValueError, '[Cc]lose Warcraft III'):
+                    install(manifest, maps_root=maps)
+
+            self.assertEqual(old.read_bytes(), b'old map')
+            self.assertFalse((maps / 'KLS-D-copylocktest-Development.w3m').exists())
+            archived = list((project / 'backups' / 'installed-diagnostics').rglob(old.name))
+            self.assertEqual(len(archived), 1)
+            self.assertEqual(archived[0].read_bytes(), b'old map')
+
+    def test_install_retry_reuses_existing_verified_archive_for_old_map(self):
+        current_bytes = b'current map'
+        old_bytes = b'archived old map'
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            project = root / 'project'
+            maps = root / 'Warcraft III' / 'Maps' / 'TheKingsLastStand'
+            maps.mkdir(parents=True)
+            old = maps / 'KLS-D-old-Development.w3m'
+            old.write_bytes(old_bytes)
+            existing_archive = (
+                project / 'backups' / 'installed-diagnostics' / 'previous-install'
+                / old.name
+            )
+            existing_archive.parent.mkdir(parents=True)
+            existing_archive.write_bytes(old_bytes)
+            source = root / 'build.w3m'
+            source.write_bytes(current_bytes)
+            manifest = {
+                'build_id': 'KLS-D-retrytest',
+                'output_path': str(source),
+                'sha256': hashlib.sha256(current_bytes).hexdigest(),
+            }
+
+            with patch.object(install_diagnostic, 'ROOT', project):
+                installed = install(manifest, maps_root=maps)
+
+            self.assertEqual(installed.read_bytes(), current_bytes)
+            self.assertEqual(
+                {path.relative_to(project / 'backups' / 'installed-diagnostics')
+                 for path in (project / 'backups' / 'installed-diagnostics').rglob(old.name)},
+                {Path('previous-install') / old.name},
+            )
+
+    def test_failed_current_map_copy_restores_the_previous_test_map(self):
+        current_bytes = b'new map'
+        old_bytes = b'old map'
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            project = root / 'project'
+            maps = root / 'Warcraft III' / 'Maps' / 'TheKingsLastStand'
+            maps.mkdir(parents=True)
+            source = root / 'build.w3m'
+            source.write_bytes(current_bytes)
+            old = maps / 'KLS-D-old-Development.w3m'
+            old.write_bytes(old_bytes)
+            target = maps / 'KLS-D-copyfailure-Development.w3m'
+            manifest = {
+                'build_id': 'KLS-D-copyfailure',
+                'output_path': str(source),
+                'sha256': hashlib.sha256(current_bytes).hexdigest(),
+            }
+            real_copy = install_diagnostic.shutil.copy2
+
+            def fail_install_copy(src, dst, *args, **kwargs):
+                if Path(src) == source and Path(dst) == target:
+                    Path(dst).write_bytes(b'partial map')
+                    raise OSError('simulated install copy failure')
+                return real_copy(src, dst, *args, **kwargs)
+
+            with patch.object(install_diagnostic, 'ROOT', project), patch.object(
+                install_diagnostic.shutil, 'copy2', side_effect=fail_install_copy
+            ):
+                with self.assertRaisesRegex(ValueError, 'Could not install the verified current build'):
+                    install(manifest, maps_root=maps)
+
+            self.assertEqual(old.read_bytes(), old_bytes)
+            self.assertFalse(target.exists())
+            archived = list((project / 'backups' / 'installed-diagnostics').rglob(old.name))
+            self.assertEqual(len(archived), 1)
+            self.assertEqual(archived[0].read_bytes(), old_bytes)

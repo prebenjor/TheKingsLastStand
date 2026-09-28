@@ -3,6 +3,14 @@
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
 
+## KLS-D-0227009b20 - 2026-09-28
+
+- Carries forward the gameplay content of `KLS-D-8669a44192`; no hero, wave, item, or race behavior changed. This package has a new build ID because the supported installer code changed and is part of the build fingerprint.
+- Hardened Windows installation: old maps are copied and hash-verified before removal, an exact existing archive is reused on retry, and failed removal or new-map copy restores prior files when possible. A locked-map error leaves the running map untouched and does not leave a partial new install.
+- Installer regressions: **6/6 passed**. Full source suite: **108/108 passed**. Package readback and installed-editor API syntax checks passed.
+- Package SHA-256: `23a7887af12f726ddffe37ab4b9e817c021ba46a2842ced4ce80a53297f43a6c`.
+- Installation safely stopped because Warcraft III still holds `KLS-D-1a040d638c-Development.w3m`. The original remains in the test folder and has one byte-identical archived recovery copy at `backups/installed-diagnostics/20260928T192844325669Z-KLS-D-8669a44192/KLS-D-1a040d638c-Development.w3m` (SHA-256 `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`). `KLS-D-0227009b20` remains packaged in `dist/`, not installed. The earlier user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`; all checks for this exact build remain pending.
+
 ## KLS-D-8669a44192 - 2026-09-28
 
 - Replaced the per-level stat dialog with three native hero `+` skills: `KSTR`, `KAGI`, and `KINT` each add three points to the chosen primary stat per rank. The separate every-fifth-level specialty choice remains.

@@ -3,14 +3,15 @@
 
 ## Current package-proven build
 
-- Current task: preserve the 40-wave Crownlands campaign and add endless campaign crossover waves, recurring bosses, personal Legendary rewards, and King-only defeat.
-- Build: **KLS-D-8669a44192**.
-- Artifact: `dist/KLS-D-8669a44192-Development.w3m`.
-- SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`.
-- Package member readback and installed-editor API syntax passed. Full source regression suite: **105/105 passed** (`python -B -m unittest discover -s tests -v`).
+- Current task: harden map installation and backup behavior while preserving the current Crownlands gameplay package.
+- Build: **KLS-D-0227009b20**.
+- Artifact: `dist/KLS-D-0227009b20-Development.w3m`.
+- SHA-256: `23a7887af12f726ddffe37ab4b9e817c021ba46a2842ced4ce80a53297f43a6c`.
+- Package member readback and installed-editor API syntax passed. Full source regression suite: **108/108 passed** (`python -B -m unittest discover -s tests -v`); installer-focused checks: **6/6 passed**.
+- Gameplay content carries forward from `KLS-D-8669a44192`; the build ID changes because installer source is included in the build fingerprint.
 - Implemented: the original 40 rows are unchanged; waves 41-50 add Naga, Blood Elf, Fel Orc, Burning Legion, and Scourge forces, with all five represented at Wave 49. The bounded ten-row cycle repeats while live-wave scaling continues. Campaign leaders rotate as bosses every ten waves; bosses from Wave 50 grant each active player a personal Legendary catalog item. Existing tracked enemy accounting, bounties, XP, summons, and relic rewards for waves 10-40 remain covered by regressions. Wave 40 continues, King Aldric's death ends the run, and the HUD shows the highest wave.
 - Crossover units resolve against installed Definitive Edition tables and retain their native campaign models, animations, movement, and armor. The deterministic ordered roster catalog is `docs/WAVE-ROSTER-CATALOG.md`.
-- The supported build/install command rebuilt the same package (no source changes; SHA-256 remains `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`) and passed package readback plus installed-API syntax checks. The install retry stopped because the running Warcraft III process locks the older `KLS-D-1a040d638c-Development.w3m`. Its original remains untouched in the test folder; its verified archive copy is at `backups/installed-diagnostics/20260928T200010515164Z-KLS-D-8669a44192/` and has the same SHA-256 `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`. The current package is not installed. Exit Warcraft III completely and rerun `python -B tools/build_map.py --install-test-map`.
+- The installer now creates and verifies a backup before removing old maps, reuses exact archived copies on retry, and restores prior files when a later install step fails. The actual retry stopped cleanly because the running Warcraft III process locks `KLS-D-1a040d638c-Development.w3m`; its untouched original and one retained archive copy have matching SHA-256 `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`. The new package is not installed. Exit Warcraft III completely and rerun `python -B tools/build_map.py --install-test-map`.
 - Status: **development build**. Current-build editor save/reopen, Test Map, Custom Game, native plus-button behavior, mine orders, Temple UI, wave 40-50 and later-boss visuals/gameplay, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
 
 ## 2026-09-28: endless campaign crossover and Crownlands runtime — KLS-D-8669a44192
