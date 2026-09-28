@@ -44,7 +44,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Repeat all 30 storage slots, all nine equipment slots, full six-item inventory, ownership, repeated transfers, consumables, simultaneous purchases, recipe failure/success, and pending boss reward behavior.
 4. Confirm every shop shows icon stock and accurate hover stats/effects; test tomes and 3 recipes.
 5. Test building requirements, footprint rejection/refund, worker mine/tree access, towers, Altar of Kings, castle healing/upgrades, talent controls, and restorative pool.
-6. Verify first prep 45s, ordinary break 50s, boss break 180s, HUD updates, spell ranks through level 100, and each signature ability.
+6. Verify first prep 45s, ordinary break 50s, boss break 180s, HUD updates, spell ranks through level 100, and each signature ability. Exercise Sacred Aura ranks 1–10 and confirm no level applies the stale 500% magic-resistance value from ranks beyond its installed three-rank definition.
 
 ### Gate 3 — waves, network, and endurance
 

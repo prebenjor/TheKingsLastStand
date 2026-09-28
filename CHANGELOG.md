@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-1398318c4a - 2026-09-28
+
+- Fixed the high-rank aura data that made Sacred Aura grant 500% magic resistance at rank 4. Installed campaign records declare these auras as three-rank abilities but contain stale fourth-rank values; rank generation now respects each record's declared level count and resolves fields through the internal ability code, including the Forsaken Paladin's `AHpa` alias.
+- The same stale-rank handling was corrected for other native abilities, including Devotion Aura. Ranks 1–3 keep their installed values; later ranks continue from those declared values.
+- Regression tests: **76/76 passed**. MPQ member readback and installed-editor API JASS syntax passed.
+- Map SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`.
+- The package is at `dist/KLS-D-1398318c4a-Development.w3m`. Installing into the dedicated Warcraft III test folder stopped because the prior `KLS-D-5b63d38dc0-Development.w3m` is locked. A verified archive copy of the old map is preserved; the old file remains in the test folder until it is closed. Current-build in-game rank behavior and the editor Test Map remain pending; the earlier Test Map success remains attributed to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-5b63d38dc0 - 2026-09-28
 
 - Player-owned kills award the full role bounty only to the killing unit's player. King Aldric's kills award 25% of the bounty to every active player. Both use the recipient-only gold notification.

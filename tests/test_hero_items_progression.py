@@ -139,8 +139,21 @@ class HeroProgressionAndRecovery(unittest.TestCase):
     def test_installed_spell_rank_values_are_preserved_before_continuation(self):
         records = decode(abilities(), extended=True)
         devotion_aura = records['AHad'][1]
-        self.assertEqual(devotion_aura[('Had1', 4)][0], 4.5)
+        self.assertEqual([devotion_aura[('Had1', rank)][0] for rank in (1, 2, 3)],
+                         [2.0, 3.5, 5.0])
+        self.assertEqual(devotion_aura[('Had1', 4)][0], 5.75)
         self.assertGreater(devotion_aura[('Had1', 5)][0], devotion_aura[('Had1', 4)][0])
+
+    def test_sacred_aura_ignores_stale_campaign_data_after_its_declared_third_rank(self):
+        records = decode(abilities(), extended=True)
+        for spell in ('AHpa', 'AHas'):
+            aura = records[spell][1]
+            self.assertIn(('hsa1', 1), aura, spell)
+            for rank, expected in enumerate((0.15, 0.25, 0.35), start=1):
+                self.assertAlmostEqual(aura[('hsa1', rank)][0], expected)
+            self.assertAlmostEqual(aura[('hsa1', 4)][0], 0.4)
+            self.assertAlmostEqual(aura[('hsa1', 10)][0], 0.7)
+            self.assertEqual(aura[('hsa2', 4)][0], 27.5)
 
     def test_space_padded_missing_native_ranks_do_not_become_numeric_values(self):
         headers, data, metadata = _ability_tables()

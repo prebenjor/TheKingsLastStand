@@ -3,6 +3,24 @@
 
 ## Current package-proven build
 
+- Build: **KLS-D-1398318c4a**.
+- Artifact: `dist/KLS-D-1398318c4a-Development.w3m`.
+- SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`.
+- Package readback, installed-editor API syntax and full source regression suite (**76/76**) passed.
+- The prior installed map `KLS-D-5b63d38dc0-Development.w3m` is still locked in the test folder. Its byte-identical archive copy has been verified; current build installation is pending closure of the process holding the prior map.
+- Status: **development build**. Editor Test Map, gameplay, multiplayer and endurance checks for this build are pending.
+
+## 2026-09-28: correct extended hero-aura rank data — KLS-D-1398318c4a
+
+- The installed Forsaken campaign ability data declares Sacred Aura as three ranks, with resistance values 0.15, 0.25, and 0.35. Its row also contains an unrelated fourth-rank value of `5`; setting the ability's max ranks to ten exposed that as 500% magic resistance.
+- The Forsaken Paladin alias `AHpa` uses internal code `AHas`. The old generator filtered allowed metadata by alias only, so it did not emit Sacred Aura's resistance fields for `AHpa`; that variant also fell through to bad source data.
+- Rank generation now uses both the alias and internal code for metadata filtering and limits native rank reads to the ability's declared number of levels. Later ranks continue from the last valid installed values. Regression coverage checks Ilastar's `AHas`, the Forsaken Paladin's `AHpa`, and Devotion Aura continuation.
+- Focused progression tests and the full suite passed (**76/76**). Package inventory/readback and JASS syntax against the installed editor API passed.
+- Package SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`.
+- The current build is not installed yet because the prior test map is held open/locked. The install attempt preserved a verified archive copy of the prior map but left its original in the test folder. Close the process holding that map and rerun the supported install command. Then check Sacred Aura rank 4 and later in the exact build. Do not treat the prior build's successful Test Map as evidence for this build.
+
+## Previous installed build
+
 - Build: **KLS-D-5b63d38dc0**.
 - Artifact: `dist/KLS-D-5b63d38dc0-Development.w3m`.
 - SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`.

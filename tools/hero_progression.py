@@ -123,12 +123,23 @@ def _rank_value(value, previous, kind, row, column_base, level, native_max_rank)
 def _modification_fields(ability_id, data_row, headers, metadata):
     fields = [('alev', 0, 0, 0, MAX_SPELL_RANK)]
     seen = {('alev', 0, 0)}
+    column_by_name = {name: index for index, name in headers.items()}
+    code_column = column_by_name.get('code')
+    ability_codes = {ability_id}
+    if code_column is not None and data_row.get(code_column):
+        ability_codes.add(data_row[code_column])
+    levels_column = column_by_name.get('levels')
+    try:
+        declared_levels = int(float(data_row.get(levels_column, MAX_NATIVE_DATA_RANK)))
+    except (TypeError, ValueError):
+        declared_levels = MAX_NATIVE_DATA_RANK
+    declared_levels = max(1, min(MAX_NATIVE_DATA_RANK, declared_levels))
     for entry in metadata:
         field_id = entry[1]
         if field_id == 'alev' or entry.get(3) != 'AbilityData':
             continue
         allowed = entry.get(23, '')
-        if allowed and ability_id not in allowed.split(','):
+        if allowed and ability_codes.isdisjoint(allowed.split(',')):
             continue
         value_kind = entry.get(10, '')
         typ = _FIELD_TYPE.get(value_kind)
@@ -143,9 +154,8 @@ def _modification_fields(ability_id, data_row, headers, metadata):
         if not any(name.startswith(column_base) and name[len(column_base):].isdigit()
                    for name in headers.values()):
             continue
-        column_by_name = {name: index for index, name in headers.items()}
         native_values = []
-        for rank in range(1, MAX_NATIVE_DATA_RANK + 1):
+        for rank in range(1, declared_levels + 1):
             raw = data_row.get(column_by_name.get(column_base + str(rank), -1), '').strip()
             if raw not in ('', '-'):
                 native_values.append((rank, raw))

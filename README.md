@@ -6,15 +6,15 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-5b63d38dc0**.
+Current development build: **KLS-D-1398318c4a**.
 
-- Map: `dist/KLS-D-5b63d38dc0-Development.w3m`
-- SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`
+- Map: `dist/KLS-D-1398318c4a-Development.w3m`
+- SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback and JASS syntax against the installed editor API pass. The regression suite has **75 tests**. This build records personal kill gold, full XP for each active hero within 1,200 range, silent one-percent-per-second spring regeneration, movable/resellable ordinary gear, 50-second normal wave breaks, and the hero-themed building/company unit expansion. The exact build is installed in the dedicated test folder. These behaviors still need an in-game check. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+Package inventory/readback, installed-editor API syntax, and all **76 regression tests** pass. This build fixes high-rank Sacred Aura data that previously caused 500% magic resistance at rank 4. The install step could not replace the previous map because a process has its file locked; the previous map's archive copy is preserved and verified. Close the process holding `KLS-D-5b63d38dc0-Development.w3m`, then run `python -B tools/build_map.py --install-test-map` to install the current build. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
 
-The current map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`. The installed file's SHA-256 matches the packaged map. See the roadmap for the next exact-build check.
+The test folder still contains the prior locked map, `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`. The new package is currently available in `dist/`; it has not been copied into the test folder yet. See the roadmap for the next exact-build check.
 
 The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build uses the native backpack object identity and current gear flags, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
 

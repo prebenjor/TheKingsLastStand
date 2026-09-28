@@ -2,7 +2,7 @@
 
 ## Approved design
 
-- Raise the player hero cap to 100 and extend each selectable hero's four regular abilities to ten ranks. Rank 1 retains the hero's ordinary unlock rules; higher ranks arrive automatically at level milestones and use the installed Warcraft ability data through rank 6 plus a conservative continuation to rank 10. Existing custom signature spells continue scaling with hero level.
+- Raise the player hero cap to 100 and extend each selectable hero's four regular abilities to ten ranks. Rank 1 retains the hero's ordinary unlock rules; higher ranks arrive automatically at level milestones and continue only from installed values within the ability's declared native rank count (up to rank 6), followed by conservative continuation to rank 10. Ignore stale data beyond a spell's declared rank count. Resolve object fields against both the campaign ability alias and its internal base code. Existing custom signature spells continue scaling with hero level.
 - Extend the tier catalog with Strength, Agility and Intelligence equipment. Add a Sage's Archive building beside the Field Apothecary with permanent +5, +10 and +20 attribute tomes for each attribute.
 - Add three personal Master Forge recipes. Each consumes its named gear components from the hero's inventory, Forsaken backpack or equipment slots. The recipe fee, ingredient removal and crafted item delivery form one transaction; failure restores the fee and leaves components alone.
 - Place a restorative fountain south of the castle, off the central route. It restores nearby living defender heroes' health and mana in timed pulses.
