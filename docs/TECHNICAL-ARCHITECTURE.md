@@ -21,7 +21,7 @@ Run from the repository root:
     python -B tools/build_map.py --install-test-map
     python -B -m unittest discover -s tests -v
 
-The extractor reads the local installed Warcraft III and writes tools/reference/installed plus provenance.json. It records the installed .build.info fingerprint and hashes of each extracted reference. The build refuses stale references after an installation update. Do not commit those extracted tables or declarations; each developer extracts from their own installed game.
+The extractor reads the local installed Warcraft III and writes tools/reference/installed plus provenance.json. It records the installed .build.info fingerprint and hashes of each extracted reference, including UnitBalance.slk, UnitUI.slk, UnitAbilities.slk, and UnitWeapons.slk for hero stats, ability lists, portraits, weapons, and models. The build refuses stale references after an installation update. Do not commit those extracted tables or declarations; each developer extracts from their own installed game.
 
 The extractor also requires a locally prepared `tools/vendor/casclib-build/Release/CascLib.dll` and a CASC-compatible file list at `tools/vendor/casclib-src/listfile/listfile.txt`. The source snapshot does not include those generated/local prerequisites. The extractor currently assumes the game at `C:\\Program Files (x86)\\Warcraft III`; parameterizing its path and documenting a clean-machine CascLib/listfile bootstrap remain setup work.
 
@@ -76,7 +76,7 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current package-proven development artifact is `dist/KLS-D-dddc30394a-Development.w3m`, SHA-256 `d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
+- The current package-proven development artifact is `dist/KLS-D-3a0464e019-Development.w3m`, SHA-256 `c0bb8275469ffb3a2165930fd7ccd62ca6716bc8203a6fc5cc366d5d732365be`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
 
 ## Network determinism and ownership
 
@@ -86,7 +86,7 @@ For every multi-step transaction (castle contribution, item purchase/equip, reci
 
 ## Spawn/error diagnostics
 
-source/diagnostics.j keeps a bounded recent diagnostic log and reports build ID, attempted unit/scenery creation, and failures. -diag displays runtime counters and recent events in diagnostic maps. tools/collect_test_logs.py snapshots Warcraft/World Editor logs with manifest linkage; a log is meaningful only after confirming the exact build ID and map hash was played.
+source/diagnostics.j keeps a bounded recent diagnostic log and reports build ID, attempted unit/scenery creation, and failures. `-diag` displays runtime counters, recent events, and each active player's runtime race plus the actual first worker's object/unit name. This distinguishes an Acolyte spawn from a selection/portrait mismatch without guessing from the unit's appearance. `tools/collect_test_logs.py` snapshots Warcraft/World Editor logs with manifest linkage; a log is meaningful only after confirming the exact build ID and map hash was played.
 
 Never attribute a model-creation failure in a stale menu/catalogue scan to the current build. Record exact log lines and package identity, then reproduce on the current map. Report every failed CreateUnit/destructable creation with object rawcode, phase, coordinates if available, owner and failure count.
 

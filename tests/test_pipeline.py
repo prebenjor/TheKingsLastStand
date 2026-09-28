@@ -154,7 +154,8 @@ class InstalledEditorData(unittest.TestCase):
         installed = check_api()
         expected = {'ItemData.slk', 'UnitData.slk', 'AbilityData.slk',
                     'UnitMetaData.slk', 'AbilityMetaData.slk', 'ItemAbilityFunc.txt',
-                    'commandbuttons.txt'}
+                    'UnitBalance.slk', 'UnitUI.slk', 'UnitAbilities.slk',
+                    'UnitWeapons.slk', 'commandbuttons.txt'}
         self.assertTrue(expected <= installed['files'].keys(), installed['files'].keys())
         for name in expected:
             reference = ROOT / 'tools/reference/installed' / name

@@ -106,10 +106,27 @@ endfunction
 
 function KLS_ShowDiagnostics takes player p returns nothing
     local integer n = IMaxBJ(0, KLS_DiagCount - 12)
+    local integer i = 0
+    local string raceName
     if not KLS_Debug then
         return
     endif
     call DisplayTimedTextToPlayer(p, 0, 0, 30, "KLS_BUILD_ID | units attempted=" + I2S(KLS_DiagUnits) + " scenery attempted=" + I2S(KLS_DiagDestructables) + " failures=" + I2S(KLS_DiagFailures))
+    loop
+        exitwhen i == 4
+        if KLS_Active[i] then
+            set raceName = "non-Human"
+            if GetPlayerRace(Player(i)) == RACE_HUMAN then
+                set raceName = "Human"
+            endif
+            if KLS_FirstWorker[i] != null then
+                call DisplayTimedTextToPlayer(p, 0, 0, 30, "Identity check player=" + I2S(i+1) + " race=" + raceName + " worker=" + GetObjectName(GetUnitTypeId(KLS_FirstWorker[i])) + " unit=" + GetUnitName(KLS_FirstWorker[i]))
+            else
+                call DisplayTimedTextToPlayer(p, 0, 0, 30, "Identity check player=" + I2S(i+1) + " race=" + raceName + " worker=NOT CREATED")
+            endif
+        endif
+        set i = i + 1
+    endloop
     loop
         exitwhen n >= KLS_DiagCount
         call DisplayTimedTextToPlayer(p, 0, 0, 30, KLS_DiagLines[ModuloInteger(n, 64)])

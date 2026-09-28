@@ -6,7 +6,7 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 
 1. README.md for repository status and quick commands.
 2. docs/GAME-VISION.md and docs/GAMEPLAY-SPEC.md for the approved player experience and map layout.
-3. docs/HEROES-AND-ABILITIES.md, docs/ITEMS-AND-EQUIPMENT.md, docs/ITEM-CATALOG.md, and docs/WAVES-AND-BOSSES.md for feature detail.
+3. docs/HEROES-AND-ABILITIES.md, docs/HERO-THEMED-EXPANSION.md, docs/ITEMS-AND-EQUIPMENT.md, docs/ITEM-CATALOG.md, and docs/WAVES-AND-BOSSES.md for feature detail. The expansion proposal is not approved until the user accepts its recommended direction.
 4. docs/TECHNICAL-ARCHITECTURE.md for build provenance and supported workflow.
 5. docs/ROADMAP-AND-ACCEPTANCE.md and docs/PROGRESS-LEDGER.md for what is actually proven.
 6. docs/DECISIONS-AND-OPEN-ISSUES.md before changing a user-approved decision or resolving a reported bug.

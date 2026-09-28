@@ -12,7 +12,7 @@
 5. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-dddc30394a` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-3a0464e019` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 

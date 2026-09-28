@@ -519,3 +519,45 @@ The current artifact differs from the user's screenshot and needs an in-engine l
 - After the user finishes and closes Warcraft III, rerun `python -B tools/build_map.py --install-test-map` from this repository. It should install `KLS-D-dddc30394a-Development.w3m` and archive prior project maps without overwriting them.
 - Then run one focused in-game check on this exact build: kill one basic enemy and verify the visible gold toast matches the gold increase. Next, verify moving one purchased gear item into normal inventory and selling an ordinary item back; test the spring's HP/mana tick afterward. Record each result against this build ID.
 - Keep editor round-trip/current-build Test Map, all gameplay, 2/3/4-player sessions, and 40-wave endurance pending until tested. Keep the map labelled development.
+
+## 2026-09-28: verified campaign roster and hero-army expansion draft — prior build KLS-D-dddc30394a
+
+### Evidence gathered
+
+- At this research point, the development artifact was `dist/KLS-D-dddc30394a-Development.w3m`, SHA-256 `d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab`.
+- `UnitData.slk`, `UnitUI.slk`, `UnitAbilities.slk`, `UnitBalance.slk`, `AbilityData.slk`, and `WorldEditStrings.txt` from the installed Definitive Edition identify Human Ilastar (`Hjsm`), Undead Ilastar (`Ujsm`), and Forsaken Paladin (`Npal`), with ability IDs recorded in `docs/HERO-THEMED-EXPANSION.md`. The unit ability table gives Human Ilastar and the Forsaken Paladin hero skills; Undead Ilastar has no global hero-skill list.
+- The screenshot name Aurrrius the Pure was not found in the installed global tables searched; the campaign-map object may be separate. No rawcode was invented and no campaign map was deprotected.
+- The installed unit data names `hpea` as `peasant` and `uaco` as `acolyte`, with distinct ability lists. The starting-worker path creates `hpea`; this confirms the source and installed records but does not resolve the in-game Acolyte portrait. The diagnostic `-diag` output now includes the runtime player race and actual first-worker object/unit name so the next current-build capture can distinguish a wrong unit from a UI/group-selection issue.
+
+### Current task and exact next action
+
+- Current task: continue the complete approved gameplay plan, with the hero-themed army/building expansion as the next major design slice.
+- Draft: `docs/HERO-THEMED-EXPANSION.md` proposes three campaign hero additions and the Oathbound Companies system. No code or map changes have been made for this new architecture pending user review.
+- The installation still has Warcraft III PID 46920 holding the older installed map; the current build cannot be installed while it remains open. Source work and data research continue independently.
+- Next independent action: after the user approves or redirects the expansion architecture, implement the hero/building/unit catalogs in phased, build-ID-tagged changes. The current-build live checklist remains pending separately.
+
+## 2026-09-28: unit-data provenance and worker identity diagnostics — KLS-D-3a0464e019
+
+### Current task and last package-proven build
+
+- Current task: continue the approved game plan; extend installed metadata for the Forsaken Kingdom hero expansion and expose runtime evidence for the reported Peasant/Acolyte portrait mismatch.
+- Current development build: **KLS-D-3a0464e019**.
+- Workspace artifact: `dist/KLS-D-3a0464e019-Development.w3m`.
+- SHA-256: `c0bb8275469ffb3a2165930fd7ccd62ca6716bc8203a6fc5cc366d5d732365be`.
+- The per-build record is in `CHANGELOG.md`; the manifest and output hash match.
+
+### Changes and evidence
+
+- The local-only API extractor and build provenance now include installed `UnitBalance.slk`, `UnitUI.slk`, `UnitAbilities.slk`, and `UnitWeapons.slk`. These source tables remain git-ignored and are regenerated from the installed game.
+- Runtime `-diag` prints each active player's actual runtime race and the object/unit name of that player's first spawned worker. The source still creates `hpea` workers.
+- Installed unit records show `hpea` named `peasant`, with abilities `Ahar,Amil,Ahrp,Ahlh`; `uaco` is named `acolyte`, with abilities `Aaha,Arst,Alam,Auns`. This proves the base definitions differ but does not prove what the live screenshot selected or displayed.
+- Installed data identifies `Hjsm` Human Ilastar with hero skills `AHas,AHsf,AHmc,AHsl`, `Npal` Forsaken Paladin with `AHcr,ANcp,AHpa,AHcl`, and `Ujsm` Undead Ilastar with no global hero-skill list. `Aurrrius the Pure` was not found in the searched global tables.
+- Full regression suite: **65/65 passed**. Installed-editor JASS syntax and 23-member MPQ inventory/readback passed. Editor/game, current-build startup, and live worker portrait checks remain pending.
+- The user-provided earlier Test Map pass remains on `KLS-D-fd638ddcf5`; this build has not yet been tried.
+- Warcraft III PID 46920 continues to hold the older installed map. No current build was installed; the prior map was preserved and the current map remains the single artifact in `dist/`.
+
+### Exact next actions
+
+1. After Warcraft III closes, run `python -B tools/build_map.py --install-test-map` to replace the one test-folder copy while archiving the older map.
+2. Open the installed `KLS-D-3a0464e019-Development.w3m`, run `-diag`, and capture the worker race/object identity lines. Confirm whether the selected worker portrait is Peasant or Acolyte.
+3. Ask the user to approve or redirect `docs/HERO-THEMED-EXPANSION.md` before implementing that new architecture; continue the already approved 40-wave/building/equipment/gameplay work independently.

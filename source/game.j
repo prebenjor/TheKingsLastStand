@@ -2,6 +2,7 @@
 globals
     unit KLS_King = null
     unit array KLS_Hero
+    unit array KLS_FirstWorker
     rect array KLS_Plot
     real array KLS_X
     real array KLS_Y
@@ -587,6 +588,9 @@ function KLS_Init takes nothing returns nothing
                 set u = KLS_CreateUnit(Player(i), 'hpea', x - 250 + j * 90, y - 300, 270)
                 if u == null then
                     return
+                endif
+                if j == 0 then
+                    set KLS_FirstWorker[i] = u
                 endif
                 set j = j + 1
             endloop

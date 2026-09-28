@@ -191,7 +191,7 @@ def build():
     source = baseline()
     api = check_api()
     source_paths = [ROOT/'source'/n for n in MODULES] + sorted((ROOT/'tools').glob('*.py'))
-    source_paths += [ROOT/'tools/reference/installed'/n for n in ('ItemData.slk','AbilityData.slk','UnitMetaData.slk','AbilityMetaData.slk','WorldEditStrings.txt','UnitData.slk','ItemAbilityFunc.txt','commandbuttons.txt')]
+    source_paths += [ROOT/'tools/reference/installed'/n for n in ('ItemData.slk','AbilityData.slk','UnitMetaData.slk','AbilityMetaData.slk','WorldEditStrings.txt','UnitData.slk','UnitBalance.slk','UnitUI.slk','UnitAbilities.slk','UnitWeapons.slk','ItemAbilityFunc.txt','commandbuttons.txt')]
     hashes = {str(p.relative_to(ROOT)).replace('\\','/'): digest(p.read_bytes()) for p in source_paths}
     build_id = 'KLS-D-' + digest(json.dumps({'sources':hashes,'api':api}, sort_keys=True).encode())[:10]
     raw_script = runtime_script(build_id)
