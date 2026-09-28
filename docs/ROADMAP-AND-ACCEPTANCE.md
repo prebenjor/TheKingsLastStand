@@ -2,18 +2,19 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-fd638ddcf5**
+Build: **KLS-D-b9e9b9dd33**
 
-Map SHA-256: **48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd**
+Map SHA-256: **3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | 23 packaged members checked; current output hash recorded | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 55/55 passed on this build | Passed |
-| Editor open, Save As, close, reopen, Test Map | No current-build evidence | Pending |
-| Exact-build Custom Game startup | Previous captured logs refer to an older artifact; current build not confirmed played | Pending |
+| Focused automated regressions | 59/59 passed on this build | Passed |
+| World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
+| Editor save/reopen | No evidence that a separate save/reopen cycle was performed | Pending |
+| Current-build Test Map / Custom Game startup | KLS-D-b9e9b9dd33 has not yet been installed or launched; the older Test Map pass remains recorded separately | Pending (not failed) |
 | Shop windows, backpack/equipment, purchases, crafting and full inventory | User reported empty/text-only shops and non-equippable items; exact current-build interaction not tested | Pending / known report |
 | All construction, gathering, king and tower systems | Source/regression evidence only | Pending live |
 | All forty waves, four boss mechanics and end states | Source/regression evidence only | Pending live |
@@ -27,10 +28,10 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Open the diagnostic map in the matching World Editor.
-3. Save a separate copy as an editor round-trip; close the editor, reopen the copy, and run Test Map.
-4. Confirm build ID, 15-hero selection court, correct active-player plots/resources, King Aldric and castle, selection/preparation countdown, and no automatic victory.
-5. Launch that build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
+2. Continue with the existing World Editor session and current build; preserve its open document instead of making a second round-trip copy.
+3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
+4. Confirm build ID, 15-hero selection court, correct active-player plots/resources, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
+5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
 
 ### Gate 2 — native items/backpack and player systems
 
@@ -49,13 +50,12 @@ Passing syntax or simulated tests never clears an in-game gate.
 
 ## Current exact human-run check
 
-1. Preserve any edits in an already-open World Editor tab.
-2. Open dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m.
-3. Save a separate copy as dist/Editor-Roundtrip-KLS-D-fd638ddcf5.w3m; never overwrite the source diagnostic.
-4. Close and reopen the saved copy, then Test Map.
-5. Confirm the visible KLS-D-fd638ddcf5 identifier, 15 selection previews, correct player plot and resources, castle and king, countdown, and absence of victory.
-6. Launch dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m or the exact same hash installed through Custom Game and report the identifier and results.
-7. If anything is missing, type -diag, capture full output and screenshot, then collect logs with python -B tools/collect_test_logs.py from the repository root.
+1. Keep the open World Editor document untouched. The user asked us to use that session, but UI automation is unavailable; no editor input has been sent.
+2. Warcraft III is currently running with the old installed diagnostic open. After the user is done and closes Warcraft III, run `python -B tools/build_map.py --install-test-map`. The revised installer archives old project maps before installing the current map. It must leave one current project `.w3m`, named `<build-id>-Development.w3m`.
+3. Test `KLS-D-b9e9b9dd33` through the established World Editor Test Map workflow. The earlier build's Test Map is a passed user-reported result; this new build remains pending until tried.
+4. Confirm the visible build ID, 15 selection previews, correct player plot and resources, castle and king, countdown, and absence of victory.
+5. Launch that exact map through Custom Game and report its ID and results.
+6. If anything is missing, type -diag, capture full output and screenshot, then collect logs with `python -B tools/collect_test_logs.py` from the repository root.
 
 ## Release criterion
 

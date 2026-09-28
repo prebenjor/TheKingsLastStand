@@ -20,6 +20,7 @@ This file keeps design choices visible when implementation evolves. A newer expl
 - Native Forsaken Kingdom backpack/equipment UI: 30 storage slots, nine equipment positions, six normal inventory spaces including the backpack item.
 - Multiple quality-tier shops with inspectable icon stock/tooltips and distinct armor/weapons/rings/trinkets/capes plus stat items.
 - Add permanent Strength, Agility and Intelligence tomes in a separate Sage's Archive beside the Apothecary.
+- Enemy kills grant combat gold. Each roster role now has a generated base bounty plus the current wave; chapter bosses have a higher formula. Split among active defenders in slot order. Values remain initial tuning pending live playtests; see `WAVES-AND-BOSSES.md`.
 - Add recipes, boss relics, long progression to hero level 100 / spell rank 10, and a health/mana restoration pool below the castle.
 - Longer breaks: 90 seconds after ordinary waves, 180 seconds before boss waves; keep 45-second hero selection and initial preparation.
 - Heal and upgrade King Aldric at his castle, with visible costs and feedback.
@@ -41,6 +42,7 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 7. **Hero spells and race targeting:** Keeper's built-in Force of Nature requires real trees; Death Knight spell semantics require appropriate living/undead targets. The custom Grove Awakening and mixed enemy roster address intent in code; all casts need in-engine tests.
 8. **Missing models/icons/rawcodes:** Older logs included model creation failures while an older map was in Warcraft's log; the failures were not attributed to the current build. Always tie new log evidence to exact build ID/hash and installed API provenance.
 9. **Shop/gameplay behavior after build changes:** Re-run acceptance against current build only. A screenshot from an old build is not evidence the latest fixed or introduced the issue.
+10. **Starting worker portrait:** Starting units use the Human Peasant rawcode `hpea`, but the user sees an Acolyte portrait while workers are selected. Audit unit creation, native portrait/icon metadata, player-race UI context, and group selection in the supported editor; make the Peasant identity visible consistently.
 
 ## Process choices made for this repository
 
@@ -48,4 +50,5 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 - Preserve the user's starter as backups/Blank-DE.w3m and the exact diagnostic map in dist/.
 - Machine-local installed Warcraft API/object files stay out of Git; regenerate them from a supported installed edition.
 - Store the complete player vision, mechanics, code/build contract, all 15 hero skill/signature descriptions, catalog, and acceptance plan as Markdown so future agents do not need conversation history to know the target.
+- Keep one current development map in `dist/` and one installed copy in the dedicated Warcraft III test folder. Archive replaced builds outside that folder and preserve the existing open World Editor document.
 - Use the progress ledger to append dated/build-tagged evidence. Never overwrite historical observations.

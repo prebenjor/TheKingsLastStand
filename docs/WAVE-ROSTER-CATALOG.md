@@ -1,4 +1,4 @@
-# Generated 40-wave roster catalog — KLS-D-fd638ddcf5
+# Generated 40-wave roster catalog — KLS-D-b9e9b9dd33
 
 This is the exact ordered rawcode sequence generated from tools/wave_rosters.py at the starting repository snapshot. Each wave has an explicit data row. At runtime the match cycles through that row in order to produce 7 + 2 × wave + 3 × active-player enemies. Boss units are spawned separately on waves 10, 20, 30, and 40. Rawcode meanings are version-sensitive; resolve them against the locally extracted supported-edition unit tables.
 

@@ -40,7 +40,7 @@ If design and source differ, record the gap in docs/DECISIONS-AND-OPEN-ISSUES.md
 
       python -B tools/build_map.py
 
-- Add --install-diagnostic only when installing the package-proven diagnostic to the local Warcraft III Custom Game folder.
+- Use `python -B tools/build_map.py --install-test-map` to install the package-proven current development build in the dedicated Warcraft III test folder. The old `--install-diagnostic` option remains a compatibility alias only.
 - The build derives compiled JASS and editable trigger data from the same runtime modules. Change source modules and generators, not generated source/war3map.j or build output.
 - Keep the explicit module order in tools/pipeline.py. Do not reintroduce source-file auto-discovery or one-off patch scripts.
 - Keep the known Definitive Edition blank starter unchanged. The builder verifies its pinned hash and metadata version and stops on unknown input.

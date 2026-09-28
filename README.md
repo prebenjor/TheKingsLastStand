@@ -6,13 +6,15 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-This repository starts with development build **KLS-D-fd638ddcf5**. Its map is available at:
+Current development build: **KLS-D-b9e9b9dd33**.
 
-- dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m
-- SHA-256: 48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd
+- Map: `dist/KLS-D-b9e9b9dd33-Development.w3m`
+- SHA-256: `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`
 - Build manifest: dist/build-manifest.json
 
-The project passes 55 source-level regression tests, syntax compilation against declarations extracted from the installed Warcraft III, and MPQ package inventory/readback. This does **not** establish a verified release. The current build has not passed the required World Editor save/reopen/Test Map cycle, exact-build Custom Game startup, complete live gameplay, 2/3/4-player network checks, or 40-wave two- and four-player endurance runs.
+Package inventory/readback, JASS syntax against the installed editor API, and 59 source-level regression tests pass for the current build. The user reported that World Editor Test Map succeeded for the earlier build `KLS-D-fd638ddcf5`; that result is recorded as a pass for that build. The current build still needs its own editor/game checks, live gameplay, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+
+The dedicated Custom Game folder currently contains two older project maps, one held open by the running Warcraft III process. The current build is not installed there yet. Once Warcraft III is closed, run the install command below; the installer will archive old project maps and leave one current build.
 
 The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped, and UI panels can overflow. Source stock/catalog logic exists, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
 
@@ -43,9 +45,9 @@ From the repository root, run:
     python -B tools/build_map.py
     python -B -m unittest discover -s tests -v
 
-To install the package-proven diagnostic into the local Custom Game map folder:
+To install the package-proven current development build into the local Custom Game test folder:
 
-    python -B tools/build_map.py --install-diagnostic
+    python -B tools/build_map.py --install-test-map
 
 Installation is local to that computer. Follow docs/PLAYER-GUIDE.md and docs/ROADMAP-AND-ACCEPTANCE.md for the exact human-run engine check.
 
@@ -55,6 +57,6 @@ Installation is local to that computer. Follow docs/PLAYER-GUIDE.md and docs/ROA
 - tools/ contains the deterministic map builder, data generators, packer, API extractor, and a licensed MPQ reader.
 - tests/ contains focused regression tests.
 - backups/Blank-DE.w3m is the pinned user-supplied blank starter map used by the builder.
-- dist/ contains the specific development map handed off by this repository snapshot.
+- dist/ contains one current build-ID-named development map and its manifest. Replaced versions are archived locally under backups/development-builds/ and remain recoverable from Git history.
 
 The user-installed API/object tables, generated builds, temporary test logs, old diagnostic maps, and compiled helper binaries are not checked in. A future builder extracts the required references from the installed game and records their provenance in the build manifest.

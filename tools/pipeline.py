@@ -5,13 +5,15 @@ import re
 import shutil
 import struct
 import subprocess
+import tempfile
+import datetime
 from pathlib import Path
 from archive_pack import pack, member, lookup
 from map_archive import MPQArchive
 from map_info import four_player_info, PLOTS, MAP_EDGE
 from objects import units, items
 from equipment_catalog import abilities, catalog_script
-from wave_rosters import wave_script, boss_script
+from wave_rosters import wave_script, boss_script, bounty_script
 from signature_spells import spell_script as signature_spell_script
 from hero_progression import spell_script as hero_spell_script
 from recipes import recipe_script
@@ -73,7 +75,7 @@ def runtime_script(build_id):
         if name == 'hud.j':
             text = text.replace('// GENERATED_BOSSES', boss_script())
         if name == 'wave_environment.j':
-            text = text.replace('// GENERATED_WAVES', wave_script())
+            text = text.replace('// GENERATED_WAVES', wave_script() + '\n' + bounty_script())
         if name == 'signatures.j':
             text = text.replace('// GENERATED_SIGNATURES', signature_spell_script())
         blocks = re.findall(r'^globals\s*\n(.*?)^endglobals\s*$', text, re.M | re.S)
@@ -158,8 +160,31 @@ def compile_script(script_path):
 
 
 def diagnostic_output_path(build_id):
-    """Return an immutable, build-specific artifact path."""
-    return ROOT / 'build' / ('DIAGNOSTIC-' + build_id + '.w3m')
+    """Return the sole checked-in development-map path for this build."""
+    return ROOT / 'dist' / (build_id + '-Development.w3m')
+
+
+def archive_previous_development_maps(current, build_id):
+    """Keep dist focused on one current map while archiving known older builds."""
+    previous = sorted(
+        path for path in current.parent.glob('*.w3m')
+        if path != current and (
+            path.name == 'DIAGNOSTIC-TheKingsLastStand.w3m'
+            or path.name.startswith('DIAGNOSTIC-KLS-D-')
+            or (path.name.startswith('KLS-D-') and path.name.endswith('-Development.w3m'))
+        )
+    )
+    if not previous:
+        return None
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    archive = ROOT / 'backups' / 'development-builds' / (stamp + '-' + build_id)
+    archive.mkdir(parents=True, exist_ok=False)
+    for old in previous:
+        destination = archive / old.name
+        if destination.exists():
+            raise ValueError('Refusing to overwrite archived development map: ' + str(destination))
+        shutil.move(str(old), str(destination))
+    return archive
 
 
 def build():
@@ -188,28 +213,51 @@ def build():
     script_path = ROOT/'build/diagnostic-war3map.j'
     script_path.write_bytes(script.encode())
     syntax = compile_script(script_path)
-    pack(source, output, components)
-    a = MPQArchive(output, listfile=False)
-    inventory = []
+    build_dir = ROOT / 'build'
+    build_dir.mkdir(parents=True, exist_ok=True)
+    fd, stage_name = tempfile.mkstemp(prefix=build_id + '-', suffix='.w3m', dir=build_dir)
+    import os
+    os.close(fd)
+    stage = Path(stage_name)
     try:
-        names = member(a, '(listfile)').decode().splitlines()
-        for name in names:
-            if lookup(a, name) is None:
-                raise ValueError('Invalid engine lookup: '+name)
-            data = member(a, name)
-            inventory.append({'name':name,'size':len(data),'sha256':digest(data)})
-        for name, data in components.items():
-            if name not in names or member(a,name) != data:
-                raise ValueError('Package differs from source: '+name)
+        pack(source, stage, components)
+        a = MPQArchive(stage, listfile=False)
+        inventory = []
+        try:
+            names = member(a, '(listfile)').decode().splitlines()
+            for name in names:
+                if lookup(a, name) is None:
+                    raise ValueError('Invalid engine lookup: '+name)
+                data = member(a, name)
+                inventory.append({'name':name,'size':len(data),'sha256':digest(data)})
+            for name, data in components.items():
+                if name not in names or member(a,name) != data:
+                    raise ValueError('Package differs from source: '+name)
+        finally:
+            a.file.close()
+        staged_sha = digest(stage.read_bytes())
+        if output.exists():
+            if digest(output.read_bytes()) != staged_sha:
+                raise ValueError('Immutable build ID already exists with different package bytes: ' + str(output))
+            stage.unlink()
+        else:
+            stage.replace(output)
+        archived = archive_previous_development_maps(output, build_id)
     finally:
-        a.file.close()
-    manifest = {'build_id':build_id,'status':'development: startup proof pending','output_path':str(output),'sha256':digest(output.read_bytes()),'baseline_sha256':BASELINE_SHA,'source_hashes':hashes,'installed_api':api,'components':inventory,'checks':{'syntax_installed_api':'passed','archive_readback':'passed','editor_roundtrip':'pending','game_startup':'pending','multiplayer':'pending'}}
+        if stage.exists():
+            stage.unlink()
+    manifest = {'build_id':build_id,'status':'development: engine and multiplayer checks pending','output_path':str(output),'sha256':digest(output.read_bytes()),'baseline_sha256':BASELINE_SHA,'source_hashes':hashes,'installed_api':api,'components':inventory,'checks':{'syntax_installed_api':'passed','archive_readback':'passed','editor_test_map':'pending','editor_save_reopen':'pending','custom_game_startup':'pending','gameplay':'pending','multiplayer':'pending','endurance':'pending'}}
     (ROOT/'build/diagnostic-manifest.json').write_text(json.dumps(manifest,indent=2))
+    published_manifest = dict(manifest)
+    published_manifest['output_path'] = str(output.relative_to(ROOT)).replace('\\', '/')
+    (ROOT/'dist/build-manifest.json').write_text(json.dumps(published_manifest,indent=2))
     (ROOT/'build/diagnostic-syntax.txt').write_text(syntax)
     (ROOT/'source/war3map.j').write_bytes(script.encode())
     print(build_id)
     print(output)
-    print('Package and installed-API syntax checks passed. Editor/game startup proof is pending.')
+    if archived:
+        print('Archived previous development map(s):', archived)
+    print('Package and installed-API syntax checks passed. Editor Test Map, Custom Game, gameplay, multiplayer and endurance checks remain unverified for this build.')
     return manifest
 
 

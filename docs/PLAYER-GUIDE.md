@@ -1,17 +1,18 @@
 # Player and human-test guide
 
-## Launch the checked-in diagnostic
+## Install and test the current development build
 
-1. Copy dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m into the Warcraft III Custom Game maps folder or install a newly built diagnostic with:
+1. Build the current map and install it to the dedicated test folder with:
 
-       python -B tools/build_map.py --install-diagnostic
+       python -B tools/build_map.py --install-test-map
 
-2. Launch Warcraft III → Single Player → Custom Game → TheKingsLastStand → DIAGNOSTIC-KLS-D-fd638ddcf5.
-3. Confirm the startup text includes KLS-D-fd638ddcf5. Stop if a different or no build ID appears.
-4. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
-5. After all players confirm, the initial preparation timer is 45 seconds.
+2. The installer archives old project maps and leaves one current map named `<build-id>-Development.w3m` in `Documents/Warcraft III/Maps/TheKingsLastStand/`. If Warcraft III currently has an older map open, close the game before installing so Windows releases the old file.
+3. Test that installed map from the already-open World Editor when it points at the current map, or select the same build in Warcraft III → Single Player → Custom Game. Do not make another test copy.
+4. Confirm the startup text includes the filename's build ID. Stop if a different or no build ID appears.
+5. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
+6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The artifact is a development build. Shop/backpack and live multiplayer behavior is not yet certified. Check the exact current status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-b9e9b9dd33` has not yet been installed or run, so its exact-build checks remain pending. Check the status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 

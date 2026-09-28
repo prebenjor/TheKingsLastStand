@@ -1,8 +1,8 @@
 {
-  "build_id": "KLS-D-fd638ddcf5",
-  "status": "development: startup proof pending",
-  "output_path": "dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m",
-  "sha256": "48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd",
+  "build_id": "KLS-D-b9e9b9dd33",
+  "status": "development: engine and multiplayer checks pending",
+  "output_path": "dist/KLS-D-b9e9b9dd33-Development.w3m",
+  "sha256": "3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a",
   "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
   "source_hashes": {
     "source/diagnostics.j": "b6ede9d3caa7b69da02267e09162a881b4131bf4523628a35da9b27658c9f558",
@@ -15,24 +15,24 @@
     "source/combat.j": "403f58ccae1ddacab95ddf307885310393b84fff3ff98d1da30fa70d21f019ed",
     "source/wave_environment.j": "60e52937a60cbec91f14094614cf60d7b0e3e7845e4d976dd04bd0356c4e9db8",
     "source/signatures.j": "530e81fbea251e4cfa975876f2e4abb39e02ddaca1cd6ba27354883de565d25b",
-    "source/game.j": "34238d333a73de7e696f27ec6d298d93c67b1bcfa2d6c4d77dae4604a32f9dfd",
+    "source/game.j": "e89ed1764ec8b5bb1c0360de2bc146471572dc2c24c06090a6b188e86828e3f1",
     "tools/archive_pack.py": "3774ac9d0fab23472f343dedecbc8bf696a99bae1382b6cb764166d0da88e3b2",
-    "tools/build_map.py": "193e3b76651e5bad6d281fa6baedb21babc6257fdd25eb09a2b79687d1af4a26",
+    "tools/build_map.py": "5bfbad9d34c5e47a030480bb7139c9ed5f0137f37cf079a8875a1152a26751f0",
     "tools/collect_test_logs.py": "87fa92a8750888d5962582edf5d7047172b5c92e5c556656c6aa0727ab4f3fbc",
     "tools/equipment_catalog.py": "a9a37dddb87a9d9fb7c52e00049c9605266614706b752838af7cf4d95043026c",
     "tools/extract_game_api.py": "eb1971e8ab7ced7313c432a1009fdd72e15f1dba86fd250e790f66d799fbbfa2",
     "tools/gui_sources.py": "5c9e094f30dc29e8a68b860d0b8ed8886063423f1f337c85e59e61b6b8e99cb3",
     "tools/hero_progression.py": "e8617fbba912d7819d2d77c094e5c5bd50d05d7f008eeada39a02b02c06c66dc",
-    "tools/install_diagnostic.py": "104bb4aa5436c4e07d55443a11c3ebc7b5693228a9ac1d0cde7d4b213f72236d",
+    "tools/install_diagnostic.py": "5e7510c1ba34dd6f39faef89c4c7711ebc753f301e064e3d6bf282028638ff9c",
     "tools/map_archive.py": "669ae74d19df0ee217f6f3f202a3eedc281403f1f487255f4363c4777084ff43",
     "tools/map_info.py": "49bb98b83f976b06b2f5088ec311cd1c965ce261333796323e6c49a6c7ee263a",
     "tools/objects.py": "3edee0c95741e276ee1b70651b704b794f854a2825f2fa39c40b353a5a67e86e",
     "tools/pack.py": "955d763127dabbb52e98ef3d1716d1dee4350a18f3abcba3fd106ef2608661b4",
-    "tools/pipeline.py": "2606774995a3ff51af3b71f7b2e3b2e5980095d0bcd3fa2231be8e3da2fbf8ba",
+    "tools/pipeline.py": "3c276d7f2bb754439c761478304ac0150e3de44b3ea8f33eee3d4c8d6a11833f",
     "tools/recipes.py": "f6282af62e138921e16d89df2be1d9ea1bfd4ead04ef2a082b95d646d1d693ea",
     "tools/signature_spells.py": "e205eba976090522fcb2fe056e59ff2d5d63ac20cde393735a246d1ce15d259c",
     "tools/terrain.py": "cafc897182d36fa9c378edcee8d664c86eecf43c0cf03a150150f67377f8fc66",
-    "tools/wave_rosters.py": "5baf3ef3ff657871f42f2082072302c8ae6417e9654dc9fc010fb4ee0e5f45f1",
+    "tools/wave_rosters.py": "0e244eb80d4e450af2b60767d9865343623801cf76252560b79224f965cb829c",
     "tools/reference/installed/ItemData.slk": "311f39bf506606d07078aedc6db4721cfc1f4fd6777cb67dfa64431bb5ce4173",
     "tools/reference/installed/AbilityData.slk": "8e0f49e848ea7d9be8866e21a766a3d4833e3747fd4ca08979fd5be7531a13b2",
     "tools/reference/installed/UnitMetaData.slk": "eaea4b8314bcdcba38b5330b2bdea500d02cd448df22a789558325df81be09a4",
@@ -98,7 +98,7 @@
     {
       "name": "(attributes)",
       "size": 100,
-      "sha256": "561ee3c6a882390575e936c9641f26278df7f3df7f41fa7de5543b46f0f384b2"
+      "sha256": "8c6a9534ad86e915afca3e192587ca7527accc16431858c4596f605780256f14"
     },
     {
       "name": "(listfile)",
@@ -117,8 +117,8 @@
     },
     {
       "name": "war3map.j",
-      "size": 153865,
-      "sha256": "ff3ec4d7d2f4d42a533f7d574f616d2f719545e07f510eb12082d5399c7a24e5"
+      "size": 155270,
+      "sha256": "0207876fc3b74c1043fb16903a3f63ca72ec5d9c5fb955b627fdcc2a9c23d19d"
     },
     {
       "name": "war3map.mmp",
@@ -153,7 +153,7 @@
     {
       "name": "war3map.w3i",
       "size": 592,
-      "sha256": "529b3b3855460b68a82fcd9cdb3714c752750ea78f97fc32ae502be67cdcc983"
+      "sha256": "1996f8e31a6b909b9836eb9a66fef409064a11fff8d7befb8bc7f93b9ed3522e"
     },
     {
       "name": "war3map.w3l",
@@ -177,8 +177,8 @@
     },
     {
       "name": "war3map.wct",
-      "size": 148697,
-      "sha256": "e16d2f721c85215eccbc47a6455b17279569b91c69eeafcb6a137eca51b847e1"
+      "size": 150102,
+      "sha256": "8eab74f1946e7a6afe0aa664f1b0088ed875055f442da472e9c6707ffa26871d"
     },
     {
       "name": "war3map.wpm",
@@ -214,9 +214,11 @@
   "checks": {
     "syntax_installed_api": "passed",
     "archive_readback": "passed",
-    "editor_roundtrip": "pending",
-    "game_startup": "pending",
-    "multiplayer": "pending"
-  },
-  "installed_diagnostic_path": "C:\\Users\\asphy\\Documents\\Warcraft III\\Maps\\TheKingsLastStand\\DIAGNOSTIC-KLS-D-fd638ddcf5.w3m"
+    "editor_test_map": "pending",
+    "editor_save_reopen": "pending",
+    "custom_game_startup": "pending",
+    "gameplay": "pending",
+    "multiplayer": "pending",
+    "endurance": "pending"
+  }
 }

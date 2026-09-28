@@ -18,7 +18,7 @@ Run from the repository root:
 
     python -B tools/extract_game_api.py
     python -B tools/build_map.py
-    python -B tools/build_map.py --install-diagnostic
+    python -B tools/build_map.py --install-test-map
     python -B -m unittest discover -s tests -v
 
 The extractor reads the local installed Warcraft III and writes tools/reference/installed plus provenance.json. It records the installed .build.info fingerprint and hashes of each extracted reference. The build refuses stale references after an installation update. Do not commit those extracted tables or declarations; each developer extracts from their own installed game.
@@ -70,11 +70,12 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 ## Packaging and outputs
 
 - python -B tools/build_map.py is the only supported build entry point.
-- Diagnostic outputs are immutable, build-tagged files under build/ during development. The checked-in diagnostic snapshot is dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m.
-- --install-diagnostic copies the exact package-proven map to the local Custom Game folder and moves older project diagnostics to a recoverable backup folder.
-- dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m is the artifact included with this repository snapshot; it is not a release build.
+- The repository keeps one current map artifact in `dist/`, named `<build-id>-Development.w3m`. Build manifests, JASS, and temporary package stages live under `build/`; no second persistent map copy is written there.
+- `--install-test-map` copies that exact package-proven map into `Documents/Warcraft III/Maps/TheKingsLastStand/`, the user's designated live test folder. That folder contains one current project map so the Custom Game entry is unambiguous.
+- When a new build replaces a prior development map, the previous `dist/` map is archived under the ignored local `backups/development-builds/`; previous installed test maps are archived under `backups/installed-diagnostics/`. Git history preserves prior checked-in `dist/` snapshots for remote recovery.
+- The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
-- Current snapshot archive contains 23 members; builder reads back every member and validates hash lookup. The packaged artifact hash is 48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd.
+- The current package-proven development artifact is `dist/KLS-D-b9e9b9dd33-Development.w3m`, SHA-256 `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
 
 ## Network determinism and ownership
 
@@ -90,4 +91,4 @@ Never attribute a model-creation failure in a stale menu/catalogue scan to the c
 
 ## Git exclusions and clean-clone setup
 
-Do not check in machine-local API tables, Blizzard script/API declarations, game/editor installation paths beyond what local configuration requires, generated build/test logs, Python caches, compiled CASC/Lua helper binaries, or old diagnostic backups. Keep the user's blank starter and current development map with the source package. A clean clone needs an installed supported Warcraft III editor and a fresh API extraction before building.
+Do not check in machine-local API tables, Blizzard script/API declarations, game/editor installation paths beyond what local configuration requires, generated build/test logs, Python caches, compiled CASC/Lua helper binaries, or local map archives. Keep the user's blank starter and the one current development map with the source package. A clean clone needs an installed supported Warcraft III editor and a fresh API extraction before building.

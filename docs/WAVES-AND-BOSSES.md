@@ -15,6 +15,29 @@ The code stores forty explicit generated rosters in tools/wave_rosters.py. Spawn
 
 Current roster rawcodes include: ugho, uske, ucry, nska, nfel, hfoo, nfgu, unec, nsat, uabo, ndqn, nvdw, umtw, nbal, and ninf. Read names from the installed game table during builds; never invent a rawcode mapping from memory. The rawcode roster is intentionally maintained against installed DE object data.
 
+## Combat gold bounty (initial tuning)
+
+Each tracked enemy death grants one team bounty, then divides it equally among active defenders; remainder gold follows player-slot order. The final blow does not take the whole payout. A role's base bounty increases by the current wave number:
+
+| Role / unit rawcode | Base gold | Example at wave 1 |
+|---|---:|---:|
+| Skeleton Warrior (`uske`) | 5 | 6 |
+| Ghoul (`ugho`) | 8 | 9 |
+| Footman escort (`hfoo`) | 9 | 10 |
+| Crypt Fiend / Skeletal Archer (`ucry` / `nska`) | 12 | 13 |
+| Satyr Trickster (`nsat`) | 14 | 15 |
+| Succubus / Voidwalker (`ndqn` / `nvdw`) | 16 | 17 |
+| Fel Stalker (`nfel`) | 18 | 19 |
+| Necromancer (`unec`) | 22 | 23 |
+| Felguard (`nfgu`) | 24 | 25 |
+| Abomination (`uabo`) | 32 | 33 |
+| Meat Wagon (`umtw`) | 36 | 37 |
+| Doom Guard (`nbal`) | 40 | 41 |
+| Infernal (`ninf`) | 45 | 46 |
+| Chapter boss | 100 + 5 × wave | 150 |
+
+These are starting values for playtesting, not final balance. Bosses also retain their existing per-defender chapter reward and personal relic. Boss reinforcements use their own unit role's bounty when killed. The table is generated from `tools/wave_rosters.py`; every rawcode in the 40 wave rosters must have exactly one bounty entry.
+
 The full generated unit-code sequence for every wave, in order, is preserved in WAVE-ROSTER-CATALOG.md. At runtime, the spawn loop cycles through that wave's listed sequence if the player-scaled count is larger than the sequence.
 
 Each wave enemy is registered once in the authoritative tracked group. The spawn loop aborts with a diagnostic error if a required unit cannot be created; it must not leave the match waiting forever for a unit that never spawned. Death, boss summons, cleanup, and wave completion need exactly-once accounting.

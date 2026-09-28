@@ -6,6 +6,50 @@ BOSS_MECHANICS = (
     {'wave':40, 'id':4, 'name':'The Last March', 'warning':'Dodge, then survive the horde and tower blackout.', 'actions':('slam','summon','tower_suppression')},
 )
 
+# Base personal-team bounty by installed enemy rawcode. Add KLS_Wave when paid
+# so later appearances of a role stay valuable without erasing role differences.
+BOUNTY_BY_UNIT = {
+    'uske': 5,    # Skeleton Warrior
+    'ugho': 8,    # Ghoul
+    'hfoo': 9,    # Footman escort
+    'ucry': 12,   # Crypt Fiend
+    'nska': 12,   # Skeletal Archer
+    'nsat': 14,   # Satyr Trickster
+    'ndqn': 16,   # Succubus
+    'nvdw': 16,   # Voidwalker
+    'nfel': 18,   # Fel Stalker
+    'unec': 22,   # Necromancer
+    'nfgu': 24,   # Felguard
+    'uabo': 32,   # Abomination
+    'umtw': 36,   # Meat Wagon
+    'nbal': 40,   # Doom Guard
+    'ninf': 45,   # Infernal
+}
+
+BOSS_UNIT_CODES = ('Udea', 'Ulic', 'Udre', 'Uanb')
+
+
+def bounty_script():
+    boss_condition = ' or '.join(f"unitCode == '{unit_code}'" for unit_code in BOSS_UNIT_CODES)
+    lines = [
+        'function KLS_EnemyBounty takes unit enemy returns integer',
+        '    local integer unitCode = GetUnitTypeId(enemy)',
+        f'    if {boss_condition} then',
+        '        return 100 + KLS_Wave * 5',
+        '    endif',
+    ]
+    for unit_code, base_bounty in BOUNTY_BY_UNIT.items():
+        lines += [
+            f"    if unitCode == '{unit_code}' then",
+            f'        return {base_bounty} + KLS_Wave',
+            '    endif',
+        ]
+    lines += [
+        '    return 8 + KLS_Wave',
+        'endfunction',
+    ]
+    return '\n'.join(lines)
+
 def boss_mechanic_for_wave(wave):
     for mechanic in BOSS_MECHANICS:
         if mechanic['wave'] == wave:

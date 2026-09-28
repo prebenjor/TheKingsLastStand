@@ -3,6 +3,7 @@ import sys
 import shutil
 import tempfile
 import unittest
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,7 +13,7 @@ from pack import pack
 
 
 class DiagnosticOutputPaths(unittest.TestCase):
-    def test_build_writes_a_build_tagged_file_and_preserves_the_shared_legacy_path(self):
+    def test_build_writes_the_current_development_name_and_preserves_the_open_editor_file(self):
         import pipeline
         from unittest.mock import patch
 
@@ -20,6 +21,8 @@ class DiagnosticOutputPaths(unittest.TestCase):
             project = Path(folder) / 'project'
             build_dir = project / 'build'
             build_dir.mkdir(parents=True)
+            dist_dir = project / 'dist'
+            dist_dir.mkdir(parents=True)
             shutil.copytree(ROOT / 'source', project / 'source')
             tools_dir = project / 'tools'
             tools_dir.mkdir()
@@ -37,11 +40,16 @@ class DiagnosticOutputPaths(unittest.TestCase):
                 manifest = pipeline.build()
 
             output = Path(manifest['output_path'])
-            self.assertEqual(output.parent, build_dir)
-            self.assertEqual(output.name, 'DIAGNOSTIC-'+manifest['build_id']+'.w3m')
+            self.assertEqual(output.parent, dist_dir)
+            self.assertEqual(output.name, manifest['build_id']+'-Development.w3m')
             self.assertNotEqual(output, legacy)
             self.assertTrue(output.is_file())
             self.assertEqual(legacy.read_bytes(), b'older editor copy held open by the editor')
+            self.assertEqual(manifest['checks']['editor_test_map'], 'pending')
+            self.assertEqual(manifest['checks']['editor_save_reopen'], 'pending')
+            published = json.loads((dist_dir / 'build-manifest.json').read_text())
+            self.assertEqual(published['output_path'], 'dist/' + output.name)
+            self.assertEqual(published['sha256'], manifest['sha256'])
 
 
 def read(a, name):

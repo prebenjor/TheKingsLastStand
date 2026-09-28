@@ -43,7 +43,7 @@ class PlayerDeparture(unittest.TestCase):
         self.assertIn('set remainder = ModuloInteger(bounty, activeCount)', award)
         self.assertIn('if remainder > 0 then', award)
         self.assertRegex(award, r'loop[\s\S]*?set i = i \+ 1[\s\S]*?if KLS_Active\[i\] then[\s\S]*?remainder = remainder - 1')
-        self.assertIn('call KLS_AwardBounty(8 + KLS_Wave)', death)
+        self.assertIn('call KLS_AwardBounty(KLS_EnemyBounty(dead))', death)
         self.assertNotIn('GetOwningPlayer(killer)', death)
 
         def shares(active_slots, bounty):

@@ -1,35 +1,37 @@
 
 # Current status — 2026-09-28
 
-## Last package-proven build
+## Current package-proven build
 
-- Build: **KLS-D-fd638ddcf5**.
-- Diagnostic artifact: `dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m`.
-- SHA-256: `48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd`.
+- Build: **KLS-D-b9e9b9dd33**.
+- Artifact: `dist/KLS-D-b9e9b9dd33-Development.w3m`.
+- SHA-256: `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`.
 - Manifest: `dist/build-manifest.json`.
-- The map is still a development build. Its editor save/reopen/Test Map cycle and exact-build Custom Game startup are not proven.
+- Package readback and JASS syntax against installed API: passed. Full source regression suite: **59/59 passed**.
+- Status: **development build**. The current exact build has not yet been installed or run in Warcraft III.
 
-## Plan work and evidence
+## User-reported engine result
 
-- The approved attribute gear, nine permanent tomes, three transactional recipes, 100-level/ten-rank hero progression, southern restorative spring, and longer wave breaks are present in source and generated object data.
-- Focused regression run in this continuation: `python -B -m unittest discover -s tests -p test_hero_items_progression.py -v` — **12/12 passed**. This is source/package evidence, not live Warcraft behavior.
-- Previously recorded full suite: **55/55 passed**; installed-API syntax compile, 23-member MPQ readback, and installed/output hash comparison passed in the historical KLS-D-fd638 entry below.
-- **Ruling:** keep 90-second normal breaks and 180-second pre-boss breaks. The feature-plan draft's 60/120 values conflict with the later user direction asking for increased downtime, especially before bosses, and with the current runtime/regression contract. Cost if wrong: the longer waits may make match pacing too slow; revise only from a recorded playtest.
+- World Editor Test Map succeeded on the earlier installed development build **KLS-D-fd638ddcf5**. This remains a pass for that build and is not listed as a failure.
+- Save/reopen, current-build Test Map, current-build Custom Game, live systems, multiplayer and endurance checks remain pending for their respective builds.
 
-## 2026-09-28: plan resumed and exact build reverified
+## Changes since the previous build
 
-- Focused progression suite: `python -B -m unittest discover -s tests -p test_hero_items_progression.py -v` — **12/12 passed**.
-- Full suite: `python -B -m unittest discover -s tests -v` — **55/55 passed**.
-- Fresh `python -B tools/build_map.py` — **KLS-D-fd638ddcf5**, package and installed-API syntax checks passed.
-- Fresh build, checked-in `dist/` map, and installed Custom Game copy all hash to `48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd`.
-- The installed diagnostic is `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\DIAGNOSTIC-KLS-D-fd638ddcf5.w3m`.
-- World Editor is currently open on an older fixed-name workspace map. It was left untouched to protect possible unsaved edits. The current exact build has not been opened, saved/reopened, Test Map launched, or started through Custom Game; no new engine logs exist for this build.
+- Each roster enemy has an explicit generated base bounty. Normal enemy gold equals the role's base value plus current wave number; bosses pay `100 + 5 × wave`. The existing equal team split and slot-order remainder remain in place. Boss summons use their own unit bounty.
+- 59/59 focused regression tests passed, including roster coverage, role ordering, boss/reinforcement rewards and existing shared payout rules.
+- One current map is kept in `dist/`; prior local map packages are archived under `backups/development-builds/`, and Git history preserves tracked versions.
+- **Ruling:** keep 90-second ordinary breaks and 180-second pre-boss breaks. Revise only after a recorded pacing playtest.
 
-## Blocking acceptance checks
+## Test-folder and Editor state
 
-- Preserve any unsaved World Editor work, then open the exact included diagnostic map. Save a separate copy, close/reopen it, Test Map, and confirm KLS-D-fd638ddcf5, hero selection, resources, castle/king, countdown, and no premature victory.
-- Launch the same build through Warcraft III Custom Game and confirm the same identifier and structures. No current-build proof exists in this repository snapshot.
-- Live shops/equipment, backpacks, crafting/tomes, fountain, construction, waves/bosses, 2/3/4-player synchronization, and full 40-wave endurance remain pending. Keep the development label until those gates pass.
+- The live test folder currently contains the older `DIAGNOSTIC-KLS-D-fd638ddcf5.w3m` and the partially installed `KLS-D-f89f212a3a-Development.w3m`. The running Warcraft III process (PID 46920) holds the older map, so the new installer correctly refuses to move forward until that lock is released. It will archive old project copies and install only the current map after Warcraft III closes.
+- The user's open World Editor document at `build/DIAGNOSTIC-TheKingsLastStand.w3m` was left untouched. UI automation could not attach in this session, so no live editor edits were sent and no round-trip copy was created.
+
+## Next exact action and remaining checks
+
+1. After Warcraft III is closed, run `python -B tools/build_map.py --install-test-map`. Confirm only `KLS-D-b9e9b9dd33-Development.w3m` remains in the dedicated test folder and its SHA-256 matches the manifest.
+2. Test this ID in World Editor and through Custom Game. Record the user-reported earlier Test Map pass separately; do not treat the current exact-build check as failed or as passed until tried.
+3. Continue the acceptance gates in ROADMAP-AND-ACCEPTANCE.md for inventory/shop use, construction/economy, all 40 waves, boss mechanics, actual 2/3/4-player sessions and two-/four-player endurance.
 
 ## Historic recovery notes
 

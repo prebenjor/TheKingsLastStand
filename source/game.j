@@ -120,7 +120,7 @@ function KLS_Death takes nothing returns nothing
     elseif IsUnitInGroup(dead, KLS_Enemies) then
         call GroupRemoveUnit(KLS_Enemies, dead)
         set KLS_Alive = KLS_Alive - 1
-        call KLS_AwardBounty(8 + KLS_Wave)
+        call KLS_AwardBounty(KLS_EnemyBounty(dead))
         if dead == KLS_Boss then
             set KLS_Boss = null
             if GetWidgetLife(KLS_King) <= 0.405 then

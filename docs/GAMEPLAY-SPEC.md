@@ -76,6 +76,7 @@ King Aldric is the shared survival objective at the central castle. His castle i
 - Exactly forty waves in four chapters. Chapter roles accumulate as described in WAVES-AND-BOSSES.md.
 - Every spawn and summon joins the tracked enemy set exactly once. Death, removal, debug cleanup, and boss summons must decrement the live count once.
 - Enemy movement targets the king. Issue pathing recovery only when an enemy has no valid order or is demonstrably stuck; do not override ordinary combat repeatedly.
+- Every tracked enemy death pays one role-based team bounty, plus the current wave number for normal units. Bosses pay `100 + 5 × wave`. Split the result equally among active defenders and distribute remainder in player-slot order. See `WAVES-AND-BOSSES.md` for starting role values; tune from recorded matches.
 - Keep enemy types varied: undead foot soldiers, ranged support, durable elites, necromancers, siege attackers, demons, and escorts. The user's feedback specifically asks for a more visible undead/demon mix than repeated identical ghouls.
 - Recalculate scaling for later waves after a defender departs.
 - Show the current wave and chapter, prep countdown, enemy count, king health/tier, personal revival countdown, and persistent boss warnings.
