@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-2f2397cf14 - 2026-09-28
+
+- Boss relics and Crownlands story items now share a guarded personal-reward delivery path. Failed `CreateItem` calls retain the item rawcode in that owner's queue and retry every five seconds during the match; full inventory leaves a visible owner-bound item at the owner's base.
+- Added source regressions for boss/story routing, null-handle guards, owner-bound fallback and retry bookkeeping. Full suite: **112/112 passed**. Installed-editor JASS compilation and package member readback passed.
+- Package SHA-256: `e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f`.
+- Installation was attempted but safely stopped because Warcraft III still locks the older `KLS-D-1a040d638c-Development.w3m`; its original and one hash-verified archive copy remain intact. This current build remains packaged in `dist/` and is not installed. Editor save/reopen, current-build Test Map/Custom Game, live item delivery, gameplay, multiplayer and endurance remain pending. The earlier user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`.
+
 
 ## KLS-D-0227009b20 - 2026-09-28
 

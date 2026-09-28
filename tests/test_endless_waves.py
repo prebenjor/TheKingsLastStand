@@ -142,9 +142,8 @@ class EndlessCampaignWaves(unittest.TestCase):
             self.assertIn(relic, reward)
         self.assertIn('KLS_Wave >= 50', reward)
         self.assertIn('KLS_RandomCatalogDrop(4)', reward)
-        self.assertIn('SetItemPlayer(reward, Player(i), false)', reward)
-        self.assertIn('SetItemUserData(reward, i+1)', reward)
-        self.assertIn('if not UnitAddItem(KLS_Hero[i], reward) then', reward)
+        self.assertIn('call KLS_PersonalRewardEnqueue(i,gear,"Boss")', reward)
+        self.assertNotIn('CreateItem(', reward)
         for code in legendaries:
             self.assertIn("return '" + code + "'", script)
 

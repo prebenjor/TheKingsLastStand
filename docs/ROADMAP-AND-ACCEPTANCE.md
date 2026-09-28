@@ -2,25 +2,26 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-0227009b20**
+Build: **KLS-D-2f2397cf14**
 
-Map SHA-256: **23a7887af12f726ddffe37ab4b9e817c021ba46a2842ced4ce80a53297f43a6c**
+Map SHA-256: **e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 108 source-level tests, including installer failure/retry safety, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
+| Focused automated regressions | 112 source-level tests, including installer failure/retry safety, personal reward delivery/retries, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | The current package has not been opened; a running Warcraft III process still locks the older installed map | Pending |
-| Current-build Test Map / Custom Game startup | `KLS-D-0227009b20` is packaged but not installed because the prior map is locked by Warcraft III. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Current-build Test Map / Custom Game startup | `KLS-D-2f2397cf14` is packaged but not installed because the prior map is locked by Warcraft III. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; visual routes and playability need live inspection | Pending in game |
 | Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, Acolyte mine haunting and Night Elf mine reach are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; visuals, ability behavior, company recruit and ownership need live checks | Pending in game |
 | Level 1–50 progression and talents | Per-level +3 Strength/Agility/Intelligence choices are native hero `+` skills; the stat-choice dialog was removed. Fifth-level specialty talent dialog and stat changes need live checks | Pending in game |
 | Endless waves after wave 40 | Ten repeating roster rows and rotating bosses scale from the live wave number | Pending in game |
 | Shops, rarity colors, drops, gear and Foundry recipes | Twenty catalog items, five rarity tiers, shop stock, drops and four racial recipes are package/regression checked; shop interface, equipment and craft interactions need live checks | Pending in game |
+| Boss/story item reliability | Both reward sources use one null-safe owner queue; failed `CreateItem` retries every five seconds, while full inventory falls back to a visible owner-bound item at base | Source regression passed; injected failure and pickup remain pending in game |
 | Optional Crownlands recovery story | Four chapters use a separate story enemy group and do not modify wave count/timer in source checks; all objective/reward paths need live play | Pending in game |
 | Sacred Aura `AHas` / `AHpa` descriptions and values | Generated ranks 1–5 and learned/learn-menu strings are regression checked; verify visible rank 4/5 text in Warcraft | Pending in game |
 | Shop windows, backpack/equipment, purchases, crafting and full inventory | Pack modifies installed `ebua`; gear object flags and inventory/catalog relationships are source checked. Native click, transfer, equipment and buyback still need live checks | Pending / known report |
@@ -63,7 +64,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ## Current exact human-run check
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
-2. Package `KLS-D-0227009b20` is at `dist/KLS-D-0227009b20-Development.w3m`, SHA-256 `23a7887af12f726ddffe37ab4b9e817c021ba46a2842ced4ce80a53297f43a6c`. The latest install retry safely reused the verified archive copy, but a running Warcraft III process still locks the original map, so no new file was installed. Exit Warcraft III completely and run `python -B tools/build_map.py --install-test-map`; the earlier Test Map pass remains recorded for its original build and is not a failed step.
+2. Package `KLS-D-2f2397cf14` is at `dist/KLS-D-2f2397cf14-Development.w3m`, SHA-256 `e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f`. The latest install attempt safely reused the verified archive copy, but a running Warcraft III process still locks the original map, so no new file was installed. Exit Warcraft III completely and run `python -B tools/build_map.py --install-test-map`; the earlier Test Map pass remains recorded for its original build and is not a failed step.
 3. Current-build startup is pending. Open the new exact map in World Editor and run Test Map, then launch that same installed map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
 4. Exercise mixed-race selection, racial build menus and worker jobs; inspect the Undead Temple icon/queues, + stat buttons, fifth-level talents, towns and road navigation; test item stock, equipment, drops, recipes, story rewards, Sacred Aura rank 4/5 tooltips, and both race-specific mine orders.
 5. Continue with the existing kill gold/XP, castle, shop/backpack, spring and 50/180-second break checks, then verify automatic wave 40 continuation, the wave 49 convergence, Lady Vashj at wave 50, and one later rotating boss. Confirm the optional Crownlands story stays outside wave accounting. Finish with real multiplayer and endless endurance acceptance.

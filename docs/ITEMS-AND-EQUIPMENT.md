@@ -111,7 +111,7 @@ Design intent: four distinct personal, unsellable relics are awarded by the four
 | 30 | Crown of Dawn | I012 | Trinket | Grants a healing aura |
 | 40 | Oath of the Last King | I013 | Ring | +5 to all attributes |
 
-These are personal, unsellable boss relics. The current reward function attempts to create and deliver one per active player; if normal inventory delivery fails it leaves an item at that player's plot. It does not yet implement the agreed pending entitlement inside the backpack and must be audited for null item creation, duplicate claims, safe pickup, and full-storage behavior. Do not rename, replace, or rebalance them without updating this catalog and testing their actual native effects.
+These are personal, unsellable boss relics. Boss relics and Crownlands story items use the shared delivery service in `source/rewards.j`. It checks `CreateItem` before using the returned handle. If creation fails, the item rawcode stays in that owner's pending queue and is retried every five seconds while the match clock runs. If the hero cannot accept a successfully created item, it remains visible and owner-bound at that player's base. Both native item owner and the project owner marker are set so other players cannot claim the personal reward. Regression coverage checks boss/story routing, null-handle guards, full-inventory fallback and retry queue behavior; verify pickup, ownership and injected creation failures in Warcraft. Do not rename, replace, or rebalance the relics without updating this catalog and testing their actual native effects.
 
 ## Player-facing interaction acceptance
 

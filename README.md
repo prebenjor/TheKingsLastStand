@@ -6,14 +6,14 @@ Players command distinct heroes and their own race-matched workers, buildings, a
 
 ## Project status
 
-Current development build: **KLS-D-8669a44192**.
+Current development build: **KLS-D-2f2397cf14**.
 
-- Map: `dist/KLS-D-8669a44192-Development.w3m`
-- SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`
-- The install command could not replace the prior test map because World Editor currently holds `KLS-D-1a040d638c-Development.w3m` open. A verified archive copy of that older file exists under `backups/installed-diagnostics/`; install the current package after closing its editor session.
+- Map: `dist/KLS-D-2f2397cf14-Development.w3m`
+- SHA-256: `e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f`
+- The install command could not replace the prior test map because a running Warcraft III process still holds `KLS-D-1a040d638c-Development.w3m`. The original and its hash-verified archive remain intact; install the current package after Warcraft III releases the file.
 - Build manifest: dist/build-manifest.json
 
-This package includes the Crownlands settlements, four-race companies, hero progression and custom content. Per-level +3 Strength, Agility, or Intelligence choices now appear as native hero ability plus buttons; the global stat-choice dialog is removed. The Undead Temple inherits the correct Temple parent, race building tooltips describe their actual roles, Undead Acolytes can haunt mines, and the Night Elf mine order can reach the starting mine. After the preserved 40-wave story, ten installed campaign crossover rosters repeat with live-wave scaling, a five-force wave 49 convergence, a Lady Vashj wave 50 boss, rotating campaign leaders and personal Legendary catalog rewards. King Aldric's death ends the run. Sacred Aura ranks 4/5 retain the generated 38.5%/27.5% and 42%/30% effects for both ability IDs. The source regression suite passes **108/108**; package readback and installed-editor API syntax pass.
+This package carries the Crownlands settlements, four-race companies, hero progression and custom content forward. It also routes boss relics and story items through a guarded personal delivery service: failed item creation is queued per owner and retried, while full inventories receive a visible owner-bound item at their base. Per-level +3 Strength, Agility, or Intelligence choices remain native hero ability plus buttons; the global stat-choice dialog is removed. The Undead Temple inherits the correct Temple parent, race building tooltips describe their actual roles, Undead Acolytes can haunt mines, and the Night Elf mine order can reach the starting mine. After the preserved 40-wave story, ten installed campaign crossover rosters repeat with live-wave scaling, a five-force wave 49 convergence, a Lady Vashj wave 50 boss, rotating campaign leaders and personal Legendary catalog rewards. King Aldric's death ends the run. Sacred Aura ranks 4/5 retain the generated 38.5%/27.5% and 42%/30% effects for both ability IDs. The source regression suite passes **112/112**; package readback and installed-editor API syntax pass.
 
 This exact build still needs its own World Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks, so it remains Development. The earlier user-reported Test Map success is a pass for `KLS-D-fd638ddcf5`. Use docs/ROADMAP-AND-ACCEPTANCE.md for current-build acceptance and docs/CROWNLANDS-EXPANSION.md for implementation details.
 

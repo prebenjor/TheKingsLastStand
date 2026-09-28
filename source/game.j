@@ -78,7 +78,6 @@ endfunction
 function KLS_BossReward takes nothing returns nothing
     local integer i = 0
     local integer gear = 'I010'
-    local item reward
     if KLS_Wave >= 50 then
         set gear = KLS_RandomCatalogDrop(4)
     elseif KLS_Wave == 20 then
@@ -93,18 +92,10 @@ function KLS_BossReward takes nothing returns nothing
         if KLS_Active[i] then
             call SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD) + 250 + KLS_Wave * 10)
             call KLS_GoldToast(i,250 + KLS_Wave * 10)
-            set reward = CreateItem(gear, KLS_X[i], KLS_Y[i])
-            call SetItemPlayer(reward, Player(i), false)
-            call SetItemUserData(reward, i+1)
-            if not UnitAddItem(KLS_Hero[i], reward) then
-                call SetItemVisible(reward, true)
-                call SetItemPosition(reward, KLS_X[i], KLS_Y[i])
-                call DisplayTimedTextToPlayer(Player(i), 0, 0, 12, "Your personal boss reward is waiting at your base.")
-            endif
+            call KLS_PersonalRewardEnqueue(i,gear,"Boss")
         endif
         set i = i + 1
     endloop
-    set reward = null
 endfunction
 
 function KLS_AwardBounty takes unit killer, integer bounty returns nothing
@@ -330,6 +321,7 @@ function KLS_Tick takes nothing returns nothing
         return
     endif
     set KLS_Seconds = KLS_Seconds + 1
+    call KLS_PersonalRewardTick()
     loop
         exitwhen i == 4
         if KLS_Respawn[i] > 0 then
@@ -579,6 +571,7 @@ function KLS_Init takes nothing returns nothing
     local real y
     local destructable tree
     set KLS_Enemies = CreateGroup()
+    call KLS_PersonalRewardInit()
     call KLS_Log("Initialization entered")
     set KLS_X[0] = -6000
     set KLS_X[1] = -3300

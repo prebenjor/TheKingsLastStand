@@ -32,8 +32,6 @@ function KLS_StoryComplete takes nothing returns nothing
     local integer p = 0
     local integer rewardTier = KLS_StoryStage
     local integer itemCode
-    local item reward
-    local unit hero
     if KLS_StoryStage >= 4 then
         return
     endif
@@ -43,14 +41,9 @@ function KLS_StoryComplete takes nothing returns nothing
     loop
         exitwhen p == 4
         if KLS_StoryContributor[KLS_StoryStage*4+p] and KLS_Active[p] and KLS_Hero[p] != null then
-            set hero = KLS_Hero[p]
             call SetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD)+150+KLS_StoryStage*100)
             set itemCode = KLS_RandomCatalogDrop(rewardTier)
-            set reward = CreateItem(itemCode,GetUnitX(hero),GetUnitY(hero))
-            if reward != null then
-                call SetItemUserData(reward,p+1)
-                call UnitAddItem(hero,reward)
-            endif
+            call KLS_PersonalRewardEnqueue(p,itemCode,"Crownlands story")
             call DisplayTimedTextToPlayer(Player(p),0,0,8,"Crownlands story reward: personal gold and a race relic.")
         endif
         set p = p+1
@@ -66,8 +59,6 @@ function KLS_StoryComplete takes nothing returns nothing
         call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700Moonbark is restored. Break the Wraithfall invasion ritual when ready.|r")
     endif
     call KLS_Log("Crownlands story stage completed; shared unlock="+I2S(KLS_StoryStage))
-    set reward = null
-    set hero = null
 endfunction
 
 function KLS_StoryCartTick takes nothing returns nothing

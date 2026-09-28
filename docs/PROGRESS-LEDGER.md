@@ -1,7 +1,17 @@
 
 # Current status — 2026-09-28
 
-## Current package-proven build
+## Current package-proven build — KLS-D-2f2397cf14
+
+- Artifact: `dist/KLS-D-2f2397cf14-Development.w3m`.
+- SHA-256: `e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f`.
+- Added `source/rewards.j` as the shared delivery path for chapter-boss and Crownlands story items. The path checks null item creation before use, queues failed item codes for the correct owner and retries every five seconds while the match clock runs. A created item goes into the owner's hero inventory when possible; otherwise it remains visible, owner-bound and retrievable at that player's base.
+- Removed direct `CreateItem` and unchecked `UnitAddItem` handling from both boss and story reward code. Reward gold, contributor eligibility, boss death counting and story stage progression are unchanged.
+- Full source suite: **112/112 passed**. Package member readback and installed-editor JASS compilation passed. Regression tests cover routing, null-handle checks, queue retry bookkeeping and full-inventory fallback.
+- Installation was attempted but did not proceed because Warcraft III still holds `KLS-D-1a040d638c-Development.w3m` open. The installer preserved its original and reused the matching archive under `backups/installed-diagnostics/20260928T192844325669Z-KLS-D-8669a44192/`; both have SHA-256 `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`. Current build remains only in `dist/`; no extra map was left in the test folder.
+- Current-build editor save/reopen, Test Map, Custom Game, live reward ownership/pickup, gameplay, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-0227009b20
 
 - Current task: harden map installation and backup behavior while preserving the current Crownlands gameplay package.
 - Build: **KLS-D-0227009b20**.
