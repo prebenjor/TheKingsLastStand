@@ -21,6 +21,8 @@ All selectable heroes are level 3 at match start and belong to a defending playe
 | Undead | Death Knight | Frontline support | Death Coil, Death Pact, Unholy Aura, Animate Dead |
 | Undead | Lich | Ranged frost caster | Frost Nova, Frost Armor, Dark Ritual, Death and Decay |
 | Undead | Dark Ranger | Ranged control | Silence, Black Arrow, Life Drain, Charm |
+| Human | Ilastar | Campaign support caster | Sacred Aura, Sacred Flame - Light's Mercy, Mind Control, Surge of Light |
+| Undead | Forsaken Paladin | Frontline purifier | Consecration, Righteous Fury, Sacred Aura, Cleansing Fire |
 
 The custom Human Priest is based on the map's custom hero type and has the four-skill set above. Preserve that identity while verifying its portrait, order, icons, and native object IDs in the installed editor version.
 
@@ -45,8 +47,10 @@ These are the IDs currently present in tools/hero_progression.py and the selecto
 | Death Knight | Udea | AUdc, AUdp, AUau, AUan |
 | Lich | Ulic | AUfn, AUfu, AUdr, AUdd |
 | Dark Ranger | Nbrn | ANsi, ANba, ANdr, ANch |
+| Ilastar | Hjsm | AHas, AHsf, AHmc, AHsl |
+| Forsaken Paladin | Npal | AHcr, ANcp, AHpa, AHcl |
 
-The 15 custom signature ability IDs are AK00 through AK14 in the same order as the table above. Keep new user-defined abilities in a project-owned, collision-checked rawcode range; verify icons and all object fields against the installed editor before packaging. Do not confuse hero object IDs, ability IDs, item IDs, and building IDs.
+The 17 custom signature ability IDs are AK00 through AK16 in the same order as the table above. Keep new user-defined abilities in a project-owned, collision-checked rawcode range; verify icons and all object fields against the installed editor before packaging. Do not confuse hero object IDs, ability IDs, item IDs, and building IDs.
 
 ## Custom signature abilities
 
@@ -69,6 +73,8 @@ Every hero receives one additional Z-key point-target signature spell. Shared va
 | Death Knight | Soul Covenant (AK12) | 150 + 20/level damage and 180 + 15/level allied healing, including undead allies. |
 | Lich | Winter's Grasp (AK13) | 200 + 20/level frost damage; slow enemies by 20% for 2 seconds. |
 | Dark Ranger | Black Hunt (AK14) | 100 + 20/level damage; summon two skeletal archers. |
+| Ilastar | Ilastar's Last Light (AK15) | 240 + 20/level area damage and 200 + 15/level allied healing. |
+| Forsaken Paladin | Cleansing Pyre (AK16) | 200 + 20/level area damage and 150 + 15/level allied healing. |
 
 These effects are the current authored object/runtime values; visual assets, native action behavior, spell targeting and balance still require in-engine verification. The Z ability is the custom signature; it does not replace the familiar four Warcraft skills.
 

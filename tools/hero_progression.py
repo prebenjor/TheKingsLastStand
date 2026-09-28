@@ -25,6 +25,10 @@ HERO_ABILITIES = {
     'Udea': ('AUdc', 'AUdp', 'AUau', 'AUan'),
     'Ulic': ('AUfn', 'AUfu', 'AUdr', 'AUdd'),
     'Nbrn': ('ANsi', 'ANba', 'ANdr', 'ANch'),
+    # Forsaken Kingdom campaign heroes verified against installed Definitive
+    # Edition UnitAbilities.slk and UnitUI.slk data.
+    'Hjsm': ('AHas', 'AHsf', 'AHmc', 'AHsl'),
+    'Npal': ('AHcr', 'ANcp', 'AHpa', 'AHcl'),
 }
 
 _DATA_LETTERS = 'ABCDEFGHIJKLMNOPQRST'

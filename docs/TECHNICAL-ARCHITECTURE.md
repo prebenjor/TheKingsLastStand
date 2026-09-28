@@ -6,7 +6,7 @@
 - JASS runtime split into explicit modules in source/: diagnostics, hero selection, backpack, shops, equipment, HUD, castle controls, combat, wave environment, signatures, and match flow.
 - tools/pipeline.py assembles those modules in a fixed order, generates native custom object files and editable trigger source, compiles the runtime against the installed Warcraft API, and writes a deterministic package manifest.
 - tools/equipment_catalog.py is the source for native gear objects, rawcodes, shop stock, costs, stats, descriptions, effects, and item metadata.
-- tools/hero_progression.py derives extended skill objects/rank logic from installed AbilityData/AbilityMetaData. tools/signature_spells.py defines the custom AK00–AK14 abilities.
+- tools/hero_progression.py derives extended skill objects/rank logic from installed AbilityData/AbilityMetaData, including the installed Hjsm and Npal campaign skill sets. tools/signature_spells.py defines the custom AK00–AK16 abilities.
 - tools/wave_rosters.py defines forty roster entries and four boss mechanic definitions.
 - tools/recipes.py builds crafting transactions from the catalog. tools/objects.py builds unit/item object records. tools/terrain.py updates terrain and pathing extents. tools/gui_sources.py produces editable WTG/WCT sources from the same assembled runtime.
 - tools/archive_pack.py and tools/map_archive.py update/read the MPQ, its listfile, hashes, blocks and checksum/attributes and verify exact component readback.
@@ -60,7 +60,7 @@ This registry records project-owned object rawcodes that agents are likely to co
 | hS01 | Hidden temporary frost-effect helper |
 | hS02 | Sage's Archive |
 | hC01 | King Aldric's Castle |
-| AK00–AK14 | Fifteen custom hero signature spells in hero-selector order |
+| AK00–AK16 | Seventeen custom hero signature spells in hero-selector order |
 | I010–I013 | Four boss relic items; see ITEMS-AND-EQUIPMENT.md |
 | I100–I127 and I128–I12A | Generated equipment families and crafted legendary variants; see ITEM-CATALOG.md |
 | KS05/10/20, KA05/10/20, KI05/10/20 | Strength, Agility, Intelligence attribute tomes |
@@ -76,7 +76,7 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current package-proven development artifact is `dist/KLS-D-2cd4884e7f-Development.w3m`, SHA-256 `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
+- The current package-proven development artifact is `dist/KLS-D-2780b4380e-Development.w3m`, SHA-256 `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
 
 ## Network determinism and ownership
 

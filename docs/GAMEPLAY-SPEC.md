@@ -11,7 +11,7 @@ Authoritative match states:
 - Create gameplay only for occupied player slots. Diagnostic packages may run solo; release packages support 2–4 defenders.
 - Defenders are allied and share vision. Shared unit control is disabled. Undead invaders have a distinct hostile owner.
 - Each active player sees a 45-second hero selection. The fallback for a player who does not confirm is Paladin.
-- Players choose one of fifteen hero previews. Duplicate choices are allowed. Create the selected hero once; do not leave or replace a usable placeholder hero.
+- Players choose one of seventeen hero previews: the original fifteen plus Human Ilastar and the Forsaken Paladin verified in installed Definitive Edition data. Duplicate choices are allowed. Create the selected hero once; do not leave or replace a usable placeholder hero.
 - After every active player selects, start the initial 45-second preparation period. Beginning troops stay held until the selection phase ends.
 - Normal cleared-wave breaks are 90 seconds. Breaks before waves 10, 20, 30, and 40 are 180 seconds. The values are longer than the original 30/60-second concept to make the market, construction, and repair loops usable.
 - Terminal victory/defeat stops spawns, timers, damage, rewards, and revival. King death takes precedence if it resolves in the same step as final-boss death.
@@ -31,7 +31,7 @@ Authoritative match states:
 - Start player heroes at level 3. Cap them at level 100.
 - Each hero retains four recognizable native Warcraft skills. Each can reach ten ranks: preserve all installed native rank data, then conservatively extend the values beyond the maximum installed rank.
 - Keep the original skill unlock levels. Once a spell is unlocked, the current extension adds one rank every ten hero levels, capped at rank 10. At level 100 all four skills have reached rank 10 when their native unlock permits it.
-- Each of the 15 heroes also has one automatically granted Z signature ability. The custom spell scales with hero level and uses a 700 cast range, 350 effect radius, 70 mana, and 30-second cooldown.
+- Each of the 17 heroes also has one automatically granted Z signature ability. The custom spell scales with hero level and uses a 700 cast range, 350 effect radius, 70 mana, and 30-second cooldown.
 - Hero talents are selected by chat shortcut in the diagnostic: Power (+12 attack damage), Vitality (+300 maximum health), or Wisdom (+10 intelligence) per point. Award talent points at five-level milestones. Count every milestone crossed when a hero gains multiple levels at once. Replace the diagnostic-only shortcuts with visible controls for release.
 - Revive a dead hero after 20 seconds at their own Altar of Kings, preserving equipment and backpack contents.
 - Support abilities and ally targeting must work across all allied hero races. Keeper's custom Grove Awakening summons Treants on open ground; it must not require harvestable trees. Death Knight effects must not assume every target is living/undead incorrectly.

@@ -6,7 +6,7 @@ Two to four friends choose different Warcraft heroes, build their own kingdom ou
 
 ## The experience
 
-The opening is a hero-selection courtyard. Players inspect fifteen recognizable hero choices, their roles, native skill sets, and signature ability before confirming. When selection ends, the view opens onto the broad battlefield: the invasion gathers beyond the northern wall, a stone road descends through the open central gate, four human base plots line the defense row, and King Aldric's castle holds the center. The market and recovery area sit farther south.
+The opening is a hero-selection courtyard. Players inspect seventeen recognizable hero choices, their roles, native skill sets, and signature ability before confirming. The roster includes the original fifteen Warcraft heroes plus verified Forsaken Kingdom campaign heroes Ilastar and the Forsaken Paladin. When selection ends, the view opens onto the broad battlefield: the invasion gathers beyond the northern wall, a stone road descends through the open central gate, four human base plots line the defense row, and King Aldric's castle holds the center. The market and recovery area sit farther south.
 
 Each player develops a personal base and army. Workers gather lumber and gold, construct and repair buildings, recruit troops, and place defensive structures. The selected hero explores the frontline, earns experience and combat gold, learns deep spell ranks, chooses talents, and builds equipment through a persistent campaign backpack. Between waves the team prepares, heals at the castle or restorative spring, shops, crafts, and adjusts defenses. Bosses interrupt the wave cadence with visible mechanics and personal rewards.
 

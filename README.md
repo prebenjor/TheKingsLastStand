@@ -6,15 +6,15 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-2cd4884e7f**.
+Current development build: **KLS-D-2780b4380e**.
 
-- Map: `dist/KLS-D-2cd4884e7f-Development.w3m`
-- SHA-256: `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`
+- Map: `dist/KLS-D-2780b4380e-Development.w3m`
+- SHA-256: `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback, JASS syntax against the installed editor API, and 65 source-level regression tests pass for the current build. It uses the native `ebua` Forsaken backpack record; it also retains visible combat gold rewards, movable/sellable normal gear, and one-second percentage spring healing. These in-game interactions remain pending. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+Package inventory/readback, JASS syntax against the installed editor API, and 66 source-level regression tests pass for the current build. It adds Human Ilastar and the Forsaken Paladin to the 15 existing hero choices, with installed-data-verified skill ranks and custom signatures. It uses the native `ebua` Forsaken backpack record and retains visible combat gold rewards, movable/sellable normal gear, and one-second percentage spring healing. These in-game interactions remain pending. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
 
-The dedicated Custom Game folder still contains older project maps. Installing the current build was blocked because Warcraft III PID 46920 holds one of those files open; after closing the game, run the install command below. The installer archives old project maps and leaves one current build.
+The current map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`. Warcraft III process PID 61400 is open, but the current build has not yet been launched. The UI-control helper failed before it could inspect the game window; see the roadmap for the one requested manual check.
 
 The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build uses the native backpack object identity and current gear flags, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
 
@@ -23,7 +23,7 @@ The user has reported that shop windows can appear empty or as text lists, purch
 - AGENTS.md — instructions and invariants for future agents.
 - docs/GAME-VISION.md — why the game exists and the experience to protect.
 - docs/GAMEPLAY-SPEC.md — match, economy, buildings, landscape, and player systems.
-- docs/HEROES-AND-ABILITIES.md — all 15 heroes, their native skills, and custom signature spells.
+- docs/HEROES-AND-ABILITIES.md — all 17 heroes, their native skills, and custom signature spells.
 - docs/HERO-THEMED-EXPANSION.md — proposed Forsaken Kingdom heroes, personal retinues, and hero-linked buildings/army research.
 - docs/ITEMS-AND-EQUIPMENT.md — Forsaken Kingdom backpack, quality progression, effects, books, recipes, relics, and shops.
 - docs/ITEM-CATALOG.md — all generated catalog entries with rawcodes, prices, slots, stats, and effects.

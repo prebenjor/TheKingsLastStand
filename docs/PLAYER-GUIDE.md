@@ -9,10 +9,10 @@
 2. The installer archives old project maps and leaves one current map named `<build-id>-Development.w3m` in `Documents/Warcraft III/Maps/TheKingsLastStand/`. If Warcraft III currently has an older map open, close the game before installing so Windows releases the old file.
 3. Test that installed map from the already-open World Editor when it points at the current map, or select the same build in Warcraft III → Single Player → Custom Game. Do not make another test copy.
 4. Confirm the startup text includes the filename's build ID. Stop if a different or no build ID appears.
-5. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
+5. Select one of 17 hero previews, read role/abilities, click Confirm. The roster includes Human Ilastar and the Forsaken Paladin from the installed campaign data. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-2cd4884e7f` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is a development build, installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`, and still needs its own in-game verification. The user-reported Test Map success for the earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 

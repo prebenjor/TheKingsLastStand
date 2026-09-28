@@ -13,7 +13,7 @@ This file keeps design choices visible when implementation evolves. A newer expl
 - Forty escalating waves in four chapters, four bosses on waves 10/20/30/40.
 - Human defenders against varied undead and demon forces; include living/other escorts so combat abilities that need living targets have valid targets.
 - Classic worker economy, plus combat gold. Markets are shared structures; purchases and reward gear remain personal.
-- One hero per player, chosen from fifteen distinct heroes; duplicate selections allowed.
+- One hero per player, chosen from seventeen distinct heroes (the original fifteen plus Human Ilastar and the Forsaken Paladin); duplicate selections allowed.
 - Free construction inside personal plots; the main road cannot be built on.
 - Repairable/upgradable buildings, tower defense, a worker-accessible mine and nearby harvestable trees at every plot.
 - Altar of Kings is the player's hero-selection/revival building. The Chapel/sorceress presentation was reported as wrong.

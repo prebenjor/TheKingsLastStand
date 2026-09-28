@@ -152,7 +152,7 @@ class HeroProgressionAndRecovery(unittest.TestCase):
 
     def test_every_selectable_hero_spell_is_extended_to_ten_native_ranks(self):
         self.assertEqual(MAX_HERO_LEVEL, 100)
-        self.assertEqual(len(HERO_ABILITIES), 15)
+        self.assertEqual(len(HERO_ABILITIES), 17)
         installed = slk('AbilityData.slk')
         installed_ids = {row[1] for row in installed.values() if 1 in row}
         self.assertTrue(all(len(spells) == 4 for spells in HERO_ABILITIES.values()))

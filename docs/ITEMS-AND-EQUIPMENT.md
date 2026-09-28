@@ -10,7 +10,7 @@ The target is the backpack/equipment presentation used by the Forsaken Kingdom c
 - Nine equipment slots: head, chest, gloves, boots, ring 1, ring 2, main hand, off hand, and trinket.
 - Normal six-slot hero inventory, with one space reserved for the persistent backpack item.
 - Native backpack/equipment UI and installed editor/game APIs, not a replacement 18-slot dialog.
-- All fifteen hero types may use the same equipment. Descriptions can recommend a role but must not enforce class or level restrictions.
+- All seventeen hero types may use the same equipment. Descriptions can recommend a role but must not enforce class or level restrictions.
 - Ordinary catalog gear is native-droppable and pawnable so the player can move it through the backpack, normal inventory, and equipment slots, and sell it to vendors for half its listed price. Boss relics are also movable/equippable, but remain unpawnable.
 
 Buying an item must deliver it in a location from which the same native inventory service can equip it. Storage, equip, unequip, ownership, stat changes, sell, and crafting must be atomic. Never remove an old item or consume a recipe part until delivery and final state are guaranteed.

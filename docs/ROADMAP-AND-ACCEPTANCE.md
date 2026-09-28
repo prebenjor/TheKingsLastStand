@@ -2,19 +2,19 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-2cd4884e7f**
+Build: **KLS-D-2780b4380e**
 
-Map SHA-256: **fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd**
+Map SHA-256: **30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | 23 packaged members checked; current output hash recorded | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 65/65 passed on this build; includes native backpack identity, exact reward toast, gear movement/sale flags, spring cadence, worker identity diagnostics, campaign records, and changelog checks | Passed |
+| Focused automated regressions | 66 source-level tests cover native backpack identity, exact reward toast, gear movement/sale flags, spring cadence, worker identity diagnostics, campaign heroes, and changelog checks | Re-run for each build |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | No evidence that a separate save/reopen cycle was performed | Pending |
-| Current-build Test Map / Custom Game startup | KLS-D-2cd4884e7f has not yet been tested; the earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Current-build Test Map / Custom Game startup | KLS-D-2780b4380e has not yet been tested; the earlier Test Map pass remains recorded separately | Pending (not failed) |
 | Shop windows, backpack/equipment, purchases, crafting and full inventory | Pack now modifies the installed `ebua` record; gear remains droppable/pawnable by object data. Native click, transfer, equipment and buyback need the current-build game check | Pending / known report |
 | Kill-reward feedback | Regression confirms each active player sees the exact personal kill/boss gold payout; visual readability needs the current-build game check | Pending in game |
 | Restoring Spring cadence | Regression confirms 1% max health and mana per second; healing appearance and range need the current-build game check | Pending in game |
@@ -32,7 +32,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
 2. Continue with the existing World Editor session and current build; preserve its open document instead of making a second round-trip copy.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
-4. Confirm build ID, 15-hero selection court, correct active-player plots/resources, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
+4. Confirm build ID, 17-hero selection court, correct active-player plots/resources, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
 
 ### Gate 2 — native items/backpack and player systems
@@ -52,12 +52,11 @@ Passing syntax or simulated tests never clears an in-game gate.
 
 ## Current exact human-run check
 
-1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step. UI automation is unavailable in this session, so no editor input has been sent.
-2. Installing `KLS-D-2cd4884e7f` remains blocked because Warcraft III PID 46920 still has an older project map open. The previous package was archived locally. After the user finishes testing and closes Warcraft III, run `python -B tools/build_map.py --install-test-map`; the installer should archive the old project map and leave one current `<build-id>-Development.w3m`.
-3. Test `KLS-D-2cd4884e7f` through the established World Editor Test Map workflow. The earlier build's Test Map is a passed user-reported result; this new build remains pending until tried.
-4. Confirm the visible build ID, 15 selection previews, correct player plot and resources, castle and king, countdown, and absence of victory.
-5. Launch that exact map through Custom Game and report its ID and results.
-6. If anything is missing, type -diag, capture full output and screenshot (including the worker race/object identity lines), then collect logs with `python -B tools/collect_test_logs.py` from the repository root.
+1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
+2. `KLS-D-2780b4380e` is installed as the single current project map at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`. Older copies were archived by the installer.
+3. Current-build startup is pending. The computer-use helper failed before it could inspect the open game window, so the next check is a direct Custom Game launch of this exact build.
+4. On startup, confirm the visible ID `KLS-D-2780b4380e`, choose one of the 17 heroes, and kill one wave-1 enemy. Report whether the visible `+N gold` notification appears and the resource counter increases. This single check validates launch identity, hero selection, and the reported reward feedback.
+5. After startup passes, continue the backpack transfer/sell and Restoring Spring tick checks, then editor, multiplayer and endurance acceptance.
 
 For the first item-system check after startup, click the Forsaken Field Pack and confirm its native UI opens. Then buy common boots, move them between backpack storage and the normal inventory, and sell them to a shop. The same run should also confirm a kill reward popup and one-second visible HP/mana restoration at the spring.
 

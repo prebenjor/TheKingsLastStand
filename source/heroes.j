@@ -34,7 +34,7 @@ function KLS_FinishSelection takes nothing returns nothing
     set KLS_Selecting = false
     set KLS_Prep = 45
     loop
-        exitwhen n == 15
+        exitwhen n == 17
         call DestroyTextTag(KLS_PreviewLabel[n])
         set KLS_PreviewLabel[n] = null
         call RemoveUnit(KLS_Preview[n])
@@ -57,7 +57,7 @@ function KLS_FinishSelection takes nothing returns nothing
 endfunction
 
 function KLS_ChooseHero takes integer p, integer n returns nothing
-    if p < 0 or p >= 4 or n < 0 or n >= 15 then
+    if p < 0 or p >= 4 or n < 0 or n >= 17 then
         return
     endif
     if not KLS_Selecting or not KLS_Active[p] or KLS_ClassChosen[p] or KLS_Ended then
@@ -111,7 +111,7 @@ function KLS_PreviewSelected takes nothing returns nothing
         return
     endif
     loop
-        exitwhen n == 15
+        exitwhen n == 17
         if GetTriggerUnit() == KLS_Preview[n] then
             set KLS_Candidate[p] = n
             call DialogClear(KLS_ClassDialog[p])
@@ -201,10 +201,16 @@ function KLS_SelectionInit takes nothing returns nothing
     set KLS_HeroType[14] = 'Nbrn'
     set KLS_HeroName[14] = "Dark Ranger"
     set KLS_HeroDescription[14] = "Ranged control: Silence, Black Arrow, Life Drain and Charm."
+    set KLS_HeroType[15] = 'Hjsm'
+    set KLS_HeroName[15] = "Ilastar, Human"
+    set KLS_HeroDescription[15] = "Support caster: Sacred Aura, Sacred Flame - Light's Mercy, Mind Control and Surge of Light."
+    set KLS_HeroType[16] = 'Npal'
+    set KLS_HeroName[16] = "Forsaken Paladin"
+    set KLS_HeroDescription[16] = "Frontline purifier: Consecration, Righteous Fury, Sacred Aura and Cleansing Fire."
     loop
-        exitwhen n == 15
-        set x = -6000 + ModuloInteger(n, 5) * 560
-        set y = -4900 - (n / 5) * 600
+        exitwhen n == 17
+        set x = -6100 + ModuloInteger(n, 6) * 520
+        set y = -4800 - (n / 6) * 600
         call SetTerrainType(x, y, 'Lrok', -1, 2, 0)
         set KLS_Preview[n] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), KLS_HeroType[n], x, y, 270)
         if KLS_Preview[n] == null then
@@ -236,7 +242,7 @@ function KLS_SelectionInit takes nothing returns nothing
                 call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2600, 0)
                 call PanCameraToTimed(-4880, -5500, 0)
             endif
-            call DisplayTimedTextToPlayer(Player(p), 0, 0, 30, "Choose your hero: click one of the 15 hero previews, read their abilities, then confirm. Duplicate choices are allowed. Paladin is chosen automatically after 45 seconds.")
+            call DisplayTimedTextToPlayer(Player(p), 0, 0, 30, "Choose your hero: click one of the 17 hero previews, read their abilities, then confirm. Duplicate choices are allowed. Paladin is chosen automatically after 45 seconds.")
         endif
         set p = p + 1
     endloop

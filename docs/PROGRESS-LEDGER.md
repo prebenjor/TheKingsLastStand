@@ -3,19 +3,43 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-2cd4884e7f**.
-- Artifact: `dist/KLS-D-2cd4884e7f-Development.w3m`.
-- SHA-256: `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`.
+- Build: **KLS-D-2780b4380e**.
+- Artifact: `dist/KLS-D-2780b4380e-Development.w3m`.
+- SHA-256: `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`.
 - Manifest: `dist/build-manifest.json`.
-- Package readback and JASS syntax against installed API: passed. Full source regression suite for the current build: **65/65 passed**.
-- Status: **development build**. The current exact build has not yet been installed or run in Warcraft III.
+- Package readback and JASS syntax against installed API: passed. Full source regression suite for the current build: **66/66 passed**.
+- Status: **development build**. The current exact build is installed but has not yet been launched in Warcraft III.
 
 ## User-reported engine result
 
 - World Editor Test Map succeeded on the earlier installed development build **KLS-D-fd638ddcf5**. This remains a pass for that build and is not listed as a failure.
 - Save/reopen, current-build Test Map, current-build Custom Game, live systems, multiplayer and endurance checks remain pending for their respective builds.
 
-## 2026-09-28: restore native backpack identity — KLS-D-2cd4884e7f
+## 2026-09-28: campaign heroes and reward/inventory corrections — KLS-D-2780b4380e
+
+### Current task and last package-proven build
+
+- Current task: keep implementing the full approved defense RPG plan, record every packaged build, and address the latest combat-feedback and Forsaken inventory test reports.
+- Current development build: **KLS-D-2780b4380e**.
+- Workspace artifact: `dist/KLS-D-2780b4380e-Development.w3m`.
+- SHA-256: `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`.
+- Package changelog: `CHANGELOG.md`; manifest: `dist/build-manifest.json`.
+
+### Changes and evidence
+
+- Expanded the 15-hero selector to 17 with Human Ilastar (`Hjsm`) and the Forsaken Paladin (`Npal`). Their four skill IDs and display names were checked against the installed Definitive Edition tables. The same rank generator extends their native skills to ten ranks through hero level 100, and the selector provides the custom `AK15`/`AK16` signatures.
+- Kept the 17 previews inside the existing selection camera bounds with a six-column grid. The user's actual selector readability test remains pending.
+- Focused and full regression suite passed: **66/66**. This includes per-player kill/boss gold notifications, ordinary gear backpack/normal-inventory movement and pawnability, unsellable boss relics, and 1% HP/mana restoration each second.
+- Package inventory/readback and JASS syntax against the installed editor API passed. The generated map is `dist/KLS-D-2780b4380e-Development.w3m`; previous build artifacts are archived outside `dist/`.
+- The earlier user-reported World Editor Test Map success remains a pass for **KLS-D-fd638ddcf5** only. It has not been carried forward as evidence for this build.
+- The current build was installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`; the installer archived the former test copy. Warcraft III PID 61400 is open, but the new map has not been launched. All engine, equipment, multiplayer, and endurance checks remain pending.
+- Computer-use initialization failed twice with `failed to write kernel assets: The system cannot find the path specified`, including after resetting the UI session. No clicks or keyboard input were sent.
+
+### Exact next action
+
+- Exact next check: launch `KLS-D-2780b4380e` via Custom Game, choose a hero, use `-wave 1` if necessary, and confirm one enemy kill displays `+N gold` while resources increase. Then report the build ID and a screenshot. After startup/reward feedback is confirmed, ask for the backpack transfer/sell and spring tick checks.
+
+## 2026-09-28: restore native backpack identity — KLS-D-2cd4884e7f (historical)
 
 ### Current task and last package-proven build
 

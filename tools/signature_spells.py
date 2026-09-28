@@ -15,6 +15,8 @@ SIGNATURES = [
  ('Soul Covenant','DeathCoil',150,180,0,0,0,0,'Damages enemies and heals defending troops, including both living and undead allies.'),
  ('Winters Grasp','Frost',200,0,0,0,0,1,'Deals frost damage and slows enemies by 20% for 2 seconds.'),
  ('Black Hunt','TheBlackArrow',100,0,0,'nska',2,0,'Damages enemies and summons two skeletal archers for 25 seconds.'),
+ ("Ilastar's Last Light",'HolyBolt',240,200,0,0,0,0,'A final flare of holy light damages nearby foes and restores defending allies of every race.'),
+ ('Cleansing Pyre','DispelMagic',200,150,0,0,0,0,'Consecrated fire burns enemies while renewing nearby allied heroes and troops.'),
 ]
 
 def spell_id(index):return 'AK'+str(index).zfill(2)
