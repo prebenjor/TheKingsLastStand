@@ -33,6 +33,8 @@ All qualities are available immediately; gold gates affordability rather than sh
 | Consumables | Field Apothecary | Existing Warcraft consumable prices |
 | Attribute books | Sage's Archive | 600 / 1,800 / 5,000 gold by tome size |
 
+Display item rarity with Warcraft color codes in item names, shop stock names, and tooltip headers: Common white (`#FFFFFF`), Uncommon green (`#1EFF00`), Rare blue (`#0070DD`), Epic purple (`#A335EE`), and Legendary gold (`#FF8000`). Boss relics use Rare for Gravetide Cleaver, Epic for Heart of the Watch and Crown of Dawn, and Legendary for Oath of the Last King. Keep the raw quality label and full stats in the tooltip so color is supplementary.
+
 The five quality levels are implemented as two neutral units per level: Arms & Armor and Apparel & Relics, plus the Field Apothecary and Sage's Archive. The two Rare Master Forge stock lists host the named recipe scrolls in the current implementation. Present them as recognizable vendor buildings around the southern market plaza, with the Archive beside the Apothecary. Shop windows must display icon buttons and stat-rich item tooltips, not a text-only list or an empty inventory.
 
 ## Equipment families, stats, and scaling

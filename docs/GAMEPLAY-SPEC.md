@@ -29,9 +29,9 @@ Authoritative match states:
 
 ## Hero growth
 
-- Start player heroes at level 3. Cap them at level 100.
-- Each hero retains four recognizable native Warcraft skills. Each can reach ten ranks: preserve all installed native rank data, then conservatively extend the values beyond the maximum installed rank.
-- Keep the original skill unlock levels. Once a spell is unlocked, the current extension adds one rank every ten hero levels, capped at rank 10. At level 100 all four skills have reached rank 10 when their native unlock permits it.
+- Start player heroes at level 3. Cap them at level 50. The level-1 starting point remains an open user request.
+- Each hero retains four recognizable native Warcraft skills. Preserve every installed native rank. Extend only abilities whose installed power fields are explicitly registered in `tools/hero_progression.py`; see HEROES-AND-ABILITIES.md for the mapping.
+- Preserve the original skill unlock levels. Runtime rank advancement occurs on ten-level milestones and stops at rank 5. For supported spells, each rank beyond the installed maximum adds 10% of the last authored power value. Other data, including cost, cooldown, duration, range and targeting, copies unchanged from the last native rank. Unsupported effects stay capped at their installed maximum.
 - Each of the 17 heroes also has one automatically granted Z signature ability. The custom spell scales with hero level and uses a 700 cast range, 350 effect radius, 70 mana, and 30-second cooldown.
 - Hero talents are selected by chat shortcut in the diagnostic: Power (+12 attack damage), Vitality (+300 maximum health), or Wisdom (+10 intelligence) per point. Award talent points at five-level milestones. Count every milestone crossed when a hero gains multiple levels at once. Replace the diagnostic-only shortcuts with visible controls for release.
 - Revive a dead hero after 20 seconds at their own Altar of Kings, preserving equipment and backpack contents.

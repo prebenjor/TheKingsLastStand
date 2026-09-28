@@ -109,7 +109,7 @@ class EquipmentRecords(unittest.TestCase):
             else:
                 self.assertIn(stock,script)
             fields=decode(items())[item['rawcode']][1]
-            self.assertEqual(fields[('utip',0)][0],item['name'])
+            self.assertEqual(fields[('utip',0)][0],item['colored_name'])
             self.assertIn('+' , fields[('utub',0)][0])
             self.assertEqual(fields[('igol',0)][0],item['price'])
         self.assertIn("KLS_Shops[10]",Path(ROOT/'source/shops.j').read_text())

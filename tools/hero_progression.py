@@ -1,11 +1,54 @@
-"""Rank the selected Warcraft hero skills through level 100 using installed data."""
+"""Rank selected Warcraft hero skills through level 50 using installed data."""
 from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_HERO_LEVEL = 100
-MAX_SPELL_RANK = 10
-MAX_NATIVE_DATA_RANK = 6
+MAX_HERO_LEVEL = 50
+MAX_SPELL_RANK = 5
+MAX_NATIVE_DATA_RANK = MAX_SPELL_RANK
+EXTRA_RANK_POWER_STEP = 0.10
+
+# Only fields whose installed meaning is a spell's power are extended. Every
+# other field is copied from the final authored rank, preserving costs,
+# cooldowns, duration, range, targeting, and mechanics. Abilities missing a
+# registered nonzero power field keep their native rank cap.
+SCALABLE_EFFECT_FIELDS = {
+    'AHhb': ('Hhb1',),                    # Holy Light heal / damage
+    'AHad': ('Had1',),                    # Devotion Aura armor
+    'AHtb': ('Htb1',),                    # Storm Bolt damage
+    'AHtc': ('Htc1',),                    # Thunder Clap damage
+    'AHbh': ('Hbh1', 'Hbh3'),             # Bash proc chance / bonus damage
+    'AHav': ('Hav1', 'Hav2', 'Hav3'),     # Avatar armor, health, damage
+    'AHfs': ('Hfs1', 'Hfs3', 'Hfs6'),     # Flame Strike damage values
+    'AHbn': ('Hbn1',),                    # Banish movement-speed reduction
+    'AHpa': ('hsa1', 'hsa2'),             # Forsaken Paladin Sacred Aura
+    'AHas': ('hsa1', 'hsa2'),             # Ilastar Sacred Aura
+    'AHfa': ('Hfa1',),                    # Searing Arrows bonus damage
+    'AOwk': ('Owk3',),                    # Wind Walk bonus damage
+    'AOcr': ('Ocr2',),                    # Critical Strike multiplier
+    'AOww': ('Oww1',),                    # Bladestorm damage
+    'AOcl': ('Ocl1',),                    # Chain Lightning damage
+    'AOsh': ('Osh1',),                    # Shockwave damage
+    'AOws': ('Wrs1',),                    # War Stomp damage
+    'AOae': ('Oae1', 'Oae2'),             # Endurance Aura move/attack speed
+    'AOhw': ('Ocl1',),                    # Healing Wave amount
+    'AEmb': ('Emb1',),                    # Mana Burn amount
+    'AEim': ('Eim1',),                    # Immolation damage
+    'AEev': ('Eev1',),                    # Evasion chance
+    'AEer': ('Eer1',),                    # Entangling Roots damage
+    'AEah': ('Eah1',),                    # Thorns Aura reflected damage
+    'AEar': ('Ear1',),                    # Trueshot Aura damage bonus
+    'AEfk': ('Efk1', 'Efk2'),             # Fan of Knives damage / total cap
+    'AEsh': ('Esh1', 'Esh5'),             # Shadow Strike poison / initial damage
+    'AEtq': ('Etq1',),                    # Tranquility healing
+    'AEme': ('Eme5',),                    # Metamorphosis bonus health
+    'AEsf': ('Esf1',),                    # Starfall damage
+    'AUdc': ('Udc1',),                    # Death Coil damage / healing
+    'AUau': ('Uau1', 'Uau2'),             # Unholy Aura speed / regeneration
+    'AUdr': ('Udp1',),                    # Dark Ritual mana conversion
+    'AUfn': ('Ufn1',),                    # Frost Nova damage
+    'AUdd': ('Udd1',),                    # Death and Decay damage fraction
+}
 
 # Hero types and the four native Warcraft skills shown by the selector. The
 # Priest is the map's custom human hero, with the spell set from its tooltip.
@@ -72,68 +115,71 @@ def _ability_tables():
     return data_headers, data, metadata
 
 
-def _median_native_slope(previous):
-    steps = []
-    for index in range(1, len(previous)):
-        before_rank, before_value = previous[index - 1]
-        rank, current_value = previous[index]
-        try:
-            step = (float(current_value) - float(before_value)) / (rank - before_rank)
-        except (TypeError, ValueError, ZeroDivisionError):
-            continue
-        if step != 0:
-            steps.append(step)
-    if not steps:
-        return 0.0
-    steps.sort()
-    middle = len(steps) // 2
-    if len(steps) % 2:
-        return steps[middle]
-    return (steps[middle - 1] + steps[middle]) * 0.5
-
-
-def _rank_value(value, previous, kind, row, column_base, level, native_max_rank):
-    """Continue a numeric curve after its actual last installed rank."""
-    numeric = kind in ('unreal', 'real', 'int')
-    if not numeric or len(previous) < 2:
-        return previous[-1][1] if previous else value
-    last_rank, last_value = previous[-1]
+def _native_level_cap(data_row, headers):
+    column_by_name = {name: index for index, name in headers.items()}
+    levels_column = column_by_name.get('levels')
     try:
-        last = float(last_value)
+        levels = int(float(data_row.get(levels_column, MAX_NATIVE_DATA_RANK)))
     except (TypeError, ValueError):
-        return last_value
-    slope = _median_native_slope(previous)
-    if slope == 0:
-        return last_value
-    # Preserve every installed value, then continue the most recent changing
-    # native step at half strength. This also handles native curves that plateau
-    # for one or more ranks before their actual final rank.
-    extended = last + slope * (level - native_max_rank) * 0.5
-    if column_base in ('Cool', 'Dur', 'HeroDur'):
-        extended = max(1.0, extended)
-    elif column_base == 'Cost':
-        extended = max(0.0, extended)
-    elif column_base == 'Area' or column_base == 'Rng':
-        extended = max(0.0, extended)
-    if kind == 'int':
-        return str(max(0, round(extended)))
-    return str(extended)
+        levels = MAX_NATIVE_DATA_RANK
+    return max(1, min(MAX_NATIVE_DATA_RANK, levels))
+
+
+def _effect_field_entries(ability_id, data_row, headers, metadata, native_level_cap):
+    """Find configured, numeric power fields actually present in this object."""
+    column_by_name = {name: index for index, name in headers.items()}
+    code_column = column_by_name.get('code')
+    ability_codes = {ability_id}
+    if code_column is not None and data_row.get(code_column):
+        ability_codes.add(data_row[code_column])
+    configured = set(SCALABLE_EFFECT_FIELDS.get(ability_id, ()))
+    found = set()
+    for entry in metadata:
+        field_id = entry[1]
+        if field_id not in configured or entry.get(3) != 'AbilityData':
+            continue
+        allowed = entry.get(23, '')
+        if allowed and ability_codes.isdisjoint(allowed.split(',')):
+            continue
+        column_base = entry.get(2, '')
+        pointer = int(entry.get(6, '0') or 0)
+        if column_base == 'Data':
+            if pointer < 1 or pointer > len(_DATA_LETTERS):
+                continue
+            column_base = 'Data' + _DATA_LETTERS[pointer - 1]
+        values = []
+        for rank in range(1, native_level_cap + 1):
+            raw = data_row.get(column_by_name.get(column_base + str(rank), -1), '').strip()
+            if raw in ('', '-'):
+                continue
+            try:
+                values.append(float(raw))
+            except (TypeError, ValueError):
+                continue
+        if values and max(values) > 0:
+            found.add(field_id)
+    return found
+
+
+def _effective_level_cap(ability_id, data_row, headers, metadata):
+    native_level_cap = _native_level_cap(data_row, headers)
+    if _effect_field_entries(ability_id, data_row, headers, metadata, native_level_cap):
+        return MAX_SPELL_RANK
+    return native_level_cap
 
 
 def _modification_fields(ability_id, data_row, headers, metadata):
-    fields = [('alev', 0, 0, 0, MAX_SPELL_RANK)]
+    native_level_cap = _native_level_cap(data_row, headers)
+    effect_field_ids = _effect_field_entries(
+        ability_id, data_row, headers, metadata, native_level_cap)
+    effective_level_cap = MAX_SPELL_RANK if effect_field_ids else native_level_cap
+    fields = [('alev', 0, 0, 0, effective_level_cap)]
     seen = {('alev', 0, 0)}
     column_by_name = {name: index for index, name in headers.items()}
     code_column = column_by_name.get('code')
     ability_codes = {ability_id}
     if code_column is not None and data_row.get(code_column):
         ability_codes.add(data_row[code_column])
-    levels_column = column_by_name.get('levels')
-    try:
-        declared_levels = int(float(data_row.get(levels_column, MAX_NATIVE_DATA_RANK)))
-    except (TypeError, ValueError):
-        declared_levels = MAX_NATIVE_DATA_RANK
-    declared_levels = max(1, min(MAX_NATIVE_DATA_RANK, declared_levels))
     for entry in metadata:
         field_id = entry[1]
         if field_id == 'alev' or entry.get(3) != 'AbilityData':
@@ -155,24 +201,22 @@ def _modification_fields(ability_id, data_row, headers, metadata):
                    for name in headers.values()):
             continue
         native_values = []
-        for rank in range(1, declared_levels + 1):
+        for rank in range(1, native_level_cap + 1):
             raw = data_row.get(column_by_name.get(column_base + str(rank), -1), '').strip()
             if raw not in ('', '-'):
                 native_values.append((rank, raw))
         if not native_values:
             continue
-        native_max_rank = native_values[-1][0]
         previous = []
-        for rank in range(1, MAX_SPELL_RANK + 1):
-            if rank <= native_max_rank:
+        for rank in range(1, effective_level_cap + 1):
+            if rank <= native_level_cap:
                 raw = data_row.get(column_by_name.get(column_base + str(rank), -1), '').strip()
-                if raw in ('', '-'):
-                    if not previous:
-                        continue
-                    raw = previous[-1][1]
             else:
-                raw = _rank_value(previous[-1][1], previous, value_kind,
-                                  data_row, column_base, rank, native_max_rank)
+                raw = ''
+            if raw in ('', '-'):
+                if not previous:
+                    continue
+                raw = previous[-1][1]
             if value_kind in ('unreal', 'real'):
                 try:
                     value = float(raw)
@@ -185,17 +229,19 @@ def _modification_fields(ability_id, data_row, headers, metadata):
                     continue
             else:
                 value = raw
+            if rank > native_level_cap and field_id in effect_field_ids and value_kind in ('unreal', 'real', 'int') and value > 0:
+                scaled = value * (1.0 + EXTRA_RANK_POWER_STEP * (rank - native_level_cap))
+                value = int(scaled + 0.5) if value_kind == 'int' else scaled
             key = (field_id, rank, pointer)
             if key not in seen:
                 fields.append((field_id, typ, rank, pointer, value))
                 seen.add(key)
-            if rank <= native_max_rank:
-                previous.append((rank, raw))
+            previous.append((rank, raw))
     return fields
 
 
 def hero_ability_records(ability_builder):
-    """Return base-object overrides that extend every selectable skill to 10."""
+    """Return safe rank overrides for the selected heroes' native skills."""
     headers, data, metadata = _ability_tables()
     records = []
     ability_ids = sorted({spell for spells in HERO_ABILITIES.values() for spell in spells})
@@ -207,26 +253,19 @@ def hero_ability_records(ability_builder):
         fields = _modification_fields(spell, row, headers, metadata)
         if len(fields) < 2:
             raise ValueError('No installed per-rank ability data found for ' + spell)
-        # The stock strings cover only the original spell ranks. Give ranks
-        # 7–10 explicit tooltips rather than leaving blank level cards.
-        name = row.get(3, spell).split(' - ', 1)[-1]
-        for rank in range(MAX_NATIVE_DATA_RANK + 1, MAX_SPELL_RANK + 1):
-            fields.append(('atp1', 3, rank, 0, name + ' - Rank ' + str(rank)))
-            fields.append(('aub1', 3, rank, 0,
-                           'Rank ' + str(rank) + ' of this hero ability. Its installed spell values continue to scale for the extended defense.'))
         records.append(ability_builder(spell, '\0' * 4, fields))
     return records
 
 
 def spell_script():
-    headers, data, _ = _ability_tables()
+    headers, data, metadata = _ability_tables()
     lines = [
-        'function KLS_RankHeroSpell takes unit hero, integer spellId, integer heroLevel, integer unlockLevel returns nothing',
+        'function KLS_RankHeroSpell takes unit hero, integer spellId, integer heroLevel, integer unlockLevel, integer maxRank returns nothing',
         '    local integer rank',
         '    if heroLevel < unlockLevel then',
         '        return',
         '    endif',
-        '    set rank = IMinBJ(10, 1 + (heroLevel - unlockLevel) / 10)',
+        '    set rank = IMinBJ(maxRank, IMinBJ(5, 1 + (heroLevel - unlockLevel) / 10))',
         '    if GetUnitAbilityLevel(hero, spellId) == 0 then',
         '        call UnitAddAbility(hero, spellId)',
         '        call UnitMakeAbilityPermanent(hero, true, spellId)',
@@ -245,6 +284,7 @@ def spell_script():
         for spell in abilities:
             row = data[spell]
             unlock = max(1, int(float(row.get(12, '1') or 1)))
-            lines.append("        call KLS_RankHeroSpell(hero, '" + spell + "', heroLevel, " + str(unlock) + ')')
+            max_rank = _effective_level_cap(spell, row, headers, metadata)
+            lines.append("        call KLS_RankHeroSpell(hero, '" + spell + "', heroLevel, " + str(unlock) + ', ' + str(max_rank) + ')')
     lines += ['    endif', 'endfunction']
     return '\n'.join(lines)

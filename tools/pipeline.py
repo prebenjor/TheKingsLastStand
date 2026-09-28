@@ -35,7 +35,7 @@ def digest(data):
 def misc_data():
     # Native XP is disabled because Warcraft divides shared XP between nearby
     # heroes. The runtime awards each active hero in its own 1200 range check.
-    return (b'[Misc]\nMaxHeroLevel=100\nHeroExpRange=0\n'
+    return (b'[Misc]\nMaxHeroLevel=50\nHeroExpRange=0\n'
             b'GrantNormalXP=0\nGrantNormalXPFormulaA=1\n'
             b'GrantNormalXPFormulaB=0\nGrantNormalXPFormulaC=0\n'
             b'GrantHeroXP=0,0,0,0,0,0,0,0,0,0\n')

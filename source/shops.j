@@ -9,6 +9,7 @@ function KLS_CreateShops takes nothing returns nothing
     local integer tier = 0
     local integer i
     local string array quality
+    local string array qualityColor
     local string array categories
     set KLS_GearData = InitHashtable()
     call KLS_CatalogInit()
@@ -17,6 +18,11 @@ function KLS_CreateShops takes nothing returns nothing
     set quality[2] = "Rare"
     set quality[3] = "Epic"
     set quality[4] = "Legendary"
+    set qualityColor[0] = "|cffffffff"
+    set qualityColor[1] = "|cff1eff00"
+    set qualityColor[2] = "|cff0070dd"
+    set qualityColor[3] = "|cffa335ee"
+    set qualityColor[4] = "|cffff8000"
     set categories[0] = "Arms & Armor"
     set categories[1] = "Apparel & Relics"
     loop
@@ -28,7 +34,7 @@ function KLS_CreateShops takes nothing returns nothing
             if KLS_Shops[tier*2+i] == null then
                 return
             endif
-            call BlzSetUnitName(KLS_Shops[tier*2+i],quality[tier]+" "+categories[i])
+            call BlzSetUnitName(KLS_Shops[tier*2+i],qualityColor[tier]+quality[tier]+"|r "+categories[i])
             call SetUnitInvulnerable(KLS_Shops[tier*2+i],true)
             set i = i+1
         endloop

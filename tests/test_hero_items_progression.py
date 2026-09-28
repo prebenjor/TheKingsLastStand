@@ -8,10 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 sys.path.insert(0, str(ROOT / 'tests'))
 
-from equipment_catalog import abilities, attribute_books, catalog_script, item_catalog
+from equipment_catalog import (
+    RARITY_COLORS, abilities, attribute_books, catalog_script, item_catalog,
+)
 from hero_progression import (
-    HERO_ABILITIES, MAX_HERO_LEVEL, _ability_tables, _modification_fields,
-    spell_script,
+    HERO_ABILITIES, MAX_HERO_LEVEL, MAX_SPELL_RANK, SCALABLE_EFFECT_FIELDS,
+    _ability_tables, _modification_fields, spell_script,
 )
 from objects import items, units
 from pipeline import misc_data, runtime_script
@@ -20,6 +22,33 @@ from test_equipment import decode, slk
 
 
 class AttributeEquipment(unittest.TestCase):
+    def test_rarity_colors_appear_in_equipment_names_and_tooltip_headers(self):
+        records = decode(items())
+        for entry in item_catalog():
+            with self.subTest(item=entry['rawcode']):
+                color = RARITY_COLORS[entry['quality']]
+                self.assertEqual(entry['colored_name'], color + entry['name'] + '|r')
+                self.assertTrue(entry['description'].startswith(
+                    color + entry['quality'] + '|r '))
+                fields = records[entry['rawcode']][1]
+                self.assertEqual(fields[('unam', 0)][0], entry['colored_name'])
+                self.assertEqual(fields[('utip', 0)][0], entry['colored_name'])
+                self.assertIn(color + entry['quality'] + '|r', fields[('utub', 0)][0])
+        relics = (
+            ('I010', 'Rare', 'Gravetide Cleaver'),
+            ('I011', 'Epic', 'Heart of the Watch'),
+            ('I012', 'Epic', 'Crown of Dawn'),
+            ('I013', 'Legendary', 'Oath of the Last King'),
+        )
+        for rawcode, quality, name in relics:
+            fields = records[rawcode][1]
+            self.assertEqual(fields[('unam', 0)][0], RARITY_COLORS[quality] + name + '|r')
+            self.assertIn(RARITY_COLORS[quality] + quality + '|r', fields[('utub', 0)][0])
+        shop_script = (ROOT / 'source/shops.j').read_text()
+        for color in RARITY_COLORS.values():
+            self.assertIn(color, shop_script)
+        self.assertIn('qualityColor[tier]+quality[tier]+"|r "', shop_script)
+
     def test_tiered_attribute_gear_is_in_the_native_catalog(self):
         catalog = item_catalog()
         attributes = [e for e in catalog if e['family'] in {
@@ -156,24 +185,44 @@ class RecipeTransactions(unittest.TestCase):
 
 
 class HeroProgressionAndRecovery(unittest.TestCase):
-    def test_installed_spell_rank_values_are_preserved_before_continuation(self):
+    def test_tagged_effect_ranks_scale_without_changing_authored_ranks(self):
         records = decode(abilities(), extended=True)
         devotion_aura = records['AHad'][1]
         self.assertEqual([devotion_aura[('Had1', rank)][0] for rank in (1, 2, 3)],
                          [2.0, 3.5, 5.0])
-        self.assertEqual(devotion_aura[('Had1', 4)][0], 5.75)
-        self.assertGreater(devotion_aura[('Had1', 5)][0], devotion_aura[('Had1', 4)][0])
+        self.assertAlmostEqual(devotion_aura[('Had1', 4)][0], 5.5)
+        self.assertAlmostEqual(devotion_aura[('Had1', 5)][0], 6.0)
+        self.assertEqual(devotion_aura[('adur', 4)][0], 4.0)
+        self.assertEqual(devotion_aura[('adur', 5)][0], 4.0)
+        self.assertEqual(devotion_aura[('alev', 0)][0], 5)
 
-    def test_sacred_aura_ignores_stale_campaign_data_after_its_declared_third_rank(self):
+        holy_light = records['AHhb'][1]
+        self.assertEqual([holy_light[('Hhb1', rank)][0] for rank in (1, 2, 3)],
+                         [200.0, 400.0, 600.0])
+        self.assertAlmostEqual(holy_light[('Hhb1', 4)][0], 660.0)
+        self.assertAlmostEqual(holy_light[('Hhb1', 5)][0], 720.0)
+
+    def test_unmapped_spell_keeps_native_rank_cap_and_unchanged_range_values(self):
+        records = decode(abilities(), extended=True)
+        blink = records['AEbl'][1]
+        self.assertEqual(blink[('alev', 0)][0], 3)
+        self.assertEqual(blink[('amcs', 3)][0], 10)
+        self.assertNotIn(('amcs', 4), blink)
+        self.assertNotIn(('Ebl1', 4), blink)
+        self.assertNotIn(('Ebl1', 5), blink)
+
+    def test_sacred_aura_gains_safe_ranks_without_reusing_stale_rank_four_data(self):
         records = decode(abilities(), extended=True)
         for spell in ('AHpa', 'AHas'):
             aura = records[spell][1]
             self.assertIn(('hsa1', 1), aura, spell)
             for rank, expected in enumerate((0.15, 0.25, 0.35), start=1):
                 self.assertAlmostEqual(aura[('hsa1', rank)][0], expected)
-            self.assertAlmostEqual(aura[('hsa1', 4)][0], 0.4)
-            self.assertAlmostEqual(aura[('hsa1', 10)][0], 0.7)
-            self.assertEqual(aura[('hsa2', 4)][0], 27.5)
+            self.assertAlmostEqual(aura[('hsa1', 4)][0], 0.385)
+            self.assertAlmostEqual(aura[('hsa1', 5)][0], 0.42)
+            self.assertAlmostEqual(aura[('hsa2', 4)][0], 27.5)
+            self.assertAlmostEqual(aura[('hsa2', 5)][0], 30.0)
+            self.assertEqual(aura[('alev', 0)][0], 5)
 
     def test_space_padded_missing_native_ranks_do_not_become_numeric_values(self):
         headers, data, metadata = _ability_tables()
@@ -183,22 +232,28 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertEqual(cast_ranks[(1, 0)], 0.0)
         self.assertEqual(cast_ranks[(2, 0)], 0.0)
 
-    def test_every_selectable_hero_spell_is_extended_to_ten_native_ranks(self):
-        self.assertEqual(MAX_HERO_LEVEL, 100)
+    def test_hero_spells_extend_only_registered_effects_through_rank_five(self):
+        self.assertEqual(MAX_HERO_LEVEL, 50)
+        self.assertEqual(MAX_SPELL_RANK, 5)
         self.assertEqual(len(HERO_ABILITIES), 17)
         installed = slk('AbilityData.slk')
         installed_ids = {row[1] for row in installed.values() if 1 in row}
         self.assertTrue(all(len(spells) == 4 for spells in HERO_ABILITIES.values()))
         self.assertTrue({spell for spells in HERO_ABILITIES.values() for spell in spells} <= installed_ids)
         records = decode(abilities(), extended=True)
+        headers, rows, _ = _ability_tables()
+        levels_column = next(index for index, name in headers.items() if name == 'levels')
         for spell in {spell for spells in HERO_ABILITIES.values() for spell in spells}:
             fields = records[spell][1]
-            self.assertEqual(fields[('alev',0)][0], 10, spell)
+            native_cap = int(float(rows[spell].get(levels_column, '1') or '1'))
+            emitted_cap = MAX_SPELL_RANK if spell in SCALABLE_EFFECT_FIELDS else native_cap
+            self.assertEqual(fields[('alev',0)][0], emitted_cap, spell)
             levels = {level for field, level in fields if level > 0}
-            self.assertGreaterEqual(max(levels), 10, spell)
-        holy_light = records['AHhb'][1]
-        self.assertGreater(holy_light[('Hhb1',5)][0], holy_light[('Hhb1',4)][0])
-        self.assertGreater(holy_light[('Hhb1',10)][0], holy_light[('Hhb1',9)][0])
+            self.assertLessEqual(max(levels, default=0), emitted_cap, spell)
+        blink = records['AEbl'][1]
+        self.assertEqual(blink[('alev',0)][0], 3)
+        self.assertEqual(blink[('amcs',3)][0], 10)
+        self.assertNotIn(('amcs',4), blink)
         runtime = runtime_script('SPELL-RANKS')
         self.assertIn('KLS_ApplySpellRanks', runtime)
         self.assertGreaterEqual(runtime.count('call KLS_ApplySpellRanks('), 2)
@@ -206,11 +261,13 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertIn("if heroType == 'Hpal' then", generated)
         self.assertNotIn('if false then', generated)
         self.assertIn('GetHeroLevel(hero)', generated)
-        self.assertIn('set rank = IMinBJ(10, 1 + (heroLevel - unlockLevel) / 10)', generated)
-        self.assertEqual(min(10, 1 + (50 - 1) // 10), 5)
-        self.assertEqual(min(10, 1 + (51 - 1) // 10), 6)
-        self.assertEqual(min(10, 1 + (100 - 1) // 10), 10)
-        self.assertIn(b'MaxHeroLevel=100', misc_data())
+        self.assertIn('set rank = IMinBJ(maxRank, IMinBJ(5, 1 + (heroLevel - unlockLevel) / 10))', generated)
+        calls = re.findall(r"call KLS_RankHeroSpell\(hero, '(.{4})', heroLevel, \d+, (\d+)\)", generated)
+        self.assertEqual({spell for spell, _ in calls},
+                         {spell for spells in HERO_ABILITIES.values() for spell in spells})
+        self.assertEqual({spell: int(cap) for spell, cap in calls}['AEbl'], 3)
+        self.assertEqual({spell: int(cap) for spell, cap in calls}['AHhb'], 5)
+        self.assertIn(b'MaxHeroLevel=50', misc_data())
 
     def test_normal_breaks_are_50_seconds_and_boss_breaks_remain_longer(self):
         runtime = runtime_script('LONGER-BREAKS')

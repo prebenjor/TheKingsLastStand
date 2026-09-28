@@ -15,7 +15,19 @@ FAMILIES = [
     ('Trinket', (('elmt','Lesser Mark of Time'),('elmf','Lesser Mark of the Forsaken'),('ebdf','Blue Dragon Figurine'),('etkj',"Knight's Javelin"),('eege','Essencium, the Gathering of Elements')), 50, 1.0, 'Trinket'),
 ]
 TIERS = [('Common',150),('Uncommon',400),('Rare',1000),('Epic',2500),('Legendary',6000)]
+RARITY_COLORS = {
+    'Common':'|cffffffff',
+    'Uncommon':'|cff1eff00',
+    'Rare':'|cff0070dd',
+    'Epic':'|cffa335ee',
+    'Legendary':'|cffff8000',
+}
 SLOTS = {'Head':1,'Chest':2,'Gloves':3,'Boots':4,'Ring':5,'Primary':6,'Offhand':7,'Trinket':8}
+
+
+def color_rarity_text(quality, text):
+    """Color a Warcraft UI string with its quality color, then reset it."""
+    return RARITY_COLORS[quality] + text + '|r'
 
 # Native item ability templates and their installed Object Editor data fields.
 STATS = {
@@ -118,11 +130,12 @@ def item_catalog():
                  12:f'Mistweave: reduce incoming spell damage by {(5,10,15)[tier-2]}%.'}.get(index,'')
             price=int(base_price*(1.5 if index<3 else 1))
             desc='; '.join('+'+str(v)+('%' if k=='attack speed' else '')+' '+k for k,v in stats.items())+'.'
-            desc=f'{quality} {family} | {slot} slot.|n'+desc+'|n'+effect+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
+            desc=color_rarity_text(quality, quality)+f' {family} | {slot} slot.|n'+desc+'|n'+effect+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
             if index==12:desc+=' Cape replaces chest armor in the chest slot.'
             if effect:desc+=' Named effects use the strongest equipped copy; swapping does not reset cooldowns.'
             result.append(dict(rawcode='I1'+code,tier=tier,quality=quality,family=family,parent=parents[tier][0],
               slot=SLOTS[slot],bonus=stat*(1,2,4,7,11)[tier],price=price,name=NAMES[index][tier],native_name=parents[tier][1],
+              colored_name=color_rarity_text(quality,NAMES[index][tier]),
               stats=stats,abilities=','.join(ability_ids),description=desc,effect=effect,family_index=index))
     for item in _CRAFTED:
         entry=dict(item)
@@ -131,7 +144,8 @@ def item_catalog():
         entry['bonus']=max(entry['stats'].values())
         entry['abilities']=','.join('A'+str(n)+suffix for n in range(len(entry['stats'])))
         bonuses='; '.join('+'+str(value)+' '+stat for stat,value in entry['stats'].items())
-        entry['description']='Legendary crafted '+entry['family']+' | '+str(entry['slot'])+' slot.|n'+bonuses+'.|n'+entry['effect']+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
+        entry['colored_name']=color_rarity_text('Legendary',entry['name'])
+        entry['description']=color_rarity_text('Legendary','Legendary')+' crafted '+entry['family']+' | '+str(entry['slot'])+' slot.|n'+bonuses+'.|n'+entry['effect']+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
         entry['crafted']=True
         result.append(entry)
     return result

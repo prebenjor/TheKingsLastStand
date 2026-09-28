@@ -6,16 +6,16 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-a2dae2be8c**.
+Current development build: **KLS-D-8b5076c3eb**.
 
-- Map: `dist/KLS-D-a2dae2be8c-Development.w3m`
-- SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`
-- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-a2dae2be8c-Development.w3m` (hash matches).
+- Map: `dist/KLS-D-8b5076c3eb-Development.w3m`
+- SHA-256: `10f6d56f3811cece7189633f8b840746f72c34583ec41e28752e2f50396545c3`
+- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-8b5076c3eb-Development.w3m` (hash matches).
 - Build manifest: dist/build-manifest.json
 
-This build fixes the recipe delivery branch that showed both “Craft complete” and “Craft failed” and could refund the fee after a successful craft. Package readback and installed-editor API syntax passed; the full regression suite is recorded in CHANGELOG.md. The prior test map was closed and archived before this build was installed. The earlier user-reported World Editor Test Map pass remains attributed only to `KLS-D-fd638ddcf5`. Save/reopen, this build's own Test Map and Custom Game checks, live recipe interaction, multiplayer, and 40-wave endurance remain pending, so this stays a development build.
+This build stops generating spell ranks beyond each ability's installed `levels` count. It also stops extending numeric fields with a generic slope; that had made Warden Blink's rank-4 mana cost zero from its native 50/10/10 cost curve. Package readback and installed-editor API syntax passed; all 77 regression tests pass. This exact build is installed in the test folder. Its editor save/reopen, Test Map, Custom Game spell checks, live gameplay, multiplayer, and 40-wave endurance remain pending, so it stays a development build.
 
-Next human check: open the installed `KLS-D-a2dae2be8c-Development.w3m` in Custom Game, complete one recipe, and confirm it shows exactly one successful craft notification with no failure/refund message. Other previously reported shop, equipment, and UI behaviors still need exact-build gameplay checks.
+Next human check: open the installed `KLS-D-8b5076c3eb-Development.w3m` in Custom Game, level one hero skill to its displayed native maximum, and confirm it still casts/works there and cannot advance into a broken extra rank. Other previously reported shop, equipment, and UI behaviors still need exact-build gameplay checks.
 
 ## Start here
 

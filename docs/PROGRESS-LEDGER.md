@@ -3,12 +3,19 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-a2dae2be8c**.
-- Artifact: `dist/KLS-D-a2dae2be8c-Development.w3m`.
-- SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`.
-- Package readback and installed-editor API syntax passed. Focused recipe/progression tests passed (**14/14**); full suite passed (**77/77**).
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-a2dae2be8c-Development.w3m`; installed hash matches the package. The previous map was closed, archived and replaced successfully.
-- Status: **development build**. This build's editor save/reopen, Test Map, Custom Game craft interaction, live gameplay, multiplayer and endurance checks are pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
+- Build: **KLS-D-b5ae4ab2fe**.
+- Artifact: `dist/KLS-D-b5ae4ab2fe-Development.w3m`.
+- SHA-256: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`.
+- Package readback, installed-editor API syntax and full source regression suite (**79/79**) passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b5ae4ab2fe-Development.w3m`; installed hash matches the package. The prior installed copy was archived outside the Custom Game folder.
+- Status: **development build**. Current-build editor save/reopen, Test Map, Custom Game rank/color presentation, live gameplay, multiplayer and endurance checks are pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
+
+## 2026-09-28: extend safe spell ranks and color item rarities — KLS-D-b5ae4ab2fe
+
+- Set the hero cap to 50 and restored ranks 4–5 only for abilities with explicitly registered, installed power fields. Each added rank increases only those effect values by 10% of the final authored value; other fields are copied unchanged. Native rank values remain exact. Sacred Aura's rank 4/5 resistance is 38.5%/42%; Blink remains capped at rank 3.
+- Added standard quality colors to gear, relics, tooltip headers and shop tier labels. The color mapping and item quality labels are tested in the emitted object data.
+- Full source suite passed (**79/79**). Package readback and installed-editor API syntax passed. Package and installed SHA-256 match: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`.
+- Exact next check: launch `KLS-D-b5ae4ab2fe-Development.w3m` in Custom Game, select the Paladin and confirm a higher-rank Holy Light still casts and its effect increases. Report the visible build ID and outcome. Rarity colors, editor round-trip, full gameplay, multiplayer and endurance also remain to verify.
 
 ## 2026-09-28: fix contradictory recipe completion/refund — KLS-D-a2dae2be8c
 

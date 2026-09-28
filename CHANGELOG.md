@@ -2,6 +2,24 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-b5ae4ab2fe - 2026-09-28
+
+- Added safe extended ranks through rank 5 and set the hero level cap to 50. Installed native ranks remain unchanged. Beyond a spell's native maximum, only its explicitly registered power fields grow by 10% of the last authored value per rank; every other field holds the final authored value. Warden Blink stays capped at its native three ranks. Sacred Aura rises from 35% magic resistance to 38.5% at rank 4 and 42% at rank 5, avoiding the stale 500% value.
+- Checked all registered effect fields against the installed editor metadata. Covered damage, healing, armor, evasion, aura bonuses, and other direct effects. Skills without a safe registered effect stay at their native rank limit.
+- Applied standard rarity colors to equipment and boss relic names, tooltip quality headings, and quality-shop names: white, green, blue, purple, and gold. Item tiers and full stat descriptions remain visible.
+- Full source regression suite: **79/79 passed**. Package readback and installed-editor API syntax passed.
+- Map SHA-256: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b5ae4ab2fe-Development.w3m`; installed hash matches the package. Current-build editor save/reopen, Test Map, Custom Game rank/color presentation, gameplay, multiplayer, and endurance checks remain pending. The earlier Test Map pass stays attributed to `KLS-D-fd638ddcf5`.
+
+## KLS-D-8b5076c3eb - 2026-09-28
+
+- Stopped extending regular hero spells beyond the `levels` count in the installed Warcraft ability data. The map now preserves each ability's authored native ranks and caps runtime rank-ups to that spell's own limit.
+- Removed generic numeric extrapolation. It treated every numeric field as a scalable effect; for example, Warden Blink's native mana costs 50/10/10 became 0 at generated rank 4. Unsupported higher ranks are no longer emitted or assigned.
+- Regression coverage checks native-rank caps for every selectable hero spell and the Blink mana-cost case. Full regression suite: **77/77 passed**.
+- Package member readback and JASS syntax against the installed editor API passed.
+- Map SHA-256: `10f6d56f3811cece7189633f8b840746f72c34583ec41e28752e2f50396545c3`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-8b5076c3eb-Development.w3m`; installed hash matches the package. Current-build editor save/reopen, Test Map, Custom Game rank behavior, gameplay, multiplayer, and endurance checks remain pending. The earlier Test Map pass stays attributed to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-a2dae2be8c - 2026-09-28
 
 - Fixed recipe delivery so a successful craft no longer falls through into the failure refund path. If the output cannot be delivered, the failure notification and fee refund still run once.

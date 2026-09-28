@@ -44,7 +44,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Repeat all 30 storage slots, all nine equipment slots, full six-item inventory, ownership, repeated transfers, consumables, simultaneous purchases, recipe failure/success, and pending boss reward behavior.
 4. Confirm every shop shows icon stock and accurate hover stats/effects; test tomes and 3 recipes.
 5. Test building requirements, footprint rejection/refund, worker mine/tree access, towers, Altar of Kings, castle healing/upgrades, talent controls, and restorative pool.
-6. Verify first prep 45s, ordinary break 50s, boss break 180s, HUD updates, spell ranks through level 100, and each signature ability. Exercise Sacred Aura ranks 1–10 and confirm no level applies the stale 500% magic-resistance value from ranks beyond its installed three-rank definition.
+6. Verify first prep 45s, ordinary break 50s, boss break 180s, HUD updates, and every signature ability. Confirm supported spells retain all authored ranks and that ranks 4–5 apply the tagged +10%-per-rank effect increase without changing cost, cooldown, range, duration, or targeting. Confirm unsupported spells stay at the native cap. Check the five rarity colors in item/shop names and item tooltips.
 
 ### Gate 3 — waves, network, and endurance
 
@@ -55,8 +55,8 @@ Passing syntax or simulated tests never clears an in-game gate.
 ## Current exact human-run check
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
-2. `KLS-D-5b63d38dc0` is installed as the single current project map at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`. The installed file's SHA-256 matches the packaged map; older copies were archived by the installer.
-3. Current-build startup is pending. The next check is to launch this exact map through Warcraft III → Single Player → Custom Game, choose one hero, and confirm its visible build ID with no premature victory.
+2. `KLS-D-b5ae4ab2fe` is installed as the single current project map at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-b5ae4ab2fe-Development.w3m`. SHA-256: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`; the installed file matches the package. Older copies were archived outside the Custom Game folder.
+3. Current-build startup is pending. The next check is to launch this exact map through Warcraft III → Single Player → Custom Game, choose one hero, and report its visible build ID and whether the match starts without errors or premature victory.
 4. Once startup is confirmed, use `-wave 1` in this diagnostic build and verify the killer-only gold popup/resource increase; full XP should go to each nearby active hero. Also verify King Aldric's 25% bounty behavior in a later co-op run.
 5. Continue with gear transfer/equip/resale, silent spring ticks and 50/180-second break checks, followed by the rest of editor, gameplay, multiplayer and endurance acceptance.
 

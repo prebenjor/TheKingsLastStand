@@ -63,7 +63,7 @@ def units():
     return table(original, custom)
 
 
-from equipment_catalog import item_catalog
+from equipment_catalog import color_rarity_text, item_catalog
 
 def items():
     from equipment_catalog import attribute_books
@@ -75,7 +75,8 @@ def items():
     original = [record('ebua','\0\0\0\0',{'unam':'Forsaken Field Pack','utip':'Forsaken Field Pack','utub':'Native Forsaken Kingdom backpack: 30 storage slots and nine equipment slots. Keep this pack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
     custom = []
     for entry in item_catalog():
-        fields={'unam':entry['name'],'utip':entry['name'],
+        display_name=entry['colored_name']
+        fields={'unam':display_name,'utip':display_name,
                 'icla':'Equipment','igol':entry['price'],'iper':0,'iabi':entry['abilities'],'utub':entry['description'],'iusa':0,'ilev':1,'ilvo':1,'ilum':0,'iuse':0,
                 # Native backpack dragging between storage, the normal hero
                 # inventory, and equipment requires the item to be droppable.
@@ -99,9 +100,9 @@ def items():
         cost=400+200*tier
         controls.append(record('ckng',raw,{'icla':'Miscellaneous','unam':'Royal Defense Upgrade - Tier '+str(tier+1),'utip':'Royal Defense Upgrade - Tier '+str(tier+1),'utub':'Upgrade King Aldric: +4,000 maximum/current health and +30 damage. Tier '+str(tier+1)+' costs '+str(cost)+' gold and 150 lumber.','igol':cost,'ilum':150,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0}))
     custom.extend(controls+[
-        record('ratf','I010',{'icla':'Equipment','unam':'Gravetide Cleaver','utip':'Gravetide Cleaver','utub':'Chapter I boss relic: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':1}),
-        record('rhth','I011',{'icla':'Equipment','unam':'Heart of the Watch','utip':'Heart of the Watch','utub':'Chapter II boss relic: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':1}),
-        record('lgdh','I012',{'icla':'Equipment','unam':'Crown of Dawn','utip':'Crown of Dawn','utub':'Chapter III boss relic: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':1}),
-        record('ckng','I013',{'icla':'Equipment','unam':'Oath of the Last King','utip':'Oath of the Last King','utub':'Chapter IV boss relic: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('ratf','I010',{'icla':'Equipment','unam':color_rarity_text('Rare','Gravetide Cleaver'),'utip':color_rarity_text('Rare','Gravetide Cleaver'),'utub':color_rarity_text('Rare','Rare')+' boss relic. Chapter I: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('rhth','I011',{'icla':'Equipment','unam':color_rarity_text('Epic','Heart of the Watch'),'utip':color_rarity_text('Epic','Heart of the Watch'),'utub':color_rarity_text('Epic','Epic')+' boss relic. Chapter II: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('lgdh','I012',{'icla':'Equipment','unam':color_rarity_text('Epic','Crown of Dawn'),'utip':color_rarity_text('Epic','Crown of Dawn'),'utub':color_rarity_text('Epic','Epic')+' boss relic. Chapter III: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('ckng','I013',{'icla':'Equipment','unam':color_rarity_text('Legendary','Oath of the Last King'),'utip':color_rarity_text('Legendary','Oath of the Last King'),'utub':color_rarity_text('Legendary','Legendary')+' boss relic. Chapter IV: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':1}),
     ])
     return table(original, custom)
