@@ -21,17 +21,17 @@ This UI is a high-priority live acceptance area. The player has reported bought 
 
 ## Vendor layout and prices
 
-All qualities are available immediately; gold gates affordability rather than shop unlocks. The common price listed is the base equipment price. The three hand-weapon families Blade/Bow/Staff cost 1.5 times base; other families cost base. Current generator tiers use different multipliers than the first concept table, so generated catalog values in ITEM-CATALOG.md are authoritative for this development snapshot.
+All qualities are available immediately; gold gates affordability rather than shop unlocks. The base equipment prices are Common 300, Uncommon 1,000, Rare 3,000, Epic 8,000 and Legendary 20,000 gold. The three hand-weapon families Blade/Bow/Staff cost 1.5 times base; other families cost base. The three original Foundry recipe fees are 5,000/7,000/12,000 gold; each racial Legendary Foundry recipe costs 9,000. Tome prices are 1,000/3,000/8,000. The catalog is authoritative for individual item costs.
 
 | Vendor quality | Shop name | Base equipment price |
 |---|---|---:|
-| Common | Quartermaster | 150 gold |
-| Uncommon | Veteran Armorer | 400 gold |
-| Rare | Master Forge | 1,000 gold |
-| Epic | Runic Reliquary | 2,500 gold |
-| Legendary | Royal Vault | 6,000 gold |
+| Common | Quartermaster | 300 gold |
+| Uncommon | Veteran Armorer | 1,000 gold |
+| Rare | Master Forge | 3,000 gold |
+| Epic | Runic Reliquary | 8,000 gold |
+| Legendary | Royal Vault | 20,000 gold |
 | Consumables | Field Apothecary | Existing Warcraft consumable prices |
-| Attribute books | Sage's Archive | 600 / 1,800 / 5,000 gold by tome size |
+| Attribute books | Sage's Archive | 1,000 / 3,000 / 8,000 gold by tome size |
 
 Display item rarity with Warcraft color codes in item names, shop stock names, and tooltip headers: Common white (`#FFFFFF`), Uncommon green (`#1EFF00`), Rare blue (`#0070DD`), Epic purple (`#A335EE`), and Legendary gold (`#FF8000`). Boss relics use Rare for Gravetide Cleaver, Epic for Heart of the Watch and Crown of Dawn, and Legendary for Oath of the Last King. Keep the raw quality label and full stats in the tooltip so color is supplementary.
 
@@ -80,15 +80,15 @@ Sage's Archive sells nine personal, permanent tomes. They apply immediately to t
 
 | Book | Rawcode | Bonus | Cost |
 |---|---|---:|---:|
-| Tome of Strength +5 | KS05 | +5 Strength | 600 |
-| Tome of Strength +10 | KS10 | +10 Strength | 1,800 |
-| Tome of Strength +20 | KS20 | +20 Strength | 5,000 |
-| Tome of Agility +5 | KA05 | +5 Agility | 600 |
-| Tome of Agility +10 | KA10 | +10 Agility | 1,800 |
-| Tome of Agility +20 | KA20 | +20 Agility | 5,000 |
-| Tome of Intelligence +5 | KI05 | +5 Intelligence | 600 |
-| Tome of Intelligence +10 | KI10 | +10 Intelligence | 1,800 |
-| Tome of Intelligence +20 | KI20 | +20 Intelligence | 5,000 |
+| Tome of Strength +5 | KS05 | +5 Strength | 1,000 |
+| Tome of Strength +10 | KS10 | +10 Strength | 3,000 |
+| Tome of Strength +20 | KS20 | +20 Strength | 8,000 |
+| Tome of Agility +5 | KA05 | +5 Agility | 1,000 |
+| Tome of Agility +10 | KA10 | +10 Agility | 3,000 |
+| Tome of Agility +20 | KA20 | +20 Agility | 8,000 |
+| Tome of Intelligence +5 | KI05 | +5 Intelligence | 1,000 |
+| Tome of Intelligence +10 | KI10 | +10 Intelligence | 3,000 |
+| Tome of Intelligence +20 | KI20 | +20 Intelligence | 8,000 |
 
 ## Recipes
 
@@ -96,9 +96,9 @@ The recipe scroll and fee are personal. Ingredients may be equipped or stored an
 
 | Result | Ingredients | Fee | Result details |
 |---|---|---:|---|
-| Oathforged Kingswrath | Rare Gravebreaker + Rare Ring of Conquest | 2,500 | Legendary blade, +88 damage, +10 Strength, 35% cleave |
-| Stormheart Prism | Rare Wintercall + Rare Spellwell | 3,500 | Legendary focus, +22 Intelligence, +550 mana, restores 50 mana per spell proc |
-| Sovereign's Mantle | Epic Dawnguard Helm + Epic Royal Bulwark | 6,000 | Legendary chest/cape, +10 of each primary attribute, +800 HP, +10 armor, 15% spell damage reduction |
+| Oathforged Kingswrath | Rare Gravebreaker + Rare Ring of Conquest | 5,000 | Legendary blade, +88 damage, +10 Strength, 35% cleave |
+| Stormheart Prism | Rare Wintercall + Rare Spellwell | 7,000 | Legendary focus, +22 Intelligence, +550 mana, restores 50 mana per spell proc |
+| Sovereign's Mantle | Epic Dawnguard Helm + Epic Royal Bulwark | 12,000 | Legendary chest/cape, +10 of each primary attribute, +800 HP, +10 armor, 15% spell damage reduction |
 
 ## Boss relics and completion rewards
 

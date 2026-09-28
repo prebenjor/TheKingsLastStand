@@ -2,21 +2,21 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-c6f02bf50d**
+Build: **KLS-D-f5fd3c5993**
 
-Map SHA-256: **0869d7fa5bb3f1f67744768648c7690e7365193a402777a23e878fee73637ad0**
+Map SHA-256: **490a89b9445bc1d7af961bb8374222ca2af9cd3dbd356c6e8e29d352bed89351**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 116 source-level tests, including optional-versus-required spawn failures, installer failure/retry safety, personal reward delivery/retries, failed random item-drop diagnostics, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
+| Focused automated regressions | 119 source-level tests, including optional-versus-required spawn failures, installer failure/retry safety, personal reward delivery/retries, failed random item-drop diagnostics, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | The current package has not been opened; Warcraft III PID `36140` still holds the older installed map | Pending |
-| Current-build Test Map / Custom Game startup | `KLS-D-c6f02bf50d` is packaged but not installed while Warcraft III holds the prior map. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Current-build Test Map / Custom Game startup | `KLS-D-f5fd3c5993` is packaged but not installed while Warcraft III PID `36140` still holds the prior map. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; visual routes and playability need live inspection | Pending in game |
-| Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, Acolyte mine haunting and Night Elf mine reach are source/regression checked | Pending in mixed-race game |
+| Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, and native Acolyte haunting orders are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; visuals, ability behavior, company recruit and ownership need live checks | Pending in game |
 | Level 1–50 progression and talents | Per-level +3 Strength/Agility/Intelligence choices are native hero `+` skills; the stat-choice dialog was removed. Fifth-level specialty talent dialog and stat changes need live checks | Pending in game |
 | Endless waves after wave 40 | Ten repeating roster rows and rotating bosses scale from the live wave number | Pending in game |

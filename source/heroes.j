@@ -19,6 +19,38 @@ function KLS_ReleaseStartingUnit takes nothing returns nothing
     call PauseUnit(GetEnumUnit(), false)
 endfunction
 
+function KLS_ConfigureStartingMine takes integer p, integer raceId returns nothing
+    local integer mineType = 0
+    local integer amount
+    local real x
+    local real y
+    local real facing
+    local unit ownedMine
+    if p < 0 or p >= 4 or KLS_BaseMine[p] == null then
+        return
+    endif
+    if raceId == 2 then
+        set mineType = 'egol'
+    elseif raceId == 3 then
+        set mineType = 'ugol'
+    else
+        return
+    endif
+    set amount = GetResourceAmount(KLS_BaseMine[p])
+    set x = GetUnitX(KLS_BaseMine[p])
+    set y = GetUnitY(KLS_BaseMine[p])
+    set facing = GetUnitFacing(KLS_BaseMine[p])
+    set ownedMine = KLS_CreateUnit(Player(p),mineType,x,y,facing)
+    if ownedMine == null then
+        return
+    endif
+    call SetResourceAmount(ownedMine,amount)
+    call RemoveUnit(KLS_BaseMine[p])
+    set KLS_BaseMine[p] = ownedMine
+    call KLS_Log("Starting mine configured race="+KLS_RaceName(raceId)+" player="+I2S(p+1)+" gold="+I2S(amount))
+    set ownedMine = null
+endfunction
+
 function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns nothing
     local integer raceId = KLS_HeroRace[heroIndex]
     local integer workerIndex = 0
@@ -40,6 +72,7 @@ function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns n
         set racePreference = RACE_PREF_UNDEAD
     endif
     call SetPlayerRacePreference(Player(p),racePreference)
+    call KLS_ConfigureStartingMine(p,raceId)
     if raceId != 0 then
         call GroupEnumUnitsOfPlayer(owned,Player(p),null)
         loop

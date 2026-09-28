@@ -1,5 +1,6 @@
 globals
     trigger KLS_MiningOrders = null
+    unit array KLS_BaseMine
 endglobals
 
 function KLS_HauntGoldMine takes nothing returns nothing
@@ -10,7 +11,7 @@ function KLS_HauntGoldMine takes nothing returns nothing
     local integer amount
     local integer orderId = GetIssuedOrderId()
     if p >= 0 and p < 4 and KLS_Active[p] and KLS_PlayerRace[p] == 3 and GetUnitTypeId(worker) == 'uaco' then
-        if mine != null and GetUnitTypeId(mine) == 'ngol' and (orderId == OrderId("smart") or orderId == OrderId("harvest")) then
+        if mine != null and GetUnitTypeId(mine) == 'ngol' and (orderId == OrderId("smart") or orderId == OrderId("harvest") or orderId == OrderId("hauntgoldmine")) then
             set amount = GetResourceAmount(mine)
             set haunted = CreateUnit(Player(p),'ugol',GetUnitX(mine),GetUnitY(mine),GetUnitFacing(mine))
             if haunted == null or GetUnitTypeId(haunted) != 'ugol' then

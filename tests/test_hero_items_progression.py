@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / 'tools'))
 sys.path.insert(0, str(ROOT / 'tests'))
 
 from equipment_catalog import (
-    RARITY_COLORS, abilities, attribute_books, catalog_script, item_catalog,
+    RARITY_COLORS, TIERS, abilities, attribute_books, catalog_script, item_catalog,
 )
 from hero_progression import (
     HERO_ABILITIES, MAX_HERO_LEVEL, MAX_SPELL_RANK, SCALABLE_EFFECT_FIELDS,
@@ -22,6 +22,29 @@ from test_equipment import decode, slk
 
 
 class AttributeEquipment(unittest.TestCase):
+    def test_shop_prices_create_a_stronger_rarity_cost_curve(self):
+        self.assertEqual([price for _, price in TIERS], [300, 1000, 3000, 8000, 20000])
+        catalog = {entry['name']: entry for entry in item_catalog()}
+        expected = {
+            'Iron Buckler': 300,
+            'Veteran Longsword': 1500,
+            'Dawnward': 3000,
+            'Cinderfang': 12000,
+            'Heart of the Leyline': 20000,
+            'Grudgebreaker': 12000,
+            'Last King’s Oath': 20000,
+            'Oathforged Kingswrath': 30000,
+            'Stormheart Prism': 28000,
+            "Sovereign's Mantle": 36000,
+        }
+        for name, price in expected.items():
+            with self.subTest(item=name):
+                self.assertEqual(catalog[name]['price'], price)
+        self.assertEqual([book['price'] for book in attribute_books()[:3]], [1000, 3000, 8000])
+        recipes = recipe_catalog(item_catalog())
+        self.assertEqual([recipe['price'] for recipe in recipes],
+                         [5000, 7000, 12000, 9000, 9000, 9000, 9000])
+
     def test_rarity_colors_appear_in_equipment_names_and_tooltip_headers(self):
         records = decode(items())
         for entry in item_catalog():

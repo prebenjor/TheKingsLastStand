@@ -82,7 +82,7 @@ class EquipmentRecords(unittest.TestCase):
                 self.assertAlmostEqual(actual,amount/100 if stat=='attack speed' else amount,places=5)
         legendary_blade=next(e for e in item_catalog() if e['family']=='Blade' and e['tier']==4)
         self.assertEqual(legendary_blade['stats']['damage'],66)
-        self.assertEqual(legendary_blade['price'],9000)
+        self.assertEqual(legendary_blade['price'],30000)
 
     def test_custom_equipment_inherits_the_installed_equipment_slot(self):
         gear=decode(items())

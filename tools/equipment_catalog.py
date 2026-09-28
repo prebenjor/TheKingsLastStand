@@ -14,7 +14,7 @@ FAMILIES = [
     ('Defensive Ring', (('ecav','Amulet of Vitality'),('ersf','Ring of Stone Fortitude'),('eres','Earthen Signet'),('eicc','Icecrown Ring'),('erdr','Diamond Ring')), 1, 1.0, 'Ring'),
     ('Trinket', (('elmt','Lesser Mark of Time'),('elmf','Lesser Mark of the Forsaken'),('ebdf','Blue Dragon Figurine'),('etkj',"Knight's Javelin"),('eege','Essencium, the Gathering of Elements')), 50, 1.0, 'Trinket'),
 ]
-TIERS = [('Common',150),('Uncommon',400),('Rare',1000),('Epic',2500),('Legendary',6000)]
+TIERS = [('Common',300),('Uncommon',1000),('Rare',3000),('Epic',8000),('Legendary',20000)]
 RARITY_COLORS = {
     'Common':'|cffffffff',
     'Uncommon':'|cff1eff00',
@@ -133,15 +133,15 @@ for race_index, (race, family, rows) in enumerate(_RACE_ITEM_ROWS):
 
 _CRAFTED = [
     {'rawcode':'I128','name':"Oathforged Kingswrath",'parent':'ebr2','tier':4,
-     'family':'Blade','family_index':0,'slot':6,'price':15000,
+     'family':'Blade','family_index':0,'slot':6,'price':30000,
      'native_name':"Blademaster's Greatsword",'stats':{'damage':88,'strength':10},
      'effect':'Cleave attacks deal 35% damage to nearby secondary enemies.'},
     {'rawcode':'I129','name':'Stormheart Prism','parent':'ehls','tier':4,
-     'family':'Focus','family_index':4,'slot':7,'price':14000,
+     'family':'Focus','family_index':4,'slot':7,'price':28000,
      'native_name':'Horn of the Lost Spirits','stats':{'intelligence':22,'mana':550},
      'effect':'Restores 50 mana after a spell cast; 8-second cooldown.'},
     {'rawcode':'I12A','name':"Sovereign's Mantle",'parent':'erbm','tier':4,
-     'family':'Cape','family_index':12,'slot':2,'price':18000,
+     'family':'Cape','family_index':12,'slot':2,'price':36000,
      'native_name':'Robes of the Battlemage',
      'stats':{'strength':10,'agility':10,'intelligence':10,'health':800,'armor':10},
      'effect':'Reduces incoming spell damage by 15%.'},
@@ -151,7 +151,7 @@ _BOOKS = []
 for stat, prefix, parent, display in (
         ('strength','S','tstr','Strength'), ('agility','A','tdex','Agility'),
         ('intelligence','I','tint','Intelligence')):
-    for amount, price in ((5,600),(10,1800),(20,5000)):
+    for amount, price in ((5,1000),(10,3000),(20,8000)):
         _BOOKS.append({'rawcode':'K'+prefix+str(amount).zfill(2),
                        'name':'Tome of '+display+' +'+str(amount),
                        'stat':stat,'amount':amount,'price':price,'parent':parent,

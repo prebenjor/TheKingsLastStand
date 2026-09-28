@@ -21,11 +21,12 @@ Authoritative match states:
 
 - Each player controls their hero, race-matched workers, trained units, and structures.
 - The team shares the battlefield, neutral vendors, enemy waves, boss encounter, king, and outcome; players do not share unit control or personal resources.
-- Workers use standard Warcraft mine and lumber gathering. Put an accessible mine and harvestable tree grove by every active plot. Trees must not block routes to the mine, Altar, buildable pad, or road.
+- Workers use standard Warcraft mine and lumber gathering. Put an accessible mine and harvestable tree grove by every active plot. Trees must not block routes to the mine, Altar, buildable pad, or road. After hero confirmation, each Undead player starts with an owned Haunted Gold Mine and each Night Elf with an owned Entangled Gold Mine; Human and Orc players keep a neutral Gold Mine. Every starting mine holds 1,000,000 gold.
 - A defender player's kill pays the full role bounty to that killer's owner only. A kill credited to King Aldric pays 25% of the bounty to each active defender. Show each recipient the exact amount credited. Boss participation gold and gear remain personal rewards for every active participant.
 - Every active defender hero within 1,200 world units of a tracked enemy's death receives the full Warcraft unit-level XP award. The same full value is applied to each nearby hero; it is not divided. Hero race and current life state do not filter the recipients. Native shared/kill XP is disabled in map data so the custom award cannot split or double-count; verify dead-hero XP behavior in the engine.
 - Boss gear is personal. If the inventory cannot accept the reward, preserve an entitlement or safely place a retrievable personal item; never destroy it or make it public/lootable by another defender.
 - The market is one shared set of neutral shops accessible to all players. A purchase, tome, recipe, or castle contribution charges the buyer's personal resources.
+- Gear rarity base prices are 300 / 1,000 / 3,000 / 8,000 / 20,000 gold from Common to Legendary. Blade, Bow and Staff cost 1.5 times the tier base; recipes and stat tomes use their higher listed prices. Healing and mana potions keep their current cost.
 
 ## Hero growth
 

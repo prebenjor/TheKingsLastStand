@@ -642,11 +642,11 @@ function KLS_Init takes nothing returns nothing
                 call SetPlayerAlliance(Player(i), Player(j), ALLIANCE_SHARED_CONTROL, false)
                 set j = j + 1
             endloop
-            set u = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), 'ngol', x, y + 1200, 270)
-            if u == null then
+            set KLS_BaseMine[i] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), 'ngol', x, y + 1200, 270)
+            if KLS_BaseMine[i] == null then
                 return
             endif
-            call SetResourceAmount(u, 100000)
+            call SetResourceAmount(KLS_BaseMine[i], 1000000)
             set u = KLS_CreateUnit(Player(i), 'htow', x, y, 270)
             if u == null then
                 return

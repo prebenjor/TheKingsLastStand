@@ -2,6 +2,15 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-f5fd3c5993 - 2026-09-28
+
+- Undead and Night Elf players now start with an already-owned Haunted or Entangled Gold Mine at their base. Both retain the full 1,000,000-gold reserve; Human and Orc mines remain neutral. Additional neutral Undead mine haunting now recognizes Warcraft's native `hauntgoldmine` order.
+- Raised equipment base prices to Common 300, Uncommon 1,000, Rare 3,000, Epic 8,000 and Legendary 20,000 gold. Blade/Bow/Staff cost 1.5× base; the three original recipe fees doubled to 5,000/7,000/12,000, racial Legendary recipes cost 9,000, and attribute tomes cost 1,000/3,000/8,000. Consumables and item stats are unchanged.
+- Full source regression suite: **119/119 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `490a89b9445bc1d7af961bb8374222ca2af9cd3dbd356c6e8e29d352bed89351`.
+- The package remains in `dist/`; Warcraft III PID `36140` is still running with the older installed map, so this build was not installed. The user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`. Current-build editor save/reopen, Test Map, Custom Game, mine harvesting, shop/economy behavior, multiplayer and endurance checks remain pending.
+
+
 ## KLS-D-c6f02bf50d - 2026-09-28
 
 - Optional spawn failures now include useful context in `-diag` while allowing the match to continue for scenery, ability effects, signature summons, boss reinforcements, and optional Crownlands encounters. Required map setup and wave enemy/boss spawns still stop the match if creation fails; a partially created optional story encounter is cleaned up and remains retryable.

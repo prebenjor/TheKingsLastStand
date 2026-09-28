@@ -1,16 +1,14 @@
-
 # Current status — 2026-09-28
 
-## Current package-proven build — KLS-D-c6f02bf50d
+## Current package-proven build — KLS-D-f5fd3c5993
 
-- Artifact: `dist/KLS-D-c6f02bf50d-Development.w3m`.
-- SHA-256: `0869d7fa5bb3f1f67744768648c7690e7365193a402777a23e878fee73637ad0`.
-- Optional spawn failures now log object name/rawcode, call-site context, and coordinates or owner, but do not defeat the match. Core setup and wave spawns remain fatal; failed optional story patrols clean up partial units and remain retryable.
-- Per-level stat selection is implemented as native hero-panel `+` skills `KSTR`, `KAGI`, and `KINT`, each adding +3 to the chosen primary stat. The old per-level stat popup is absent from current source; the fifth-level specialty talent remains separate.
-- Full source suite: **116/116 passed**. Package archive readback and installed-editor JASS syntax checks passed.
-- Warcraft III PID `36140` remains open with the older installed map. This build has not been installed; no replacement was attempted while the game held the old file. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
-- Next check: after Warcraft III releases the old map, run `python -B tools/build_map.py --install-test-map` and open `KLS-D-c6f02bf50d`. Verify that a hero gets the three `+3` skills on level-up and that picking one does not interrupt another player's game. Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance remain pending.
-- Current-build editor save/reopen, Test Map, Custom Game, live gameplay, multiplayer, and endurance checks remain pending.
+- Artifact: `dist/KLS-D-f5fd3c5993-Development.w3m`.
+- SHA-256: `490a89b9445bc1d7af961bb8374222ca2af9cd3dbd356c6e8e29d352bed89351`.
+- Undead and Night Elf starting heroes now receive an already-owned Haunted or Entangled Gold Mine at the normal base mine location, retaining the full 1,000,000-gold reserve. Human and Orc retain neutral mines; the additional Undead mine-order handler recognizes Warcraft's native `hauntgoldmine` order.
+- Equipment rarity base prices are Common 300, Uncommon 1,000, Rare 3,000, Epic 8,000 and Legendary 20,000 gold. Blade/Bow/Staff remain 1.5× base, the three original Foundry recipe fees are 5,000/7,000/12,000, racial recipes are 9,000, and attribute tomes are 1,000/3,000/8,000. Consumable prices and item stats remain unchanged.
+- Full source suite: **119/119 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Warcraft III PID `36140` is still running with the older installed map, so this exact package remains in `dist/` and was not installed. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- After Warcraft III closes fully, run `python -B tools/build_map.py --install-test-map`, then verify this build's starting mine ownership/resource reserves, worker mining, item affordability progression, shop display and purchases. Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance checks for this exact build remain pending.
 
 ## Previous package-proven build — KLS-D-2f2397cf14
 

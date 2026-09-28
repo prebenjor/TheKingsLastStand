@@ -1,6 +1,7 @@
 """Regression contracts for racial mine access and faction building roles."""
 import sys
 import unittest
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +15,13 @@ from pipeline import runtime_script
 from test_equipment import decode
 from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
 from hero_catalog import NEW_HEROES
+
+
+def function_body(script, name):
+    match = re.search(r'^function ' + re.escape(name) + r' takes [\s\S]*?^endfunction$', script, re.M)
+    if not match:
+        raise AssertionError('Missing runtime function ' + name)
+    return match.group()
 
 
 class RaceMiningAndBuildings(unittest.TestCase):
@@ -75,6 +83,26 @@ class RaceMiningAndBuildings(unittest.TestCase):
         self.assertIn('IssueTargetOrder(worker,"harvest",haunted)', runtime)
         self.assertIn('SetPlayerRacePreference(Player(0), RACE_PREF_RANDOM)', runtime)
         self.assertNotIn('RACE_PREF_HUMAN)', runtime[runtime.index('function config takes'):])
+
+    def test_selected_undead_and_night_elf_start_with_owned_mines_at_full_reserve(self):
+        runtime = runtime_script('STARTING-MINE-TEST')
+        init = function_body(runtime, 'KLS_Init')
+        self.assertIn("KLS_BaseMine[i] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), 'ngol'", init)
+        self.assertIn('SetResourceAmount(KLS_BaseMine[i], 1000000)', init)
+        self.assertIn('function KLS_ConfigureStartingMine takes', runtime)
+        configure = function_body(runtime, 'KLS_ConfigureStartingMine')
+        self.assertIn("set mineType = 'egol'", configure)
+        self.assertIn("set mineType = 'ugol'", configure)
+        self.assertIn('GetResourceAmount(KLS_BaseMine[p])', configure)
+        self.assertIn('CreateUnit(Player(p),mineType', configure)
+        self.assertIn('SetResourceAmount(ownedMine,amount)', configure)
+        self.assertIn('RemoveUnit(KLS_BaseMine[p])', configure)
+        self.assertIn('KLS_ConfigureStartingMine(p,raceId)', function_body(runtime, 'KLS_ReplaceStartingFaction'))
+
+    def test_acolyte_haunt_handler_accepts_the_native_haunting_order(self):
+        runtime = runtime_script('NATIVE-HAUNT-ORDER-TEST')
+        mining = runtime[runtime.index('function KLS_HauntGoldMine takes'):runtime.index('function KLS_MiningInit takes')]
+        self.assertIn('OrderId("hauntgoldmine")', mining)
 
     def test_night_elf_tree_entangle_reaches_the_starting_mine(self):
         _, fields = decode(abilities(), extended=True)['Aent']

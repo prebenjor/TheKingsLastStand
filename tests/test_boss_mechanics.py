@@ -183,7 +183,7 @@ class BossMechanics(unittest.TestCase):
             r'call KLS_BuildLandscape\(\)\s+if KLS_Ended then\s+return\s+endif',
             r"set u = KLS_CreateUnit\(Player\(PLAYER_NEUTRAL_PASSIVE\), 'hC01'[\s\S]*?if u == null then\s+return\s+endif[\s\S]*?set KLS_Castle = u[\s\S]*?BlzSetUnitName",
             r"set KLS_King = KLS_CreateUnit[\s\S]*?if KLS_King == null then\s+return\s+endif[\s\S]*?BlzSetUnitName",
-            r"set u = KLS_CreateUnit\(Player\(PLAYER_NEUTRAL_PASSIVE\), 'ngol'[\s\S]*?if u == null then\s+return\s+endif[\s\S]*?SetResourceAmount",
+            r"set KLS_BaseMine\[i\] = KLS_CreateUnit\(Player\(PLAYER_NEUTRAL_PASSIVE\), 'ngol'[\s\S]*?if KLS_BaseMine\[i\] == null then\s+return\s+endif[\s\S]*?SetResourceAmount\(KLS_BaseMine\[i\], 1000000\)",
             r"set KLS_Altar\[i\] = KLS_CreateUnit[\s\S]*?if KLS_Altar\[i\] == null then\s+return\s+endif",
             r'call KLS_SelectionInit\(\)\s+if KLS_Ended then\s+return\s+endif',
         ):

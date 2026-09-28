@@ -31,7 +31,7 @@ For hand-authored terrain dressing, see [TERRAIN-DRESSING-GUIDE.md](TERRAIN-DRES
 
 Race is assigned per selected hero and per owner. It must not be inferred from another player's hero or a fixed Human lobby preference. The map starts with race preference set to Random; confirming a Human, Orc, Night Elf or Undead hero sets only that player's Warcraft race preference and replaces their starting Town Hall, altar and five workers with the matching faction. In mixed-race matches, each build menu and constructed role stays matched to its owner.
 
-The Undead Acolyte can order a neutral gold mine to be haunted: the runtime replaces it with an owner-controlled Haunted Gold Mine, preserves its remaining gold, and sends the Acolyte to harvest. Night Elf Tree of Life's native Entangle Gold Mine order has a 1,450 range so it can reach the starting mine. Confirm both interactions in Warcraft; generated source checks do not prove native target acceptance.
+When a hero is confirmed, the Undead player's starting neutral mine is replaced with an owner-controlled Haunted Gold Mine, and the Night Elf player's with an owner-controlled Entangled Gold Mine. Both retain the full 1,000,000-gold reserve and the same plot location. Human and Orc players keep a neutral Gold Mine. The Undead order handler also recognizes Warcraft's native `hauntgoldmine` order for any additional neutral mine; the Night Elf Tree of Life's native Entangle range is 1,450. Confirm these native mine types and worker routes in Warcraft; source checks do not prove engine harvesting behavior.
 
 | Role | Human | Orc | Night Elf | Undead |
 |---|---|---|---|---|
@@ -129,10 +129,10 @@ Use standard item-name and tooltip colors: Common white `|cffffffff`, Uncommon g
 
 | Foundry recipe | Components | Result | Recipe price |
 |---|---|---|---:|
-| Crownward Foundry Pattern `RCP4` | Aldric's Aegis + Lionroad Mantle | Last King's Oath | 4,500 gold |
-| Redtusk Foundry Pattern `RCP5` | Stormscar Bracers + Ashen War Drum | Worldrend Standard | 4,500 gold |
-| Moonbark Foundry Pattern `RCP6` | Duskwatch Longbow + Starleaf Quiver | Silvermoon Vigil | 4,500 gold |
-| Wraith Foundry Pattern `RCP7` | Soulreaper's Fang + Wraithsilk Cape | Night's Covenant | 4,500 gold |
+| Crownward Foundry Pattern `RCP4` | Aldric's Aegis + Lionroad Mantle | Last King's Oath | 9,000 gold |
+| Redtusk Foundry Pattern `RCP5` | Stormscar Bracers + Ashen War Drum | Worldrend Standard | 9,000 gold |
+| Moonbark Foundry Pattern `RCP6` | Duskwatch Longbow + Starleaf Quiver | Silvermoon Vigil | 9,000 gold |
+| Wraith Foundry Pattern `RCP7` | Soulreaper's Fang + Wraithsilk Cape | Night's Covenant | 9,000 gold |
 
 ### Native item object and equipment-slot IDs
 
@@ -140,26 +140,26 @@ Each custom item object uses the listed native parent for its installed icon/art
 
 | Race | Rarity item | Item rawcode / native parent | Slot | Price | Stat ability rawcodes |
 |---|---|---|---|---:|---|
-| Human | Common Watchman’s Token | `I23C` / `elmt` | Trinket | 150 | `A03C`, `A13C` |
-| Human | Uncommon Lionroad Mantle | `I23G` / `emoh` | Chest | 400 | `A03G`, `A13G` |
-| Human | Rare Aldric’s Aegis | `I23K` / `eosc` | Offhand | 1,000 | `A03K`, `A13K` |
-| Human | Epic Crownward Pennant | `I23O` / `ebdf` | Trinket | 2,500 | `A03O`, `A13O` |
-| Human | Legendary Last King’s Oath | `I23S` / `erdr` | Ring | 6,000 | `A03S`, `A13S`, `A23S` |
-| Orc | Common Redtusk Fetish | `I23D` / `elmt` | Trinket | 150 | `A03D`, `A13D` |
-| Orc | Uncommon Ashen War Drum | `I23H` / `etkj` | Trinket | 400 | `A03H`, `A13H` |
-| Orc | Rare Stormscar Bracers | `I23L` / `eggn` | Gloves | 1,000 | `A03L`, `A13L` |
-| Orc | Epic Grudgebreaker | `I23P` / `efpb` | Primary | 3,750 | `A03P`, `A13P` |
-| Orc | Legendary Worldrend Standard | `I23T` / `ehls` | Offhand | 6,000 | `A03T`, `A13T` |
-| Night Elf | Common Moonbark Charm | `I23E` / `ebdf` | Trinket | 150 | `A03E`, `A13E` |
-| Night Elf | Uncommon Starleaf Quiver | `I23I` / `epsb` | Primary | 600 | `A03I`, `A13I` |
-| Night Elf | Rare Duskwatch Longbow | `I23M` / `epsb` | Primary | 1,500 | `A03M`, `A13M` |
-| Night Elf | Epic Briarheart Mantle | `I23Q` / `emoh` | Chest | 2,500 | `A03Q`, `A13Q` |
-| Night Elf | Legendary Silvermoon Vigil | `I23U` / `ejjr` | Ring | 6,000 | `A03U`, `A13U` |
-| Undead | Common Crypt-Iron Band | `I23F` / `ecav` | Ring | 150 | `A03F`, `A13F` |
-| Undead | Uncommon Wraithsilk Cape | `I23J` / `edsm` | Chest | 400 | `A03J`, `A13J` |
-| Undead | Rare Soulreaper’s Fang | `I23N` / `epbs` | Primary | 1,500 | `A03N`, `A13N` |
-| Undead | Epic Mourning Reliquary | `I23R` / `eege` | Trinket | 2,500 | `A03R`, `A13R` |
-| Undead | Legendary Night’s Covenant | `I23V` / `ehls` | Offhand | 6,000 | `A03V`, `A13V`, `A23V` |
+| Human | Common Watchman’s Token | `I23C` / `elmt` | Trinket | 300 | `A03C`, `A13C` |
+| Human | Uncommon Lionroad Mantle | `I23G` / `emoh` | Chest | 1,000 | `A03G`, `A13G` |
+| Human | Rare Aldric’s Aegis | `I23K` / `eosc` | Offhand | 3,000 | `A03K`, `A13K` |
+| Human | Epic Crownward Pennant | `I23O` / `ebdf` | Trinket | 8,000 | `A03O`, `A13O` |
+| Human | Legendary Last King’s Oath | `I23S` / `erdr` | Ring | 20,000 | `A03S`, `A13S`, `A23S` |
+| Orc | Common Redtusk Fetish | `I23D` / `elmt` | Trinket | 300 | `A03D`, `A13D` |
+| Orc | Uncommon Ashen War Drum | `I23H` / `etkj` | Trinket | 1,000 | `A03H`, `A13H` |
+| Orc | Rare Stormscar Bracers | `I23L` / `eggn` | Gloves | 3,000 | `A03L`, `A13L` |
+| Orc | Epic Grudgebreaker | `I23P` / `efpb` | Primary | 12,000 | `A03P`, `A13P` |
+| Orc | Legendary Worldrend Standard | `I23T` / `ehls` | Offhand | 20,000 | `A03T`, `A13T` |
+| Night Elf | Common Moonbark Charm | `I23E` / `ebdf` | Trinket | 300 | `A03E`, `A13E` |
+| Night Elf | Uncommon Starleaf Quiver | `I23I` / `epsb` | Primary | 1,500 | `A03I`, `A13I` |
+| Night Elf | Rare Duskwatch Longbow | `I23M` / `epsb` | Primary | 4,500 | `A03M`, `A13M` |
+| Night Elf | Epic Briarheart Mantle | `I23Q` / `emoh` | Chest | 8,000 | `A03Q`, `A13Q` |
+| Night Elf | Legendary Silvermoon Vigil | `I23U` / `ejjr` | Ring | 20,000 | `A03U`, `A13U` |
+| Undead | Common Crypt-Iron Band | `I23F` / `ecav` | Ring | 300 | `A03F`, `A13F` |
+| Undead | Uncommon Wraithsilk Cape | `I23J` / `edsm` | Chest | 1,000 | `A03J`, `A13J` |
+| Undead | Rare Soulreaper’s Fang | `I23N` / `epbs` | Primary | 4,500 | `A03N`, `A13N` |
+| Undead | Epic Mourning Reliquary | `I23R` / `eege` | Trinket | 8,000 | `A03R`, `A13R` |
+| Undead | Legendary Night’s Covenant | `I23V` / `ehls` | Offhand | 20,000 | `A03V`, `A13V`, `A23V` |
 
 Recipes consume components only when crafting succeeds. Failed craft attempts preserve every component and refund the full recipe fee. Drops use the same catalog: ordinary gear chance is 3% distributed across rarities; bosses use 50%, with higher-tier weights. Potions roll independently (4% ordinary enemy, 18% boss). Killer owns drops; story rewards are bound to contributors.
 
