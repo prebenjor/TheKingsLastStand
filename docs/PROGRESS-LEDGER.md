@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-fdee19fa63
+## Current package-proven build — KLS-D-2aa1705c84
+
+- Artifact: dist/KLS-D-2aa1705c84-Development.w3m.
+- SHA-256: edd432c6f16f5c628f63c6956b842b97ab2e66faff9e531395e8b4012f84b5b0.
+- Fixed native tier-two town-hall prerequisites to point at the selected race's custom Altar, Barracks and upgrade structure: Human Castle (hcas), Orc Stronghold (ostr), Night Elf Tree of Ages (etoa), and Undead Halls of the Dead (unp1).
+- Added a regression that failed against all four upgrade targets before the fix and passed afterward. Full source suite: 125/125 passed. Package archive readback and installed-editor API syntax checks passed.
+- Installed on 2026-09-29 at C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-2aa1705c84-Development.w3m; installed SHA-256 matches the package manifest, and the folder contains one project map. The replaced build was archived under backups/installed-diagnostics/20260928T233302983717Z-KLS-D-2aa1705c84/.
+- Captured local engine logs under test-results/20260928T233351692935Z-KLS-D-2aa1705c84/. They show the older KLS-D-1a040d638c map opening and several model-creation warnings; the manifest marks played_build_confirmed false. Those warnings are not evidence about this build. In-game -diag text is not persisted in War3Log.txt.
+- Current-build editor save/reopen, Test Map, Custom Game, faction town-hall upgrade behavior, general gameplay, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains assigned to KLS-D-fd638ddcf5.
+
+## Previous package-proven build — KLS-D-fdee19fa63
 
 - Artifact: `dist/KLS-D-fdee19fa63-Development.w3m`.
 - SHA-256: `6e591f5af710a3c6654d65743c957bf3308902c291907f6fec6090361367fa14`.

@@ -53,6 +53,7 @@ Required building families:
 - Blacksmith — defensive and army upgrades.
 - Three tower roles — distinct anti-swarm, anti-armor, and support/utility coverage.
 - Repairable and upgradeable structures where the building role supports it.
+- Tier-two Town Hall upgrades must require the matching race's custom Altar, Barracks and upgrade structure rawcodes so Castle, Stronghold, Tree of Ages and Halls of the Dead remain reachable from every race's build menu.
 
 Construction rules:
 

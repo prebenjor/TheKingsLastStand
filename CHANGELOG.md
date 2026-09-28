@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-2aa1705c84 - 2026-09-29
+
+- Tier-two town-hall upgrades now require each faction's custom Altar rawcode and matching Barracks/upgrade building: Castle (hcas), Stronghold (ostr), Tree of Ages (etoa), and Halls of the Dead (unp1). This makes the Altars available in the racial build menus satisfy the native upgrade requirements.
+- The regression was added first and failed for all four native upgrade targets, then passed after the object-data fix. Full source suite: **125/125 passed**.
+- Package archive readback and installed-editor API syntax checks passed. Package SHA-256: edd432c6f16f5c628f63c6956b842b97ab2e66faff9e531395e8b4012f84b5b0.
+- Installed on 2026-09-29 at Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2aa1705c84-Development.w3m; the installed SHA-256 matches the package and the test folder contains one project map.
+- Editor save/reopen, current-build Test Map, Custom Game, town-hall upgrades in Warcraft, gameplay, multiplayer and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to KLS-D-fd638ddcf5.
+
 ## KLS-D-fdee19fa63 - 2026-09-29
 
 - `-diag` now reports the caller's currently selected units, including object name, unit name, raw type ID, owner and coordinates. It reports up to 12 units so the displayed selection can be compared with the race-assigned worker.

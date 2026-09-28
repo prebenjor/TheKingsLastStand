@@ -29,6 +29,8 @@ For hand-authored terrain dressing, see [TERRAIN-DRESSING-GUIDE.md](TERRAIN-DRES
 
 ## Race identity and player companies
 
+The native tier-two town-hall upgrades must recognize those custom Altars. Their required-structure lists use the matching race's Barracks, upgrade building, and altar rawcodes: Human Castle hcas requires hbar, hbla, h000; Orc Stronghold ostr requires obar, ofor, kA01; Night Elf Tree of Ages etoa requires eaow, eaoe, kA02; Undead Halls of the Dead unp1 requires usep, uslh, kA03. Preserve each faction's native next-tier upgrade path.
+
 Race is assigned per selected hero and per owner. It must not be inferred from another player's hero or a fixed Human lobby preference. The map starts with race preference set to Random; confirming a Human, Orc, Night Elf or Undead hero sets only that player's Warcraft race preference and replaces their starting Town Hall, altar and five workers with the matching faction. In mixed-race matches, each build menu and constructed role stays matched to its owner.
 
 When a hero is confirmed, the Undead player's starting neutral mine is replaced with an owner-controlled Haunted Gold Mine, and the Night Elf player's with an owner-controlled Entangled Gold Mine. Both retain the full 1,000,000-gold reserve and the same plot location. Human and Orc players keep a neutral Gold Mine. The Undead order handler also recognizes Warcraft's native `hauntgoldmine` order for any additional neutral mine; the Night Elf Tree of Life's native Entangle range is 1,450. Confirm these native mine types and worker routes in Warcraft; source checks do not prove engine harvesting behavior.

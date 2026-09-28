@@ -12,7 +12,7 @@ from faction_catalog import FACTIONS
 from equipment_catalog import abilities
 from objects import units
 from pipeline import runtime_script
-from test_equipment import decode
+from test_equipment import decode, slk
 from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
 from hero_catalog import NEW_HEROES
 
@@ -98,6 +98,22 @@ class RaceMiningAndBuildings(unittest.TestCase):
         self.assertIn('SetResourceAmount(ownedMine,amount)', configure)
         self.assertIn('RemoveUnit(KLS_BaseMine[p])', configure)
         self.assertIn('KLS_ConfigureStartingMine(p,raceId)', function_body(runtime, 'KLS_ReplaceStartingFaction'))
+
+    def test_tier_two_town_hall_upgrades_accept_the_selected_races_custom_altar(self):
+        records = decode(units())
+        expected = {
+            'hcas': ('hbar', 'hbla', 'h000'),
+            'ostr': ('obar', 'ofor', 'kA01'),
+            'etoa': ('eaow', 'eaoe', 'kA02'),
+            'unp1': ('usep', 'uslh', 'kA03'),
+        }
+        installed_units = slk('UnitData.slk')
+        for hall, requirements in expected.items():
+            with self.subTest(town_hall_upgrade=hall):
+                self.assertIn(hall, installed_units)
+                self.assertIn(hall, records)
+                actual = records[hall][1][('ureq', 0)][0].split(',')
+                self.assertEqual(actual, list(requirements))
 
     def test_diagnostics_report_expected_and_actual_starting_mine_state(self):
         runtime = runtime_script('STARTING-MINE-DIAGNOSTIC-TEST')

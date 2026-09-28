@@ -55,6 +55,8 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 18. **Boss and story item delivery:** Build `KLS-D-2f2397cf14` routes both through a null-safe per-player delivery queue. A failed item creation is retried every five seconds; full inventory leaves a visible owner-bound item at the owner's base. Source tests and installed-API compilation pass. Actual pickup/ownership and injected native creation failure still need live verification.
 19. **Hall of Banners appearance and Foundry interaction:** Source inspection confirms the Hall models inherit the four races' main keep/Town Hall assets (`hcas`, `ofrt`, `etol`, `unpl`), explaining why the Human Hall looks like a normal castle/keep. Construction immediately applies the doctrine and unlocks company stock, so the Hall has no player-facing action. Foundry construction immediately grants the +20% company/support health and damage bonus; it also has no visible research button or shop stock. The user has reported both presentation issues. Distinct Hall models and an explicit Foundry interaction are needed; choose interaction and price behavior before changing this flow. No in-game appearance or command-card check is recorded for the current build.
 
+20. **Racial town-hall upgrade prerequisites:** Build KLS-D-2aa1705c84 rewrites hcas, ostr, etoa and unp1 to require each race's matching custom Altar, Barracks and upgrade building. Source regressions and package checks pass; verify all four native upgrades in Warcraft.
+
 ## Process choices made for this repository
 
 - The current artifact is a development map, not a release claim.

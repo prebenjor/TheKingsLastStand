@@ -26,6 +26,19 @@ def units():
     from hero_catalog import NEW_HEROES
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
+    # Each race builds a custom altar child rather than Warcraft's stock altar.
+    # Native tier-two town halls still require the stock altar rawcode, which
+    # makes the displayed Altar of Kings requirement impossible to satisfy.
+    # Point each upgrade target at the matching altar and race core buildings.
+    town_hall_upgrade_requirements = (
+        ('hcas', 'hbar', 'hbla', 'h000'),
+        ('ostr', 'obar', 'ofor', 'kA01'),
+        ('etoa', 'eaow', 'eaoe', 'kA02'),
+        ('unp1', 'usep', 'uslh', 'kA03'),
+    )
+    original.extend(record(town_hall, '\0\0\0\0', {
+        'ureq': ','.join((barracks, blacksmith, altar))})
+        for town_hall, barracks, blacksmith, altar in town_hall_upgrade_requirements)
     custom_hero_ids = {entry['unit_id'] for entry in NEW_HEROES} | {'H000'}
     for hero_id, abilities in HERO_ABILITIES.items():
         if hero_id not in custom_hero_ids:
