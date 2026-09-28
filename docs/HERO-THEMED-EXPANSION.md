@@ -1,10 +1,12 @@
 # Hero-themed armies and Forsaken Kingdom expansion
 
-**Status: approved architecture; initial source implementation added.** The original 40-wave Crownlands story remains intact and is followed by the approved endless campaign crossover. Exact build/package and engine acceptance remain separate gates.
+**Status: historical exploration, superseded by the current four-race plan.** The authoritative roster and gameplay rules are in [GAMEPLAY-SPEC.md](GAMEPLAY-SPEC.md), [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md), and [HEROES-AND-ABILITIES.md](HEROES-AND-ABILITIES.md). Keep the original 40-wave Crownlands story followed by the approved endless campaign crossover; exact build/package and engine acceptance remain separate gates.
+
+The current roster has 25 selectable heroes: the original fifteen, Human Ilastar, the Forsaken Paladin, and eight original race-themed heroes. Heroes start at level 1 and cap at 50. Confirming a hero independently selects that player's Human, Orc, Night Elf, or Undead worker and matching building/recruit tree. The older Human-only army and level-3-start proposal below is retained only as design history and must not be reintroduced.
 
 ## Design goal
 
-Make each hero choice change how that player's kingdom army develops. Keep one shared Human building tree, while giving each player a distinct recruit, tactical support unit, and building research path tied to their hero. Add official Forsaken Kingdom campaign heroes only where their unit, ability, portrait, and icon records can be verified from the installed Definitive Edition data.
+Make each hero choice change both that player's race-flavored kingdom army and their personal company. Use shared role rules and catalog-backed costs while matching workers, structures, recruits, and support units to Human, Orc, Night Elf, or Undead identity. Add official Forsaken Kingdom campaign heroes only where their unit, ability, portrait, and icon records can be verified from the installed Definitive Edition data.
 
 ## Campaign records verified locally
 
@@ -16,7 +18,7 @@ The installed edition's `UnitData.slk`, `AbilityData.slk`, and `WorldEditStrings
 | Ilastar, Undead | `Ujsm` | Installed base object has no `heroAbilList`; audit the campaign-provided skill data and target rules before making it selectable |
 | Forsaken Paladin | `Npal` | `ANcp` Righteous Fury; `AHcr` Consecration; `AHcl` Cleansing Fire; `AHpa` Sacred Aura |
 
-Keep the original fifteen choices, duplicate picks, level-3 start, Human workers/buildings, and player ownership rules. Human Ilastar (`Hjsm`) and the Forsaken Paladin (`Npal`) are now included as two additional selectable campaign heroes, with native ability ranks and custom signature abilities generated from the installed Definitive Edition data. Their selector descriptions use the installed ability names. Convert `Npal` into a proper selectable hero record rather than spawning the neutral creep template unchanged if testing confirms its global unit record lacks a required hero property. Add Undead Ilastar only after the campaign-specific ability list is found and audited; the global `Ujsm` record alone is not a complete hero definition.
+**Historical proposal, superseded:** preserve fifteen choices, start at level 3, and use Human workers/buildings for everyone. The current design instead has 25 choices, level-1 starts, and independently race-matched workers/buildings/companies. Human Ilastar (`Hjsm`) and the Forsaken Paladin (`Npal`) are selectable campaign heroes, with native ability ranks and signature abilities generated from installed Definitive Edition data. Their selector descriptions use installed ability names. The global Undead Ilastar (`Ujsm`) record lacks a verified campaign skill list, so Undead Ilastar is a research candidate and is not one of the 25 selectable heroes. Do not invent its rawcode or kit.
 
 The user's screenshot names **Aurrrius the Pure**. That exact name was not present in the installed global unit and ability tables checked for this draft; it may be a campaign-map-specific object. Do not fabricate a rawcode or copy a protected map. If the campaign's editor data exposes Aurrrius as an object, add that native record after verifying its portrait, model, abilities, and attribution.
 
@@ -42,7 +44,7 @@ The implemented first slice is documented in `COMPANIES-AND-BUILDINGS.md` and ge
 - Hall of Banners (`kH00`, installed Castle parent `hcas`) grants the selected hero one installed doctrine aura and unlocks only their personal recruit stock in owned Barracks.
 - Royal Foundry (`kF00`, installed Blacksmith parent `hbla`) gives that player's current and future company/support recruits +20% maximum HP and +20% base damage, applied once per unit.
 - Siege Yard (`kY00`, installed Workshop parent `harm`) stocks the hero-specific support recruit.
-- Seventeen selected heroes have distinct custom company and support rawcodes. They inherit native race-appropriate unit models/icons/abilities and receive catalog-defined names, costs, HP, and damage.
+- All 25 selected heroes have distinct custom company and support rawcodes. They inherit native race-appropriate unit models/icons/abilities and receive catalog-defined names, costs, HP, and damage.
 - The Altar is preplaced at each base. It does not consume a redundant worker build-card button. The Peasant construction menu has twelve or fewer choices.
 - Purchases from a mismatched player's company shop are removed and refunded. Company recruits stay out of the wave enemy group, accounting, and bounty system.
 
@@ -70,16 +72,16 @@ Names below are working names. The long-term table includes the Undead Ilastar c
 | Lich | Frostbound | Rime Mortar | Slow fields and ranged spell support |
 | Dark Ranger | Black Arrow Company | Forsaken Marksman | Attrition, silence, and ranged focus fire |
 | Ilastar, Human | Light's Vanguard | Mercy Bearer | Campaign light magic and allied rescue |
-| Ilastar, Undead | Duskbound | Soul Lantern | Campaign shadow/light hybrid and control |
+| Ilastar, Undead (research candidate; not selectable) | Duskbound (proposal only) | Soul Lantern (proposal only) | Campaign shadow/light hybrid and control |
 | Forsaken Paladin | Argent Revenants | Cleansing Pyre | Consecration, fire, and undead-counterplay |
 
 Company units use current selectable-hero ownership, can be controlled only by their owner, retain their current orders when the owner leaves, and do not count as wave enemies. Their special summons must have explicit expiry and cleanup. Enemy-kill gold follows the personal-killer / King Aldric quarter-bounty rule in `GAMEPLAY-SPEC.md`; company units do not generate gold merely for being summoned.
 
 ## Other approaches considered
 
-1. **One Hall and one custom company unit per hero.** Lowest footprint and easiest to tune, but does not deliver the requested new building/unit ecosystem.
-2. **Oathbound Companies (recommended).** Three new structures connect the Barracks, Blacksmith, Workshop, and Arcane Sanctum to each hero. Strong hero identity with a controlled, reusable architecture; it requires careful plot-space and 2/4-player balance testing.
-3. **Eighteen separate racial/hero building trees.** Maximum visual uniqueness, but it replaces the approved Human kingdom economy, consumes plot space, multiplies object data, and makes multiplayer balance and maintenance much harder.
+1. **One Hall and one custom company unit per hero.** Lowest footprint and easiest to tune, but does not deliver the requested building/unit ecosystem.
+2. **Four-race Oathbound Companies (current design).** Hero selection determines race-specific workers/buildings/units; the Hall, Foundry, and Siege Yard connect each hero to their company. Shared catalog rules keep roles and costs aligned while preserving faction identity. This requires careful plot-space and 2/4-player balance testing.
+3. **A complete classic tech tree for every race and hero.** Maximum breadth, but it consumes plot space, multiplies object data, and makes multiplayer balance and maintenance much harder. The current request is for the specified custom buildings, workers, companies, towers, support units and upgrades, not every classic tech-tree building.
 
 ## Integration and implementation gates
 
