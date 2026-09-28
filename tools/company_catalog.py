@@ -1,4 +1,4 @@
-"""Installed-unit based army and building catalog for the 17 selectable heroes."""
+"""Installed-unit based army and building catalog for the 25 selectable heroes."""
 
 COMPANY_BUILDINGS = {
     'hall': {
