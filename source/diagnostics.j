@@ -174,9 +174,30 @@ function KLS_ShowDiagnostics takes player p returns nothing
     local string raceName
     local string expectedMine
     local unit mine
+    local unit selectedUnit
+    local group selectedUnits
+    local integer selectedCount = 0
     if not KLS_Debug then
         return
     endif
+    set selectedUnits = GetUnitsSelectedAll(p)
+    loop
+        set selectedUnit = FirstOfGroup(selectedUnits)
+        exitwhen selectedUnit == null
+        call GroupRemoveUnit(selectedUnits,selectedUnit)
+        if selectedCount < 12 then
+            call DisplayTimedTextToPlayer(p, 0, 0, 30, "Selection identity player=" + I2S(GetPlayerId(p)+1) + " object=" + GetObjectName(GetUnitTypeId(selectedUnit)) + " unit=" + GetUnitName(selectedUnit) + " typeId=" + I2S(GetUnitTypeId(selectedUnit)) + " owner=" + I2S(GetPlayerId(GetOwningPlayer(selectedUnit))+1) + " at=" + R2S(GetUnitX(selectedUnit)) + "," + R2S(GetUnitY(selectedUnit)))
+        endif
+        set selectedCount = selectedCount + 1
+    endloop
+    if selectedCount == 0 then
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Selection identity player=" + I2S(GetPlayerId(p)+1) + " selected=NONE")
+    elseif selectedCount > 12 then
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Selection identity player=" + I2S(GetPlayerId(p)+1) + " count=" + I2S(selectedCount) + "; first 12 shown")
+    endif
+    call DestroyGroup(selectedUnits)
+    set selectedUnits = null
+    set selectedUnit = null
     call DisplayTimedTextToPlayer(p, 0, 0, 30, "KLS_BUILD_ID | units attempted=" + I2S(KLS_DiagUnits) + " scenery attempted=" + I2S(KLS_DiagDestructables) + " failures=" + I2S(KLS_DiagFailures))
     loop
         exitwhen i == 4

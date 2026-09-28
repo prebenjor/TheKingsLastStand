@@ -18,6 +18,17 @@ class WorkerIdentityDiagnostics(unittest.TestCase):
         self.assertIn('GetObjectName(GetUnitTypeId(KLS_FirstWorker[i]))', report)
         self.assertIn('GetUnitName(KLS_FirstWorker[i])', report)
 
+    def test_debug_report_identifies_the_calling_players_selected_units(self):
+        diagnostics = (ROOT / 'source' / 'diagnostics.j').read_text()
+        start = diagnostics.index('function KLS_ShowDiagnostics')
+        end = diagnostics.index('endfunction', start)
+        report = diagnostics[start:end]
+        self.assertIn('GetUnitsSelectedAll(p)', report)
+        self.assertIn('GetObjectName(GetUnitTypeId(selectedUnit))', report)
+        self.assertIn('GetUnitName(selectedUnit)', report)
+        self.assertIn('GetPlayerId(GetOwningPlayer(selectedUnit))', report)
+        self.assertIn('DestroyGroup(selectedUnits)', report)
+
 
 if __name__ == '__main__':
     unittest.main()

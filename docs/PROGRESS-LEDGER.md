@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-4a67348b4e
+## Current package-proven build — KLS-D-fdee19fa63
+
+- Artifact: `dist/KLS-D-fdee19fa63-Development.w3m`.
+- SHA-256: `6e591f5af710a3c6654d65743c957bf3308902c291907f6fec6090361367fa14`.
+- `-diag` now reports the calling player's selected units with object name, unit name, numeric type ID, owner and position, up to 12 units. This distinguishes a wrong worker spawn from a different selected unit behind the Peon/Acolyte portrait report.
+- Full source suite: **124/124 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-fdee19fa63-Development.w3m`; installed SHA-256 matches the manifest and the test folder contains one project map. The prior installed map remains preserved in the verified local archive.
+- Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending in Warcraft. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-4a67348b4e
 
 - Artifact: `dist/KLS-D-4a67348b4e-Development.w3m`.
 - SHA-256: `a013631ed88293b9d4c2610015152135eb3a7a9456e5b119cc2b8c211560aff4`.

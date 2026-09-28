@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-fdee19fa63 - 2026-09-29
+
+- `-diag` now reports the caller's currently selected units, including object name, unit name, raw type ID, owner and coordinates. It reports up to 12 units so the displayed selection can be compared with the race-assigned worker.
+- Full source regression suite: **124/124 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `6e591f5af710a3c6654d65743c957bf3308902c291907f6fec6090361367fa14`.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-fdee19fa63-Development.w3m`; installed SHA-256 matches the package manifest, and the folder contains one project map.
+- Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-4a67348b4e - 2026-09-29
 
 - The optional King's Restoring Spring visual now uses the shared checked spawn wrapper with the `restoring spring visual` context. Failed creation is logged and counted in diagnostics without aborting the match or disabling the coordinate-based regeneration timer.
