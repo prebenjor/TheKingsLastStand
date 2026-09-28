@@ -6,7 +6,7 @@
 - Extend the tier catalog with Strength, Agility and Intelligence equipment. Add a Sage's Archive building beside the Field Apothecary with permanent +5, +10 and +20 attribute tomes for each attribute.
 - Add three personal Master Forge recipes. Each consumes its named gear components from the hero's inventory, Forsaken backpack or equipment slots. The recipe fee, ingredient removal and crafted item delivery form one transaction; failure restores the fee and leaves components alone.
 - Place a restorative fountain south of the castle, off the central route. It restores nearby living defender heroes' health and mana in timed pulses.
-- Set normal post-wave preparation to 60 seconds and boss-wave preparation to 120 seconds. Keep the approved initial selection/preparation timers.
+- Set normal post-wave preparation to 90 seconds and boss-wave preparation to 180 seconds. Keep the approved 45-second selection and initial preparation timers. The 60/120-second draft is superseded by the later user request for longer breaks, especially before bosses.
 
 ## Implementation sequence
 
