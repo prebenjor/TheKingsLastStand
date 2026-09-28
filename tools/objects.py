@@ -17,7 +17,10 @@ def table(original, custom):
 
 
 def units():
-    original = [record('hpea', '\0\0\0\0', {'ubui':'htow,hhou,hbar,hbla,harm,h000,h004,h001,h002,h003', 'ureq':''})]
+    # The Altar is placed for every player at match start, so it does not
+    # consume a Peasant build-card slot. Replace the ordinary Workshop button
+    # with its hero-specific Siege Yard child; retain twelve usable buttons.
+    original = [record('hpea', '\0\0\0\0', {'ubui':'htow,hhou,hbar,hbla,h004,h001,h002,h003,kH00,kF00,kY00', 'ureq':''})]
     custom = [
         record('Hamg', 'H000', {'unam':'Priest','uhab':'AHhb,AHab,AHds,AHre','ureq':'','uhpm':600}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
@@ -27,6 +30,32 @@ def units():
         record('hctw', 'h002', {'unam':'Bombard Tower','ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
         record('hatw', 'h003', {'unam':'Sanctuary Tower','utub':'Restores 15 health to nearby allied units every 3 seconds. Range 650.','ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
+    from company_catalog import COMPANY_BUILDINGS, HERO_COMPANIES
+    for entry in COMPANY_BUILDINGS.values():
+        fields = {
+            'unam':entry['name'], 'utip':'Build '+entry['name'],
+            'utub':entry['tooltip'], 'ugol':entry['gold'],
+            'ulum':entry['lumber'], 'ubld':entry['build_time'],
+            'uhpm':entry['hit_points'], 'ureq':'hbar', 'ures':'', 'urev':0,
+        }
+        if entry['rawcode'] == COMPANY_BUILDINGS['siege_yard']['rawcode']:
+            fields['uabi'] = 'Aneu,Apit,Asid,Asud'
+        custom.append(record(entry['parent'],entry['rawcode'],fields))
+    for entry in HERO_COMPANIES:
+        company_fields = {
+            'unam':entry['company_name'], 'utip':entry['company_name'],
+            'utub':entry['hero_name']+' company recruit. Trained only from your Barracks after you raise this hero banner.',
+            'ugol':entry['company_gold'], 'ulum':entry['company_lumber'],
+            'uhpm':entry['company_hp'], 'ua1b':entry['company_damage'], 'ureq':'',
+        }
+        support_fields = {
+            'unam':entry['support_name'], 'utip':entry['support_name'],
+            'utub':entry['hero_name']+' tactical support. Trained only at your personal Siege Yard.',
+            'ugol':entry['support_gold'], 'ulum':entry['support_lumber'],
+            'uhpm':entry['support_hp'], 'ua1b':entry['support_damage'], 'ureq':'',
+        }
+        custom.append(record(entry['company_parent'],entry['company_id'],company_fields))
+        custom.append(record(entry['support_parent'],entry['support_id'],support_fields))
     custom.append(record('ngme','hS00',{'unam':'Kingdom Merchant','usei':'','umki':'','uabi':'Avul,Aneu,Apit,Asid,Asud','utub':'Select to browse equipment. Bring your hero within 700 range to buy.'}))
     custom.append(record('hars','hS02',{'unam':"Sage's Archive",'utip':"Sage's Archive",'utub':'A quiet shop for permanent Strength, Agility and Intelligence tomes. Select your hero before buying.','uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
     custom.append(record('hcas','hC01',{"unam":"King Aldric's Castle",'uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))

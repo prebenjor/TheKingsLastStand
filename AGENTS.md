@@ -6,7 +6,7 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 
 1. README.md for repository status and quick commands.
 2. docs/GAME-VISION.md and docs/GAMEPLAY-SPEC.md for the approved player experience and map layout.
-3. docs/HEROES-AND-ABILITIES.md, docs/HERO-THEMED-EXPANSION.md, docs/ITEMS-AND-EQUIPMENT.md, docs/ITEM-CATALOG.md, and docs/WAVES-AND-BOSSES.md for feature detail. The expansion proposal is not approved until the user accepts its recommended direction.
+3. docs/HEROES-AND-ABILITIES.md, docs/HERO-THEMED-EXPANSION.md, docs/COMPANIES-AND-BUILDINGS.md, docs/ITEMS-AND-EQUIPMENT.md, docs/ITEM-CATALOG.md, and docs/WAVES-AND-BOSSES.md for feature detail. The user approved the hero-themed building and army expansion; keep it in the implementation scope.
 4. docs/TECHNICAL-ARCHITECTURE.md for build provenance and supported workflow.
 5. docs/ROADMAP-AND-ACCEPTANCE.md and docs/PROGRESS-LEDGER.md for what is actually proven.
 6. docs/DECISIONS-AND-OPEN-ISSUES.md before changing a user-approved decision or resolving a reported bug.
@@ -17,10 +17,13 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 - The game is a 2–4 player cooperative human-kingdom defense RPG with individual player armies and heroes. Players do not receive shared unit control.
 - Preserve the 40-wave, four-chapter structure and the bosses on waves 10, 20, 30, and 40.
 - Preserve the user's battlefield: a broad north-to-south road, the undead/demon approach from the north, an open central gate in the northern wall, four separate player plots aligned across one horizontal row, King Aldric's castle at the defense line, and the shared market farther south.
-- Keep the 15-choice hero selector before the match proper. Duplicate choices are allowed. All heroes retain human workers and building access.
+- Keep the 17-choice hero selector before the match proper. Duplicate choices are allowed. All heroes retain human workers and building access.
+- Each hero unlocks their own Barracks company after completing a Hall of Banners, a matching support recruit at their Siege Yard, and a personal doctrine aura. Their Royal Foundry applies a one-time +20% health and base damage veteran upgrade to existing and future company recruits. Do not add company units to the tracked enemy group or enemy gold rewards.
 - The Forsaken Kingdom backpack is the intended native equipment system: 30 storage spaces, nine equipment slots, and one backpack carried in normal inventory. Never silently substitute a custom 18-slot dialog.
 - Keep gear personal, preserve ownership, and make buying, equipping, crafting, and rewards safe when inventory is full.
 - The king is a shared defense objective. Healing and upgrades are purchased at his castle with the acting player's personal gold and lumber.
+- Player-owned kill bounties go only to that killer's player. A King Aldric kill pays 25% of its bounty to each active player. Each active hero within 1,200 range gets the full kill XP value; do not split it. Native XP is disabled because Warcraft's alliance sharing divides awards.
+- Ordinary between-wave breaks are 50 seconds; pre-boss breaks remain 180 seconds. The Restoring Spring quietly restores 1% max HP and mana each second within range without effects or text.
 - Keep Definitive Edition rendering and use native installed game objects, portraits, icons, abilities, and models where possible.
 - Build stays labelled DEVELOPMENT until the editor save/reopen/Test Map, Custom Game startup, live gameplay, multiplayer, and endurance acceptance gates have actually passed.
 
@@ -47,7 +50,7 @@ If design and source differ, record the gap in docs/DECISIONS-AND-OPEN-ISSUES.md
 - tools/reference/installed is machine-local output from the user's installed Warcraft III. Do not check in installed SLK/API tables or Blizzard script declarations. Documented extraction and provenance checks are part of the build contract.
 - Do not deprotect or reuse a protected third-party map. This project is the user's new map based on the blank DE starter.
 - All synchronized gameplay changes must be deterministic and run for all players. GetLocalPlayer() may change display/camera only; it must not decide resources, item ownership, damage, wave state, or unit creation.
-- Add regression tests for changed archive, JASS, editor-source, hero, inventory, economy, wave, or multiplayer-state behavior. A passing syntax check is not engine compatibility proof.
+- Add regression tests for changed archive, JASS, editor-source, hero, company, inventory, economy, wave, or multiplayer-state behavior. A passing syntax check is not engine compatibility proof.
 - Use the captured diagnostic logs and full KLS diagnostic output to investigate missing objects. Tie each conclusion to the current immutable build ID and map hash.
 - Keep output names versioned and preserve an editor-open file. Do not overwrite/delete the file World Editor currently has open.
 - Update the docs and progress ledger in the same change as behavior changes. Record build ID, SHA-256, exact checks, failures, and the single next human-run check.

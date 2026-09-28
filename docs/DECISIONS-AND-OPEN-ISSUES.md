@@ -20,9 +20,10 @@ This file keeps design choices visible when implementation evolves. A newer expl
 - Native Forsaken Kingdom backpack/equipment UI: 30 storage slots, nine equipment positions, six normal inventory spaces including the backpack item.
 - Multiple quality-tier shops with inspectable icon stock/tooltips and distinct armor/weapons/rings/trinkets/capes plus stat items.
 - Add permanent Strength, Agility and Intelligence tomes in a separate Sage's Archive beside the Apothecary.
-- Enemy kills grant combat gold. Each roster role now has a generated base bounty plus the current wave; chapter bosses have a higher formula. Split among active defenders in slot order. Values remain initial tuning pending live playtests; see `WAVES-AND-BOSSES.md`.
+- Enemy kills grant combat gold. Each roster role has a generated base bounty plus the current wave; chapter bosses have a higher formula. The killing defender's player gets the full bounty. King Aldric's kills grant 25% of that bounty to each active player. Values remain initial tuning pending live playtests; see `WAVES-AND-BOSSES.md`.
+- Every active hero within 1,200 world units gets the full XP value for each enemy kill. Nearby heroes do not split XP; all hero races and life states are included. Native XP grants are disabled in map data and the runtime awards XP individually.
 - Add recipes, boss relics, long progression to hero level 100 / spell rank 10, and a health/mana restoration pool below the castle.
-- Longer breaks: 90 seconds after ordinary waves, 180 seconds before boss waves; keep 45-second hero selection and initial preparation.
+- Breaks: 50 seconds after ordinary waves, 180 seconds before boss waves; keep 45-second hero selection and initial preparation. The 50-second normal break supersedes the earlier 90-second choice.
 - Heal and upgrade King Aldric at his castle, with visible costs and feedback.
 
 ## Requirements history / precedence
@@ -43,15 +44,16 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 8. **Missing models/icons/rawcodes:** Older logs included model creation failures while an older map was in Warcraft's log; the failures were not attributed to the current build. Always tie new log evidence to exact build ID/hash and installed API provenance.
 9. **Shop/gameplay behavior after build changes:** Re-run acceptance against current build only. A screenshot from an old build is not evidence the latest fixed or introduced the issue.
 10. **Starting worker portrait:** Source creates `hpea`; installed `UnitUI.slk` names it `peasant`, while `uaco` is `acolyte`, and `UnitAbilities.slk` shows different ability lists. The reported portrait still needs runtime evidence. Current `-diag` now prints each player's actual race and first worker's object/unit name so the next exact-build capture distinguishes a wrong spawn from a display/group-selection issue.
-11. **Combat gold feedback:** Exact per-player ordinary and boss gold payouts now use a local timed notification in source; verify it is visible/readable during dense waves and matches credited resources in game.
-12. **Restoring Spring cadence:** Source now restores 1% of maximum HP and mana per second within the spring radius; verify its visual tick, exact regen, full-resource behavior and range in game.
-13. **Hero/building/unit expansion:** Installed data verifies Human and Undead Ilastar (`Hjsm`, `Ujsm`) and the Forsaken Paladin (`Npal`) plus their campaign ability IDs. `docs/HERO-THEMED-EXPANSION.md` proposes adding them and Oathbound Companies; this architecture still needs user approval before gameplay code is changed. Aurrrius the Pure remains unresolved in the global installed tables and must not be assigned an invented rawcode.
+11. **Combat gold feedback and ownership:** Source now awards full normal kill gold only to the owner of a defender killing unit. King Aldric awards 25% of a kill bounty to each active player. Recipient-only floating text and a timed notification display credited gold. Verify popups/resources for both kill paths in game.
+12. **XP award behavior:** Source disables native shared XP (which divides XP among heroes) and grants the full unit/hero kill XP independently to every active hero within 1,200 range, including heroes regardless of race or life state. Verify recipient range, full per-hero amount, and dead-hero handling in game.
+13. **Restoring Spring cadence:** The source restores capped 1% max HP and mana each second within 450 range, with no healing effect or floating/timed text. The native fountain prop is optional, so its spawn failure cannot suppress the coordinate-based timer. Verify exact regeneration, quiet presentation, full-resource behavior, and range in game.
+13. **Hero/building/unit expansion:** The user approved Oathbound Companies. The new source catalog adds Hall of Banners, Royal Foundry, Siege Yard, and a personal Barracks company plus support recruit for each of the 17 currently selectable heroes. Recruitment, doctrine effects, owner checks, and the one-time foundry bonus are package/source checks only; actual building access and purchases remain unverified. Human Ilastar (`Hjsm`) and Forsaken Paladin (`Npal`) are selectable. Undead Ilastar (`Ujsm`) still lacks a verified global skill list; Aurrrius the Pure remains unresolved in the global installed tables. Do not invent either hero's rawcode/kit.
 
 ## Process choices made for this repository
 
 - The current artifact is a development map, not a release claim.
 - Preserve the user's starter as backups/Blank-DE.w3m and the exact diagnostic map in dist/.
 - Machine-local installed Warcraft API/object files stay out of Git; regenerate them from a supported installed edition.
-- Store the complete player vision, mechanics, code/build contract, all 15 hero skill/signature descriptions, catalog, and acceptance plan as Markdown so future agents do not need conversation history to know the target.
+- Store the complete player vision, mechanics, code/build contract, all 17 hero skill/signature and company details, item catalog, and acceptance plan as Markdown so future agents do not need conversation history to know the target.
 - Keep one current development map in `dist/` and one installed copy in the dedicated Warcraft III test folder. Archive replaced builds outside that folder and preserve the existing open World Editor document.
 - Use the progress ledger to append dated/build-tagged evidence. Never overwrite historical observations.

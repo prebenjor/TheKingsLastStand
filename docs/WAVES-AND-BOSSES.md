@@ -17,7 +17,7 @@ Current roster rawcodes include: ugho, uske, ucry, nska, nfel, hfoo, nfgu, unec,
 
 ## Combat gold bounty (initial tuning)
 
-Each tracked enemy death grants one team bounty, then divides it equally among active defenders; remainder gold follows player-slot order. The final blow does not take the whole payout. A role's base bounty increases by the current wave number:
+Each tracked enemy death gives the role bounty to the defender player who owns the killing unit. Player kill gold is not shared. If King Aldric gets the killing blow, each active defender gets 25% of that enemy's bounty. A role's base bounty increases by the current wave number:
 
 | Role / unit rawcode | Base gold | Example at wave 1 |
 |---|---:|---:|
@@ -37,6 +37,8 @@ Each tracked enemy death grants one team bounty, then divides it equally among a
 | Chapter boss | 100 + 5 × wave | 150 |
 
 These are starting values for playtesting, not final balance. Bosses also retain their existing per-defender chapter reward and personal relic. Boss reinforcements use their own unit role's bounty when killed. The table is generated from `tools/wave_rosters.py`; every rawcode in the 40 wave rosters must have exactly one bounty entry.
+
+For each tracked enemy death, each active defender hero within 1,200 world units independently receives the full normal unit-level XP award. The runtime disables native XP sharing and applies each full award, so nearby heroes do not divide one total. Hero race and life state do not filter recipients. Verify behavior with a dead hero in the installed game before calling it engine-proven.
 
 The full generated unit-code sequence for every wave, in order, is preserved in WAVE-ROSTER-CATALOG.md. At runtime, the spawn loop cycles through that wave's listed sequence if the player-scaled count is larger than the sequence.
 

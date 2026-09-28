@@ -1,6 +1,6 @@
 # Hero-themed armies and Forsaken Kingdom expansion
 
-**Status: design draft for approval.** This is the proposed next content system for The King's Last Stand. The existing 40-wave design remains in force. The map runtime has not yet been changed for this expansion.
+**Status: approved architecture; initial source implementation added.** The existing 40-wave design remains in force. Exact build/package and engine acceptance remain separate gates.
 
 ## Design goal
 
@@ -20,7 +20,7 @@ Keep the original fifteen choices, duplicate picks, level-3 start, Human workers
 
 The user's screenshot names **Aurrrius the Pure**. That exact name was not present in the installed global unit and ability tables checked for this draft; it may be a campaign-map-specific object. Do not fabricate a rawcode or copy a protected map. If the campaign's editor data exposes Aurrrius as an object, add that native record after verifying its portrait, model, abilities, and attribution.
 
-## Recommended implementation: Oathbound Companies
+## Approved architecture: Oathbound Companies
 
 Each selected hero unlocks a personal company that only that player's Barracks can train. The company has one clear battlefield role and one signature ability. A new **Hall of Banners** researches the hero's company doctrine and chapter upgrades. A new **Royal Foundry** upgrades company weapons/armor and unlocks the campaign's veteran variants. A new **Siege Yard** trains the matching tactical support unit: a ranged, control, healer, scout, or siege counter chosen to complement the hero rather than duplicate their damage role.
 
@@ -35,9 +35,22 @@ The existing buildings keep their jobs and gain connected, hero-aware options:
 
 All new structures remain buildable within the owner's plot and use the same footprint, refund, resource, and upgrade validation as existing buildings. No new structure or army unit may block the King's Road or gate.
 
+## Current source baseline
+
+The implemented first slice is documented in `COMPANIES-AND-BUILDINGS.md` and generated from `tools/company_catalog.py`:
+
+- Hall of Banners (`kH00`, installed Castle parent `hcas`) grants the selected hero one installed doctrine aura and unlocks only their personal recruit stock in owned Barracks.
+- Royal Foundry (`kF00`, installed Blacksmith parent `hbla`) gives that player's current and future company/support recruits +20% maximum HP and +20% base damage, applied once per unit.
+- Siege Yard (`kY00`, installed Workshop parent `harm`) stocks the hero-specific support recruit.
+- Seventeen selected heroes have distinct custom company and support rawcodes. They inherit native race-appropriate unit models/icons/abilities and receive catalog-defined names, costs, HP, and damage.
+- The Altar is preplaced at each base. It does not consume a redundant worker build-card button. The Peasant construction menu has twelve or fewer choices.
+- Purchases from a mismatched player's company shop are removed and refunded. Company recruits stay out of the wave enemy group, accounting, and bounty system.
+
+The initial code does not yet include the architecture's planned three chapter researches, multiple weapon/armor branches, or a newly authored active ability for each recruit. Keep those items in the future scope; do not claim they are implemented. The unit catalog, class-to-stock pairing, doctrine aura, foundry upgrade, ownership, and stock purchase all require exact-build Warcraft verification.
+
 ## Hero company concepts
 
-Names below are working names. The long-term table includes the Undead Ilastar candidate; its recruit remains gated on the missing campaign-specific skill data. Final base damage, armor, cost, cooldowns, and rank curves must be generated from one catalog and tuned against recorded playtests.
+Names below are working names. The long-term table includes the Undead Ilastar candidate; its recruit remains gated on the missing campaign-specific skill data. Implemented base damage, health, and prices live in one catalog and remain initial tuning values until recorded playtests.
 
 | Hero | Barracks company | Tactical support | Doctrine identity |
 |---|---|---|---|
@@ -60,7 +73,7 @@ Names below are working names. The long-term table includes the Undead Ilastar c
 | Ilastar, Undead | Duskbound | Soul Lantern | Campaign shadow/light hybrid and control |
 | Forsaken Paladin | Argent Revenants | Cleansing Pyre | Consecration, fire, and undead-counterplay |
 
-Company units use current selectable-hero ownership, can be controlled only by their owner, retain their current orders when the owner leaves, and do not count as wave enemies. Their special summons must have explicit expiry and cleanup. Enemy-kill gold uses the existing personal split and roster bounty source; company units do not generate gold merely for being summoned.
+Company units use current selectable-hero ownership, can be controlled only by their owner, retain their current orders when the owner leaves, and do not count as wave enemies. Their special summons must have explicit expiry and cleanup. Enemy-kill gold follows the personal-killer / King Aldric quarter-bounty rule in `GAMEPLAY-SPEC.md`; company units do not generate gold merely for being summoned.
 
 ## Other approaches considered
 
@@ -70,9 +83,9 @@ Company units use current selectable-hero ownership, can be controlled only by t
 
 ## Integration and implementation gates
 
-1. Use the extended local installed-data extractor for `UnitBalance.slk`, `UnitUI.slk`, `UnitAbilities.slk`, and `UnitWeapons.slk`, without committing machine-local tables. Resolve hero stats, ability lists, portraits, command icons, model paths, and the worker portrait issue from these records. Human Ilastar and Forsaken Paladin have global hero skill lists; Undead Ilastar does not in the global list and needs campaign-specific skill data.
-2. Extend the hero catalog to verified campaign identities; Human Ilastar and the Forsaken Paladin are implemented in the current development source. Preserve all original choices and confirm each added hero's native skill behavior in game.
-3. Generate company/support unit object data, prices, training buttons, tooltips, upgrades, and bounty policy from one catalog. Use native Definitive Edition art and avoid rawcode collisions.
-4. Add the Hall of Banners, Royal Foundry, and Siege Yard to the Human build menu with validated prerequisites, footprint, costs, refund behavior, and plot-only construction.
-5. Add focused regressions for object records, catalogs, unlocks, costs, ownership, wave accounting, and GUI source parity; then package under a new development build ID and add its SHA-256/changelog entry.
-6. Verify portraits, training, abilities, upgrade effects, pathing, gold, and no shared control in the editor and a live 2-player session before expanding to four players or recording balance conclusions.
+1. Use installed `UnitBalance.slk`, `UnitUI.slk`, `UnitAbilities.slk`, and `UnitWeapons.slk` for stats, models, abilities, portraits, and icons. Keep these tables machine-local.
+2. Human Ilastar and the Forsaken Paladin are selectable. Undead Ilastar and Aurrrius remain gated on verified hero/skill records; do not fabricate either identity.
+3. The initial company/support objects and three structures are generated from one catalog with collision/object-record regressions.
+4. Complete the in-engine proof for worker build cards, structure placement, Hall unlock, matching Barracks/Siege Yard purchases, ability behavior, one-time Foundry upgrades, and ownership/refunds.
+5. Implement the remaining chapter upgrades, company gear/armor branches, and further unique unit abilities from the approved design after the current recruitment gate passes.
+6. Test actual two-player synchronization first, then three- and four-player setup and full-match progression. Tune only from recorded playtests.

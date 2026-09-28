@@ -2,6 +2,25 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-5b63d38dc0 - 2026-09-28
+
+- Player-owned kills award the full role bounty only to the killing unit's player. King Aldric's kills award 25% of the bounty to every active player. Both use the recipient-only gold notification.
+- Each active hero within 1,200 world units receives a full individual kill-XP award. Warcraft's native shared XP divides experience, so native normal/hero kill XP and native shared XP are disabled; the runtime awards the Warcraft default unit-level progression or hero-kill XP value to each nearby hero. Race and life state are not used as recipient filters.
+- King Aldric's acquisition range is 900 to enable his attack bounty route. Ordinary wave breaks are now 50 seconds, while pre-boss breaks remain 180 seconds.
+- Restoring Spring restores 1% maximum HP and mana every second within range without a healing effect, floating text, or timed notification.
+- Shop-purchased gear is moved to an available normal inventory slot when possible. Vendor resale now obtains the manipulated/pawned item from the correct event native. Both behaviors still require live backpack/shop verification.
+- Adds Hall of Banners, Royal Foundry, Siege Yard, and 34 hero-specific company/support unit records for the 17 selectable heroes. Their recruiting, doctrines, upgrade effect, placement, and multiplayer ownership remain engine-pending.
+- Full source regression suite: **75/75 passed** after adding this build's changelog entry. Package member readback and installed-editor API JASS syntax passed. The earlier run's only failure was the changelog guard detecting that the newly generated ID was undocumented; this entry resolves it.
+- Map SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`; the installed hash matches the package. Editor save/reopen, current-build Test Map, Custom Game gameplay, XP/gold behavior, item UI, multiplayer, and endurance checks remain pending. The earlier Test Map pass stays attributed to `KLS-D-fd638ddcf5`.
+
+## KLS-D-49ab762fcd - 2026-09-28 (superseded before installation)
+
+- Intermediate package included personal player kill gold, King Aldric's 25% bounty for each active player, silent one-second spring regeneration, 50-second normal breaks, and the hero-company building/unit slice.
+- Package inventory/readback and installed-editor API syntax passed. The XP-sharing audit then showed that the native alliance experience setting divides XP; the source was changed to award the full amount independently to each hero in range, producing the follow-up build `KLS-D-5b63d38dc0`.
+- SHA-256: `612e9a0578749275d70ac3f72406ea32a97758fbbaa30485cc32a479974a4436`.
+- This intermediate map was never installed or engine-tested; it is retained in `backups/development-builds/`.
+
 ## KLS-D-2780b4380e - 2026-09-28
 
 - Added two installed-data-verified Forsaken Kingdom heroes, Human Ilastar and the Forsaken Paladin, bringing the selector to 17 choices. Their descriptions use the native skill names, their native abilities are extended through the same level-100/rank-10 progression generator, and each receives a new custom signature ability (`AK15`/`AK16`).

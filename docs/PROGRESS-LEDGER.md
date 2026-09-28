@@ -3,19 +3,49 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-2780b4380e**.
-- Artifact: `dist/KLS-D-2780b4380e-Development.w3m`.
-- SHA-256: `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`.
+- Build: **KLS-D-5b63d38dc0**.
+- Artifact: `dist/KLS-D-5b63d38dc0-Development.w3m`.
+- SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`.
+- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-5b63d38dc0-Development.w3m` (hash matches the package).
 - Manifest: `dist/build-manifest.json`.
-- Package readback and JASS syntax against installed API: passed. Full source regression suite for the current build: **66/66 passed**.
-- Status: **development build**. The current exact build is installed but has not yet been launched in Warcraft III.
+- Package archive readback and JASS syntax against installed API: passed. Full source regression suite: **75/75 passed**.
+- Status: **development build**. Current-build editor, Custom Game, gameplay, multiplayer, and endurance checks are pending.
 
 ## User-reported engine result
 
 - World Editor Test Map succeeded on the earlier installed development build **KLS-D-fd638ddcf5**. This remains a pass for that build and is not listed as a failure.
 - Save/reopen, current-build Test Map, current-build Custom Game, live systems, multiplayer and endurance checks remain pending for their respective builds.
 
-## 2026-09-28: campaign heroes and reward/inventory corrections — KLS-D-2780b4380e
+## 2026-09-28: personal bounties, full-range XP, quiet spring, and Oathbound Companies — KLS-D-5b63d38dc0
+
+### Current task and last proven build
+
+- Current task: implement the approved RPG recovery plan and the user's latest reward, regeneration, gear-flow, building expansion, and wave-break feedback.
+- Current development build: **KLS-D-5b63d38dc0**.
+- Workspace artifact: `dist/KLS-D-5b63d38dc0-Development.w3m`.
+- SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`.
+- Installed version: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-5b63d38dc0-Development.w3m`; the installed copy matches this SHA-256.
+
+### Changes and evidence
+
+- Player-owned kills now pay the full role bounty only to that player's resources. King Aldric kills pay 25% of the bounty to each active defender. Visible recipient-only gold text remains on both routes.
+- Warcraft's native experience-sharing behavior divides XP across heroes, so the map disables native XP awards and the runtime grants a full per-kill XP amount to each active hero inside 1,200 world units. Hero race and life state do not filter recipients. XP values use the normal unit-level progression and hero-kill table. Dead-hero XP, actual range behavior, and high-level progression still need engine proof.
+- King Aldric's acquisition range is set to 900 so the stationary king can attempt to make the kills that use his quarter-bounty route.
+- Restoring Spring heals 1% max health and mana every second with no Holy Bolt effect, floating text, or timed message.
+- Normal between-wave preparation is 50 seconds; before boss waves it remains 180 seconds. Initial preparation remains 45 seconds.
+- Bought equipment transfers toward an available normal-inventory slot after shop purchase. Vendor resale reads the pawn event's manipulated item instead of the unrelated sold-item event payload. Equipment/backpack/sale behavior remains engine-pending.
+- Added Hall of Banners, Royal Foundry, Siege Yard, and 34 hero-linked company/support unit records. Company purchase, ownership, effects, and UI are still engine-pending.
+- Focused reward/XP/timing tests passed. The first full-suite run reported only that this newly generated build ID had no changelog section yet; after documenting the ID, the full suite passed **75/75**.
+- `python -B tools/build_map.py` passed MPQ readback and installed-editor API syntax checks. `python -B tools/build_map.py --install-test-map` archived older project test maps and installed the new version. The installed SHA-256 matches the package.
+- The user-reported World Editor Test Map success remains credited only to **KLS-D-fd638ddcf5**. The current build has not been launched or tested in the editor yet.
+
+### Exact next action and remaining checks
+
+- Next human check: start the installed `KLS-D-5b63d38dc0-Development.w3m` through Warcraft III → Single Player → Custom Game, confirm its visible ID and that hero selection opens without a premature victory. Use this exact build in all subsequent checks.
+- After startup proof, check killer-only gold feedback, XP to every nearby hero, King Aldric's quarter bounty, gear transfer/equip/resale, the silent one-second spring tick, and 50/180-second break timers.
+- The 2/3/4-player, 40-wave, boss, building/company, current editor save/reopen, and endurance acceptance checks remain pending.
+
+## 2026-09-28: campaign heroes and reward/inventory corrections — KLS-D-2780b4380e (historical)
 
 ### Current task and last package-proven build
 

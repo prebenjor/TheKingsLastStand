@@ -11,8 +11,9 @@ globals
     integer KLS_Wave = 0
     integer KLS_Alive = 0
     integer KLS_Prep = 45
-    integer KLS_NormalPrep = 90
+    integer KLS_NormalPrep = 50
     integer KLS_BossPrep = 180
+    integer KLS_XPShareRange = 1200
     boolean KLS_Ended = false
     timer KLS_Clock = null
     group KLS_Enemies = null
@@ -26,9 +27,28 @@ function KLS_Message takes string s returns nothing
 endfunction
 
 function KLS_GoldToast takes integer p, integer amount returns nothing
+    local texttag rewardTag
     if p >= 0 and p < 4 and amount > 0 then
+        // The timed message can be lost among simultaneous wave text. Add a
+        // recipient-only combat number above that player's hero as well.
+        set rewardTag = CreateTextTag()
+        call SetTextTagText(rewardTag, "+"+I2S(amount)+" gold", 0.020)
+        call SetTextTagColor(rewardTag,255,214,64,255)
+        if KLS_Hero[p] != null then
+            call SetTextTagPosUnit(rewardTag,KLS_Hero[p],65.0)
+        else
+            call SetTextTagPos(rewardTag,0,0,0)
+        endif
+        call SetTextTagVelocity(rewardTag,0,0.028)
+        call SetTextTagPermanent(rewardTag,false)
+        call SetTextTagLifespan(rewardTag,2.5)
+        call SetTextTagFadepoint(rewardTag,1.8)
+        if GetLocalPlayer() != Player(p) then
+            call SetTextTagVisibility(rewardTag,false)
+        endif
         call DisplayTimedTextToPlayer(Player(p),0,0.22,2.5,"|cffffcc00+"+I2S(amount)+" gold|r")
     endif
+    set rewardTag = null
 endfunction
 
 function KLS_End takes boolean won returns nothing
@@ -84,38 +104,98 @@ function KLS_BossReward takes nothing returns nothing
     set reward = null
 endfunction
 
-function KLS_AwardBounty takes integer bounty returns nothing
+function KLS_AwardBounty takes unit killer, integer bounty returns nothing
     local integer i = 0
-    local integer activeCount = 0
-    local integer share = 0
-    local integer remainder = 0
+    local integer p = -1
     local integer payout = 0
-    loop
-        exitwhen i == 4
-        if KLS_Active[i] then
-            set activeCount = activeCount + 1
-        endif
-        set i = i + 1
-    endloop
-    if activeCount == 0 then
+    if KLS_Ended or killer == null or bounty <= 0 then
         return
     endif
-    set share = bounty / activeCount
-    set remainder = ModuloInteger(bounty, activeCount)
-    set i = 0
-    loop
-        exitwhen i == 4
-        if KLS_Active[i] then
-            set payout = share
-            if remainder > 0 then
-                set payout = payout + 1
-                set remainder = remainder - 1
-            endif
-            call SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD) + payout)
-            call KLS_GoldToast(i,payout)
+    if killer == KLS_King then
+        set payout = R2I(I2R(bounty)*0.25)
+        if payout < 1 then
+            set payout = 1
         endif
-        set i = i + 1
+        loop
+            exitwhen i == 4
+            if KLS_Active[i] then
+                call SetPlayerState(Player(i),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(i),PLAYER_STATE_RESOURCE_GOLD)+payout)
+                call KLS_GoldToast(i,payout)
+            endif
+            set i = i+1
+        endloop
+        call KLS_Log("King Aldric kill bounty: each active defender receives 25 percent")
+    else
+        set p = GetPlayerId(GetOwningPlayer(killer))
+        if p >= 0 and p < 4 and KLS_Active[p] then
+            call SetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD)+bounty)
+            call KLS_GoldToast(p,bounty)
+        endif
+    endif
+endfunction
+
+function KLS_UnitKillXP takes unit dead returns integer
+    local integer level = GetUnitLevel(dead)
+    local integer xp = 25
+    if level <= 0 then
+        return 0
+    endif
+    if IsUnitType(dead,UNIT_TYPE_HERO) then
+        if level <= 1 then
+            return 100
+        elseif level == 2 then
+            return 120
+        elseif level == 3 then
+            return 160
+        elseif level == 4 then
+            return 220
+        elseif level == 5 then
+            return 300
+        elseif level == 6 then
+            return 400
+        elseif level == 7 then
+            return 500
+        elseif level == 8 then
+            return 600
+        elseif level == 9 then
+            return 700
+        endif
+        return 800
+    endif
+    // Warcraft's default normal-unit XP sequence: F(1)=25,
+    // F(x)=F(x-1)+5*x+5. Native kill XP is disabled in Misc.txt below.
+    set level = level - 1
+    loop
+        exitwhen level <= 0
+        set xp = xp + 5*level + 5
+        set level = level - 1
     endloop
+    return xp
+endfunction
+
+function KLS_AwardKillXP takes unit dead returns nothing
+    local integer i = 0
+    local integer xp = KLS_UnitKillXP(dead)
+    local unit hero
+    local real dx
+    local real dy
+    if xp > 0 then
+        loop
+            exitwhen i == 4
+            set hero = KLS_Hero[i]
+            // Intentionally do not require a living unit or a specific race:
+            // an active player's nearby hero receives the full award.
+            if KLS_Active[i] and hero != null then
+                set dx = GetUnitX(hero)-GetUnitX(dead)
+                set dy = GetUnitY(hero)-GetUnitY(dead)
+                if dx*dx+dy*dy <= I2R(KLS_XPShareRange*KLS_XPShareRange) then
+                    call AddHeroXP(hero,xp,false)
+                endif
+            endif
+            set i = i + 1
+        endloop
+    endif
+    set hero = null
 endfunction
 
 function KLS_Death takes nothing returns nothing
@@ -129,7 +209,8 @@ function KLS_Death takes nothing returns nothing
     elseif IsUnitInGroup(dead, KLS_Enemies) then
         call GroupRemoveUnit(KLS_Enemies, dead)
         set KLS_Alive = KLS_Alive - 1
-        call KLS_AwardBounty(KLS_EnemyBounty(dead))
+        call KLS_AwardKillXP(dead)
+        call KLS_AwardBounty(GetKillingUnit(),KLS_EnemyBounty(dead))
         if dead == KLS_Boss then
             set KLS_Boss = null
             if GetWidgetLife(KLS_King) <= 0.405 then
@@ -467,9 +548,18 @@ endfunction
 function KLS_PlayerLeft takes nothing returns nothing
     local player departing = GetTriggerPlayer()
     local integer p = GetPlayerId(departing)
+    local integer i = 0
     if p < 4 and KLS_Active[p] then
         set KLS_Active[p] = false
         set KLS_Players = KLS_Players-1
+        loop
+            exitwhen i == 4
+            if i != p then
+                call SetPlayerAlliance(Player(i),departing,ALLIANCE_SHARED_XP,false)
+                call SetPlayerAlliance(departing,Player(i),ALLIANCE_SHARED_XP,false)
+            endif
+            set i = i+1
+        endloop
         call KLS_Log("Defender left; active players=" + I2S(KLS_Players))
         call KLS_Message(GetPlayerName(departing) + " has left the defense. Their army keeps its current orders.")
         if KLS_Selecting then
@@ -540,7 +630,7 @@ function KLS_Init takes nothing returns nothing
     call BlzSetUnitMaxHP(KLS_King, 15000)
     call SetWidgetLife(KLS_King, 15000)
     call BlzSetUnitBaseDamage(KLS_King, 80, 0)
-    call SetUnitAcquireRange(KLS_King, 0)
+    call SetUnitAcquireRange(KLS_King, 900)
     call SetUnitMoveSpeed(KLS_King, 0)
     // Six tiered gear vendors are placed around the southern market plaza.
     call KLS_CreateShops()
@@ -598,6 +688,24 @@ function KLS_Init takes nothing returns nothing
         endif
         set i = i + 1
     endloop
+    // Disable native sharing; the kill handler awards full XP to each nearby
+    // active player's hero, rather than splitting one pool between heroes.
+    set i = 0
+    loop
+        exitwhen i == 4
+        if KLS_Active[i] then
+            set j = 0
+            loop
+                exitwhen j == 4
+                if KLS_Active[j] and i != j then
+                    call SetPlayerAlliance(Player(i),Player(j),ALLIANCE_SHARED_XP,false)
+                endif
+                set j = j+1
+            endloop
+        endif
+        set i = i+1
+    endloop
+    call KLS_CompanyInit()
     call TriggerAddAction(leaves,function KLS_PlayerLeft)
     call TriggerRegisterAnyUnitEventBJ(deaths, EVENT_PLAYER_UNIT_DEATH)
     call TriggerAddAction(deaths, function KLS_Death)

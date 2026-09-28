@@ -28,34 +28,23 @@ class PlayerDeparture(unittest.TestCase):
         self.assertIn('if KLS_Players == 0 then', leave)
         self.assertIn('call KLS_End(false)', leave)
         self.assertNotIn('SetUnitOwner', leave)
-        self.assertNotIn('SetPlayerAlliance', leave)
+        self.assertIn('ALLIANCE_SHARED_XP,false', leave)
 
     def test_every_defender_slot_registers_a_leave_event(self):
         init = function_body(self.script, 'KLS_Init')
         self.assertIn('TriggerRegisterPlayerEvent(leaves,Player(i),EVENT_PLAYER_LEAVE)', init)
         self.assertIn('TriggerAddAction(leaves,function KLS_PlayerLeft)', init)
 
-    def test_enemy_bounty_is_shared_and_remainder_follows_player_slot_order(self):
+    def test_enemy_kill_gold_is_personal_while_king_has_a_separate_team_payout(self):
         award = function_body(self.script, 'KLS_AwardBounty')
         death = function_body(self.script, 'KLS_Death')
-        self.assertIn('if KLS_Active[i] then', award)
-        self.assertIn('set share = bounty / activeCount', award)
-        self.assertIn('set remainder = ModuloInteger(bounty, activeCount)', award)
-        self.assertIn('if remainder > 0 then', award)
-        self.assertRegex(award, r'loop[\s\S]*?set i = i \+ 1[\s\S]*?if KLS_Active\[i\] then[\s\S]*?remainder = remainder - 1')
-        self.assertIn('call KLS_AwardBounty(KLS_EnemyBounty(dead))', death)
-        self.assertNotIn('GetOwningPlayer(killer)', death)
-
-        def shares(active_slots, bounty):
-            ordered = sorted(active_slots)
-            if not ordered:
-                return {}
-            base, remainder = divmod(bounty, len(ordered))
-            return {slot: base + (index < remainder) for index, slot in enumerate(ordered)}
-
-        self.assertEqual(shares([3, 1], 11), {1: 6, 3: 5})
-        self.assertEqual(shares([2, 0, 3], 8), {0: 3, 2: 3, 3: 2})
-        self.assertEqual(shares([2], 9), {2: 9})
+        self.assertIn('call KLS_AwardBounty(GetKillingUnit(),KLS_EnemyBounty(dead))', death)
+        self.assertIn('GetPlayerId(GetOwningPlayer(killer))', award)
+        self.assertIn('call KLS_GoldToast(p,bounty)', award)
+        self.assertIn('if killer == KLS_King then', award)
+        self.assertIn('R2I(I2R(bounty)*0.25)', award)
+        self.assertNotIn('remainder = ModuloInteger', award)
+        self.assertNotIn('SetUnitOwner', function_body(self.script, 'KLS_PlayerLeft'))
 
 
 if __name__ == '__main__':

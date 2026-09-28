@@ -12,7 +12,7 @@
 5. Select one of 17 hero previews, read role/abilities, click Confirm. The roster includes Human Ilastar and the Forsaken Paladin from the installed campaign data. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is a development build, installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`, and still needs its own in-game verification. The user-reported Test Map success for the earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is development build `KLS-D-5b63d38dc0`, installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`, and still needs its own in-game verification. The user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 
@@ -24,10 +24,11 @@ The current artifact is a development build, installed at `Documents/Warcraft II
 - The southern market offers gear tiers. Inspect each shop's item icon and tooltip before buying. If stock is empty or the shop only shows unlabeled text, record the build ID and stop that shop test.
 - Click the Forsaken Field Pack in your hero's normal inventory to open the native backpack equipment panel. This build uses the installed `ebua` item identity. Confirm the panel shows 30 storage slots and nine equipment positions. If it does not open, keep the item and report the exact build ID with a screenshot.
 - To move bought gear between the 30-slot backpack, the five other normal inventory slots, and the nine equipment slots, drag the item through the native Forsaken Kingdom inventory panel. Gear can be sold back to a market vendor for half its listed price; boss relics remain unsellable.
-- Enemy kills show a gold popup for the personal share credited to each active defender. Stronger enemies pay larger bounties.
+- A player-owned defender kill pays its full bounty only to that player's resources. King Aldric's kill pays 25% of the bounty to each active player. The exact amount should appear in a recipient-only gold popup. Stronger enemies pay larger bounties.
+- Each active player's hero within 1,200 range of a tracked enemy death receives the full XP award individually. Nearby heroes do not divide the XP; race and life state do not filter recipients. This custom award is source/package checked and needs in-game confirmation.
 - Use King Aldric's Castle for heal/upgrade buttons. Contributions cost personal resources.
-- Normal breaks: 90 seconds. Before waves 10, 20, 30, 40: 180 seconds.
-- The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range recover 1% of maximum HP and 1% of maximum mana every second while missing either resource.
+- Normal breaks: 50 seconds. Before waves 10, 20, 30, 40: 180 seconds.
+- The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range quietly recover 1% of maximum HP and 1% of maximum mana every second while missing either resource. It no longer produces a healing burst effect or per-tick text.
 
 ## Diagnostic-only shortcuts
 

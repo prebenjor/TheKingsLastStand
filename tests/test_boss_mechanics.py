@@ -108,7 +108,7 @@ class BossMechanics(unittest.TestCase):
                 r'set KLS_Shops\[11\] = KLS_CreateUnit[\s\S]*?if KLS_Shops\[11\] == null then\s+return\s+endif[\s\S]*?BlzSetUnitName',
             ),
             'KLS_GrovePlant': (r'KLS_GroveTree\[KLS_GroveCount\] = KLS_CreateDestructable[\s\S]*?if KLS_GroveTree\[KLS_GroveCount\] == null then\s+return\s+endif[\s\S]*?set KLS_GroveCount',),
-            'KLS_WaveEnvironmentInit': (r'set KLS_RestorePool = KLS_CreateUnit[\s\S]*?if KLS_RestorePool == null then\s+return\s+endif[\s\S]*?BlzSetUnitName',),
+            'KLS_WaveEnvironmentInit': (r'set KLS_RestorePool = CreateUnit[\s\S]*?if KLS_RestorePool != null then[\s\S]*?BlzSetUnitName[\s\S]*?else[\s\S]*?ERROR restoring spring model unavailable[\s\S]*?set KLS_PoolClock = CreateTimer\(\)[\s\S]*?TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)',),
             'KLS_ChooseHero': (r'set KLS_Hero\[p\] = KLS_CreateUnit[\s\S]*?if KLS_Hero\[p\] == null then\s+return\s+endif[\s\S]*?set KLS_ClassChosen\[p\] = true',),
             'KLS_SelectionInit': (r'set KLS_Preview\[n\] = KLS_CreateUnit[\s\S]*?if KLS_Preview\[n\] == null then\s+return\s+endif[\s\S]*?SetUnitInvulnerable',),
             'KLS_SignatureCast': (r'set u = KLS_CreateUnit\(owner,KLS_SignatureSummon\[n\][\s\S]*?if u == null then\s+exitwhen true\s+endif[\s\S]*?SetUnitUseFood\(u,false\)',),
@@ -129,8 +129,8 @@ class BossMechanics(unittest.TestCase):
         ):
             with self.subTest(function='KLS_Init', pattern=pattern):
                 self.assertRegex(init, pattern)
-        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 1,
-                         'all unit creation should pass through diagnostic wrapper')
+        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 2,
+                         'the only direct unit creation outside the diagnostic wrapper is the optional spring visual')
 
     def test_each_boss_action_is_limited_to_its_approved_wave_mechanics(self):
         script = runtime_script('KLS-D-TEST')

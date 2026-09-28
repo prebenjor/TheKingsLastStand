@@ -179,9 +179,9 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertEqual(min(10, 1 + (100 - 1) // 10), 10)
         self.assertIn(b'MaxHeroLevel=100', misc_data())
 
-    def test_wave_breaks_are_longer_with_double_time_before_each_boss(self):
+    def test_normal_breaks_are_50_seconds_and_boss_breaks_remain_longer(self):
         runtime = runtime_script('LONGER-BREAKS')
-        self.assertIn('set KLS_NormalPrep = 90', runtime)
+        self.assertIn('set KLS_NormalPrep = 50', runtime)
         self.assertIn('set KLS_BossPrep = 180', runtime)
         self.assertRegex(runtime, r'if ModuloInteger\(KLS_Wave \+ 1, 10\) == 0 then\s+set KLS_Prep = KLS_BossPrep\s+else\s+set KLS_Prep = KLS_NormalPrep')
 

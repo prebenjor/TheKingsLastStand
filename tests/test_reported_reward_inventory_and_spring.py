@@ -30,6 +30,13 @@ class ReportedRewardInventoryAndSpring(unittest.TestCase):
         toast = function_body(self.script, 'KLS_GoldToast')
         self.assertIn('I2S(amount)', toast)
         self.assertRegex(toast, r'DisplayTimedTextToPlayer\(Player\(p\)[\s\S]*?\+I2S\(amount\)\+" gold')
+        # Keep the text message and add a rising number over the recipient's
+        # hero so the reward stays visible while the camera is in battle.
+        for fragment in ('CreateTextTag()', 'SetTextTagPosUnit(rewardTag,KLS_Hero[p]',
+                         'SetTextTagColor(rewardTag,255,214,64,255)',
+                         'SetTextTagVisibility(rewardTag,false)',
+                         'GetLocalPlayer() != Player(p)'):
+            self.assertIn(fragment, toast)
 
         bounty = function_body(self.script, 'KLS_AwardBounty')
         self.assertIn('call KLS_GoldToast(i,payout)', bounty)
@@ -61,10 +68,17 @@ class ReportedRewardInventoryAndSpring(unittest.TestCase):
         tick = function_body(self.script, 'KLS_PoolTick')
         self.assertIn('GetWidgetLife(hero)+maxHP*0.01', tick)
         self.assertIn('GetUnitState(hero,UNIT_STATE_MANA)+maxMana*0.01', tick)
+        self.assertNotIn('KLS_RestoreToast', tick)
+        self.assertNotIn('AddSpecialEffectTarget', tick)
+        self.assertNotIn('CreateTextTag', tick)
+        self.assertNotIn('DisplayTimedTextToPlayer', tick)
         self.assertNotIn('GetWidgetLife(hero)+200.0', tick)
         self.assertNotIn('UNIT_STATE_MANA)+120.0', tick)
         init = function_body(self.script, 'KLS_WaveEnvironmentInit')
         self.assertRegex(init, r'TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)')
+        self.assertNotIn('if KLS_RestorePool == null then\n        return', init)
+        self.assertIn("CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh'", init)
+        self.assertNotIn("KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh'", init)
 
 
 if __name__ == '__main__':

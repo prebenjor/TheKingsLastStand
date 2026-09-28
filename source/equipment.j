@@ -233,6 +233,21 @@ function KLS_GearUnequip takes nothing returns nothing
     call KLS_Log("Unequipped "+GetItemName(GetUnequippedItem())+" from "+GetUnitName(GetTriggerUnit()))
 endfunction
 
+function KLS_GearPawned takes nothing returns nothing
+    // Pawn-item uses the generic manipulated-item payload, not the sold-unit
+    // or sold-item accessors used by the separate shop purchase events.
+    local item gear = GetManipulatedItem()
+    local unit seller = GetTriggerUnit()
+    local integer p = GetPlayerId(GetOwningPlayer(seller))
+    local integer rawcode = GetItemTypeId(gear)
+    if p >= 0 and p < 4 and gear != null and LoadInteger(KLS_GearData,rawcode,0) > 0 then
+        call KLS_Log("Native pawn event: item="+GetItemName(gear)+" seller=p"+I2S(p+1)+" item-owner="+I2S(GetItemUserData(gear)))
+        call DisplayTimedTextToPlayer(Player(p),0,0,6,"Sold "+GetItemName(gear)+" back to the market.")
+    endif
+    set seller = null
+    set gear = null
+endfunction
+
 function KLS_PackUsed takes nothing returns nothing
     if GetItemTypeId(GetManipulatedItem()) == 'ebua' then
         call KLS_Log("Pack activated: storage="+I2S(UnitExtendedInventorySize(GetTriggerUnit())))
@@ -245,6 +260,7 @@ function KLS_GearInit takes nothing returns nothing
     local trigger equipped = CreateTrigger()
     local trigger used = CreateTrigger()
     local trigger unequipped = CreateTrigger()
+    local trigger pawned = CreateTrigger()
     call TriggerRegisterAnyUnitEventBJ(damage,EVENT_PLAYER_UNIT_DAMAGED)
     call TriggerAddAction(damage,function KLS_GearHit)
     call TriggerRegisterAnyUnitEventBJ(cast,EVENT_PLAYER_UNIT_SPELL_EFFECT)
@@ -253,6 +269,8 @@ function KLS_GearInit takes nothing returns nothing
     call TriggerAddAction(equipped,function KLS_GearEquip)
     call TriggerRegisterAnyUnitEventBJ(unequipped,EVENT_PLAYER_UNIT_UNEQUIP_ITEM)
     call TriggerAddAction(unequipped,function KLS_GearUnequip)
+    call TriggerRegisterAnyUnitEventBJ(pawned,EVENT_PLAYER_UNIT_PAWN_ITEM)
+    call TriggerAddAction(pawned,function KLS_GearPawned)
     call TriggerRegisterAnyUnitEventBJ(used,EVENT_PLAYER_UNIT_USE_ITEM)
     call TriggerAddAction(used,function KLS_PackUsed)
     set KLS_GearClock = CreateTimer()
@@ -262,4 +280,5 @@ function KLS_GearInit takes nothing returns nothing
     set equipped = null
     set used = null
     set unequipped = null
+    set pawned = null
 endfunction

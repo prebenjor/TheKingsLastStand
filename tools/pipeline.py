@@ -16,12 +16,13 @@ from equipment_catalog import abilities, catalog_script
 from wave_rosters import wave_script, boss_script, bounty_script
 from signature_spells import spell_script as signature_spell_script
 from hero_progression import spell_script as hero_spell_script
+from company_catalog import company_script
 from recipes import recipe_script
 from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('diagnostics.j', 'heroes.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'game.j')
+MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'game.j')
 BASELINE_SHA = '3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9'
 INFO_SHA = 'a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc'
 GAME = Path(r'C:\Program Files (x86)\Warcraft III')
@@ -32,7 +33,12 @@ def digest(data):
 
 
 def misc_data():
-    return b'[Misc]\nMaxHeroLevel=100\n'
+    # Native XP is disabled because Warcraft divides shared XP between nearby
+    # heroes. The runtime awards each active hero in its own 1200 range check.
+    return (b'[Misc]\nMaxHeroLevel=100\nHeroExpRange=0\n'
+            b'GrantNormalXP=0\nGrantNormalXPFormulaA=1\n'
+            b'GrantNormalXPFormulaB=0\nGrantNormalXPFormulaC=0\n'
+            b'GrantHeroXP=0,0,0,0,0,0,0,0,0,0\n')
 
 
 def baseline():
@@ -72,6 +78,8 @@ def runtime_script(build_id):
             text = text.replace('// GENERATED_RECIPES', recipe_script())
         if name == 'heroes.j':
             text = text.replace('// GENERATED_HERO_PROGRESSION', hero_spell_script())
+        if name == 'companies.j':
+            text = text.replace('// GENERATED_COMPANIES', company_script())
         if name == 'hud.j':
             text = text.replace('// GENERATED_BOSSES', boss_script())
         if name == 'wave_environment.j':

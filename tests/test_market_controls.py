@@ -67,11 +67,31 @@ class NativeMarketControls(unittest.TestCase):
         market = function_body(self.script, 'KLS_MarketBuy')
         equip = function_body(self.script, 'KLS_MarketEquipPurchased')
         self.assertNotIn('UnitEquipItem(buyer,gear)', market)
-        self.assertRegex(market, r'TimerStart\([^,]+,0\.05,false,function KLS_MarketEquipPurchased\)')
+        self.assertRegex(market, r'TimerStart\([^,]+,0\.25,false,function KLS_MarketEquipPurchased\)')
         self.assertIn('UnitEquipItem(buyer,gear)', equip)
+        self.assertIn('KLS_MovePurchaseToRegularInventory(buyer,gear)', equip)
+        self.assertIn('LoadInteger(KLS_GearData,key,22)', equip)
+        self.assertIn('TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)', equip)
         self.assertIn('KLS_Log("ERROR native equip rejected shop item after transfer:', equip)
         self.assertIn('equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2))', equip)
         self.assertIn('SetItemUserData(gear,p+1)', market)
+
+    def test_purchase_fallback_places_a_backpack_item_in_a_real_free_inventory_slot(self):
+        move = function_body(self.script, 'KLS_MovePurchaseToRegularInventory')
+        self.assertIn('UnitItemInSlot(buyer,slot)', move)
+        self.assertIn('UnitAddItemToSlotById(buyer,rawcode,emptySlot)', move)
+        self.assertIn('SetItemUserData(moved,GetItemUserData(gear))', move)
+        self.assertIn('SetItemCharges(moved,GetItemCharges(gear))', move)
+        self.assertIn('RemoveItem(gear)', move)
+
+    def test_native_successful_pawn_is_logged_and_confirmed_to_the_player(self):
+        pawn = function_body(self.script, 'KLS_GearPawned')
+        init = function_body(self.script, 'KLS_GearInit')
+        self.assertIn('GetManipulatedItem()', pawn)
+        self.assertNotIn('GetSoldItem()', pawn)
+        self.assertIn('Native pawn event: item=', pawn)
+        self.assertIn('Sold "+GetItemName(gear)+" back to the market.', pawn)
+        self.assertIn('EVENT_PLAYER_UNIT_PAWN_ITEM', init)
 
     def test_catalog_registers_the_real_equipment_slot_for_diagnostics(self):
         generated=catalog_script()

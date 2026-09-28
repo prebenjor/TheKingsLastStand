@@ -6,15 +6,15 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-2780b4380e**.
+Current development build: **KLS-D-5b63d38dc0**.
 
-- Map: `dist/KLS-D-2780b4380e-Development.w3m`
-- SHA-256: `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`
+- Map: `dist/KLS-D-5b63d38dc0-Development.w3m`
+- SHA-256: `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback, JASS syntax against the installed editor API, and 66 source-level regression tests pass for the current build. It adds Human Ilastar and the Forsaken Paladin to the 15 existing hero choices, with installed-data-verified skill ranks and custom signatures. It uses the native `ebua` Forsaken backpack record and retains visible combat gold rewards, movable/sellable normal gear, and one-second percentage spring healing. These in-game interactions remain pending. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+Package inventory/readback and JASS syntax against the installed editor API pass. The regression suite has **75 tests**. This build records personal kill gold, full XP for each active hero within 1,200 range, silent one-percent-per-second spring regeneration, movable/resellable ordinary gear, 50-second normal wave breaks, and the hero-themed building/company unit expansion. The exact build is installed in the dedicated test folder. These behaviors still need an in-game check. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
 
-The current map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2780b4380e-Development.w3m`. Warcraft III process PID 61400 is open, but the current build has not yet been launched. The UI-control helper failed before it could inspect the game window; see the roadmap for the one requested manual check.
+The current map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`. The installed file's SHA-256 matches the packaged map. See the roadmap for the next exact-build check.
 
 The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build uses the native backpack object identity and current gear flags, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
 

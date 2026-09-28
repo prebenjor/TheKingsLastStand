@@ -68,6 +68,7 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     if KLS_Hero[p] == null then
         return
     endif
+    set KLS_HeroChoice[p] = n
     set KLS_ClassChosen[p] = true
     call DialogDisplay(Player(p), KLS_ClassDialog[p], false)
     call BlzSetUnitName(KLS_Hero[p], KLS_HeroName[n])

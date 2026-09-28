@@ -27,6 +27,42 @@ function KLS_TalentLevel takes nothing returns nothing
     set u = null
 endfunction
 
+function KLS_MovePurchaseToRegularInventory takes unit buyer, item gear returns item
+    local integer slot = 0
+    local integer emptySlot = -1
+    local integer rawcode = GetItemTypeId(gear)
+    local item current
+    local item moved = null
+    // Native shop purchases can land in the 30-slot Forsaken bag. If there is
+    // a free six-slot inventory position, place the same catalog item there
+    // first; this lets native equipment and merchant drag interactions work.
+    loop
+        exitwhen slot == 6
+        set current = UnitItemInSlot(buyer,slot)
+        if current == gear then
+            set current = null
+            return gear
+        endif
+        if current == null and emptySlot < 0 then
+            set emptySlot = slot
+        endif
+        set slot = slot+1
+    endloop
+    if emptySlot >= 0 and UnitAddItemToSlotById(buyer,rawcode,emptySlot) then
+        set moved = UnitItemInSlot(buyer,emptySlot)
+        if moved != null and GetItemTypeId(moved) == rawcode then
+            call SetItemUserData(moved,GetItemUserData(gear))
+            call SetItemCharges(moved,GetItemCharges(gear))
+            call RemoveItem(gear)
+            set current = null
+            return moved
+        endif
+    endif
+    set current = null
+    set moved = null
+    return gear
+endfunction
+
 function KLS_MarketEquipPurchased takes nothing returns nothing
     local timer equipTimer = GetExpiredTimer()
     local integer key = GetHandleId(equipTimer)
@@ -34,15 +70,26 @@ function KLS_MarketEquipPurchased takes nothing returns nothing
     local item gear = LoadItemHandle(KLS_GearData,key,21)
     local integer p
     local integer rawcode
+    local integer attempt = LoadInteger(KLS_GearData,key,22)
+    local boolean retry = false
     if buyer != null and gear != null then
         set p = GetPlayerId(GetOwningPlayer(buyer))
         set rawcode = GetItemTypeId(gear)
         if p >= 0 and p < 4 and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 and LoadInteger(KLS_GearData,rawcode,0) > 0 then
+            set gear = KLS_MovePurchaseToRegularInventory(buyer,gear)
             if UnitEquipItem(buyer,gear) then
                 call KLS_Log("Shop purchase equipped after transfer: "+GetItemName(gear)+" owner=p"+I2S(p+1)+" equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2)))
             else
-                call KLS_Log("ERROR native equip rejected shop item after transfer: "+GetItemName(gear)+" item type="+I2S(rawcode)+" equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2)))
-                call DisplayTimedTextToPlayer(GetOwningPlayer(buyer),0,0,8,"Purchase succeeded, but Warcraft rejected this item's equipment slot. It remains yours; use the Forsaken Field Pack to try again and type -diag to capture the reason.")
+                if attempt < 8 then
+                    set attempt = attempt+1
+                    call SaveInteger(KLS_GearData,key,22,attempt)
+                    call SaveItemHandle(KLS_GearData,key,21,gear)
+                    call TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)
+                    set retry = true
+                else
+                    call KLS_Log("ERROR native equip rejected shop item after transfer: "+GetItemName(gear)+" item type="+I2S(rawcode)+" equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2)))
+                    call DisplayTimedTextToPlayer(GetOwningPlayer(buyer),0,0,8,"Your gear is safe in your normal inventory or backpack, but Warcraft has not equipped it. Make room in the six inventory slots, then try the equipment panel again.")
+                endif
             endif
         else
             call KLS_Log("ERROR purchased gear cannot equip: buyer is not the living owning hero; item="+GetItemName(gear)+" player="+I2S(p+1))
@@ -50,9 +97,11 @@ function KLS_MarketEquipPurchased takes nothing returns nothing
     else
         call KLS_Log("ERROR deferred equipment lost its buyer or item handle")
     endif
-    call FlushChildHashtable(KLS_GearData,key)
-    call PauseTimer(equipTimer)
-    call DestroyTimer(equipTimer)
+    if not retry then
+        call FlushChildHashtable(KLS_GearData,key)
+        call PauseTimer(equipTimer)
+        call DestroyTimer(equipTimer)
+    endif
     set equipTimer = null
     set buyer = null
     set gear = null
@@ -129,7 +178,8 @@ function KLS_MarketBuy takes nothing returns nothing
                 set equipTimer = CreateTimer()
                 call SaveUnitHandle(KLS_GearData,GetHandleId(equipTimer),20,buyer)
                 call SaveItemHandle(KLS_GearData,GetHandleId(equipTimer),21,gear)
-                call TimerStart(equipTimer,0.05,false,function KLS_MarketEquipPurchased)
+                call SaveInteger(KLS_GearData,GetHandleId(equipTimer),22,0)
+                call TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)
             endif
         endif
         call AddItemToStock(shop,rawcode,1,1)

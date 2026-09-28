@@ -76,7 +76,9 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current package-proven development artifact is `dist/KLS-D-2780b4380e-Development.w3m`, SHA-256 `30e1fa1a9c5e6415131f2aea1f200046504e93dbe3dab9de504482eb24641a33`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
+- The current package-proven development artifact is `dist/KLS-D-5b63d38dc0-Development.w3m`, SHA-256 `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`. The exact map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`; its hash matches the package. The builder reads back every member and validates hash lookup; see `dist/build-manifest.json` for the exact inventory.
+- Kill XP uses a custom path: map `GrantNormalXP` and `GrantHeroXP` are zeroed, native `HeroExpRange` is disabled, and `KLS_AwardKillXP` applies one full award to every active player hero within 1,200 world units. Keep the default Warcraft unit-level award table/formula aligned with `KLS_UnitKillXP`. This avoids native alliance splitting. Dead-hero and campaign-hero behavior remain pending game verification.
+- Personal kill gold is separate from XP: owner gets full role bounty, while a King Aldric kill gives 25% to every active defender. Ordinary breaks are 50 seconds; boss breaks are 180 seconds. The Restoring Spring uses silent one-percent-per-second health/mana recovery.
 
 ## Network determinism and ownership
 

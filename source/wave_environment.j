@@ -68,7 +68,6 @@ function KLS_PoolTick takes nothing returns nothing
             if GetWidgetLife(hero) < maxHP or GetUnitState(hero,UNIT_STATE_MANA) < maxMana then
                 call SetWidgetLife(hero,RMinBJ(maxHP,GetWidgetLife(hero)+maxHP*0.01))
                 call SetUnitState(hero,UNIT_STATE_MANA,RMinBJ(maxMana,GetUnitState(hero,UNIT_STATE_MANA)+maxMana*0.01))
-                call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl",hero,"origin"))
             endif
         endif
         set p = p+1
@@ -97,16 +96,27 @@ function KLS_WaveEnvironmentInit takes nothing returns nothing
     if KLS_Ended then
         return
     endif
-    set KLS_RestorePool = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',-900,-1600,270)
-    if KLS_RestorePool == null then
-        return
+    // This visual prop is optional: its failure must not abort the match or
+    // disable the coordinate-based restoration trigger.
+    set KLS_RestorePool = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',-900,-1600,270)
+    if KLS_RestorePool != null then
+        if GetUnitTypeId(KLS_RestorePool) == 'nfoh' then
+            call BlzSetUnitName(KLS_RestorePool,"King's Restoring Spring")
+            call SetUnitInvulnerable(KLS_RestorePool,true)
+            call SetUnitPathing(KLS_RestorePool,false)
+        else
+            call KLS_Log("ERROR restoring spring expected nfoh but received type="+I2S(GetUnitTypeId(KLS_RestorePool)))
+            call RemoveUnit(KLS_RestorePool)
+            set KLS_RestorePool = null
+        endif
+    else
+        // The restorative trigger is coordinate-based, so it can still work
+        // if the visual fountain model cannot be created in this game build.
+        call KLS_Log("ERROR restoring spring model unavailable; healing trigger retained at -900,-1600")
     endif
-    call BlzSetUnitName(KLS_RestorePool,"King's Restoring Spring")
-    call SetUnitInvulnerable(KLS_RestorePool,true)
-    call SetUnitPathing(KLS_RestorePool,false)
     set KLS_PoolClock = CreateTimer()
     call TimerStart(KLS_PoolClock,1.0,true,function KLS_PoolTick)
     set KLS_GroveClock = CreateTimer()
     call TimerStart(KLS_GroveClock,1,true,function KLS_GroveTick)
-    call KLS_Log("30 combat-grove trees planted; King's Restoring Spring at -900,-1600 restores 1% of maximum health and mana every second. Mixed wave rosters initialized.")
+    call KLS_Log("30 combat-grove trees planted; King's Restoring Spring quietly restores 1% of maximum health and mana every second. Mixed wave rosters initialized.")
 endfunction

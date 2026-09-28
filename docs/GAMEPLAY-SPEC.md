@@ -13,7 +13,7 @@ Authoritative match states:
 - Each active player sees a 45-second hero selection. The fallback for a player who does not confirm is Paladin.
 - Players choose one of seventeen hero previews: the original fifteen plus Human Ilastar and the Forsaken Paladin verified in installed Definitive Edition data. Duplicate choices are allowed. Create the selected hero once; do not leave or replace a usable placeholder hero.
 - After every active player selects, start the initial 45-second preparation period. Beginning troops stay held until the selection phase ends.
-- Normal cleared-wave breaks are 90 seconds. Breaks before waves 10, 20, 30, and 40 are 180 seconds. The values are longer than the original 30/60-second concept to make the market, construction, and repair loops usable.
+- Normal cleared-wave breaks are 50 seconds. Breaks before waves 10, 20, 30, and 40 are 180 seconds. The 50-second ordinary break supersedes the earlier 90-second decision; the longer boss break remains.
 - Terminal victory/defeat stops spawns, timers, damage, rewards, and revival. King death takes precedence if it resolves in the same step as final-boss death.
 - If a player leaves, remove their control and stop scaling them into future waves. Do not transfer their living army to another player; let its current orders continue.
 
@@ -22,7 +22,8 @@ Authoritative match states:
 - Each player controls their hero, Human workers, trained units, and structures.
 - The team shares the battlefield, neutral vendors, enemy waves, boss encounter, king, and outcome; players do not share unit control or personal resources.
 - Workers use standard Warcraft mine and lumber gathering. Put an accessible mine and harvestable tree grove by every active plot. Trees must not block routes to the mine, Altar, buildable pad, or road.
-- Enemy combat bounty is divided equally among active defenders; assign remainder gold in ascending player-slot order. Show each recipient the exact gold credited on their kill-reward notification. Boss gold and gear rewards are granted once per active participant and boss gold is shown the same way.
+- A defender player's kill pays the full role bounty to that killer's owner only. A kill credited to King Aldric pays 25% of the bounty to each active defender. Show each recipient the exact amount credited. Boss participation gold and gear remain personal rewards for every active participant.
+- Every active defender hero within 1,200 world units of a tracked enemy's death receives the full Warcraft unit-level XP award. The same full value is applied to each nearby hero; it is not divided. Hero race and current life state do not filter the recipients. Native shared/kill XP is disabled in map data so the custom award cannot split or double-count; verify dead-hero XP behavior in the engine.
 - Boss gear is personal. If the inventory cannot accept the reward, preserve an entitlement or safely place a retrievable personal item; never destroy it or make it public/lootable by another defender.
 - The market is one shared set of neutral shops accessible to all players. A purchase, tome, recipe, or castle contribution charges the buyer's personal resources.
 
@@ -76,7 +77,8 @@ King Aldric is the shared survival objective at the central castle. His castle i
 - Exactly forty waves in four chapters. Chapter roles accumulate as described in WAVES-AND-BOSSES.md.
 - Every spawn and summon joins the tracked enemy set exactly once. Death, removal, debug cleanup, and boss summons must decrement the live count once.
 - Enemy movement targets the king. Issue pathing recovery only when an enemy has no valid order or is demonstrably stuck; do not override ordinary combat repeatedly.
-- Every tracked enemy death pays one role-based team bounty, plus the current wave number for normal units. Bosses pay `100 + 5 × wave`. Split the result equally among active defenders and distribute remainder in player-slot order. See `WAVES-AND-BOSSES.md` for starting role values; tune from recorded matches.
+- Every tracked enemy death pays the killer's defender owner one role-based bounty, plus the current wave number for normal units; no kill gold is shared. Bosses pay `100 + 5 × wave` for the killing defender. If King Aldric makes the killing blow, every active defender gets 25% of the bounty. See `WAVES-AND-BOSSES.md` for starting role values; tune from recorded matches.
+- Every active defender hero within 1,200 world units receives the full kill XP value individually. Do not divide XP among heroes. The runtime computes the Warcraft normal-unit sequence and hero-kill table, disables native XP grants, and applies the value to each nearby hero regardless of race or life state.
 - Keep enemy types varied: undead foot soldiers, ranged support, durable elites, necromancers, siege attackers, demons, and escorts. The user's feedback specifically asks for a more visible undead/demon mix than repeated identical ghouls.
 - Recalculate scaling for later waves after a defender departs.
 - Show the current wave and chapter, prep countdown, enemy count, king health/tier, personal revival countdown, and persistent boss warnings.
@@ -84,7 +86,7 @@ King Aldric is the shared survival objective at the central castle. His castle i
 
 ## Recovery, shops, and progression spaces
 
-- King's Restoring Spring is below/south-west of the castle and outside the road. Within 450 range, restore 1% of maximum health and 1% of maximum mana to active living defender heroes every second, capped at their maximums. Stop emitting the recovery effect while both resources are full.
+- King's Restoring Spring is below/south-west of the castle and outside the road. Within 450 range, restore 1% of maximum health and 1% of maximum mana to active living defender heroes every second, capped at their maximums. This is quiet regeneration: no healing effect, floating text, or per-tick notification.
 - Six quality vendors (Common/Quartermaster, Uncommon/Veteran, Rare/Master Forge, Epic/Runic Reliquary, Legendary/Royal Vault, and Field Apothecary) are visible in the southern market. The implementation has separate shop objects for the five gear tiers' Arms & Armor and Apparel & Relics categories. Sage's Archive sits next to the Apothecary and sells personal permanent Strength/Agility/Intelligence tomes.
 - Gold alone gates equipment quality; all shop tiers are available from the beginning.
 - A shop must use an actual clickable item stock/window with icon, item identity, price, slot, stats, and special effect tooltip. A text-only page or empty list is a user-reported failure to resolve.
