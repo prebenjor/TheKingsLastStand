@@ -230,7 +230,6 @@ def recipe_script():
               '                    call KLS_RecipeRestoreIngredients(buyer, first, second)',
               '                    call KLS_RecipeRefund(buyer, scroll)',
               '                endif',
-              '                call KLS_RecipeRefund(buyer, scroll)',
               '            endif',
               '        else',
               '            call KLS_RecipeRefund(buyer, scroll)',

@@ -3,12 +3,20 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-1398318c4a**.
-- Artifact: `dist/KLS-D-1398318c4a-Development.w3m`.
-- SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`.
-- Package readback, installed-editor API syntax and full source regression suite (**76/76**) passed.
-- The prior installed map `KLS-D-5b63d38dc0-Development.w3m` is still locked in the test folder. Its byte-identical archive copy has been verified; current build installation is pending closure of the process holding the prior map.
-- Status: **development build**. Editor Test Map, gameplay, multiplayer and endurance checks for this build are pending.
+- Build: **KLS-D-a2dae2be8c**.
+- Artifact: `dist/KLS-D-a2dae2be8c-Development.w3m`.
+- SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`.
+- Package readback and installed-editor API syntax passed. Focused recipe/progression tests passed (**14/14**); full suite passed (**77/77**).
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-a2dae2be8c-Development.w3m`; installed hash matches the package. The previous map was closed, archived and replaced successfully.
+- Status: **development build**. This build's editor save/reopen, Test Map, Custom Game craft interaction, live gameplay, multiplayer and endurance checks are pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
+
+## 2026-09-28: fix contradictory recipe completion/refund — KLS-D-a2dae2be8c
+
+- The craft output delivery branch already refunded the fee and reported failure when `UnitAddItem` failed. A second unconditional refund immediately after the branch caused the contradictory screenshot message after successful crafting and could charge/refund incorrectly on failed delivery. Removed that unconditional call while retaining the failure-branch refund.
+- Added a regression asserting that success emits no refund, failed delivery refunds once, and there is no statement after the delivery conditional before its enclosing branch closes.
+- Focused recipe/progression tests: **14/14 passed**. Full suite: **77/77 passed**. Package readback and installed API JASS syntax passed.
+- SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`; installed map matches at the dedicated Custom Game path above.
+- Exact next check: use this build to complete a single recipe and confirm one completion notification with no failure/refund notification. Broader current-build gameplay and multiplayer gates remain pending.
 
 ## 2026-09-28: correct extended hero-aura rank data — KLS-D-1398318c4a
 

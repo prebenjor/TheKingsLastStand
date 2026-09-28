@@ -6,17 +6,16 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-1398318c4a**.
+Current development build: **KLS-D-a2dae2be8c**.
 
-- Map: `dist/KLS-D-1398318c4a-Development.w3m`
-- SHA-256: `b7fe3601272d32c7d95e23fb7b50470ee6e39ca40bc914d0e9c2c14fa6016af2`
+- Map: `dist/KLS-D-a2dae2be8c-Development.w3m`
+- SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`
+- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-a2dae2be8c-Development.w3m` (hash matches).
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback, installed-editor API syntax, and all **76 regression tests** pass. This build fixes high-rank Sacred Aura data that previously caused 500% magic resistance at rank 4. The install step could not replace the previous map because a process has its file locked; the previous map's archive copy is preserved and verified. Close the process holding `KLS-D-5b63d38dc0-Development.w3m`, then run `python -B tools/build_map.py --install-test-map` to install the current build. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+This build fixes the recipe delivery branch that showed both “Craft complete” and “Craft failed” and could refund the fee after a successful craft. Package readback and installed-editor API syntax passed; the full regression suite is recorded in CHANGELOG.md. The prior test map was closed and archived before this build was installed. The earlier user-reported World Editor Test Map pass remains attributed only to `KLS-D-fd638ddcf5`. Save/reopen, this build's own Test Map and Custom Game checks, live recipe interaction, multiplayer, and 40-wave endurance remain pending, so this stays a development build.
 
-The test folder still contains the prior locked map, `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`. The new package is currently available in `dist/`; it has not been copied into the test folder yet. See the roadmap for the next exact-build check.
-
-The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build uses the native backpack object identity and current gear flags, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
+Next human check: open the installed `KLS-D-a2dae2be8c-Development.w3m` in Custom Game, complete one recipe, and confirm it shows exactly one successful craft notification with no failure/refund message. Other previously reported shop, equipment, and UI behaviors still need exact-build gameplay checks.
 
 ## Start here
 

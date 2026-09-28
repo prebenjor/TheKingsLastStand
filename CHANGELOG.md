@@ -2,6 +2,15 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-a2dae2be8c - 2026-09-28
+
+- Fixed recipe delivery so a successful craft no longer falls through into the failure refund path. If the output cannot be delivered, the failure notification and fee refund still run once.
+- Added a regression check for the contradictory success/failure notification and duplicate-refund path.
+- Focused recipe/progression regression tests: **14/14 passed**. Full regression suite: **77/77 passed**.
+- Package member readback and JASS syntax against the installed editor API passed.
+- Map SHA-256: `e86d0c0e1696897d8727d243bf6bc92bd6f5ce8ca6b6b39a8d24ae38668dbd9d`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-a2dae2be8c-Development.w3m`; its SHA-256 matches the package. Current-build editor save/reopen, Test Map, Custom Game craft interaction, gameplay, multiplayer, and endurance checks remain pending. The earlier Test Map pass stays attributed to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-1398318c4a - 2026-09-28
 
 - Fixed the high-rank aura data that made Sacred Aura grant 500% magic resistance at rank 4. Installed campaign records declare these auras as three-rank abilities but contain stale fourth-rank values; rank generation now respects each record's declared level count and resolves fields through the internal ability code, including the Forsaken Paladin's `AHpa` alias.

@@ -134,6 +134,26 @@ class RecipeTransactions(unittest.TestCase):
         self.assertRegex(script, r'function KLS_RecipeRestoreIngredients[\s\S]*?UnitAddItem\(buyer, first\)[\s\S]*?UnitAddItem\(buyer, second\)[\s\S]*?UnitEquipItem\(buyer, first\)[\s\S]*?UnitEquipItem\(buyer, second\)')
         self.assertRegex(script, r'set output = CreateItem\([\s\S]*?if output == null then[\s\S]*?KLS_RecipeRestoreIngredients\(buyer, first, second\)[\s\S]*?KLS_RecipeRefund\(buyer, scroll\)[\s\S]*?else[\s\S]*?SetItemPlayer\(output')
 
+    def test_successful_recipe_delivery_does_not_also_run_failure_refund(self):
+        script = recipe_script()
+        match = re.search(r'^function KLS_RecipeComplete takes [\s\S]*?^endfunction$',
+                          script, re.M)
+        self.assertIsNotNone(match)
+        complete = match.group()
+        start = complete.index('if UnitAddItem(buyer, output) then')
+        failed_delivery = complete.index('                else', start)
+        delivery_end = complete.index('                endif', failed_delivery)
+        success_branch = complete[start:failed_delivery]
+        failure_branch = complete[failed_delivery:delivery_end]
+        after_delivery = complete[delivery_end + len('                endif'):]
+
+        self.assertIn('Craft complete:', success_branch)
+        self.assertNotIn('KLS_RecipeRefund(buyer, scroll)', success_branch)
+        self.assertIn('KLS_RecipeRefund(buyer, scroll)', failure_branch)
+        next_statement = next(line.strip() for line in after_delivery.splitlines()
+                              if line.strip())
+        self.assertEqual(next_statement, 'endif')
+
 
 class HeroProgressionAndRecovery(unittest.TestCase):
     def test_installed_spell_rank_values_are_preserved_before_continuation(self):
