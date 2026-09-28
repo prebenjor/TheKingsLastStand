@@ -12,7 +12,7 @@
 5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current package is development build `KLS-D-dd3a53babf` at `dist/KLS-D-dd3a53babf-Development.w3m` (SHA-256 `f2d804924a18aaab17ff00ed8d61b321a7fda54278a08e77559c3fcf6ab666cf`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-dd3a53babf-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. Current-build Test Map and Custom Game checks remain pending; the user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
+The current package is development build `KLS-D-81285a4cc0` at `dist/KLS-D-81285a4cc0-Development.w3m` (SHA-256 `21540054f1250628fa1095ad42ee68bb986982a2f421c89b421574de827398cc`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-81285a4cc0-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. Current-build Test Map and Custom Game checks remain pending; the user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
 
 All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its five themed universal items and healing/mana potions. Talk to the settlement characters to start the optional four-chapter recovery story; it continues during active waves. The four Legendary Foundry patterns combine that race's Rare and Uncommon item into its Legendary item. When hero selection ends, Undead and Night Elf players already have their Haunted or Entangled Gold Mine at the base; Human and Orc players use a regular Gold Mine. Starting mines hold 1,000,000 gold.
 
@@ -42,7 +42,7 @@ These are for development/testing and must not be treated as release controls:
 | Chat text | Purpose |
 |---|---|
 | -help | Show diagnostic help |
-| -diag | Show build ID and recent runtime creation/error diagnostics |
+| -diag | Show build ID, recent runtime creation/error diagnostics, and each active player's expected/actual starting mine, owner, gold reserve and coordinates |
 | -wave N | Start a diagnostic-selected wave 1-1000 |
 | -gold | Add diagnostic gold/lumber |
 | -repair | Exercise castle-heal transaction |
@@ -53,7 +53,7 @@ These are for development/testing and must not be treated as release controls:
 
 ## Reporting a problem
 
-Include the exact on-screen build ID. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. For engine or editor errors, run:
+Include the exact on-screen build ID. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. The starting-mine line appears after hero confirmation and reports expected/actual mine, owner player ID, remaining gold and position. Required racial-mine spawn failures use the context `starting racial gold mine`. For engine or editor errors, run:
 
     python -B tools/collect_test_logs.py
 

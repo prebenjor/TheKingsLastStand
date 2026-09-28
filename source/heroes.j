@@ -40,14 +40,14 @@ function KLS_ConfigureStartingMine takes integer p, integer raceId returns nothi
     set x = GetUnitX(KLS_BaseMine[p])
     set y = GetUnitY(KLS_BaseMine[p])
     set facing = GetUnitFacing(KLS_BaseMine[p])
-    set ownedMine = KLS_CreateUnit(Player(p),mineType,x,y,facing)
+    set ownedMine = KLS_CreateUnitChecked(Player(p),mineType,x,y,facing,true,"starting racial gold mine")
     if ownedMine == null then
         return
     endif
     call SetResourceAmount(ownedMine,amount)
     call RemoveUnit(KLS_BaseMine[p])
     set KLS_BaseMine[p] = ownedMine
-    call KLS_Log("Starting mine configured race="+KLS_RaceName(raceId)+" player="+I2S(p+1)+" gold="+I2S(amount))
+    call KLS_Log("Starting mine configured race="+KLS_RaceName(raceId)+" type="+GetObjectName(GetUnitTypeId(ownedMine))+" player="+I2S(p+1)+" gold="+I2S(amount))
     set ownedMine = null
 endfunction
 

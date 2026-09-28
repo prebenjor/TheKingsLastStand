@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-81285a4cc0 - 2026-09-29
+
+- `-diag` now reports each active player's expected and actual starting mine, actual owner player ID, remaining gold, and coordinates. Failure to create a race-specific starting mine now logs the specific required-spawn context `starting racial gold mine`.
+- Full source regression suite: **122/122 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `21540054f1250628fa1095ad42ee68bb986982a2f421c89b421574de827398cc`.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-81285a4cc0-Development.w3m`; the installed SHA-256 matches the package manifest, and the folder contains one project map.
+- Editor save/reopen, current-build Test Map, Custom Game, actual starting mine ownership/mining, all other live gameplay, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-dd3a53babf - 2026-09-28
 
 - Removed the tree-targeted native `AEfn` spell from Keeper of the Grove and Faelor Briarward whenever hero spell ranks are applied. Their tree-free Grove Awakening/Briarward Stand signature spells remain available for summoning Treants on open ground.

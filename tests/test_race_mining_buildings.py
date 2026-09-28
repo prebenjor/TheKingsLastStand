@@ -94,10 +94,32 @@ class RaceMiningAndBuildings(unittest.TestCase):
         self.assertIn("set mineType = 'egol'", configure)
         self.assertIn("set mineType = 'ugol'", configure)
         self.assertIn('GetResourceAmount(KLS_BaseMine[p])', configure)
-        self.assertIn('CreateUnit(Player(p),mineType', configure)
+        self.assertIn('KLS_CreateUnitChecked(Player(p),mineType', configure)
         self.assertIn('SetResourceAmount(ownedMine,amount)', configure)
         self.assertIn('RemoveUnit(KLS_BaseMine[p])', configure)
         self.assertIn('KLS_ConfigureStartingMine(p,raceId)', function_body(runtime, 'KLS_ReplaceStartingFaction'))
+
+    def test_diagnostics_report_expected_and_actual_starting_mine_state(self):
+        runtime = runtime_script('STARTING-MINE-DIAGNOSTIC-TEST')
+        expected = function_body(runtime, 'KLS_ExpectedStartingMine')
+        diagnostics = function_body(runtime, 'KLS_ShowDiagnostics')
+        self.assertIn('return "Entangled Gold Mine (egol)"', expected)
+        self.assertIn('return "Haunted Gold Mine (ugol)"', expected)
+        self.assertIn('return "Gold Mine (ngol)"', expected)
+        self.assertIn('if mine != null then', diagnostics)
+        self.assertIn('actual=MISSING', diagnostics)
+        for observed_state in ('expected=', 'actual=', 'owner=', 'gold=', 'at='):
+            self.assertIn(observed_state, diagnostics)
+        self.assertIn('GetUnitTypeId(mine)', diagnostics)
+        self.assertIn('GetOwningPlayer(mine)', diagnostics)
+        self.assertIn('GetResourceAmount(mine)', diagnostics)
+        self.assertIn('GetUnitX(mine)', diagnostics)
+        self.assertIn('GetUnitY(mine)', diagnostics)
+
+    def test_racial_mine_spawn_failure_has_specific_required_spawn_context(self):
+        runtime = runtime_script('STARTING-MINE-SPAWN-DIAGNOSTIC-TEST')
+        configure = function_body(runtime, 'KLS_ConfigureStartingMine')
+        self.assertIn('KLS_CreateUnitChecked(Player(p),mineType,x,y,facing,true,"starting racial gold mine")', configure)
 
     def test_acolyte_haunt_handler_accepts_the_native_haunting_order(self):
         runtime = runtime_script('NATIVE-HAUNT-ORDER-TEST')

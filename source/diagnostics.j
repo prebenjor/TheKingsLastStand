@@ -17,6 +17,15 @@ function KLS_RaceName takes integer raceId returns string
     return "Undead"
 endfunction
 
+function KLS_ExpectedStartingMine takes integer raceId returns string
+    if raceId == 2 then
+        return "Entangled Gold Mine (egol)"
+    elseif raceId == 3 then
+        return "Haunted Gold Mine (ugol)"
+    endif
+    return "Gold Mine (ngol)"
+endfunction
+
 function KLS_Log takes string message returns nothing
     if not KLS_Debug then
         return
@@ -160,7 +169,11 @@ endfunction
 function KLS_ShowDiagnostics takes player p returns nothing
     local integer n = IMaxBJ(0, KLS_DiagCount - 12)
     local integer i = 0
+    local integer mineType
+    local integer mineOwner
     local string raceName
+    local string expectedMine
+    local unit mine
     if not KLS_Debug then
         return
     endif
@@ -169,10 +182,19 @@ function KLS_ShowDiagnostics takes player p returns nothing
         exitwhen i == 4
         if KLS_Active[i] then
             set raceName = KLS_RaceName(KLS_PlayerRace[i])
+            set expectedMine = KLS_ExpectedStartingMine(KLS_PlayerRace[i])
+            set mine = KLS_BaseMine[i]
             if KLS_FirstWorker[i] != null then
                 call DisplayTimedTextToPlayer(p, 0, 0, 30, "Identity check player=" + I2S(i+1) + " race=" + raceName + " worker=" + GetObjectName(GetUnitTypeId(KLS_FirstWorker[i])) + " unit=" + GetUnitName(KLS_FirstWorker[i]))
             else
                 call DisplayTimedTextToPlayer(p, 0, 0, 30, "Identity check player=" + I2S(i+1) + " race=" + raceName + " worker=NOT CREATED")
+            endif
+            if mine != null then
+                set mineType = GetUnitTypeId(mine)
+                set mineOwner = GetPlayerId(GetOwningPlayer(mine))
+                call DisplayTimedTextToPlayer(p, 0, 0, 30, "Starting mine player=" + I2S(i+1) + " expected=" + expectedMine + " actual=" + GetObjectName(mineType) + " owner=" + I2S(mineOwner) + " gold=" + I2S(GetResourceAmount(mine)) + " at=" + R2S(GetUnitX(mine)) + "," + R2S(GetUnitY(mine)))
+            else
+                call DisplayTimedTextToPlayer(p, 0, 0, 30, "Starting mine player=" + I2S(i+1) + " expected=" + expectedMine + " actual=MISSING")
             endif
         endif
         set i = i + 1
@@ -182,4 +204,5 @@ function KLS_ShowDiagnostics takes player p returns nothing
         call DisplayTimedTextToPlayer(p, 0, 0, 30, KLS_DiagLines[ModuloInteger(n, 64)])
         set n = n + 1
     endloop
+    set mine = null
 endfunction

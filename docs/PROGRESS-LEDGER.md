@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-dd3a53babf
+## Current package-proven build — KLS-D-81285a4cc0
+
+- Artifact: `dist/KLS-D-81285a4cc0-Development.w3m`.
+- SHA-256: `21540054f1250628fa1095ad42ee68bb986982a2f421c89b421574de827398cc`.
+- Adds mine-specific startup diagnostics: `-diag` reports each active player's expected and actual starting mine type, mine owner, remaining gold, and coordinates. A missing mine is reported explicitly; required racial mine spawn failures include the `starting racial gold mine` context.
+- Retains tree-free Keeper/Faelor signatures, pre-owned Undead Haunted and Night Elf Entangled starting mines with 1,000,000 gold, and the higher equipment price curve (300/1,000/3,000/8,000/20,000; hand weapons cost 1.5× base; racial recipes cost 9,000; tomes cost 1,000/3,000/8,000).
+- Full source suite: **122/122 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-81285a4cc0-Development.w3m`; installed SHA-256 matches the manifest and the test folder contains one project map. The prior installed map remains preserved in the verified local archive.
+- Current-build editor save/reopen, Test Map, Custom Game, starter mine ownership/mining, shops and prices, multiplayer, and endurance checks remain pending in Warcraft. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-dd3a53babf
 
 - Artifact: `dist/KLS-D-dd3a53babf-Development.w3m`.
 - SHA-256: `f2d804924a18aaab17ff00ed8d61b321a7fda54278a08e77559c3fcf6ab666cf`.
