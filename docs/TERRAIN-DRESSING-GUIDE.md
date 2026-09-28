@@ -21,3 +21,12 @@ Use this generated reference as inspiration while hand-editing the map in World 
 - Check doodad pathing after placement. Send a worker and a ground unit along every branch road, the full enemy route, and the routes between each base and its mine before saving.
 
 The reference is meant to guide manual terrain dressing; it does not prescribe changes to the 192 × 192 map bounds or the approved defense layout.
+
+## Full-map composition studies — 2026-09-29
+
+These two additional generated images compare a more formal kingdom-road arrangement with a less symmetrical landscape. They are visual references, not exact map screenshots or tile-by-tile build instructions.
+
+- [Formal King's Road layout](visuals/Crownlands-Layout-Formal-Road.png): balanced settlement clearings, branch roads, rocky road shoulders, and an open central avenue.
+- [Asymmetric road and terrain layout](visuals/Crownlands-Layout-Asymmetric-Road.png): a gentle road bend, contrasting woodland and meadow sides, and low rocky rises set back from the route.
+
+In both, keep the actual gate, King's Road, settlement entrances, boss-fight space, build plots, mines, and worker routes clear when translating the idea into the World Editor.
