@@ -79,13 +79,28 @@ function KLS_StoryCartTick takes nothing returns nothing
     endif
 endfunction
 
+function KLS_StoryEncounterAbort takes nothing returns nothing
+    local unit remaining = FirstOfGroup(KLS_StoryEnemies)
+    loop
+        exitwhen remaining == null
+        call GroupRemoveUnit(KLS_StoryEnemies,remaining)
+        call RemoveUnit(remaining)
+        set remaining = FirstOfGroup(KLS_StoryEnemies)
+    endloop
+    set KLS_StoryRemaining = 0
+    call KLS_Log("ERROR Crownlands encounter cancelled after an optional spawn failure; stage remains="+I2S(KLS_StoryStage))
+    call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,8,"A Crownlands patrol failed to muster. The story remains available to retry; waves continue.")
+    set remaining = null
+endfunction
+
 function KLS_StorySpawnEncounter takes integer siteIndex, boolean ritual returns nothing
     local integer n = 0
     local integer kind = 'ugho'
     local unit enemy
+    local boolean spawnFailed = false
     local real x = GetUnitX(KLS_TownSite[siteIndex])
     local real y = GetUnitY(KLS_TownSite[siteIndex])
-    set KLS_StoryRemaining = 4
+    set KLS_StoryRemaining = 0
     loop
         exitwhen n == 4 or KLS_Ended
         if ritual then
@@ -109,17 +124,22 @@ function KLS_StorySpawnEncounter takes integer siteIndex, boolean ritual returns
                 set kind = 'nfgu'
             endif
         endif
-        set enemy = KLS_CreateUnit(Player(11),kind,x+I2R(n-2)*150,y+I2R(n-2)*90,270)
+        set enemy = KLS_CreateUnitOptional(Player(11),kind,x+I2R(n-2)*150,y+I2R(n-2)*90,270,"Crownlands story encounter")
         if enemy == null then
-            set KLS_StoryRemaining = 0
-            return
+            set spawnFailed = true
+        else
+            call GroupAddUnit(KLS_StoryEnemies,enemy)
+            set KLS_StoryRemaining = KLS_StoryRemaining+1
+            call SetUnitAcquireRange(enemy,900)
+            call IssuePointOrder(enemy,"attack",GetUnitX(KLS_King),GetUnitY(KLS_King))
         endif
-        call GroupAddUnit(KLS_StoryEnemies,enemy)
-        call SetUnitAcquireRange(enemy,900)
-        call IssuePointOrder(enemy,"attack",GetUnitX(KLS_King),GetUnitY(KLS_King))
         set n = n+1
     endloop
-    call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,8,"A Crownlands story encounter is attacking during the current wave. It does not change the wave count.")
+    if spawnFailed then
+        call KLS_StoryEncounterAbort()
+    elseif KLS_StoryRemaining > 0 and not KLS_Ended then
+        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,8,"A Crownlands story encounter is attacking during the current wave. It does not change the wave count.")
+    endif
     set enemy = null
 endfunction
 
@@ -147,8 +167,9 @@ function KLS_StoryBegin takes integer p, integer siteIndex returns nothing
             call DisplayTimedTextToPlayer(Player(p),0,0,5,"You joined the Northwatch supply escort.")
             return
         endif
-        set KLS_StoryCart = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hpea',0,-9000,270)
+        set KLS_StoryCart = KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'hpea',0,-9000,270,"Northwatch supply caravan")
         if KLS_StoryCart == null then
+            call DisplayTimedTextToPlayer(Player(p),0,0,6,"The caravan could not be created. No resources were spent; check -diag and try again.")
             return
         endif
         set KLS_StoryContributor[KLS_StoryStage*4+p] = true

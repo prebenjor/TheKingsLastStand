@@ -1,25 +1,25 @@
 {
-  "build_id": "KLS-D-25463efa09",
+  "build_id": "KLS-D-c6f02bf50d",
   "status": "development: engine and multiplayer checks pending",
-  "output_path": "dist/KLS-D-25463efa09-Development.w3m",
-  "sha256": "d1a5d81cc66998f526103738d0164388b24467306bdc9b73e9d6ec02f087b03d",
+  "output_path": "dist/KLS-D-c6f02bf50d-Development.w3m",
+  "sha256": "0869d7fa5bb3f1f67744768648c7690e7365193a402777a23e878fee73637ad0",
   "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
   "source_hashes": {
-    "source/diagnostics.j": "c0c14509fb54fe013a0d2cee0de6b5b22202a124886d5c45527019aaed8b8b2f",
+    "source/diagnostics.j": "9698ecefaab275e40436c14f1c8dea2635c53037b0132f12ea8055407ea1ea99",
     "source/heroes.j": "9da47ff45d0cd860608ae42abf8afe91bcd658ba1155bf835b78f2c8a90e674c",
     "source/companies.j": "b60f2ded55e3a8cc5c7f2d723f792f1abcefc751f1e411c8255b5cb646817832",
     "source/mining.j": "e61a057d1224cdbd4c9d28c7a36ff5e798b3428ba92141fac45813cd09df14cc",
     "source/backpack.j": "a5553baa4da1984c0a4b7c3ce7bded123eb9bde0b26e23bf6d823fa406baef94",
     "source/shops.j": "b8c173a4938673f23a9ade7b2a3f000f7178fea46808657a7b42704f19d07ff7",
-    "source/equipment.j": "bbe7ccf714d79be8085e9c18a11e9aaac89fd35f474bd69d1365e3b3c2b67f77",
+    "source/equipment.j": "102f3b77eb1f7021bc3d35c02e1be2de75f66626f032c023417afddc1e6db11b",
     "source/hud.j": "028afa0281d0b49055b0e93e2b3f3c6330e00000550f82bbb678621254c5ddc2",
     "source/castle.j": "14639874a76fe03a6a1373c19ea8cb2ea294410505727cdc5f8946052325757e",
-    "source/combat.j": "2e4606e85af3f83f54afda0da4f3d5da4eb2a4269d14e2559b96faa0be4a8860",
-    "source/wave_environment.j": "afcb1c4a039b51d7df31d667e831be8aa1b5baea5ff7f5cd45f991616c1a9c42",
-    "source/signatures.j": "a16829a069171cada310756905bae6b143ca1e3c3fde73477eb8ebcf96951633",
+    "source/combat.j": "004e2de2747e73e9538c10080c28fd98789636f1e870a8e388121ab6c0e40bc3",
+    "source/wave_environment.j": "7c915157ce55161aa412a36c8f66bd53182ca0bd43c821de9981c2f906143341",
+    "source/signatures.j": "5d9aca202780663f4421584b6d42f09b0dfb16ca46e3d2af105867aaae61e3c6",
     "source/rewards.j": "f9f0cc8acc3527fc19b78966460c0950c35600fb6b562bf417376b1317cf157b",
-    "source/crownlands.j": "67b74e851d37abea6e5e9b14e2342ba6fa6665bdcd6642da01efd6a9023d16c2",
-    "source/game.j": "e7a4d613f95e177cbf3b774b2940a9eb1ea96ed2a450289811ad7e46102e4081",
+    "source/crownlands.j": "6104edfa705ec09338b3e6b680108bd9030892b5c48676701092aa5f3a45cd17",
+    "source/game.j": "964d0081e4898721ce8d78e721e262a07294ff6e9061d69355e6e2f4f05f183d",
     "tools/archive_pack.py": "3774ac9d0fab23472f343dedecbc8bf696a99bae1382b6cb764166d0da88e3b2",
     "tools/build_map.py": "5bfbad9d34c5e47a030480bb7139c9ed5f0137f37cf079a8875a1152a26751f0",
     "tools/collect_test_logs.py": "87fa92a8750888d5962582edf5d7047172b5c92e5c556656c6aa0727ab4f3fbc",
@@ -130,7 +130,7 @@
     {
       "name": "(attributes)",
       "size": 100,
-      "sha256": "7f2ad4089044991eff02098b8048bcf29cdef29e07f7d8178eed893723667f65"
+      "sha256": "6d654ce256490a58db5bf75761151fa950c5b9f079c90ebd0fab87140f31136f"
     },
     {
       "name": "(listfile)",
@@ -149,8 +149,8 @@
     },
     {
       "name": "war3map.j",
-      "size": 256648,
-      "sha256": "feae2dfb19f56d54d39831c10f263405d53afaa0b2df3e90360aa11f47fbf022"
+      "size": 260336,
+      "sha256": "41eb2854d18a3700604b43b08e736a8ea3f4c699f0586f2318b287e54a818242"
     },
     {
       "name": "war3map.mmp",
@@ -185,7 +185,7 @@
     {
       "name": "war3map.w3i",
       "size": 592,
-      "sha256": "de388ef1ef08bc5f229704ccda134edc4acee9152c7c6157a8a20d926eb81b86"
+      "sha256": "f126b75d26315ef4e7e3ef61ad0ce059c3251617485811648dd62df2514a30ef"
     },
     {
       "name": "war3map.w3l",
@@ -209,8 +209,8 @@
     },
     {
       "name": "war3map.wct",
-      "size": 249107,
-      "sha256": "2cac2a35624071b82d9dd3d037e1c2615336accd42efdac45d60f7d77a4bf70e"
+      "size": 252795,
+      "sha256": "45948f38207e63ebc166bcf2b5a11798d2fe48934182508f215ef84a1805df10"
     },
     {
       "name": "war3map.wpm",

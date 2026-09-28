@@ -137,7 +137,7 @@ function KLS_GearHit takes nothing returns nothing
                 endif
                 if frost > 0 then
                     call KLS_ProcDamage(source,u,frost)
-                    set dummy = KLS_CreateUnit(Player(p),'hS01',GetUnitX(u),GetUnitY(u),0)
+                    set dummy = KLS_CreateUnitOptional(Player(p),'hS01',GetUnitX(u),GetUnitY(u),0,"weapon frost slow effect")
                     if dummy != null then
                         call IssueTargetOrder(dummy,"slow",u)
                         call UnitApplyTimedLife(dummy,'BTLF',3)

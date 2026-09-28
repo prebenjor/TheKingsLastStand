@@ -399,7 +399,7 @@ function KLS_Chat takes nothing returns nothing
 endfunction
 
 function KLS_AddTree takes real x, real y returns nothing
-    local destructable tree = KLS_CreateDestructable('LTlt', x, y, 0, 1.0, 0)
+    local destructable tree = KLS_CreateDestructableOptional('LTlt', x, y, 0, 1.0, 0, "base harvest tree")
     if tree == null then
         return
     endif

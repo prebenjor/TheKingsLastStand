@@ -33,7 +33,7 @@ function KLS_GroveTick takes nothing returns nothing
 endfunction
 
 function KLS_GrovePlant takes real x, real y returns nothing
-    set KLS_GroveTree[KLS_GroveCount] = KLS_CreateDestructable('LTlt',x,y,0,1,0)
+    set KLS_GroveTree[KLS_GroveCount] = KLS_CreateDestructableOptional('LTlt',x,y,0,1,0,"ability grove tree")
     if KLS_GroveTree[KLS_GroveCount] == null then
         return
     endif

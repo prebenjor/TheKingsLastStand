@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-c6f02bf50d - 2026-09-28
+
+- Optional spawn failures now include useful context in `-diag` while allowing the match to continue for scenery, ability effects, signature summons, boss reinforcements, and optional Crownlands encounters. Required map setup and wave enemy/boss spawns still stop the match if creation fails; a partially created optional story encounter is cleaned up and remains retryable.
+- Preserved the hero-panel `+3 Strength`, `+3 Agility`, and `+3 Intelligence` skills for per-level stat selection. There is no per-level stat dialog in this package; the separate specialty talent dialog remains every fifth level.
+- Full source regression suite: **116/116 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `0869d7fa5bb3f1f67744768648c7690e7365193a402777a23e878fee73637ad0`.
+- The package remains in `dist/`; Warcraft III PID `36140` still holds the older installed map, so this build was not installed. Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance remain pending. The user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-25463efa09 - 2026-09-28
 
 - Kept the requested level-up choices in the hero ability panel as native `+` skills: `KSTR`, `KAGI`, and `KINT` each grant +3 to one primary stat per level. The old global stat-choice dialog is absent from current source; only the separate fifth-level specialty talent uses a dialog.

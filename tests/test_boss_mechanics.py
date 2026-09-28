@@ -72,12 +72,62 @@ class BossMechanics(unittest.TestCase):
         self.assertIn('set KLS_Ended = true', abort)
         self.assertIn('call CustomDefeatBJ', abort)
 
-    def test_failed_boss_reinforcement_is_not_counted_and_aborts_the_match(self):
+    def test_failed_boss_reinforcement_is_not_counted_or_fatal_to_the_match(self):
         script = runtime_script('KLS-D-TEST')
         summon = function_body(script, 'KLS_BossSummon')
-        self.assertIn('local boolean spawnFailed = false', summon)
         self.assertRegex(summon, r'if summon != null then[\s\S]*?GroupAddUnit\(KLS_Enemies,summon\)[\s\S]*?set KLS_Alive = KLS_Alive\+1[\s\S]*?else\s+set spawnFailed = true')
-        self.assertIn('call KLS_AbortForSpawnFailure("boss reinforcement", kind)', summon)
+        self.assertIn('KLS_CreateUnitOptional(Player(11),kind,', summon)
+        self.assertIn('"boss reinforcement"', summon)
+        self.assertNotIn('KLS_AbortForSpawnFailure', summon)
+
+    def test_optional_spawn_failures_have_context_without_global_abort(self):
+        script = runtime_script('KLS-D-TEST')
+        for function, fatal_token in (
+            ('KLS_CreateUnitOptional', 'KLS_AbortForSpawnFailure'),
+            ('KLS_CreateDestructableOptional', 'KLS_AbortForSpawnFailure'),
+        ):
+            body = function_body(script, function)
+            with self.subTest(function=function):
+                self.assertIn('false', body)
+                self.assertNotIn(fatal_token, body)
+        checked_unit = function_body(script, 'KLS_CreateUnitChecked')
+        checked_destructable = function_body(script, 'KLS_CreateDestructableChecked')
+        for body in (checked_unit, checked_destructable):
+            self.assertIn('if fatal then', body)
+            self.assertRegex(body, r'KLS_AbortForSpawnFailure\(context,\s*kind\)')
+            self.assertIn('ERROR optional', body)
+            self.assertIn('context=', body)
+            self.assertIn('GetObjectName(kind)', body)
+            self.assertIn('R2S(x)', body)
+
+    def test_optional_gameplay_callers_use_nonfatal_spawn_paths(self):
+        script = runtime_script('KLS-D-TEST')
+        expected = {
+            'KLS_AddTree': "KLS_CreateDestructableOptional('LTlt', x, y, 0, 1.0, 0, \"base harvest tree\")",
+            'KLS_GrovePlant': "KLS_CreateDestructableOptional('LTlt',x,y,0,1,0,\"ability grove tree\")",
+            'KLS_SignatureCast': 'KLS_CreateUnitOptional(owner,\'hS01\'',
+            'KLS_StorySpawnEncounter': 'KLS_CreateUnitOptional(Player(11),kind,',
+            'KLS_StoryBegin': "KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'hpea'",
+        }
+        for function, fragment in expected.items():
+            with self.subTest(function=function):
+                self.assertIn(fragment, function_body(script, function))
+        encounter = function_body(script, 'KLS_StorySpawnEncounter')
+        self.assertIn('call KLS_StoryEncounterAbort()', encounter)
+        abort = function_body(script, 'KLS_StoryEncounterAbort')
+        self.assertIn('RemoveUnit(remaining)', abort)
+        self.assertIn('set KLS_StoryRemaining = 0', abort)
+        self.assertNotIn('KLS_AbortForSpawnFailure', abort)
+
+    def test_required_spawn_path_still_aborts_and_wave_enemies_remain_required(self):
+        script = runtime_script('KLS-D-TEST')
+        for function in ('KLS_CreateUnit', 'KLS_CreateDestructable'):
+            body = function_body(script, function)
+            with self.subTest(function=function):
+                self.assertIn('true', body)
+        spawn = function_body(script, 'KLS_Spawn')
+        self.assertIn('KLS_CreateUnit(Player(11), kind,', spawn)
+        self.assertIn('call KLS_AbortForSpawnFailure("wave enemy", kind)', spawn)
 
     def test_boss_reward_is_once_on_death_and_wave_40_continues_without_victory(self):
         script = runtime_script('KLS-D-TEST')
@@ -94,10 +144,16 @@ class BossMechanics(unittest.TestCase):
         script = runtime_script('KLS-D-TEST')
         create_unit = function_body(script, 'KLS_CreateUnit')
         create_destructable = function_body(script, 'KLS_CreateDestructable')
-        self.assertIn('call KLS_AbortForSpawnFailure("unit", kind)', create_unit)
-        self.assertIn('call KLS_AbortForSpawnFailure("destructable", kind)', create_destructable)
-        self.assertIn('GetObjectName(kind)', create_unit)
-        self.assertIn('GetObjectName(kind)', create_destructable)
+        self.assertIn('KLS_CreateUnitChecked(owner,kind,x,y,facing,true,"required unit")', create_unit)
+        self.assertIn('KLS_CreateDestructableChecked(kind,x,y,facing,scale,variation,true,"required destructable")', create_destructable)
+        checked_unit = function_body(script, 'KLS_CreateUnitChecked')
+        checked_destructable = function_body(script, 'KLS_CreateDestructableChecked')
+        self.assertIn('if fatal then', checked_unit)
+        self.assertIn('if fatal then', checked_destructable)
+        self.assertRegex(checked_unit, r'KLS_AbortForSpawnFailure\(context,\s*kind\)')
+        self.assertRegex(checked_destructable, r'KLS_AbortForSpawnFailure\(context,\s*kind\)')
+        self.assertIn('GetObjectName(kind)', checked_unit)
+        self.assertIn('GetObjectName(kind)', checked_destructable)
 
     def test_startup_and_combat_callers_guard_handles_after_failed_creation(self):
         script = runtime_script('KLS-D-TEST')
@@ -115,7 +171,7 @@ class BossMechanics(unittest.TestCase):
             'KLS_WaveEnvironmentInit': (r'set KLS_RestorePool = CreateUnit[\s\S]*?if KLS_RestorePool != null then[\s\S]*?BlzSetUnitName[\s\S]*?else[\s\S]*?ERROR restoring spring model unavailable[\s\S]*?set KLS_PoolClock = CreateTimer\(\)[\s\S]*?TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)',),
             'KLS_ChooseHero': (r'set KLS_Hero\[p\] = KLS_CreateUnit[\s\S]*?if KLS_Hero\[p\] == null then\s+return\s+endif[\s\S]*?set KLS_ClassChosen\[p\] = true',),
             'KLS_SelectionInit': (r'set KLS_Preview\[n\] = KLS_CreateUnit[\s\S]*?if KLS_Preview\[n\] == null then\s+return\s+endif[\s\S]*?SetUnitInvulnerable',),
-            'KLS_SignatureCast': (r'set u = KLS_CreateUnit\(owner,KLS_SignatureSummon\[n\][\s\S]*?if u == null then\s+exitwhen true\s+endif[\s\S]*?SetUnitUseFood\(u,false\)',),
+            'KLS_SignatureCast': (r'set u = KLS_CreateUnitOptional\(owner,KLS_SignatureSummon\[n\][\s\S]*?if u == null then\s+exitwhen true\s+endif[\s\S]*?SetUnitUseFood\(u,false\)',),
         }
         for name, patterns in cases.items():
             body = function_body(script, name)

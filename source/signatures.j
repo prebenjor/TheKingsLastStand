@@ -55,7 +55,7 @@ function KLS_SignatureCast takes nothing returns nothing
                     call UnitDamageTarget(hero,u,KLS_SignatureDamage[n]+20.0*level,false,false,ATTACK_TYPE_MAGIC,DAMAGE_TYPE_MAGIC,null)
                 endif
                 if KLS_SignatureExtra[n] == 1 and GetWidgetLife(u) > 0.405 and not KLS_Ended then
-                    set dummy = KLS_CreateUnit(owner,'hS01',GetUnitX(u),GetUnitY(u),0)
+                    set dummy = KLS_CreateUnitOptional(owner,'hS01',GetUnitX(u),GetUnitY(u),0,"signature slow effect")
                     if dummy != null then
                         call IssueTargetOrder(dummy,"slow",u)
                         call UnitApplyTimedLife(dummy,'BTLF',3)
@@ -82,7 +82,7 @@ function KLS_SignatureCast takes nothing returns nothing
         endif
         loop
             exitwhen k == KLS_SignatureCount[n]
-            set u = KLS_CreateUnit(owner,KLS_SignatureSummon[n],x+100*Cos(k*2.094),y+100*Sin(k*2.094),270)
+            set u = KLS_CreateUnitOptional(owner,KLS_SignatureSummon[n],x+100*Cos(k*2.094),y+100*Sin(k*2.094),270,"signature summon")
             if u == null then
                 exitwhen true
             endif

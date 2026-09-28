@@ -359,7 +359,7 @@ function KLS_BossSummon takes nothing returns nothing
         else
             set kind = 'uske'
         endif
-        set summon = KLS_CreateUnit(Player(11),kind,KLS_BossX+GetRandomReal(-250,250),KLS_BossY+GetRandomReal(-250,250),270)
+        set summon = KLS_CreateUnitOptional(Player(11),kind,KLS_BossX+GetRandomReal(-250,250),KLS_BossY+GetRandomReal(-250,250),270,"boss reinforcement")
         if summon != null then
             call BlzSetUnitMaxHP(summon,R2I(hp))
             call SetWidgetLife(summon,hp)
@@ -371,7 +371,7 @@ function KLS_BossSummon takes nothing returns nothing
             call IssuePointOrder(summon,"attack",0,350)
         else
             set spawnFailed = true
-            call KLS_AbortForSpawnFailure("boss reinforcement", kind)
+            call KLS_Log("WARN boss reinforcement sequence stopped after a failed optional spawn; spawned="+I2S(spawned))
         endif
         set n = n+1
     endloop

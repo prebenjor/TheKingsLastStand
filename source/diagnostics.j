@@ -52,7 +52,7 @@ function KLS_AbortForSpawnFailure takes string context, integer kind returns not
     endloop
 endfunction
 
-function KLS_CreateUnit takes player owner, integer kind, real x, real y, real facing returns unit
+function KLS_CreateUnitChecked takes player owner, integer kind, real x, real y, real facing, boolean fatal, string context returns unit
     local unit u
     if KLS_Ended then
         return null
@@ -62,18 +62,31 @@ function KLS_CreateUnit takes player owner, integer kind, real x, real y, real f
         if KLS_Debug then
             set KLS_DiagUnits = KLS_DiagUnits + 1
             set KLS_DiagFailures = KLS_DiagFailures + 1
-            call KLS_Log("ERROR unit creation name=" + GetObjectName(kind) + " type=" + I2S(kind) + " owner=" + I2S(GetPlayerId(owner)) + " at " + R2S(x) + "," + R2S(y))
+            if fatal then
+                call KLS_Log("ERROR required unit spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" owner="+I2S(GetPlayerId(owner))+" at "+R2S(x)+","+R2S(y))
+            else
+                call KLS_Log("ERROR optional unit spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" owner="+I2S(GetPlayerId(owner))+" at "+R2S(x)+","+R2S(y))
+            endif
         endif
-        call KLS_AbortForSpawnFailure("unit", kind)
+        if fatal then
+            call KLS_AbortForSpawnFailure(context, kind)
+        endif
         return null
     endif
     if GetUnitTypeId(u) != kind then
         if KLS_Debug then
             set KLS_DiagUnits = KLS_DiagUnits + 1
             set KLS_DiagFailures = KLS_DiagFailures + 1
-            call KLS_Log("ERROR wrong unit type created name=" + GetObjectName(kind) + " type=" + I2S(kind) + " actual=" + I2S(GetUnitTypeId(u)))
+            if fatal then
+                call KLS_Log("ERROR required unit has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetUnitTypeId(u))+" at "+R2S(x)+","+R2S(y))
+            else
+                call KLS_Log("ERROR optional unit has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetUnitTypeId(u))+" at "+R2S(x)+","+R2S(y))
+            endif
         endif
-        call KLS_AbortForSpawnFailure("wrong unit type", kind)
+        call RemoveUnit(u)
+        if fatal then
+            call KLS_AbortForSpawnFailure(context, kind)
+        endif
         return null
     endif
     if KLS_Debug then
@@ -85,7 +98,15 @@ function KLS_CreateUnit takes player owner, integer kind, real x, real y, real f
     return u
 endfunction
 
-function KLS_CreateDestructable takes integer kind, real x, real y, real facing, real scale, integer variation returns destructable
+function KLS_CreateUnit takes player owner, integer kind, real x, real y, real facing returns unit
+    return KLS_CreateUnitChecked(owner,kind,x,y,facing,true,"required unit")
+endfunction
+
+function KLS_CreateUnitOptional takes player owner, integer kind, real x, real y, real facing, string context returns unit
+    return KLS_CreateUnitChecked(owner,kind,x,y,facing,false,context)
+endfunction
+
+function KLS_CreateDestructableChecked takes integer kind, real x, real y, real facing, real scale, integer variation, boolean fatal, string context returns destructable
     local destructable d
     if KLS_Ended then
         return null
@@ -95,24 +116,45 @@ function KLS_CreateDestructable takes integer kind, real x, real y, real facing,
         if KLS_Debug then
             set KLS_DiagDestructables = KLS_DiagDestructables + 1
             set KLS_DiagFailures = KLS_DiagFailures + 1
-            call KLS_Log("ERROR destructable creation name=" + GetObjectName(kind) + " type=" + I2S(kind) + " at " + R2S(x) + "," + R2S(y))
+            if fatal then
+                call KLS_Log("ERROR required destructable spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" at "+R2S(x)+","+R2S(y))
+            else
+                call KLS_Log("ERROR optional destructable spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" at "+R2S(x)+","+R2S(y))
+            endif
         endif
-        call KLS_AbortForSpawnFailure("destructable", kind)
+        if fatal then
+            call KLS_AbortForSpawnFailure(context, kind)
+        endif
         return null
     endif
     if GetDestructableTypeId(d) != kind then
         if KLS_Debug then
             set KLS_DiagDestructables = KLS_DiagDestructables + 1
             set KLS_DiagFailures = KLS_DiagFailures + 1
-            call KLS_Log("ERROR wrong destructable type created name=" + GetObjectName(kind) + " type=" + I2S(kind) + " actual=" + I2S(GetDestructableTypeId(d)))
+            if fatal then
+                call KLS_Log("ERROR required destructable has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetDestructableTypeId(d))+" at "+R2S(x)+","+R2S(y))
+            else
+                call KLS_Log("ERROR optional destructable has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetDestructableTypeId(d))+" at "+R2S(x)+","+R2S(y))
+            endif
         endif
-        call KLS_AbortForSpawnFailure("wrong destructable type", kind)
+        call RemoveDestructable(d)
+        if fatal then
+            call KLS_AbortForSpawnFailure(context, kind)
+        endif
         return null
     endif
     if KLS_Debug then
         set KLS_DiagDestructables = KLS_DiagDestructables + 1
     endif
     return d
+endfunction
+
+function KLS_CreateDestructable takes integer kind, real x, real y, real facing, real scale, integer variation returns destructable
+    return KLS_CreateDestructableChecked(kind,x,y,facing,scale,variation,true,"required destructable")
+endfunction
+
+function KLS_CreateDestructableOptional takes integer kind, real x, real y, real facing, real scale, integer variation, string context returns destructable
+    return KLS_CreateDestructableChecked(kind,x,y,facing,scale,variation,false,context)
 endfunction
 
 function KLS_ShowDiagnostics takes player p returns nothing
