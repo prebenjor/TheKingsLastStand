@@ -16,6 +16,8 @@ The product remains a 2-4 player co-op defense RPG. Preserve the original 40-wav
 - Each town shows its native-race Town Hall, Altar, food building, Barracks, Blacksmith, one watch tower, a named neutral shop and a race-matched quest-giver. The four settlements are allied to Aldric's defenders and use installed Warcraft models.
 - Town shops sell the five universally equippable items of their race's theme, plus healing and mana potions. Their item definitions, stats, rarity colors, stock IDs and drops come from the shared item catalog.
 
+For hand-authored terrain dressing, see [TERRAIN-DRESSING-GUIDE.md](TERRAIN-DRESSING-GUIDE.md). Its four-panel visual is a reference for road shoulders, branch paths, rocky passes, settlement edges, and the undead frontier; preserve the navigable defense route and resource access while editing.
+
 ### Settlement identity
 
 | Town | Race | Worker | Town Hall / Barracks / Altar | Shop | Story character |

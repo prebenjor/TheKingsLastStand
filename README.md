@@ -23,6 +23,7 @@ This exact build still needs its own World Editor save/reopen, Test Map, Custom 
 - docs/GAME-VISION.md — why the game exists and the experience to protect.
 - docs/GAMEPLAY-SPEC.md — match, economy, buildings, landscape, and player systems.
 - docs/CROWNLANDS-EXPANSION.md — current expansion contract: 192-cell map, four settlements, race-matched workers/buildings, 25 heroes, progression, optional story, twenty-item catalog, and endless campaign waves.
+- docs/TERRAIN-DRESSING-GUIDE.md — generated visual reference and practical World Editor guidance for natural paths, grass transitions, boulders, hills, settlement edges, and undead ground.
 - docs/HEROES-AND-ABILITIES.md — hero roster, native skills, safe ranks, and signature spells.
 - docs/HERO-THEMED-EXPANSION.md — proposed Forsaken Kingdom heroes, personal retinues, and hero-linked buildings/army research.
 - docs/ITEMS-AND-EQUIPMENT.md — Forsaken Kingdom backpack, quality progression, effects, books, recipes, relics, and shops.
