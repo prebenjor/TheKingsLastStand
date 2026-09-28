@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-4a67348b4e - 2026-09-29
+
+- The optional King's Restoring Spring visual now uses the shared checked spawn wrapper with the `restoring spring visual` context. Failed creation is logged and counted in diagnostics without aborting the match or disabling the coordinate-based regeneration timer.
+- Full source regression suite: **123/123 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `a013631ed88293b9d4c2610015152135eb3a7a9456e5b119cc2b8c211560aff4`.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-4a67348b4e-Development.w3m`; the installed SHA-256 matches the package manifest, and the folder contains one project map.
+- Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-81285a4cc0 - 2026-09-29
 
 - `-diag` now reports each active player's expected and actual starting mine, actual owner player ID, remaining gold, and coordinates. Failure to create a race-specific starting mine now logs the specific required-spawn context `starting racial gold mine`.

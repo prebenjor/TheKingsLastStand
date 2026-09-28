@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-81285a4cc0
+## Current package-proven build — KLS-D-4a67348b4e
+
+- Artifact: `dist/KLS-D-4a67348b4e-Development.w3m`.
+- SHA-256: `a013631ed88293b9d4c2610015152135eb3a7a9456e5b119cc2b8c211560aff4`.
+- The optional King's Restoring Spring visual now uses the shared checked spawn wrapper with `restoring spring visual` context. Spawn failure is logged and counted by diagnostics without stopping the match or disabling coordinate-based regeneration.
+- Full source suite: **123/123 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-4a67348b4e-Development.w3m`; installed SHA-256 matches the manifest and the test folder contains one project map. The prior installed map remains preserved in the verified local archive.
+- Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance checks remain pending in Warcraft. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-81285a4cc0
 
 - Artifact: `dist/KLS-D-81285a4cc0-Development.w3m`.
 - SHA-256: `21540054f1250628fa1095ad42ee68bb986982a2f421c89b421574de827398cc`.

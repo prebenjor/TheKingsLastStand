@@ -77,8 +77,8 @@ class ReportedRewardInventoryAndSpring(unittest.TestCase):
         init = function_body(self.script, 'KLS_WaveEnvironmentInit')
         self.assertRegex(init, r'TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)')
         self.assertNotIn('if KLS_RestorePool == null then\n        return', init)
-        self.assertIn("CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh'", init)
-        self.assertNotIn("KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh'", init)
+        self.assertIn("KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',-900,-1600,270,\"restoring spring visual\")", init)
+        self.assertNotIn("CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh'", init)
 
 
 if __name__ == '__main__':
