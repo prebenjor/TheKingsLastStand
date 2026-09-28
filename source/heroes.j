@@ -290,7 +290,7 @@ function KLS_SelectionInit takes nothing returns nothing
     set KLS_HeroDescription[8] = "Melee damage: Mana Burn, Immolation, Evasion and Metamorphosis."
     set KLS_HeroType[9] = 'Ekee'
     set KLS_HeroName[9] = "Keeper of the Grove"
-    set KLS_HeroDescription[9] = "Control and healing: Entangling Roots, Force of Nature, Thorns Aura and Tranquility."
+    set KLS_HeroDescription[9] = "Control and healing: Entangling Roots, Grove Awakening, Thorns Aura and Tranquility."
     set KLS_HeroType[10] = 'Emoo'
     set KLS_HeroName[10] = "Priestess of the Moon"
     set KLS_HeroDescription[10] = "Ranged support: Scout, Searing Arrows, Trueshot Aura and Starfall."

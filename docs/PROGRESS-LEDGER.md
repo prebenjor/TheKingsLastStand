@@ -1,14 +1,15 @@
-# Current status — 2026-09-28
+# Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-f5fd3c5993
+## Current package-proven build — KLS-D-dd3a53babf
 
-- Artifact: `dist/KLS-D-f5fd3c5993-Development.w3m`.
-- SHA-256: `490a89b9445bc1d7af961bb8374222ca2af9cd3dbd356c6e8e29d352bed89351`.
-- Undead and Night Elf starting heroes now receive an already-owned Haunted or Entangled Gold Mine at the normal base mine location, retaining the full 1,000,000-gold reserve. Human and Orc retain neutral mines; the additional Undead mine-order handler recognizes Warcraft's native `hauntgoldmine` order.
-- Equipment rarity base prices are Common 300, Uncommon 1,000, Rare 3,000, Epic 8,000 and Legendary 20,000 gold. Blade/Bow/Staff remain 1.5× base, the three original Foundry recipe fees are 5,000/7,000/12,000, racial recipes are 9,000, and attribute tomes are 1,000/3,000/8,000. Consumable prices and item stats remain unchanged.
-- Full source suite: **119/119 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Artifact: `dist/KLS-D-dd3a53babf-Development.w3m`.
+- SHA-256: `f2d804924a18aaab17ff00ed8d61b321a7fda54278a08e77559c3fcf6ab666cf`.
+- Keeper of the Grove and Faelor Briarward no longer receive the unusable tree-targeted native `AEfn` button when spell ranks are applied. Keeper's Grove Awakening and Faelor's Briarward Stand signatures summon Treants at an open target point without nearby tree destructables. `AEfn` is removed again after each hero-rank update.
+- Undead and Night Elf starting heroes receive owned Haunted or Entangled Gold Mines at their base with 1,000,000 gold; the Undead handler also accepts the native `hauntgoldmine` order.
+- Equipment rarity prices: 300/1,000/3,000/8,000/20,000; hand weapons cost 1.5× base, original recipe fees 5,000/7,000/12,000, racial recipes 9,000, and tomes 1,000/3,000/8,000. Consumable prices and item stats are unchanged.
+- Full source suite: **120/120 passed**. Package archive readback and installed-editor API syntax checks passed.
 - Warcraft III PID `36140` is still running with the older installed map, so this exact package remains in `dist/` and was not installed. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
-- After Warcraft III closes fully, run `python -B tools/build_map.py --install-test-map`, then verify this build's starting mine ownership/resource reserves, worker mining, item affordability progression, shop display and purchases. Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance checks for this exact build remain pending.
+- After Warcraft III closes fully, run `python -B tools/build_map.py --install-test-map`; then verify Keeper and Faelor signature casting on clear ground, starter mine ownership/mining, shops and prices. Editor save/reopen, current-build Test Map, Custom Game, multiplayer, and endurance checks remain pending.
 
 ## Previous package-proven build — KLS-D-2f2397cf14
 

@@ -364,5 +364,11 @@ def spell_script():
             unlock = max(1, int(float(row.get(12, '1') or 1)))
             max_rank = _effective_level_cap(spell, row, headers, metadata)
             lines.append("        call KLS_RankHeroSpell(hero, '" + spell + "', heroLevel, " + str(unlock) + ', ' + str(max_rank) + ')')
-    lines += ['    endif', 'endfunction']
+    lines += [
+        '    endif',
+        "    if heroType == 'Ekee' or heroType == 'Efal' then",
+        "        call UnitRemoveAbility(hero, 'AEfn')",
+        '    endif',
+        'endfunction',
+    ]
     return '\n'.join(lines)

@@ -1,4 +1,4 @@
-# Generated item catalog — KLS-D-f5fd3c5993
+# Generated item catalog — KLS-D-dd3a53babf
 
 Generated from tools/equipment_catalog.py for the current development build. There are 80 tiered equipment items, three crafted outputs, and nine attribute books. This file records names, rawcodes, slots, prices, stats, and authored effects; update it whenever the source catalog changes. The generated Object Editor data and live in-game values still need engine verification.
 

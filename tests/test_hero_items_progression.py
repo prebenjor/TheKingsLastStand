@@ -319,6 +319,16 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertEqual({spell: int(cap) for spell, cap in calls}['AHhb'], 5)
         self.assertIn(b'MaxHeroLevel=50', misc_data())
 
+    def test_tree_dependent_force_of_nature_is_removed_for_keeper_and_faelor(self):
+        generated = spell_script()
+        self.assertIn("if heroType == 'Ekee' or heroType == 'Efal' then", generated)
+        self.assertIn("call UnitRemoveAbility(hero, 'AEfn')", generated)
+        self.assertGreater(generated.index("call UnitRemoveAbility(hero, 'AEfn')"),
+                           generated.index("call KLS_RankHeroSpell(hero, 'AEtq'"))
+        runtime = runtime_script('TREELESS-FORCE-OF-NATURE')
+        self.assertIn('Grove Awakening', runtime)
+        self.assertIn('No trees required.', runtime)
+
     def test_normal_breaks_are_50_seconds_and_boss_breaks_remain_longer(self):
         runtime = runtime_script('LONGER-BREAKS')
         self.assertIn('set KLS_NormalPrep = 50', runtime)

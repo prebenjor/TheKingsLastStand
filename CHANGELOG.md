@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-dd3a53babf - 2026-09-28
+
+- Removed the tree-targeted native `AEfn` spell from Keeper of the Grove and Faelor Briarward whenever hero spell ranks are applied. Their tree-free Grove Awakening/Briarward Stand signature spells remain available for summoning Treants on open ground.
+- Full source regression suite: **120/120 passed**. Package archive readback and installed-editor API syntax checks passed.
+- Package SHA-256: `f2d804924a18aaab17ff00ed8d61b321a7fda54278a08e77559c3fcf6ab666cf`.
+- The package remains in `dist/`; Warcraft III PID `36140` is still running with the older installed map, so this build was not installed. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`. Current-build editor save/reopen, Test Map, Custom Game, Keeper/Faelor casting, multiplayer, and endurance checks remain pending.
+
+
 ## KLS-D-f5fd3c5993 - 2026-09-28
 
 - Undead and Night Elf players now start with an already-owned Haunted or Entangled Gold Mine at their base. Both retain the full 1,000,000-gold reserve; Human and Orc mines remain neutral. Additional neutral Undead mine haunting now recognizes Warcraft's native `hauntgoldmine` order.

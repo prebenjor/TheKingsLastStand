@@ -15,7 +15,7 @@ All selectable heroes start at level 1 and belong to a defending player's owners
 | Orc | Tauren Chieftain | Frontline control | Shockwave, War Stomp, Endurance Aura, Reincarnation |
 | Orc | Shadow Hunter | Healer/utility | Healing Wave, Hex, Serpent Ward, Big Bad Voodoo |
 | Night Elf | Demon Hunter | Anti-magic melee | Mana Burn, Immolation, Evasion, Metamorphosis |
-| Night Elf | Keeper of the Grove | Nature control/support | Entangling Roots, Force of Nature, Thorns Aura, Tranquility |
+| Night Elf | Keeper of the Grove | Nature control/support | Entangling Roots, Grove Awakening, Thorns Aura, Tranquility |
 | Night Elf | Priestess of the Moon | Ranged support | Scout, Searing Arrows, Trueshot Aura, Starfall |
 | Night Elf | Warden | Mobile area damage | Fan of Knives, Blink, Shadow Strike, Vengeance |
 | Undead | Death Knight | Frontline support | Death Coil, Death Pact, Unholy Aura, Animate Dead |
@@ -91,6 +91,6 @@ These effects are the current authored object/runtime values; visual assets, nat
 ## Race-sensitive spell behavior
 
 - Healing and ally detection must include all allied human, orc, night elf, and undead defenders and their friendly troops.
-- Keeper's classic Force of Nature still follows its tree-target requirement, so the combat area needs usable trees. Grove Awakening is a separate custom spell that summons Treants without consuming a tree.
+- Keeper of the Grove and Faelor Briarward have the native tree-targeting `AEfn` ability removed when hero ranks are applied. Their tree-free Grove Awakening/Briarward Stand signature spells provide the Treant summon on open ground, so this roster no longer leaves a dead tree-dependent Force of Nature button on either hero.
 - Death Knight abilities must respect their ordinary living/undead target semantics, while the custom Soul Covenant must support the mixed allied party explicitly.
 - Summoned signature units need ownership, target orders, cleanup/lifetime, and wave-accounting rules tested in live play.
