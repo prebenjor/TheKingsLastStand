@@ -8,8 +8,8 @@
 - Undead and Night Elf starting heroes receive owned Haunted or Entangled Gold Mines at their base with 1,000,000 gold; the Undead handler also accepts the native `hauntgoldmine` order.
 - Equipment rarity prices: 300/1,000/3,000/8,000/20,000; hand weapons cost 1.5× base, original recipe fees 5,000/7,000/12,000, racial recipes 9,000, and tomes 1,000/3,000/8,000. Consumable prices and item stats are unchanged.
 - Full source suite: **120/120 passed**. Package archive readback and installed-editor API syntax checks passed.
-- Warcraft III PID `36140` is still running with the older installed map, so this exact package remains in `dist/` and was not installed. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
-- After Warcraft III closes fully, run `python -B tools/build_map.py --install-test-map`; then verify Keeper and Faelor signature casting on clear ground, starter mine ownership/mining, shops and prices. Editor save/reopen, current-build Test Map, Custom Game, multiplayer, and endurance checks remain pending.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-dd3a53babf-Development.w3m`; the installed SHA-256 matches the manifest and the test folder contains one project map. The locked prior map was retained in the verified local installed-map archive.
+- Current-build editor save/reopen, Test Map, Custom Game, Keeper/Faelor signature casting on clear ground, starter mine ownership/mining, shops and prices, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
 
 ## Previous package-proven build — KLS-D-2f2397cf14
 

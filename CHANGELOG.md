@@ -7,7 +7,8 @@ Keep one entry for every packaged build. The entry names the exact immutable bui
 - Removed the tree-targeted native `AEfn` spell from Keeper of the Grove and Faelor Briarward whenever hero spell ranks are applied. Their tree-free Grove Awakening/Briarward Stand signature spells remain available for summoning Treants on open ground.
 - Full source regression suite: **120/120 passed**. Package archive readback and installed-editor API syntax checks passed.
 - Package SHA-256: `f2d804924a18aaab17ff00ed8d61b321a7fda54278a08e77559c3fcf6ab666cf`.
-- The package remains in `dist/`; Warcraft III PID `36140` is still running with the older installed map, so this build was not installed. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`. Current-build editor save/reopen, Test Map, Custom Game, Keeper/Faelor casting, multiplayer, and endurance checks remain pending.
+- Installed on 2026-09-29 at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-dd3a53babf-Development.w3m`; the test-folder SHA-256 matches the package manifest, and the folder contains one project map. The prior map is retained in `backups/installed-diagnostics/20260928T192844325669Z-KLS-D-8669a44192/`.
+- Re-ran the full source regression suite on 2026-09-29: **120/120 passed**. Current-build editor save/reopen, Test Map, Custom Game, Keeper/Faelor casting, mine ownership/mining, shop/economy behavior, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
 
 
 ## KLS-D-f5fd3c5993 - 2026-09-28
