@@ -3,19 +3,18 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-b5ae4ab2fe**.
-- Artifact: `dist/KLS-D-b5ae4ab2fe-Development.w3m`.
-- SHA-256: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`.
-- Package readback, installed-editor API syntax and full source regression suite (**79/79**) passed.
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b5ae4ab2fe-Development.w3m`; installed hash matches the package. The prior installed copy was archived outside the Custom Game folder.
-- Status: **development build**. Current-build editor save/reopen, Test Map, Custom Game rank/color presentation, live gameplay, multiplayer and endurance checks are pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
+- Current task: implement and document the Crownlands kingdom expansion and correct Sacred Aura's learned/learn-menu tooltip ranks.
+- Build: **KLS-D-1a040d638c**.
+- Artifact: `dist/KLS-D-1a040d638c-Development.w3m`.
+- SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`.
+- Package member readback, installed-editor API syntax, package archive verification and the full automated regression suite (**88/88**) passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`; package and installed SHA-256 match. Previous development and installed maps are preserved under `backups/development-builds/` and `backups/installed-diagnostics/`.
+- Implemented: 192×192 terrain/pathing/camera/minimap, four connected allied settlements, per-player race-matched workers and build menus, eight heroes and 16 hero-matched recruits, four-race structures, level 1–50 stat/talent progression, 20 catalog items/four Legendary recipes, optional four-stage story with multi-player escort credit, and generated rank-aware Sacred Aura descriptions.
+- Status: **development build**. World Editor is open and responsive on this exact installed map. Save/reopen, Test Map, Custom Game, live gameplay, multiplayer and endurance remain pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5** and is not counted as a failed step or as evidence for this new build.
 
-## 2026-09-28: extend safe spell ranks and color item rarities — KLS-D-b5ae4ab2fe
+## Previous build record — KLS-D-b5ae4ab2fe
 
-- Set the hero cap to 50 and restored ranks 4–5 only for abilities with explicitly registered, installed power fields. Each added rank increases only those effect values by 10% of the final authored value; other fields are copied unchanged. Native rank values remain exact. Sacred Aura's rank 4/5 resistance is 38.5%/42%; Blink remains capped at rank 3.
-- Added standard quality colors to gear, relics, tooltip headers and shop tier labels. The color mapping and item quality labels are tested in the emitted object data.
-- Full source suite passed (**79/79**). Package readback and installed-editor API syntax passed. Package and installed SHA-256 match: `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`.
-- Exact next check: launch `KLS-D-b5ae4ab2fe-Development.w3m` in Custom Game, select the Paladin and confirm a higher-rank Holy Light still casts and its effect increases. Report the visible build ID and outcome. Rarity colors, editor round-trip, full gameplay, multiplayer and endurance also remain to verify.
+- Its 79/79 automated suite, package readback and installed-editor API checks passed. Its SHA-256 was `05a072b826318b5d40d9cacda0f9e3755c845093f618f7bfb227da3fd7ec5da7`. It has been archived and superseded by the current expansion build above.
 
 ## 2026-09-28: fix contradictory recipe completion/refund — KLS-D-a2dae2be8c
 

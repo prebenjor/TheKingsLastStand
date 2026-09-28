@@ -17,7 +17,7 @@ from test_equipment import decode, slk
 
 class HeroCompanyExpansion(unittest.TestCase):
     def test_every_selectable_hero_has_personal_company_and_support_stock(self):
-        self.assertEqual(len(HERO_COMPANIES), 17)
+        self.assertEqual(len(HERO_COMPANIES), 25)
         self.assertEqual([entry['hero_type'] for entry in HERO_COMPANIES], list(HERO_ABILITIES))
 
         unit_ids = []
@@ -29,12 +29,12 @@ class HeroCompanyExpansion(unittest.TestCase):
             self.assertGreater(entry['company_hp'], 0)
             self.assertGreater(entry['support_hp'], 0)
             unit_ids.extend((entry['company_id'], entry['support_id']))
-        self.assertEqual(len(set(unit_ids)), 34)
+        self.assertEqual(len(set(unit_ids)), 50)
 
         installed_units = slk('UnitData.slk')
         self.assertTrue(set(unit_ids).isdisjoint(installed_units))
         building_ids = [entry['rawcode'] for entry in COMPANY_BUILDINGS.values()]
-        self.assertEqual(len(set(unit_ids + building_ids)), 37)
+        self.assertEqual(len(set(unit_ids + building_ids)), 53)
         self.assertTrue(set(building_ids).isdisjoint(installed_units))
         installed_abilities = slk('AbilityData.slk')
         for ability_id in {entry['banner_ability'] for entry in HERO_COMPANIES}:
@@ -72,7 +72,7 @@ class HeroCompanyExpansion(unittest.TestCase):
 
         runtime = runtime_script('COMPANY-TEST')
         self.assertIn("KLS_CompanyUnitId[15] = 'kC15'", runtime)
-        self.assertIn("KLS_CompanySupportId[16] = 'kS16'", runtime)
+        self.assertIn("KLS_CompanySupportId[24] = 'kS24'", runtime)
         self.assertIn('integer array KLS_HeroChoice', runtime)
         self.assertIn('KLS_HeroChoice[p] = n', runtime)
         self.assertIn('KLS_CompanyHall[p]', runtime)
@@ -86,7 +86,7 @@ class HeroCompanyExpansion(unittest.TestCase):
 
     def test_banner_doctrines_use_installed_auras_and_foundry_bonus_is_persistent(self):
         ids = {entry['banner_ability'] for entry in HERO_COMPANIES}
-        self.assertTrue(ids <= {'AHad', 'AOae', 'AEar', 'AHab'})
+        self.assertTrue(ids <= {'AHad', 'AOae', 'AEar', 'AHab', 'AUau'})
         runtime = runtime_script('COMPANY-TEST')
         self.assertIn('KLS_CompanyFoundry[p] = true', runtime)
         self.assertIn('KLS_CompanyApplyFoundry', runtime)

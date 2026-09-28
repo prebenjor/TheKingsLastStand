@@ -90,15 +90,16 @@ class ArchiveRegression(unittest.TestCase):
             if line.startswith('C;') and ';Y' in line and ';X1;' in line:
                 match = re.search(r';K"?([^";]+)', line)
                 if match: installed_ids.add(match.group(1))
-        self.assertEqual(len(catalog), 83)
-        self.assertEqual(len({entry['rawcode'] for entry in catalog}), 83)
+        self.assertEqual(len(catalog), 103)
+        self.assertEqual(len({entry['rawcode'] for entry in catalog}), 103)
         self.assertTrue({entry['rawcode'] for entry in catalog}.isdisjoint(installed_ids))
         self.assertEqual({entry['tier'] for entry in catalog}, set(range(5)))
         self.assertEqual({entry['family'] for entry in catalog}, {
             'Blade', 'Bow', 'Staff', 'Shield', 'Focus', 'Helmet', 'Chest',
             'Gloves', 'Boots', 'Offensive Ring', 'Defensive Ring', 'Trinket', 'Cape',
-            'Might Chestplate', 'Windrunner Boots', 'Arcanist Focus'})
-        self.assertEqual([sum(e['tier'] == tier and not e.get('crafted') for e in catalog) for tier in range(5)], [16]*5)
+            'Might Chestplate', 'Windrunner Boots', 'Arcanist Focus', 'Crown Relics',
+            'Redtusk Relics', 'Moonbark Relics', 'Wraith Relics'})
+        self.assertEqual([sum(e['tier'] == tier and not e.get('crafted') for e in catalog) for tier in range(5)], [20]*5)
         self.assertEqual(len({e['parent'] for e in catalog if e['family'] == 'Blade'}), 5)
         self.assertEqual(len({e['parent'] for e in catalog if e['family'] == 'Bow'}), 2)
         self.assertEqual(len({e['parent'] for e in catalog if e['family'] == 'Trinket'}), 5)

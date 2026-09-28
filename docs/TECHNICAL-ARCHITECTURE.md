@@ -6,7 +6,8 @@
 - JASS runtime split into explicit modules in source/: diagnostics, hero selection, backpack, shops, equipment, HUD, castle controls, combat, wave environment, signatures, and match flow.
 - tools/pipeline.py assembles those modules in a fixed order, generates native custom object files and editable trigger source, compiles the runtime against the installed Warcraft API, and writes a deterministic package manifest.
 - tools/equipment_catalog.py is the source for native gear objects, rawcodes, shop stock, costs, stats, descriptions, effects, and item metadata.
-- tools/hero_progression.py derives extended skill objects/rank logic from installed AbilityData/AbilityMetaData, including the installed Hjsm and Npal campaign skill sets. tools/signature_spells.py defines the custom AK00–AK16 abilities.
+- tools/hero_progression.py derives extended skill objects/rank logic from installed AbilityData/AbilityMetaData, including the installed Hjsm and Npal campaign skill sets. tools/hero_catalog.py defines eight added hero records and per-player race identity. tools/signature_spells.py defines the 25 custom AK00–AK24 abilities.
+- tools/faction_catalog.py defines the four race-specific worker/building/tower menus; tools/company_catalog.py defines 25 hero-matched company/support pairs. tools/town_catalog.py is the source of truth for the four settlement and story-site placements; source/crownlands.j owns settlement construction and match-scoped story progression.
 - tools/wave_rosters.py defines forty roster entries and four boss mechanic definitions.
 - tools/recipes.py builds crafting transactions from the catalog. tools/objects.py builds unit/item object records. tools/terrain.py updates terrain and pathing extents. tools/gui_sources.py produces editable WTG/WCT sources from the same assembled runtime.
 - tools/archive_pack.py and tools/map_archive.py update/read the MPQ, its listfile, hashes, blocks and checksum/attributes and verify exact component readback.
@@ -32,7 +33,7 @@ The local builder currently assumes Warcraft III at C:\Program Files (x86)\Warcr
 - Build input is backups/Blank-DE.w3m; its expected SHA-256 is 3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9.
 - The validated source/template/war3map.w3i metadata is version 39 with pinned SHA-256 a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc.
 - Reject any baseline or metadata that differs. Preserve all untouched Definitive Edition settings.
-- The map is expanded to 128 × 128 terrain cells. Four starts/plots are centered at (-6000,-500), (-3300,-500), (3300,-500), (6000,-500). Playable bounds, terrain, pathing, camera bounds, minimap and visual route must stay in sync.
+- The map is expanded to 192 × 192 terrain cells. Four starts/plots are centered at (-6000,-500), (-3300,-500), (3300,-500), (6000,-500). Playable bounds, terrain, pathing, camera bounds, minimap, towns and visual routes must stay in sync. tools/town_catalog.py is the settlement layout source of truth.
 - Generated W3I has four human defender slots in one allied force, shared vision, no shared control, and one hostile undead owner.
 - The output title and first startup message carry the immutable development build ID. Initialization uses one generated runtime for compiled JASS and editable trigger sources, sets initial globals explicitly, and guards against a second initialization.
 - No default melee initializer or automatic victory rule may be present.
@@ -60,7 +61,12 @@ This registry records project-owned object rawcodes that agents are likely to co
 | hS01 | Hidden temporary frost-effect helper |
 | hS02 | Sage's Archive |
 | hC01 | King Aldric's Castle |
-| AK00–AK16 | Seventeen custom hero signature spells in hero-selector order |
+| AK00–AK24 | Twenty-five custom hero signature spells in hero-selector order |
+| Havl, Htor, Okrg, Omor, Esly, Efal, Uvyr, Utha | Eight custom selectable heroes based on installed race-native hero models |
+| kH00–kH03, kF00–kF03, kY00–kY03 | Four race-themed Hall, Foundry and Siege Yard roles |
+| kQ00–kQ03 | Crownlands story characters for the four settlements |
+| I23C–I23V | Twenty race-themed item records, five per race |
+| RCP4–RCP7 | Four race-themed Legendary Foundry recipes |
 | I010–I013 | Four boss relic items; see ITEMS-AND-EQUIPMENT.md |
 | I100–I127 and I128–I12A | Generated equipment families and crafted legendary variants; see ITEM-CATALOG.md |
 | KS05/10/20, KA05/10/20, KI05/10/20 | Strength, Agility, Intelligence attribute tomes |
@@ -73,10 +79,10 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The repository keeps one current map artifact in `dist/`, named `<build-id>-Development.w3m`. Build manifests, JASS, and temporary package stages live under `build/`; no second persistent map copy is written there.
 - `--install-test-map` copies that exact package-proven map into `Documents/Warcraft III/Maps/TheKingsLastStand/`, the user's designated live test folder. That folder contains one current project map so the Custom Game entry is unambiguous.
 - When a new build replaces a prior development map, the previous `dist/` map is archived under the ignored local `backups/development-builds/`; previous installed test maps are archived under `backups/installed-diagnostics/`. Git history preserves prior checked-in `dist/` snapshots for remote recovery.
-- The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
+- The current development map is `dist/KLS-D-1a040d638c-Development.w3m`, installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`, SHA-256 `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`. Package and installed hashes match. Prior builds are archived under `backups/development-builds/` and `backups/installed-diagnostics/`. World Editor is open and responsive on the installed map; do not rebuild/replace it while it is open, and do not create extra map copies. Test Map and gameplay checks remain pending.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current package-proven development artifact is `dist/KLS-D-5b63d38dc0-Development.w3m`, SHA-256 `560b662379fb23969ad2528f53d2623667125760e89d050e6a2dd6c5e8781bc8`. The exact map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`; its hash matches the package. The builder reads back every member and validates hash lookup; see `dist/build-manifest.json` for the exact inventory.
+- The current source regression suite has 88 tests. The latest package readback and installed-editor API syntax checks passed. The older user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`; current-build editor, game, multiplayer and endurance checks remain pending.
 - Kill XP uses a custom path: map `GrantNormalXP` and `GrantHeroXP` are zeroed, native `HeroExpRange` is disabled, and `KLS_AwardKillXP` applies one full award to every active player hero within 1,200 world units. Keep the default Warcraft unit-level award table/formula aligned with `KLS_UnitKillXP`. This avoids native alliance splitting. Dead-hero and campaign-hero behavior remain pending game verification.
 - Personal kill gold is separate from XP: owner gets full role bounty, while a King Aldric kill gives 25% to every active defender. Ordinary breaks are 50 seconds; boss breaks are 180 seconds. The Restoring Spring uses silent one-percent-per-second health/mana recovery.
 

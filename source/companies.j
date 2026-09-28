@@ -10,6 +10,18 @@ globals
     integer array KLS_CompanySupportGold
     integer array KLS_CompanySupportLumber
     integer array KLS_HeroChoice
+    integer array KLS_FactionTownHallId
+    integer array KLS_FactionWorkerId
+    integer array KLS_FactionAltarId
+    integer array KLS_FactionBarracksId
+    integer array KLS_FactionFoodId
+    integer array KLS_FactionBlacksmithId
+    integer array KLS_FactionArcaneId
+    integer array KLS_FactionTowerId
+    integer array KLS_FactionHallId
+    integer array KLS_FactionFoundryId
+    integer array KLS_FactionSiegeYardId
+    integer array KLS_PlayerRace
     unit array KLS_CompanyHall
     unit array KLS_CompanyYard
     boolean array KLS_CompanyFoundry
@@ -29,7 +41,7 @@ endfunction
 function KLS_CompanyBarracksEnum takes nothing returns nothing
     local unit barracks = GetEnumUnit()
     local integer p = GetPlayerId(GetOwningPlayer(barracks))
-    if GetUnitTypeId(barracks) == 'hbar' then
+    if KLS_IsFactionBarracks(GetUnitTypeId(barracks)) then
         call KLS_CompanyAddBarracksStock(barracks,p)
     endif
     set barracks = null
@@ -71,7 +83,7 @@ endfunction
 function KLS_CompanyProductPrice takes integer rawcode, boolean support returns integer
     local integer i = 0
     loop
-        exitwhen i == 17
+        exitwhen i == KLS_HeroCount
         if support then
             if rawcode == KLS_CompanySupportId[i] then
                 return KLS_CompanySupportGold[i]
@@ -87,7 +99,7 @@ endfunction
 function KLS_CompanyProductLumber takes integer rawcode, boolean support returns integer
     local integer i = 0
     loop
-        exitwhen i == 17
+        exitwhen i == KLS_HeroCount
         if support then
             if rawcode == KLS_CompanySupportId[i] then
                 return KLS_CompanySupportLumber[i]
@@ -149,7 +161,7 @@ function KLS_CompanyConstructed takes nothing returns nothing
     local group owned
     local integer doctrine
     if p >= 0 and p < 4 and KLS_Active[p] and KLS_HeroChoice[p] >= 0 then
-        if rawcode == KLS_CompanyHallId then
+        if KLS_IsFactionHall(rawcode) then
             set KLS_CompanyHall[p] = building
             set doctrine = KLS_CompanyBannerAbility[KLS_HeroChoice[p]]
             call UnitAddAbility(building,doctrine)
@@ -160,7 +172,7 @@ function KLS_CompanyConstructed takes nothing returns nothing
             call DestroyGroup(owned)
             set owned = null
             call KLS_Log("Hall of Banners completed for p"+I2S(p+1)+" doctrine="+GetObjectName(doctrine))
-        elseif rawcode == KLS_CompanyFoundryId then
+        elseif KLS_IsFactionFoundry(rawcode) then
             set KLS_CompanyFoundry[p] = true
             set owned = CreateGroup()
             call GroupEnumUnitsOfPlayer(owned,Player(p),null)
@@ -168,13 +180,13 @@ function KLS_CompanyConstructed takes nothing returns nothing
             call DestroyGroup(owned)
             set owned = null
             call KLS_Log("Royal Foundry veteran upgrades completed for p"+I2S(p+1))
-        elseif rawcode == KLS_CompanySiegeYardId then
+        elseif KLS_IsFactionSiegeYard(rawcode) then
             set KLS_CompanyYard[p] = building
             call UnitAddAbility(building,'Aneu')
             call AddUnitToStock(building,KLS_CompanySupportId[KLS_HeroChoice[p]],99,99)
             call SetUnitAcquireRange(building,0)
             call KLS_Log("Siege Yard completed for p"+I2S(p+1)+" support="+GetObjectName(KLS_CompanySupportId[KLS_HeroChoice[p]]))
-        elseif rawcode == 'hbar' and KLS_CompanyHall[p] != null then
+        elseif KLS_IsFactionBarracks(rawcode) and KLS_CompanyHall[p] != null then
             call KLS_CompanyAddBarracksStock(building,p)
         endif
     endif
@@ -186,6 +198,7 @@ function KLS_CompanyInit takes nothing returns nothing
     local trigger constructed = CreateTrigger()
     local trigger sold = CreateTrigger()
     call KLS_CompanyCatalogInit()
+    call KLS_FactionCatalogInit()
     loop
         exitwhen p == 4
         set KLS_HeroChoice[p] = -1
@@ -200,5 +213,5 @@ function KLS_CompanyInit takes nothing returns nothing
     call TriggerAddAction(sold,function KLS_CompanySellUnit)
     set constructed = null
     set sold = null
-    call KLS_Log("Oathbound Companies initialized for 17 selectable heroes")
+    call KLS_Log("Race-matched companies, workers, buildings and towers initialized for 25 heroes")
 endfunction

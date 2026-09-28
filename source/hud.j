@@ -48,7 +48,7 @@ function KLS_HUDUpdate takes nothing returns nothing
         call KLS_HUDRow(2, "Match", "Finished")
     elseif KLS_Selecting then
         set wave = 1
-        call KLS_HUDRow(0, "Hero selection", "17 heroes")
+        call KLS_HUDRow(0, "Hero selection", "25 heroes")
         call KLS_HUDRow(2, "Choose within", KLS_TimeText(KLS_SelectionLeft))
     elseif KLS_Alive == 0 then
         set wave = IMinBJ(40, wave + 1)

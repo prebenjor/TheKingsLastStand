@@ -1,6 +1,6 @@
 # Heroes and abilities
 
-All selectable heroes are level 3 at match start and belong to a defending player's ownership. Hero race affects model and hero identity only: every player still commands Human workers and uses the Human base-building tree. Duplicate hero choices are valid.
+All selectable heroes start at level 1 and belong to a defending player's ownership. The 25-choice roster preserves the original seventeen and adds eight race-themed heroes; their detailed signatures, company/support recruits and IDs are recorded in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). A confirmed choice sets that player's worker and matching race build menu independently. Duplicate hero choices are valid.
 
 ## Selection roster
 
@@ -85,7 +85,7 @@ These effects are the current authored object/runtime values; visual assets, nat
 - Safely extend only abilities with a registered, installed, nonzero power field in `tools/hero_progression.py`. Each rank beyond the installed maximum adds 10% of the final authored power value; the increase is relative to the authored value, not compounded (for a three-rank ability, ranks 4 and 5 are 110% and 120%). Every other field copies from the final authored rank, including mana cost, cooldown, duration, range, targeting and mechanics.
 - The extension table is explicit and keyed by ability rawcode and AbilityData field ID: `AHhb/Hhb1`, `AHad/Had1`, `AHtb/Htb1`, `AHtc/Htc1`, `AHbh/Hbh1+Hbh3`, `AHav/Hav1+Hav2+Hav3`, `AHfs/Hfs1+Hfs3+Hfs6`, `AHbn/Hbn1`, `AHpa/hsa1+hsa2`, `AHas/hsa1+hsa2`, `AHfa/Hfa1`, `AOwk/Owk3`, `AOcr/Ocr2`, `AOww/Oww1`, `AOcl/Ocl1`, `AOsh/Osh1`, `AOws/Wrs1`, `AOae/Oae1+Oae2`, `AOhw/Ocl1`, `AEmb/Emb1`, `AEim/Eim1`, `AEev/Eev1`, `AEer/Eer1`, `AEah/Eah1`, `AEar/Ear1`, `AEfk/Efk1+Efk2`, `AEsh/Esh1+Esh5`, `AEtq/Etq1`, `AEme/Eme5`, `AEsf/Esf1`, `AUdc/Udc1`, `AUau/Uau1+Uau2`, `AUdr/Udp1`, `AUfn/Ufn1`, and `AUdd/Udd1`. These labels were checked against the installed editor's localized AbilityMetaData strings.
 - Unregistered abilities remain at their installed rank cap rather than receiving guessed scaling. The runtime advances ranks at ten-level milestones, to rank 5 at most. The custom signature ability system keeps its separate per-hero-level effects.
-- Talent points are earned for each five-level milestone crossed, even when one level award crosses multiple milestones. Each point chooses one permanent bonus: +12 damage, +300 maximum HP, or +10 intelligence.
+- Each hero level queues one visible stat investment: +3 Strength, +3 Agility or +3 Intelligence. Every fifth level grants a separate talent choice; Strength adds health and health regeneration, Agility adds attack speed and evasion, and Intelligence adds mana and mana regeneration. The exact effects are listed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
 - Keep hero inventory/equipment through death and revive after 20 seconds at that player's Altar of Kings.
 
 ## Race-sensitive spell behavior

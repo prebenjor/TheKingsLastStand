@@ -2,6 +2,25 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-1a040d638c - 2026-09-28
+
+- Carries forward the complete Crownlands expansion and Sacred Aura tooltip work described in the previous entry.
+- Fixed supply-escort contribution tracking: any active defender who joins while the caravan is already travelling is now recorded for that chapter's personal story reward. The escort contributor is recorded only after its caravan successfully spawns.
+- Added a regression for the second-player join path. Full automated regression suite: **88/88 passed**. Package member readback, installed-editor API syntax and archive verification passed.
+- Package SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`. Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`; installed hash matches.
+- Supersedes `KLS-D-41d103f7cb`, which is archived locally. World Editor is now open on this exact installed map and the editor window is responsive; save/reopen, Test Map, Custom Game, in-game feature checks, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+
+## KLS-D-41d103f7cb - 2026-09-28
+
+- Expanded the battlefield to 192×192 and placed four connected allied settlements: Human Crownshire, Orc Redtusk Hold, Night Elf Moonbark Glade and Undead Wraithfall. Kept the defense road, gate, player plots and existing wave cadence; terrain, pathing, camera bounds and minimap were rebuilt together.
+- Hero choice now sets each player's race independently, including the matching Peasant, Peon, Wisp or Acolyte, Town Hall, Altar, construction menu, towers and race-flavored Hall of Banners, Foundry and Siege Yard. Shared construction roles and costs remain catalog-driven.
+- Added eight race-native heroes (two per race), custom signature abilities and matching company/support recruits. The roster now has 25 choices; heroes begin at level 1 and cap at 50, with a visible +3 primary-stat choice per level and a separate Strength/Agility/Intelligence talent choice at every fifth level.
+- Added the four-stage optional Crownlands recovery story, which can progress during active waves without altering wave counts or timers. Shared unlocks and personal contributor rewards last through the match.
+- Added 20 universal race-themed gear items (five standard rarity tiers per race), with item names/tooltips colored white, green, blue, purple and gold. Shop stock, stats, drops, icons and four race-specific Legendary Foundry recipes use the shared item catalog.
+- Fixed Sacred Aura learned and learn-menu descriptions for both `AHas` and `AHpa`; rank 4 displays 38.5% resistance / 27.5% healing received, rank 5 displays 42% / 30%, and the learn menu distinguishes current from next rank.
+- Full automated regression suite: **87/87 passed**. Package readback, installed-editor API syntax checks and archive verification passed. Package SHA-256: `67f363beac6ce79313916026016a34b8458b35c648e7d27db46f0af370308928`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-41d103f7cb-Development.w3m`; installed SHA-256 matches the package. Previous development and installed maps were archived under `backups/development-builds/` and `backups/installed-diagnostics/`. Current-build editor save/reopen, Test Map, Custom Game, live feature checks, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+
 ## KLS-D-b5ae4ab2fe - 2026-09-28
 
 - Added safe extended ranks through rank 5 and set the hero level cap to 50. Installed native ranks remain unchanged. Beyond a spell's native maximum, only its explicitly registered power fields grow by 10% of the last authored value per rank; every other field holds the final authored value. Warden Blink stays capped at its native three ranks. Sacred Aura rises from 35% magic resistance to 38.5% at rank 4 and 42% at rank 5, avoiding the stale 500% value.

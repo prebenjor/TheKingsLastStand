@@ -104,11 +104,13 @@ class AttributeEquipment(unittest.TestCase):
 
 
 class RecipeTransactions(unittest.TestCase):
-    def test_master_forge_has_three_named_combinations_using_existing_gear(self):
+    def test_master_forge_has_seven_named_combinations_using_existing_gear(self):
         recipes = recipe_catalog(item_catalog())
-        self.assertEqual(len(recipes), 3)
+        self.assertEqual(len(recipes), 7)
         names = {r['name'] for r in recipes}
-        self.assertEqual(names, {'Oathforged Kingswrath','Stormheart Prism','Sovereign’s Mantle'})
+        self.assertEqual(names, {'Oathforged Kingswrath','Stormheart Prism','Sovereign’s Mantle',
+                                 'Crownward Foundry Pattern','Redtusk Foundry Pattern',
+                                 'Moonbark Foundry Pattern','Wraith Foundry Pattern'})
         catalog_ids = {entry['rawcode'] for entry in item_catalog()}
         for recipe in recipes:
             self.assertEqual(len(recipe['components']), 2)
@@ -224,6 +226,31 @@ class HeroProgressionAndRecovery(unittest.TestCase):
             self.assertAlmostEqual(aura[('hsa2', 5)][0], 30.0)
             self.assertEqual(aura[('alev', 0)][0], 5)
 
+    def test_sacred_aura_tooltips_describe_each_generated_rank(self):
+        records = decode(abilities(), extended=True)
+        expected = ((15, 15), (25, 20), (35, 25), (38.5, 27.5), (42, 30))
+        for spell in ('AHas', 'AHpa'):
+            fields = records[spell][1]
+            for rank, (resistance, healing) in enumerate(expected, start=1):
+                with self.subTest(spell=spell, rank=rank):
+                    normal_title = fields[('atp1', rank)][0]
+                    normal_text = fields[('aub1', rank)][0]
+                    learn_title = fields[('aut1', rank)][0]
+                    learn_text = fields[('auu1', rank)][0]
+                    self.assertIn(f'Level {rank}', normal_title)
+                    self.assertIn(f'{resistance:g}% Magic Resistance', normal_text)
+                    self.assertIn(f'{healing:g}% increased healing received', normal_text)
+                    plain_learn_title = learn_title.replace('|cffffcc00', '').replace('|r', '')
+                    self.assertIn(f'Learn Sacred Aura - Level {rank}', plain_learn_title)
+                    current = 'not learned' if rank == 1 else str(rank - 1)
+                    self.assertIn(f'Current rank: {current}', learn_text)
+                    self.assertIn(f'Next rank: {rank}', learn_text)
+                    self.assertIn(f'Requires hero level: {1 + (rank - 1) * 2}', learn_text)
+                    self.assertIn(f'{resistance:g}% Magic Resistance', learn_text)
+                    self.assertIn(f'{healing:g}% increased healing received', learn_text)
+                    self.assertIn('Rank 1: 15% Magic Resistance', learn_text)
+                    self.assertIn('Rank 5: 42% Magic Resistance', learn_text)
+
     def test_space_padded_missing_native_ranks_do_not_become_numeric_values(self):
         headers, data, metadata = _ability_tables()
         fields = _modification_fields('AEar', data['AEar'], headers, metadata)
@@ -235,7 +262,7 @@ class HeroProgressionAndRecovery(unittest.TestCase):
     def test_hero_spells_extend_only_registered_effects_through_rank_five(self):
         self.assertEqual(MAX_HERO_LEVEL, 50)
         self.assertEqual(MAX_SPELL_RANK, 5)
-        self.assertEqual(len(HERO_ABILITIES), 17)
+        self.assertEqual(len(HERO_ABILITIES), 25)
         installed = slk('AbilityData.slk')
         installed_ids = {row[1] for row in installed.values() if 1 in row}
         self.assertTrue(all(len(spells) == 4 for spells in HERO_ABILITIES.values()))

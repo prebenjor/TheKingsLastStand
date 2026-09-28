@@ -1,8 +1,9 @@
 """Build the enlarged grassland, road, player plots, gate approach and pathing."""
 from collections import Counter
 import struct
+from town_catalog import TOWNS
 
-MAP_CELLS = 128
+MAP_CELLS = 192
 TILE_UNITS = 128
 W3E_HEADER_SIZE = 69
 
@@ -16,12 +17,22 @@ def _ground_palette(data):
     return {tile: ids.index(tile) for tile in required}
 
 
+def _near_segment(x, y, x1, y1, x2, y2, radius):
+    dx, dy = x2 - x1, y2 - y1
+    length_sq = dx * dx + dy * dy
+    if length_sq == 0:
+        return (x - x1) ** 2 + (y - y1) ** 2 <= radius * radius
+    t = max(0.0, min(1.0, ((x - x1) * dx + (y - y1) * dy) / length_sq))
+    px, py = x1 + t * dx, y1 + t * dy
+    return (x - px) ** 2 + (y - py) ** 2 <= radius * radius
+
+
 def _paint(x, y, plots, tiles):
     # The central lane is visibly paved and remains clear from the south market
     # square to the northern gate and spawn approach.
-    if abs(x) <= 448 and -7800 <= y <= 7800:
+    if abs(x) <= 448 and -10200 <= y <= 10200:
         return tiles['Lrok']
-    if abs(x) <= 640 and -7800 <= y <= 7800:
+    if abs(x) <= 640 and -10200 <= y <= 10200:
         return tiles['Ldro']
 
     # A rocky gateway throat narrows at the open center lane.
@@ -34,6 +45,25 @@ def _paint(x, y, plots, tiles):
         dx, dy = abs(x - px), abs(y - py)
         if dx <= 1024 and dy <= 1024:
             if dx >= 896 or dy >= 896:
+                return tiles['Lrok']
+            return tiles['Lgrd']
+
+    # Crownlands routes connect the four allied towns to the defended road.
+    # The northern/southern towns use the existing north-south avenue. East
+    # and west branches angle away from the four building plots and leave the
+    # defense road well below the gate, so they cannot bypass it.
+    for end_x in (-9000, 9000):
+        if _near_segment(x, y, 0, 2500, end_x, 0, 320):
+            return tiles['Lrok']
+        if _near_segment(x, y, 0, 2500, end_x, 0, 512):
+            return tiles['Ldro']
+
+    # Broad connected town squares give every settlement a readable paved
+    # center while leaving its branch road open through the middle.
+    for town in TOWNS:
+        dx, dy = abs(x-town['x']), abs(y-town['y'])
+        if dx <= 1280 and dy <= 1280:
+            if dx >= 1152 or dy >= 1152:
                 return tiles['Lrok']
             return tiles['Lgrd']
 
@@ -61,8 +91,8 @@ def expanded_terrain(template, plots, map_cells=MAP_CELLS):
     width, height = struct.unpack_from('<II', template, 53)
     if version != 12 or width != 65 or height != 65 or len(template) != W3E_HEADER_SIZE + width * height * 8:
         raise ValueError('Expected the validated 64-cell version 12 terrain fixture.')
-    if map_cells != 128:
-        raise ValueError('This recovery build is configured for a 128-cell battlefield.')
+    if map_cells != 192:
+        raise ValueError('This build is configured for a 192-cell battlefield.')
 
     tiles = _ground_palette(template)
     old_vertices = [template[W3E_HEADER_SIZE + i * 8:W3E_HEADER_SIZE + (i + 1) * 8]
@@ -95,8 +125,8 @@ def expanded_pathing(template, map_cells=MAP_CELLS):
     magic, version, width, height = struct.unpack_from('<4sIII', template)
     if magic != b'MP3W' or version != 0 or width != 256 or height != 256 or len(template) != 16 + width * height:
         raise ValueError('Expected the validated 64-cell blank-map pathing fixture.')
-    if map_cells != 128:
-        raise ValueError('This recovery build is configured for a 128-cell battlefield.')
+    if map_cells != 192:
+        raise ValueError('This build is configured for a 192-cell battlefield.')
     pixels = map_cells * 4
     margin = 6 * 4
     data = bytearray([206]) * (pixels * pixels)
@@ -106,10 +136,10 @@ def expanded_pathing(template, map_cells=MAP_CELLS):
     # Permanent ground barriers flank the open gate. Trees are not relied on
     # for containment: harvesting cannot open a route around the gateway.
     for row in range(margin, pixels - margin):
-        world_y = -8192 + (row + 0.5) * 32
+        world_y = -map_cells * 64 + (row + 0.5) * 32
         if 4800 <= world_y <= 5600:
             for col in range(margin, pixels - margin):
-                world_x = -8192 + (col + 0.5) * 32
+                world_x = -map_cells * 64 + (col + 0.5) * 32
                 if abs(world_x) >= 1100:
                     data[row * pixels + col] |= 2  # ground movement blocked
     return struct.pack('<4sIII', magic, version, pixels, pixels) + data

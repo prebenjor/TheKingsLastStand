@@ -1,9 +1,11 @@
 """Modify only known fields in this editor's version 39 starter metadata."""
 import struct
 
-MAP_CELLS = 128
+MAP_CELLS = 192
 MAP_EDGE = MAP_CELLS * 64
 PLOTS = [(-6000.0, -500.0), (-3300.0, -500.0), (3300.0, -500.0), (6000.0, -500.0)]
+from town_catalog import TOWNS as TOWN_CATALOG
+TOWNS = [(town['race'], town['x'], town['y']) for town in TOWN_CATALOG]
 
 
 def four_player_info(data):

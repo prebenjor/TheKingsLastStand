@@ -30,10 +30,10 @@ function KLS_SignatureCast takes nothing returns nothing
         return
     endif
     loop
-        exitwhen n == 17 or GetSpellAbilityId() == KLS_SignatureId[n]
+        exitwhen n == KLS_HeroCount or GetSpellAbilityId() == KLS_SignatureId[n]
         set n = n+1
     endloop
-    if n == 17 then
+    if n == KLS_HeroCount then
         return
     endif
     call KLS_Log(KLS_SignatureName[n]+" cast by p"+I2S(p+1))

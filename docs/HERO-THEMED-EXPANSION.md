@@ -89,3 +89,8 @@ Company units use current selectable-hero ownership, can be controlled only by t
 4. Complete the in-engine proof for worker build cards, structure placement, Hall unlock, matching Barracks/Siege Yard purchases, ability behavior, one-time Foundry upgrades, and ownership/refunds.
 5. Implement the remaining chapter upgrades, company gear/armor branches, and further unique unit abilities from the approved design after the current recruitment gate passes.
 6. Test actual two-player synchronization first, then three- and four-player setup and full-match progression. Tune only from recorded playtests.
+# Current implementation supersedes the original proposal
+
+The approved and current expansion is documented in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). It adds eight rather than merely proposing additional heroes, gives race selection matching workers/buildings/companies, places four settlements and optional story sites, and specifies the shared item/rank catalogs. Older exploratory notes in this file are historical ideas, not instructions to restore the level-3 start or Human-only worker rule.
+
+\n

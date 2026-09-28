@@ -109,3 +109,6 @@ Generated from tools/equipment_catalog.py for the repository's starting build. T
 - Stat multipliers are 1, 2, 4, 7, and 11.
 - Effects activate only while equipped; equal-name duplicate effects use the strongest equipped version, and swapping items does not reset cooldowns.
 - Normal equipment sells for 50%. The four personal boss relics (I010–I013) are not represented by the tier generator and still need a full names/stats/sellability audit.
+# Crownlands race relic additions
+
+The approved twenty universally equippable items, rarity colors, effects, shop/drop integration and racial recipes are cataloged in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). Their rawcodes are I23C–I23V and their effects/stock/drop records are generated from tools/equipment_catalog.py. Recipes RCP4–RCP7 use a Rare plus an Uncommon item to produce their race's Legendary relic. The canonical table is generated from the same catalog; do not maintain a second competing list in code.

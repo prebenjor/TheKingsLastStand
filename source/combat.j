@@ -8,8 +8,107 @@ globals
     real KLS_BossY = 0
     integer array KLS_TalentPoints
     integer array KLS_LastTalentMilestone
+    integer array KLS_StatPending
+    integer array KLS_TalentStrengthRank
+    integer array KLS_TalentAgilityRank
+    integer array KLS_TalentIntelligenceRank
+    dialog array KLS_ProgressionDialog
+    button array KLS_StatStrengthButton
+    button array KLS_StatAgilityButton
+    button array KLS_StatIntelligenceButton
+    button array KLS_TalentStrengthButton
+    button array KLS_TalentAgilityButton
+    button array KLS_TalentIntelligenceButton
     boolean KLS_Debug = true
 endglobals
+
+function KLS_ProgressionShow takes integer p returns nothing
+    if p < 0 or p >= 4 or not KLS_Active[p] or KLS_ProgressionDialog[p] == null then
+        return
+    endif
+    call DialogClear(KLS_ProgressionDialog[p])
+    if KLS_StatPending[p] > 0 then
+        call DialogSetMessage(KLS_ProgressionDialog[p],"Level-up stat investment: choose where to put this level's 3 points.")
+        set KLS_StatStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Strength",0)
+        set KLS_StatAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Agility",0)
+        set KLS_StatIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Intelligence",0)
+    elseif KLS_TalentPoints[p] > 0 then
+        call DialogSetMessage(KLS_ProgressionDialog[p],"Talent earned! Every 5 hero levels, choose one specialty.")
+        set KLS_TalentStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Vanguard: Strength, health and regeneration",0)
+        set KLS_TalentAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Skirmisher: Agility, attack speed and evasion",0)
+        set KLS_TalentIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Sage: Intelligence, mana and regeneration",0)
+    else
+        return
+    endif
+    call DialogDisplay(Player(p),KLS_ProgressionDialog[p],true)
+endfunction
+
+function KLS_TalentApply takes integer p, integer stat returns nothing
+    local unit hero
+    local integer maximum
+    local real current
+    if p < 0 or p >= 4 or KLS_Hero[p] == null then
+        return
+    endif
+    set hero = KLS_Hero[p]
+    if stat == 0 then
+        set KLS_TalentStrengthRank[p] = KLS_TalentStrengthRank[p]+1
+        call ModifyHeroStat(bj_HEROSTAT_STR,hero,bj_MODIFYMETHOD_ADD,5)
+        set maximum = BlzGetUnitMaxHP(hero)
+        call BlzSetUnitMaxHP(hero,maximum+200)
+        call SetWidgetLife(hero,GetWidgetLife(hero)+200.0)
+        set current = BlzGetUnitRealField(hero,UNIT_RF_HIT_POINTS_REGENERATION_RATE)
+        call BlzSetUnitRealField(hero,UNIT_RF_HIT_POINTS_REGENERATION_RATE,current+2.0)
+    elseif stat == 1 then
+        set KLS_TalentAgilityRank[p] = KLS_TalentAgilityRank[p]+1
+        call ModifyHeroStat(bj_HEROSTAT_AGI,hero,bj_MODIFYMETHOD_ADD,5)
+    else
+        set KLS_TalentIntelligenceRank[p] = KLS_TalentIntelligenceRank[p]+1
+        call ModifyHeroStat(bj_HEROSTAT_INT,hero,bj_MODIFYMETHOD_ADD,5)
+        set maximum = R2I(GetUnitState(hero,UNIT_STATE_MAX_MANA))
+        call BlzSetUnitMaxMana(hero,maximum+100)
+        call SetUnitState(hero,UNIT_STATE_MANA,GetUnitState(hero,UNIT_STATE_MANA)+100.0)
+        set current = BlzGetUnitRealField(hero,UNIT_RF_MANA_REGENERATION)
+        call BlzSetUnitRealField(hero,UNIT_RF_MANA_REGENERATION,current+2.0)
+    endif
+    call DisplayTimedTextToPlayer(Player(p),0,0,6,"Talent chosen. Its attribute and secondary bonuses are now active.")
+    set hero = null
+endfunction
+
+function KLS_ProgressionClick takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local button clicked = GetClickedButton()
+    local unit hero
+    if p < 0 or p >= 4 or KLS_Hero[p] == null then
+        return
+    endif
+    set hero = KLS_Hero[p]
+    if clicked == KLS_StatStrengthButton[p] then
+        call ModifyHeroStat(bj_HEROSTAT_STR,hero,bj_MODIFYMETHOD_ADD,3)
+    elseif clicked == KLS_StatAgilityButton[p] then
+        call ModifyHeroStat(bj_HEROSTAT_AGI,hero,bj_MODIFYMETHOD_ADD,3)
+    elseif clicked == KLS_StatIntelligenceButton[p] then
+        call ModifyHeroStat(bj_HEROSTAT_INT,hero,bj_MODIFYMETHOD_ADD,3)
+    elseif clicked == KLS_TalentStrengthButton[p] and KLS_TalentPoints[p] > 0 then
+        set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
+        call KLS_TalentApply(p,0)
+    elseif clicked == KLS_TalentAgilityButton[p] and KLS_TalentPoints[p] > 0 then
+        set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
+        call KLS_TalentApply(p,1)
+    elseif clicked == KLS_TalentIntelligenceButton[p] and KLS_TalentPoints[p] > 0 then
+        set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
+        call KLS_TalentApply(p,2)
+    else
+        set hero = null
+        return
+    endif
+    if KLS_StatPending[p] > 0 then
+        set KLS_StatPending[p] = KLS_StatPending[p]-1
+    endif
+    call DialogDisplay(Player(p),KLS_ProgressionDialog[p],false)
+    call KLS_ProgressionShow(p)
+    set hero = null
+endfunction
 
 function KLS_TalentLevel takes nothing returns nothing
     local unit u = GetTriggerUnit()
@@ -17,14 +116,42 @@ function KLS_TalentLevel takes nothing returns nothing
     local integer milestone
     if p >= 0 and p < 4 and u == KLS_Hero[p] then
         call KLS_ApplySpellRanks(u)
+        set KLS_StatPending[p] = KLS_StatPending[p]+1
         set milestone = GetHeroLevel(u) / 5
         if milestone > KLS_LastTalentMilestone[p] then
             set KLS_TalentPoints[p] = KLS_TalentPoints[p] + milestone - KLS_LastTalentMilestone[p]
             set KLS_LastTalentMilestone[p] = milestone
-            call DisplayTimedTextToPlayer(Player(p), 0, 0, 10, "Talent earned! -power adds damage, -vitality adds health, -wisdom adds intelligence.")
+            call DisplayTimedTextToPlayer(Player(p), 0, 0, 10, "Talent earned at level "+I2S(GetHeroLevel(u))+". Choose a primary-stat specialty after your stat investment.")
         endif
+        call KLS_ProgressionShow(p)
     endif
     set u = null
+endfunction
+
+function KLS_TalentAvoidDamage takes nothing returns nothing
+    local unit victim = GetTriggerUnit()
+    local integer p = GetPlayerId(GetOwningPlayer(victim))
+    if p >= 0 and p < 4 and victim == KLS_Hero[p] and KLS_TalentAgilityRank[p] > 0 then
+        if GetRandomInt(1,100) <= KLS_TalentAgilityRank[p]*2 then
+            call BlzSetEventDamage(0.0)
+        endif
+    endif
+    set victim = null
+endfunction
+
+function KLS_ProgressionInit takes nothing returns nothing
+    local integer p = 0
+    local trigger clicks = CreateTrigger()
+    loop
+        exitwhen p == 4
+        if KLS_Active[p] then
+            set KLS_ProgressionDialog[p] = DialogCreate()
+            call TriggerRegisterDialogEvent(clicks,KLS_ProgressionDialog[p])
+        endif
+        set p = p+1
+    endloop
+    call TriggerAddAction(clicks,function KLS_ProgressionClick)
+    set clicks = null
 endfunction
 
 function KLS_MovePurchaseToRegularInventory takes unit buyer, item gear returns item
@@ -193,7 +320,7 @@ endfunction
 function KLS_BossPauseTower takes nothing returns nothing
     local unit tower = GetEnumUnit()
     local integer rawcode = GetUnitTypeId(tower)
-    if GetWidgetLife(tower) > 0.405 and (rawcode == 'h001' or rawcode == 'h002' or rawcode == 'h003') then
+    if GetWidgetLife(tower) > 0.405 and KLS_IsFactionTower(rawcode) then
         call PauseUnit(tower,KLS_BossPauseState)
     endif
     set tower = null
@@ -293,7 +420,7 @@ function KLS_Sanctuary takes nothing returns nothing
     local unit tower = GetEnumUnit()
     local group targets
     local unit u
-    if GetUnitTypeId(tower) == 'h003' and GetWidgetLife(tower) > 0.405 and KLS_TowerSuppression == 0 then
+    if KLS_IsFactionSanctuaryTower(GetUnitTypeId(tower)) and GetWidgetLife(tower) > 0.405 and KLS_TowerSuppression == 0 then
         set targets = CreateGroup()
         call GroupEnumUnitsInRange(targets,GetUnitX(tower),GetUnitY(tower),650,null)
         loop

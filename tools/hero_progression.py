@@ -74,6 +74,9 @@ HERO_ABILITIES = {
     'Npal': ('AHcr', 'ANcp', 'AHpa', 'AHcl'),
 }
 
+from hero_catalog import NEW_HEROES
+HERO_ABILITIES.update({entry['unit_id']: entry['abilities'] for entry in NEW_HEROES})
+
 _DATA_LETTERS = 'ABCDEFGHIJKLMNOPQRST'
 _FIELD_TYPE = {
     'unreal': 2,
@@ -240,6 +243,50 @@ def _modification_fields(ability_id, data_row, headers, metadata):
     return fields
 
 
+def _sacred_aura_tooltips(fields):
+    """Describe all safe Sacred Aura ranks in both learned and learn-menu tips."""
+    rank_values = {}
+    for field_id, _, rank, _, value in fields:
+        if field_id in ('hsa1', 'hsa2') and rank:
+            rank_values.setdefault(rank, {})[field_id] = value
+
+    def percent(value):
+        return f'{value:g}'
+
+    result = []
+    rank_summary = []
+    for rank in range(1, MAX_SPELL_RANK + 1):
+        values = rank_values.get(rank, {})
+        resistance = round(float(values['hsa1']) * 100, 1)
+        healing = round(float(values['hsa2']), 1)
+        rank_summary.append(
+            f'Rank {rank}: {percent(resistance)}% Magic Resistance, '
+            f'{percent(healing)}% increased healing received.')
+
+    for rank, summary in enumerate(rank_summary, start=1):
+        values = rank_values[rank]
+        resistance = percent(round(float(values['hsa1']) * 100, 1))
+        healing = percent(round(float(values['hsa2']), 1))
+        current = 'not learned' if rank == 1 else str(rank - 1)
+        required_hero_level = 1 + (rank - 1) * 2
+        normal_title = f'Sacred Aura - |cffffcc00Level {rank}|r'
+        normal_text = (
+            f'Current rank: {rank}|nGives {resistance}% Magic Resistance and '
+            f'{healing}% increased healing received to nearby friendly units.')
+        learn_title = f'Learn Sacred Aura - |cffffcc00Level {rank}|r'
+        learn_text = (
+            f'Current rank: {current}|nNext rank: {rank}|n'
+            f'Requires hero level: {required_hero_level}|n'
+            + '|n'.join(rank_summary))
+        result.extend((
+            ('atp1', 3, rank, 0, normal_title),
+            ('aub1', 3, rank, 0, normal_text),
+            ('aut1', 3, rank, 0, learn_title),
+            ('auu1', 3, rank, 0, learn_text),
+        ))
+    return result
+
+
 def hero_ability_records(ability_builder):
     """Return safe rank overrides for the selected heroes' native skills."""
     headers, data, metadata = _ability_tables()
@@ -251,6 +298,8 @@ def hero_ability_records(ability_builder):
     for spell in ability_ids:
         row = data[spell]
         fields = _modification_fields(spell, row, headers, metadata)
+        if spell in ('AHas', 'AHpa'):
+            fields.extend(_sacred_aura_tooltips(fields))
         if len(fields) < 2:
             raise ValueError('No installed per-rank ability data found for ' + spell)
         records.append(ability_builder(spell, '\0' * 4, fields))

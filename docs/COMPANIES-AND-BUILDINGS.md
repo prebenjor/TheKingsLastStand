@@ -37,13 +37,21 @@ Each row is one selector choice in the same order as `tools/hero_progression.py`
 | Dark Ranger | Black Arrow Company (`kC14` / Skeletal Archer `nska`) | 270/90; 760; 35 | Forsaken Marksman (`kS14` / Fel Stalker `nfel`) | 390/135; 760; 38 | Trueshot Aura (`AEar`) |
 | Ilastar, Human | Light’s Vanguard (`kC15` / Footman `hfoo`) | 300/90; 920; 36 | Mercy Bearer (`kS15` / Priest `hmpr`) | 380/120; 720; 26 | Devotion Aura (`AHad`) |
 | Forsaken Paladin | Argent Revenants (`kC16` / Ghoul `ugho`) | 310/100; 1,000; 39 | Cleansing Pyre (`kS16` / Priest `hmpr`) | 400/135; 740; 30 | Devotion Aura (`AHad`) |
+| Aveline Ashford | Lionguard (`kC17` / Footman `hfoo`) | 290/80; 980; 36 | Banner Chaplain (`kS17` / Priest `hmpr`) | 340/110; 700; 24 | Devotion Aura (`AHad`) |
+| Toren Flintlock | Powderwrights (`kC18` / Mortar Team `hmtm`) | 300/100; 900; 42 | Field Engineer (`kS18` / Priest `hmpr`) | 380/140; 680; 32 | Devotion Aura (`AHad`) |
+| Korgal Redtusk | Redtusk Breakers (`kC19` / Tauren `otau`) | 340/120; 1,320; 48 | Bloodfire Drummer (`kS19` / Shaman `oshm`) | 390/140; 900; 30 | Endurance Aura (`AOae`) |
+| Morgra Ashcaller | Ashcallers (`kC20` / Shaman `oshm`) | 290/95; 820; 34 | Spirit Guide (`kS20` / Wolf Rider `orai`) | 390/140; 760; 28 | Endurance Aura (`AOae`) |
+| Selyra Moonlance | Moonlance Sentinels (`kC21` / Archer `esen`) | 300/100; 900; 40 | Moonwell Keeper (`kS21` / Dryad `edry`) | 430/150; 780; 34 | Trueshot Aura (`AEar`) |
+| Faelor Briarward | Briarward Guard (`kC22` / Dryad `edry`) | 280/100; 850; 31 | Thornmender (`kS22` / Ancient Protector `etrp`) | 410/145; 840; 29 | Trueshot Aura (`AEar`) |
+| Veyra Wraithveil | Veilbound Wraiths (`kC23` / Banshee `uban`) | 300/100; 820; 38 | Grave Cantor (`kS23` / Crypt Fiend `ucry`) | 420/160; 780; 40 | Unholy Aura (`AUau`) |
+| Tharos Bonecrown | Bonecrown Wardens (`kC24` / Ghoul `ugho`) | 330/110; 1,150; 46 | Crypt Acolyte (`kS24` / Crypt Fiend `ucry`) | 430/160; 1,050; 39 | Unholy Aura (`AUau`) |
 
 These custom unit records inherit their native parent model, portrait/icon, and ability set, then override the name, tooltip, cost, health, and base damage. They belong to their buyer's player and never join `KLS_Enemies`, so they cannot hold a wave open or generate enemy bounties. A mismatched-player Barracks/Siege Yard purchase is removed and refunded. The four banner doctrines use installed Warcraft abilities, not project-invented rawcodes.
 
 ## Engineering source of truth
 
-- `tools/company_catalog.py` owns the hero-to-company pairing, all 17 unit stats/costs, banner choices, building models and prices.
-- `tools/objects.py` serializes all 3 structures and 34 recruit unit records; `tools/pipeline.py` inserts the generated company runtime.
+- `tools/company_catalog.py` owns the hero-to-company pairing, all 25 unit stats/costs, banner choices, building models and prices.
+- `tools/objects.py` serializes all 12 race-flavored structures and 50 recruit unit records; `tools/pipeline.py` inserts the generated company runtime.
 - `source/companies.j` handles Hall/Barracks/Siege Yard unlocks, owner checks, recruiting, stock replenishment, and the permanent Foundry upgrade.
 - `source/heroes.j` stores the selector index on the player before company shops can unlock.
 - Regression coverage is in `tests/test_company_expansion.py`. Tests prove catalog/metadata/package rules, not visual placement, shop UI, aura behavior, or multiplayer correctness in Warcraft III.
@@ -51,3 +59,8 @@ These custom unit records inherit their native parent model, portrait/icon, and 
 ## Still to verify in game
 
 Build one Barracks, Hall, Royal Foundry, and Siege Yard. Confirm the Hall adds only the correct hero's recruit to that player's Barracks, each Siege Yard sells its matching support recruit, a teammate cannot buy another player's company, and all recruits retain their current orders/control ownership. Build the Foundry before and after recruiting, and verify the +20% max HP/base damage applies once. Confirm none of the friendly recruits affects enemy counts or combat gold.
+# Current four-race implementation
+
+The earlier Human-only company design is superseded by the user-approved mixed-race rule. Hero selection gives each player the corresponding Peasant, Peon, Wisp or Acolyte. Their Town Hall, altar, worker menu, three tower roles, Arcane/support building, Hall, Foundry and Siege Yard are race-themed while shared role costs and behavior stay aligned. The complete rawcode/catalog table is in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md) and tools/faction_catalog.py.
+
+Company and support recruit pairs remain specific to all 25 heroes. The eight new hero pairs and signature descriptions are listed in the Crownlands document and generated from tools/hero_catalog.py and tools/company_catalog.py.

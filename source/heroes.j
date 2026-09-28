@@ -1,9 +1,11 @@
 globals
     boolean KLS_Selecting = true
     integer KLS_SelectionLeft = 45
+    integer KLS_HeroCount = 25
     integer array KLS_HeroType
     string array KLS_HeroName
     string array KLS_HeroDescription
+    integer array KLS_HeroRace
     texttag array KLS_PreviewLabel
     unit array KLS_Preview
     integer array KLS_Candidate
@@ -15,6 +17,62 @@ endglobals
 
 function KLS_ReleaseStartingUnit takes nothing returns nothing
     call PauseUnit(GetEnumUnit(), false)
+endfunction
+
+function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns nothing
+    local integer raceId = KLS_HeroRace[heroIndex]
+    local integer workerIndex = 0
+    local integer rawcode
+    local real x = KLS_X[p]
+    local real y = KLS_Y[p]
+    local unit candidate
+    local unit created
+    local group owned = CreateGroup()
+    set KLS_PlayerRace[p] = raceId
+    if raceId != 0 then
+        call GroupEnumUnitsOfPlayer(owned,Player(p),null)
+        loop
+            set candidate = FirstOfGroup(owned)
+            exitwhen candidate == null
+            call GroupRemoveUnit(owned,candidate)
+            set rawcode = GetUnitTypeId(candidate)
+            if candidate != KLS_Hero[p] and (rawcode == 'htow' or rawcode == 'h000' or rawcode == 'hpea') then
+                call RemoveUnit(candidate)
+            endif
+        endloop
+        set created = KLS_CreateUnit(Player(p),KLS_FactionTownHallId[raceId],x,y,270)
+        if created == null then
+            call DestroyGroup(owned)
+            return
+        endif
+        call PauseUnit(created,true)
+        set KLS_BaseTownHall[p] = created
+        set KLS_Altar[p] = KLS_CreateUnit(Player(p),KLS_FactionAltarId[raceId],x-650,y-500,270)
+        if KLS_Altar[p] == null then
+            call DestroyGroup(owned)
+            return
+        endif
+        call PauseUnit(KLS_Altar[p],true)
+        set workerIndex = 0
+        loop
+            exitwhen workerIndex == 5
+            set created = KLS_CreateUnit(Player(p),KLS_FactionWorkerId[raceId],x-250+workerIndex*90,y-300,270)
+            if created == null then
+                call DestroyGroup(owned)
+                return
+            endif
+            call PauseUnit(created,true)
+            if workerIndex == 0 then
+                set KLS_FirstWorker[p] = created
+            endif
+            set workerIndex = workerIndex+1
+        endloop
+    endif
+    call KLS_Log("Hero race selected for p"+I2S(p+1)+": "+KLS_RaceName(raceId)+" worker="+GetUnitName(KLS_FirstWorker[p]))
+    call DestroyGroup(owned)
+    set owned = null
+    set candidate = null
+    set created = null
 endfunction
 
 function KLS_FinishSelection takes nothing returns nothing
@@ -34,7 +92,7 @@ function KLS_FinishSelection takes nothing returns nothing
     set KLS_Selecting = false
     set KLS_Prep = 45
     loop
-        exitwhen n == 17
+        exitwhen n == KLS_HeroCount
         call DestroyTextTag(KLS_PreviewLabel[n])
         set KLS_PreviewLabel[n] = null
         call RemoveUnit(KLS_Preview[n])
@@ -57,7 +115,7 @@ function KLS_FinishSelection takes nothing returns nothing
 endfunction
 
 function KLS_ChooseHero takes integer p, integer n returns nothing
-    if p < 0 or p >= 4 or n < 0 or n >= 17 then
+    if p < 0 or p >= 4 or n < 0 or n >= KLS_HeroCount then
         return
     endif
     if not KLS_Selecting or not KLS_Active[p] or KLS_ClassChosen[p] or KLS_Ended then
@@ -70,9 +128,10 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     endif
     set KLS_HeroChoice[p] = n
     set KLS_ClassChosen[p] = true
+    call KLS_ReplaceStartingFaction(p,n)
     call DialogDisplay(Player(p), KLS_ClassDialog[p], false)
     call BlzSetUnitName(KLS_Hero[p], KLS_HeroName[n])
-    call SetHeroLevel(KLS_Hero[p], 3, false)
+    call SetHeroLevel(KLS_Hero[p], 1, false)
     call KLS_ApplySpellRanks(KLS_Hero[p])
     set KLS_LastTalentMilestone[p] = GetHeroLevel(KLS_Hero[p]) / 5
     call UnitAddAbility(KLS_Hero[p], KLS_SignatureId[n])
@@ -86,7 +145,7 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     endif
     call PauseUnit(KLS_Hero[p], true)
     if GetLocalPlayer() == Player(p) then
-        call SetCameraBounds(-7424, -7424, 7424, 7424, -7424, 7424, 7424, -7424)
+        call SetCameraBounds(-11520, -11520, 11520, 11520, -11520, 11520, 11520, -11520)
         call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1650, 0)
         call PanCameraToTimed(GetUnitX(KLS_Hero[p]), GetUnitY(KLS_Hero[p]), 0)
         call ClearSelection()
@@ -112,7 +171,7 @@ function KLS_PreviewSelected takes nothing returns nothing
         return
     endif
     loop
-        exitwhen n == 17
+        exitwhen n == KLS_HeroCount
         if GetTriggerUnit() == KLS_Preview[n] then
             set KLS_Candidate[p] = n
             call DialogClear(KLS_ClassDialog[p])
@@ -208,10 +267,11 @@ function KLS_SelectionInit takes nothing returns nothing
     set KLS_HeroType[16] = 'Npal'
     set KLS_HeroName[16] = "Forsaken Paladin"
     set KLS_HeroDescription[16] = "Frontline purifier: Consecration, Righteous Fury, Sacred Aura and Cleansing Fire."
+    // GENERATED_HERO_CATALOG
     loop
-        exitwhen n == 17
-        set x = -6100 + ModuloInteger(n, 6) * 520
-        set y = -4800 - (n / 6) * 600
+        exitwhen n == KLS_HeroCount
+        set x = -10800 + ModuloInteger(n, 5) * 450
+        set y = -10800 + (n / 5) * 450
         call SetTerrainType(x, y, 'Lrok', -1, 2, 0)
         set KLS_Preview[n] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), KLS_HeroType[n], x, y, 270)
         if KLS_Preview[n] == null then
@@ -220,7 +280,7 @@ function KLS_SelectionInit takes nothing returns nothing
         call SetUnitInvulnerable(KLS_Preview[n], true)
         call PauseUnit(KLS_Preview[n], true)
         call SetUnitPathing(KLS_Preview[n], false)
-        call SetHeroLevel(KLS_Preview[n], 3, false)
+        call SetHeroLevel(KLS_Preview[n], 1, false)
         call BlzSetUnitName(KLS_Preview[n], KLS_HeroName[n])
         set label = CreateTextTag()
         set KLS_PreviewLabel[n] = label
@@ -239,11 +299,11 @@ function KLS_SelectionInit takes nothing returns nothing
             call GroupClear(army)
             if GetLocalPlayer() == Player(p) then
                 call ClearSelection()
-                call SetCameraBounds(-6600, -6700, -3000, -4200, -6600, -4200, -3000, -6700)
+                call SetCameraBounds(-11520, -11520, -8200, -8200, -11520, -8200, -8200, -11520)
                 call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 2600, 0)
-                call PanCameraToTimed(-4880, -5500, 0)
+                call PanCameraToTimed(-10000, -10000, 0)
             endif
-            call DisplayTimedTextToPlayer(Player(p), 0, 0, 30, "Choose your hero: click one of the 17 hero previews, read their abilities, then confirm. Duplicate choices are allowed. Paladin is chosen automatically after 45 seconds.")
+            call DisplayTimedTextToPlayer(Player(p), 0, 0, 30, "Choose your hero: click one of the 25 hero previews, read their abilities, then confirm. Duplicate choices are allowed. Paladin is chosen automatically after 45 seconds.")
         endif
         set p = p + 1
     endloop

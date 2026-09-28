@@ -100,7 +100,7 @@ class EquipmentRecords(unittest.TestCase):
 
     def test_native_icon_shops_expose_all_catalog_items_by_tier_and_category(self):
         catalog=item_catalog();script=catalog_script()
-        self.assertEqual(len(catalog),83)
+        self.assertEqual(len(catalog),103)
         for item in catalog:
             tier=item['tier'];cat=0 if item['family_index']<7 else 1
             stock=f"AddItemToStock(KLS_Shops[{tier*2+cat}], '{item['rawcode']}', 1, 1)"

@@ -75,6 +75,62 @@ _ATTRIBUTE_FAMILIES = [
      2,1.0,'Offhand'),
 ]
 
+# Five universal pieces per playable race. The catalog owns their quality,
+# native icon parent, slot, stat abilities, tooltip color, and shop/drop data.
+_RACE_ITEM_ROWS = (
+    ('Human', 'Crown Relics', (
+        ('Watchman’s Token','Trinket','health',120,'elmt',{'strength':2}),
+        ('Lionroad Mantle','Chest','strength',4,'emoh',{'health':180}),
+        ('Aldric’s Aegis','Offhand','armor',5,'eosc',{'strength':5}),
+        ('Crownward Pennant','Trinket','strength',6,'ebdf',{'health':300}),
+        ('Last King’s Oath','Ring','strength',8,'erdr',{'damage':20,'health':500}),
+    )),
+    ('Orc', 'Redtusk Relics', (
+        ('Redtusk Fetish','Trinket','strength',3,'elmt',{'damage':3}),
+        ('Ashen War Drum','Trinket','strength',3,'etkj',{'attack speed':5}),
+        ('Stormscar Bracers','Gloves','strength',4,'eggn',{'attack speed':7}),
+        ('Grudgebreaker','Primary','damage',24,'efpb',{'strength':4}),
+        ('Worldrend Standard','Offhand','damage',20,'ehls',{'strength':9}),
+    )),
+    ('Night Elf', 'Moonbark Relics', (
+        ('Moonbark Charm','Trinket','agility',2,'ebdf',{'health':100}),
+        ('Starleaf Quiver','Primary','agility',3,'epsb',{'attack speed':5}),
+        ('Duskwatch Longbow','Primary','damage',15,'epsb',{'agility':4}),
+        ('Briarheart Mantle','Chest','agility',6,'emoh',{'health':250}),
+        ('Silvermoon Vigil','Ring','agility',8,'ejjr',{'attack speed':8}),
+    )),
+    ('Undead', 'Wraith Relics', (
+        ('Crypt-Iron Band','Ring','intelligence',2,'ecav',{'armor':1}),
+        ('Wraithsilk Cape','Chest','intelligence',3,'edsm',{'mana':100}),
+        ('Soulreaper’s Fang','Primary','damage',9,'epbs',{'intelligence':5}),
+        ('Mourning Reliquary','Trinket','intelligence',6,'eege',{'mana':300}),
+        ('Night’s Covenant','Offhand','intelligence',8,'ehls',{'health':250,'mana':400}),
+    )),
+)
+_TIER_MULTIPLIER = (1,2,4,7,11)
+CUSTOM_RACE_ITEMS = []
+for race_index, (race, family, rows) in enumerate(_RACE_ITEM_ROWS):
+    for tier, (name, slot_name, main_stat, base_amount, icon, extra_stats) in enumerate(rows):
+        stats = {main_stat:base_amount*_TIER_MULTIPLIER[tier]}
+        stats.update({stat:amount*_TIER_MULTIPLIER[tier] for stat, amount in extra_stats.items()})
+        serial = 120 + tier*4 + race_index
+        suffix = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[serial//36] + '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[serial%36]
+        quality = TIERS[tier][0]
+        bonus = max(stats.values())
+        colored = color_rarity_text(quality,name)
+        bonuses = '; '.join('+'+str(value)+' '+stat for stat,value in stats.items())
+        CUSTOM_RACE_ITEMS.append({
+            'rawcode':'I2'+suffix, 'tier':tier, 'quality':quality, 'family':family,
+            'family_index':16+race_index, 'race':race, 'slot':SLOTS[slot_name],
+            'slot_name':slot_name, 'bonus':bonus, 'price':int(TIERS[tier][1]*(1.5 if slot_name=='Primary' else 1)),
+            'name':name, 'native_name':name, 'parent':icon,
+            'abilities':','.join(f'A{n}{suffix}' for n in range(len(stats))),
+            'stats':stats, 'effect':'', 'colored_name':colored,
+            'description':color_rarity_text(quality,quality)+f' | {family} | {slot_name} slot.|n{bonuses}.|n'+
+                'Universally equippable by all heroes. Bonuses apply while equipped. Sells for 50%.',
+            'craft_output':tier==4,
+        })
+
 _CRAFTED = [
     {'rawcode':'I128','name':"Oathforged Kingswrath",'parent':'ebr2','tier':4,
      'family':'Blade','family_index':0,'slot':6,'price':15000,
@@ -148,6 +204,7 @@ def item_catalog():
         entry['description']=color_rarity_text('Legendary','Legendary')+' crafted '+entry['family']+' | '+str(entry['slot'])+' slot.|n'+bonuses+'.|n'+entry['effect']+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
         entry['crafted']=True
         result.append(entry)
+    result.extend(dict(entry) for entry in CUSTOM_RACE_ITEMS)
     return result
 
 
@@ -190,6 +247,10 @@ def catalog_script():
         lines += [f"    call SaveInteger(KLS_GearData, '{e['rawcode']}', 0, {e['family_index']+1})",
                   f"    call SaveInteger(KLS_GearData, '{e['rawcode']}', 1, {e['tier']})",
                   f"    call SaveInteger(KLS_GearData, '{e['rawcode']}', 2, {e['slot']})"]
+    for race_index, race in enumerate(('Human','Orc','Night Elf','Undead')):
+        for entry in CUSTOM_RACE_ITEMS:
+            if entry['race'] == race:
+                lines.append(f"    set KLS_RaceItemId[{race_index*5+entry['tier']}] = '{entry['rawcode']}'")
     lines+=['endfunction','function KLS_StockCatalog takes nothing returns nothing']
     for e in item_catalog():
         if e.get('crafted'):
@@ -220,4 +281,82 @@ def catalog_script():
         condition=' or '.join("itemCode == '"+code+"'" for code in codes)
         lines += ['    elseif '+condition+' then', f'        return {constant}']
     lines += ['    endif', '    return bj_HEROSTAT_STR', 'endfunction']
+    droppable=[entry for entry in item_catalog() if not entry.get('crafted')]
+    lines += [
+        'function KLS_RandomCatalogDrop takes integer tier returns integer',
+        '    local integer choice = 0',
+        '    local integer n = 0',
+    ]
+    for tier, (quality, _) in enumerate(TIERS):
+        rows=[entry for entry in droppable if entry['tier']==tier]
+        lines += [f'    if tier == {tier} then',
+                  f'        set choice = GetRandomInt(0,{len(rows)-1})']
+        for index, entry in enumerate(rows):
+            branch='if' if index==0 else 'elseif'
+            lines.append(f"        {branch} choice == {index} then")
+            lines.append(f"            return '{entry['rawcode']}'")
+        lines += ['        endif', '    endif']
+    lines += [
+        "    return 'I100'",
+        'endfunction',
+        'function KLS_EnemyDrop takes unit enemy, boolean boss returns nothing',
+        '    local integer roll = GetRandomInt(1,10000)',
+        '    local integer potionRoll = GetRandomInt(1,1000)',
+        '    local integer itemCode = 0',
+        '    local integer p = 4',
+        '    local unit killer = GetKillingUnit()',
+        '    local item drop',
+        '    if killer != null then',
+        '        set p = GetPlayerId(GetOwningPlayer(killer))',
+        '    endif',
+        '    if boss then',
+        "        if roll <= 1500 then",
+        '            set itemCode = KLS_RandomCatalogDrop(0)',
+        '        elseif roll <= 2800 then',
+        '            set itemCode = KLS_RandomCatalogDrop(1)',
+        '        elseif roll <= 4100 then',
+        '            set itemCode = KLS_RandomCatalogDrop(2)',
+        '        elseif roll <= 4800 then',
+        '            set itemCode = KLS_RandomCatalogDrop(3)',
+        '        elseif roll <= 5000 then',
+        '            set itemCode = KLS_RandomCatalogDrop(4)',
+        '        endif',
+        '    else',
+        '        if roll <= 160 then',
+        '            set itemCode = KLS_RandomCatalogDrop(0)',
+        '        elseif roll <= 250 then',
+        '            set itemCode = KLS_RandomCatalogDrop(1)',
+        '        elseif roll <= 290 then',
+        '            set itemCode = KLS_RandomCatalogDrop(2)',
+        '        elseif roll <= 298 then',
+        '            set itemCode = KLS_RandomCatalogDrop(3)',
+        '        elseif roll <= 300 then',
+        '            set itemCode = KLS_RandomCatalogDrop(4)',
+        '        endif',
+        '    endif',
+        '    if (boss and potionRoll <= 180) or (not boss and potionRoll <= 40) then',
+        '        set itemCode = 0',
+        '        set roll = GetRandomInt(0,3)',
+        "        if roll == 0 then",
+        "            set itemCode = 'phea'",
+        "        elseif roll == 1 then",
+        "            set itemCode = 'pman'",
+        "        elseif roll == 2 then",
+        "            set itemCode = 'stwp'",
+        '        else',
+        "            set itemCode = 'shea'",
+        '        endif',
+        '    endif',
+        '    if itemCode != 0 and enemy != null then',
+        '        set drop = CreateItem(itemCode,GetUnitX(enemy),GetUnitY(enemy))',
+        '        if drop != null then',
+        '            if p >= 0 and p < 4 then',
+        '                call DisplayTimedTextToPlayer(Player(p),0,0,6,GetItemName(drop)+" dropped nearby.")',
+        '            endif',
+        '        endif',
+        '    endif',
+        '    set drop = null',
+        '    set killer = null',
+        'endfunction',
+    ]
     return '\n'.join(lines)

@@ -6,6 +6,17 @@ globals
     integer KLS_DiagFailures = 0
 endglobals
 
+function KLS_RaceName takes integer raceId returns string
+    if raceId == 0 then
+        return "Human"
+    elseif raceId == 1 then
+        return "Orc"
+    elseif raceId == 2 then
+        return "Night Elf"
+    endif
+    return "Undead"
+endfunction
+
 function KLS_Log takes string message returns nothing
     if not KLS_Debug then
         return
@@ -115,10 +126,7 @@ function KLS_ShowDiagnostics takes player p returns nothing
     loop
         exitwhen i == 4
         if KLS_Active[i] then
-            set raceName = "non-Human"
-            if GetPlayerRace(Player(i)) == RACE_HUMAN then
-                set raceName = "Human"
-            endif
+            set raceName = KLS_RaceName(KLS_PlayerRace[i])
             if KLS_FirstWorker[i] != null then
                 call DisplayTimedTextToPlayer(p, 0, 0, 30, "Identity check player=" + I2S(i+1) + " race=" + raceName + " worker=" + GetObjectName(GetUnitTypeId(KLS_FirstWorker[i])) + " unit=" + GetUnitName(KLS_FirstWorker[i]))
             else

@@ -9,8 +9,8 @@ class HeroAndInvasionData(unittest.TestCase):
     def test_signature_spells_are_visible_point_casts_and_summons_exist(self):
         records=decode(abilities(),True)
         installed=slk('UnitData.slk')
-        self.assertEqual(len(SIGNATURES),17)
-        self.assertEqual(len({e[0] for e in SIGNATURES}),17)
+        self.assertEqual(len(SIGNATURES),25)
+        self.assertEqual(len({e[0] for e in SIGNATURES}),25)
         for index,entry in enumerate(SIGNATURES):
             base,fields=records[spell_id(index)]
             self.assertEqual(base,'ANcl')

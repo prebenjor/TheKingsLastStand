@@ -2,27 +2,28 @@
 
 **A cooperative, 40-wave Warcraft III Definitive Edition defense RPG.**
 
-Players command distinct heroes and their own human kingdom armies, build and upgrade four personal bases, and hold the King's Road against a changing undead and demonic invasion. King Aldric and his castle are the shared objective. The game combines hero progression and equipment with worker economy, construction, towers, boss fights, and personal boss rewards.
+Players command distinct heroes and their own race-matched workers, buildings, and armies, build and upgrade four personal bases, and hold the King's Road against a changing undead and demonic invasion. King Aldric and his castle are the shared objective. The game combines hero progression and equipment with worker economy, construction, towers, boss fights, and personal boss rewards.
 
 ## Project status
 
-Current development build: **KLS-D-8b5076c3eb**.
+Current development build: **KLS-D-1a040d638c**.
 
-- Map: `dist/KLS-D-8b5076c3eb-Development.w3m`
-- SHA-256: `10f6d56f3811cece7189633f8b840746f72c34583ec41e28752e2f50396545c3`
-- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-8b5076c3eb-Development.w3m` (hash matches).
+- Map: `dist/KLS-D-1a040d638c-Development.w3m`
+- SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`
+- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m` (hash matches).
 - Build manifest: dist/build-manifest.json
 
-This build stops generating spell ranks beyond each ability's installed `levels` count. It also stops extending numeric fields with a generic slope; that had made Warden Blink's rank-4 mana cost zero from its native 50/10/10 cost curve. Package readback and installed-editor API syntax passed; all 77 regression tests pass. This exact build is installed in the test folder. Its editor save/reopen, Test Map, Custom Game spell checks, live gameplay, multiplayer, and 40-wave endurance remain pending, so it stays a development build.
+This build expands the battlefield to 192×192 with four connected allied settlements; makes workers, build menus, structures and recruit roles match each selected hero's race; adds eight heroes, race-themed companies, level-up choices, a four-part optional story, and twenty race-themed rarity items with four Foundry recipes. Sacred Aura's rank 4/5 learned and learn-menu tooltips are generated from safe 38.5%/27.5% and 42%/30% effects for both ability IDs. The suite passes **87/87**; package readback and installed-editor API syntax pass. Previous versions are archived locally.
 
-Next human check: open the installed `KLS-D-8b5076c3eb-Development.w3m` in Custom Game, level one hero skill to its displayed native maximum, and confirm it still casts/works there and cannot advance into a broken extra rank. Other previously reported shop, equipment, and UI behaviors still need exact-build gameplay checks.
+This exact build still needs its own World Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and 40-wave endurance checks, so it remains Development. The suite passes **88/88**. The earlier user-reported Test Map success is a pass for `KLS-D-fd638ddcf5`. Use docs/ROADMAP-AND-ACCEPTANCE.md for current-build acceptance and docs/CROWNLANDS-EXPANSION.md for implementation details.
 
 ## Start here
 
 - AGENTS.md — instructions and invariants for future agents.
 - docs/GAME-VISION.md — why the game exists and the experience to protect.
 - docs/GAMEPLAY-SPEC.md — match, economy, buildings, landscape, and player systems.
-- docs/HEROES-AND-ABILITIES.md — all 17 heroes, their native skills, and custom signature spells.
+- docs/CROWNLANDS-EXPANSION.md — current expansion contract: 192-cell map, four settlements, race-matched workers/buildings, 25 heroes, progression, optional story, and twenty-item catalog.
+- docs/HEROES-AND-ABILITIES.md — hero roster, native skills, safe ranks, and signature spells.
 - docs/HERO-THEMED-EXPANSION.md — proposed Forsaken Kingdom heroes, personal retinues, and hero-linked buildings/army research.
 - docs/ITEMS-AND-EQUIPMENT.md — Forsaken Kingdom backpack, quality progression, effects, books, recipes, relics, and shops.
 - docs/ITEM-CATALOG.md — all generated catalog entries with rawcodes, prices, slots, stats, and effects.

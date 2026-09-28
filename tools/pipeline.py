@@ -10,19 +10,21 @@ import datetime
 from pathlib import Path
 from archive_pack import pack, member, lookup
 from map_archive import MPQArchive
-from map_info import four_player_info, PLOTS, MAP_EDGE
+from map_info import four_player_info, PLOTS, MAP_EDGE, MAP_CELLS
 from objects import units, items
 from equipment_catalog import abilities, catalog_script
 from wave_rosters import wave_script, boss_script, bounty_script
 from signature_spells import spell_script as signature_spell_script
 from hero_progression import spell_script as hero_spell_script
+from hero_catalog import hero_selection_script
 from company_catalog import company_script
 from recipes import recipe_script
 from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
+from town_catalog import town_script
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'game.j')
+MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'crownlands.j', 'game.j')
 BASELINE_SHA = '3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9'
 INFO_SHA = 'a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc'
 GAME = Path(r'C:\Program Files (x86)\Warcraft III')
@@ -78,6 +80,7 @@ def runtime_script(build_id):
             text = text.replace('// GENERATED_RECIPES', recipe_script())
         if name == 'heroes.j':
             text = text.replace('// GENERATED_HERO_PROGRESSION', hero_spell_script())
+            text = text.replace('// GENERATED_HERO_CATALOG', hero_selection_script())
         if name == 'companies.j':
             text = text.replace('// GENERATED_COMPANIES', company_script())
         if name == 'hud.j':
@@ -86,6 +89,8 @@ def runtime_script(build_id):
             text = text.replace('// GENERATED_WAVES', wave_script() + '\n' + bounty_script())
         if name == 'signatures.j':
             text = text.replace('// GENERATED_SIGNATURES', signature_spell_script())
+        if name == 'crownlands.j':
+            text = text.replace('// GENERATED_TOWN_PLACEMENTS', town_script())
         blocks = re.findall(r'^globals\s*\n(.*?)^endglobals\s*$', text, re.M | re.S)
         if len(blocks) != 1:
             raise ValueError('Expected one globals section in ' + name)
@@ -210,7 +215,7 @@ def build():
     info = four_player_info(info)
     title_end = info.index(b'\0', 28)+1
     info = info[:28] + ('KLS DEVELOPMENT '+build_id).encode()+b'\0'+info[title_end:]
-    components = {'war3map.j':script.encode(), 'war3map.wtg':wtg, 'war3map.wct':wct, 'war3map.w3i':info, 'war3map.w3u':units(), 'war3map.w3t':items(), 'war3map.w3a':abilities(), 'war3map.w3e':expanded_terrain((ROOT/'source/template/war3map.w3e').read_bytes(), PLOTS), 'war3map.wpm':expanded_pathing((ROOT/'source/template/war3map.wpm').read_bytes()), 'war3map.shd':bytes(512 * 512), 'war3mapMisc.txt':misc_data()}
+    components = {'war3map.j':script.encode(), 'war3map.wtg':wtg, 'war3map.wct':wct, 'war3map.w3i':info, 'war3map.w3u':units(), 'war3map.w3t':items(), 'war3map.w3a':abilities(), 'war3map.w3e':expanded_terrain((ROOT/'source/template/war3map.w3e').read_bytes(), PLOTS), 'war3map.wpm':expanded_pathing((ROOT/'source/template/war3map.wpm').read_bytes()), 'war3map.shd':bytes((MAP_CELLS * 4) ** 2), 'war3mapMisc.txt':misc_data()}
     if 'call Melee' in script or b'Melee Initialization' in wtg or b'call Melee' in wct:
         raise ValueError('Default melee initialization found in output')
     for name in ('war3map.w3u','war3map.w3t'):

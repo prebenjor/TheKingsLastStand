@@ -1,5 +1,7 @@
 globals
     unit array KLS_Shops
+    unit array KLS_TownShop
+    integer array KLS_RaceItemId
 endglobals
 
 // GENERATED_CATALOG

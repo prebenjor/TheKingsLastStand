@@ -13,7 +13,7 @@ class WorkerIdentityDiagnostics(unittest.TestCase):
         start = diagnostics.index('function KLS_ShowDiagnostics')
         end = diagnostics.index('endfunction', start)
         report = diagnostics[start:end]
-        self.assertIn('GetPlayerRace(Player(i)) == RACE_HUMAN', report)
+        self.assertIn('KLS_RaceName(KLS_PlayerRace[i])', report)
         self.assertIn('GetUnitTypeId(KLS_FirstWorker[i])', report)
         self.assertIn('GetObjectName(GetUnitTypeId(KLS_FirstWorker[i]))', report)
         self.assertIn('GetUnitName(KLS_FirstWorker[i])', report)

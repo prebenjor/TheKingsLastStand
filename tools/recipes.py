@@ -25,17 +25,43 @@ _RECIPES = (
         'price': 6000,
         'description': "Combine Epic Dawnguard Helm and Epic Royal Bulwark. Costs 6,000 gold. Ingredients are consumed only when the crafted cape can be delivered.",
     },
+    {
+        'rawcode': 'RCP4', 'name': 'Crownward Foundry Pattern',
+        'components_by_name': ('Aldric’s Aegis','Lionroad Mantle'),
+        'component_tiers': (2,1), 'output_name': 'Last King’s Oath', 'price': 4500,
+        'description': 'Forge the Last King’s Oath from Aldric’s Aegis and Lionroad Mantle. Costs 4,500 gold; ingredients are consumed only after the personal output is delivered.',
+    },
+    {
+        'rawcode': 'RCP5', 'name': 'Redtusk Foundry Pattern',
+        'components_by_name': ('Stormscar Bracers','Ashen War Drum'),
+        'component_tiers': (2,1), 'output_name': 'Worldrend Standard', 'price': 4500,
+        'description': 'Forge the Worldrend Standard from Stormscar Bracers and Ashen War Drum. Costs 4,500 gold; ingredients are consumed only after the personal output is delivered.',
+    },
+    {
+        'rawcode': 'RCP6', 'name': 'Moonbark Foundry Pattern',
+        'components_by_name': ('Duskwatch Longbow','Starleaf Quiver'),
+        'component_tiers': (2,1), 'output_name': 'Silvermoon Vigil', 'price': 4500,
+        'description': 'Forge Silvermoon Vigil from the Duskwatch Longbow and Starleaf Quiver. Costs 4,500 gold; ingredients are consumed only after the personal output is delivered.',
+    },
+    {
+        'rawcode': 'RCP7', 'name': 'Wraith Foundry Pattern',
+        'components_by_name': ('Soulreaper’s Fang','Wraithsilk Cape'),
+        'component_tiers': (2,1), 'output_name': 'Night’s Covenant', 'price': 4500,
+        'description': 'Forge Night’s Covenant from Soulreaper’s Fang and Wraithsilk Cape. Costs 4,500 gold; ingredients are consumed only after the personal output is delivered.',
+    },
 )
 
 
 def recipe_catalog(catalog):
     """Resolve recipe component and output rawcodes from the shared item catalog."""
     exact = {(entry['name'], entry['tier']): entry for entry in catalog}
-    outputs = {entry['name']: entry for entry in catalog if entry.get('crafted')}
+    outputs = {entry['name']: entry for entry in catalog
+               if entry.get('crafted') or entry.get('craft_output')}
     resolved = []
     for recipe in _RECIPES:
-        tier = 3 if recipe['rawcode'] == 'RCP3' else 2
-        components = [exact[(name, tier)] for name in recipe['components_by_name']]
+        default_tier = 3 if recipe['rawcode'] == 'RCP3' else 2
+        tiers = recipe.get('component_tiers', (default_tier, default_tier))
+        components = [exact[(name, tier)] for name, tier in zip(recipe['components_by_name'], tiers)]
         output = outputs[recipe['output_name']]
         resolved.append({
             'rawcode': recipe['rawcode'],

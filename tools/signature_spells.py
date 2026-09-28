@@ -19,6 +19,9 @@ SIGNATURES = [
  ('Cleansing Pyre','DispelMagic',200,150,0,0,0,0,'Consecrated fire burns enemies while renewing nearby allied heroes and troops.'),
 ]
 
+from hero_catalog import NEW_HEROES
+SIGNATURES.extend(entry['signature'] for entry in NEW_HEROES)
+
 def spell_id(index):return 'AK'+str(index).zfill(2)
 
 def description(entry):

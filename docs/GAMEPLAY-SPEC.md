@@ -11,7 +11,7 @@ Authoritative match states:
 - Create gameplay only for occupied player slots. Diagnostic packages may run solo; release packages support 2–4 defenders.
 - Defenders are allied and share vision. Shared unit control is disabled. Undead invaders have a distinct hostile owner.
 - Each active player sees a 45-second hero selection. The fallback for a player who does not confirm is Paladin.
-- Players choose one of seventeen hero previews: the original fifteen plus Human Ilastar and the Forsaken Paladin verified in installed Definitive Edition data. Duplicate choices are allowed. Create the selected hero once; do not leave or replace a usable placeholder hero.
+- Players choose one of 25 hero previews: the original seventeen plus the eight race-themed heroes. Duplicate choices are allowed. The selected hero's race independently determines that player's starting worker and building menu. Create the selected hero once; do not leave or replace a usable placeholder hero.
 - After every active player selects, start the initial 45-second preparation period. Beginning troops stay held until the selection phase ends.
 - Normal cleared-wave breaks are 50 seconds. Breaks before waves 10, 20, 30, and 40 are 180 seconds. The 50-second ordinary break supersedes the earlier 90-second decision; the longer boss break remains.
 - Terminal victory/defeat stops spawns, timers, damage, rewards, and revival. King death takes precedence if it resolves in the same step as final-boss death.
@@ -19,7 +19,7 @@ Authoritative match states:
 
 ## Player ownership and economy
 
-- Each player controls their hero, Human workers, trained units, and structures.
+- Each player controls their hero, race-matched workers, trained units, and structures.
 - The team shares the battlefield, neutral vendors, enemy waves, boss encounter, king, and outcome; players do not share unit control or personal resources.
 - Workers use standard Warcraft mine and lumber gathering. Put an accessible mine and harvestable tree grove by every active plot. Trees must not block routes to the mine, Altar, buildable pad, or road.
 - A defender player's kill pays the full role bounty to that killer's owner only. A kill credited to King Aldric pays 25% of the bounty to each active defender. Show each recipient the exact amount credited. Boss participation gold and gear remain personal rewards for every active participant.
@@ -29,11 +29,12 @@ Authoritative match states:
 
 ## Hero growth
 
-- Start player heroes at level 3. Cap them at level 50. The level-1 starting point remains an open user request.
+- Start player heroes at level 1. Cap them at level 50.
 - Each hero retains four recognizable native Warcraft skills. Preserve every installed native rank. Extend only abilities whose installed power fields are explicitly registered in `tools/hero_progression.py`; see HEROES-AND-ABILITIES.md for the mapping.
 - Preserve the original skill unlock levels. Runtime rank advancement occurs on ten-level milestones and stops at rank 5. For supported spells, each rank beyond the installed maximum adds 10% of the last authored power value. Other data, including cost, cooldown, duration, range and targeting, copies unchanged from the last native rank. Unsupported effects stay capped at their installed maximum.
-- Each of the 17 heroes also has one automatically granted Z signature ability. The custom spell scales with hero level and uses a 700 cast range, 350 effect radius, 70 mana, and 30-second cooldown.
-- Hero talents are selected by chat shortcut in the diagnostic: Power (+12 attack damage), Vitality (+300 maximum health), or Wisdom (+10 intelligence) per point. Award talent points at five-level milestones. Count every milestone crossed when a hero gains multiple levels at once. Replace the diagnostic-only shortcuts with visible controls for release.
+- Each of the 25 heroes has one custom signature ability and a hero-specific company/support pair.
+- Each hero level queues a visible choice granting +3 Strength, Agility or Intelligence. A second dialog awards a talent every five levels: Strength adds health/health regeneration; Agility adds attack speed/evasion; Intelligence adds mana/mana regeneration. Keep multiple queued choices if a hero crosses several levels at once.
+- Optional Crownlands recovery objectives are shared within the match and remain available during waves; they never pause wave timing or change the wave enemy count. See CROWNLANDS-EXPANSION.md for all four steps and personal rewards.
 - Revive a dead hero after 20 seconds at their own Altar of Kings, preserving equipment and backpack contents.
 - Support abilities and ally targeting must work across all allied hero races. Keeper's custom Grove Awakening summons Treants on open ground; it must not require harvestable trees. Death Knight effects must not assume every target is living/undead incorrectly.
 

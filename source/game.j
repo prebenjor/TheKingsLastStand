@@ -3,6 +3,7 @@ globals
     unit KLS_King = null
     unit array KLS_Hero
     unit array KLS_FirstWorker
+    unit array KLS_BaseTownHall
     rect array KLS_Plot
     real array KLS_X
     real array KLS_Y
@@ -206,11 +207,14 @@ function KLS_Death takes nothing returns nothing
     endif
     if dead == KLS_King then
         call KLS_End(false)
+    elseif IsUnitInGroup(dead,KLS_StoryEnemies) then
+        call KLS_StoryEnemyKilled(dead)
     elseif IsUnitInGroup(dead, KLS_Enemies) then
         call GroupRemoveUnit(KLS_Enemies, dead)
         set KLS_Alive = KLS_Alive - 1
         call KLS_AwardKillXP(dead)
         call KLS_AwardBounty(GetKillingUnit(),KLS_EnemyBounty(dead))
+        call KLS_EnemyDrop(dead,dead == KLS_Boss)
         if dead == KLS_Boss then
             set KLS_Boss = null
             if GetWidgetLife(KLS_King) <= 0.405 then
@@ -390,16 +394,8 @@ function KLS_Chat takes nothing returns nothing
         call KLS_KingContribute(p,false,KLS_KingTier,false)
     elseif s == "-upgrade" then
         call KLS_KingContribute(p,true,KLS_KingTier,false)
-    elseif s == "-power" and KLS_TalentPoints[i] > 0 then
-        set KLS_TalentPoints[i] = KLS_TalentPoints[i] - 1
-        call BlzSetUnitBaseDamage(KLS_Hero[i], BlzGetUnitBaseDamage(KLS_Hero[i], 0)+12, 0)
-    elseif s == "-vitality" and KLS_TalentPoints[i] > 0 then
-        set KLS_TalentPoints[i] = KLS_TalentPoints[i] - 1
-        call BlzSetUnitMaxHP(KLS_Hero[i], BlzGetUnitMaxHP(KLS_Hero[i])+300)
-        call SetWidgetLife(KLS_Hero[i], GetWidgetLife(KLS_Hero[i])+300)
-    elseif s == "-wisdom" and KLS_TalentPoints[i] > 0 then
-        set KLS_TalentPoints[i] = KLS_TalentPoints[i] - 1
-        call SetHeroInt(KLS_Hero[i], GetHeroInt(KLS_Hero[i], false)+10, true)
+    elseif (s == "-power" or s == "-vitality" or s == "-wisdom") and i >= 0 and i < 4 then
+        call KLS_ProgressionShow(i)
     elseif s == "-gold" and KLS_Debug then
         call SetPlayerState(p, PLAYER_STATE_RESOURCE_GOLD, gold+5000)
         call SetPlayerState(p, PLAYER_STATE_RESOURCE_LUMBER, wood+5000)
@@ -412,7 +408,7 @@ function KLS_Chat takes nothing returns nothing
             call KLS_Spawn()
         endif
     elseif s == "-help" then
-        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend the king through 40 waves. Build in your personal plot. Gold mines and trees fund your army. Select King Aldric's Castle to heal or upgrade him. -repair: 150 gold/50 lumber, heals 2000. -upgrade: 400+200 per tier gold/150 lumber. Heroes revive after 20 seconds. The Forsaken Field Pack adds 30 storage and nine equipment slots.")
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend King Aldric through 40 waves. Level-up dialogs offer +3 Strength, Agility or Intelligence each level and a secondary-stat talent every 5 levels. -repair and -upgrade contribute resources at the castle. The optional Crownlands story can be advanced during active waves.")
     endif
     set p = null
 endfunction
@@ -583,6 +579,7 @@ function KLS_Init takes nothing returns nothing
     local trigger builds = CreateTrigger()
     local trigger chats = CreateTrigger()
     local trigger talents = CreateTrigger()
+    local trigger evasion = CreateTrigger()
     local trigger market = CreateTrigger()
     local trigger leaves = CreateTrigger()
     local real x
@@ -668,6 +665,7 @@ function KLS_Init takes nothing returns nothing
             if u == null then
                 return
             endif
+            set KLS_BaseTownHall[i] = u
             set KLS_Altar[i] = KLS_CreateUnit(Player(i), 'h000', x - 650, y - 500, 270)
             if KLS_Altar[i] == null then
                 return
@@ -706,6 +704,8 @@ function KLS_Init takes nothing returns nothing
         set i = i+1
     endloop
     call KLS_CompanyInit()
+    call KLS_CrownlandsInit()
+    call KLS_ProgressionInit()
     call TriggerAddAction(leaves,function KLS_PlayerLeft)
     call TriggerRegisterAnyUnitEventBJ(deaths, EVENT_PLAYER_UNIT_DEATH)
     call TriggerAddAction(deaths, function KLS_Death)
@@ -714,6 +714,8 @@ function KLS_Init takes nothing returns nothing
     call TriggerAddAction(chats, function KLS_Chat)
     call TriggerRegisterAnyUnitEventBJ(talents, EVENT_PLAYER_HERO_LEVEL)
     call TriggerAddAction(talents, function KLS_TalentLevel)
+    call TriggerRegisterAnyUnitEventBJ(evasion, EVENT_PLAYER_UNIT_DAMAGED)
+    call TriggerAddAction(evasion, function KLS_TalentAvoidDamage)
     call TriggerRegisterAnyUnitEventBJ(market, EVENT_PLAYER_UNIT_SELL_ITEM)
     call TriggerAddAction(market, function KLS_MarketBuy)
     call KLS_HUDInit()
@@ -740,6 +742,7 @@ function KLS_Init takes nothing returns nothing
     set builds = null
     set chats = null
     set talents = null
+    set evasion = null
     set market = null
     set leaves = null
 endfunction

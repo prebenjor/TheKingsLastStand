@@ -21,7 +21,7 @@ function KLS_AltarSelected takes nothing returns nothing
     if p >= 4 or KLS_Ended then
         return
     endif
-    if GetUnitTypeId(GetTriggerUnit()) != 'h000' or GetOwningPlayer(GetTriggerUnit()) != Player(p) then
+    if not KLS_IsFactionAltar(GetUnitTypeId(GetTriggerUnit())) or GetOwningPlayer(GetTriggerUnit()) != Player(p) then
         return
     endif
     if not KLS_ClassChosen[p] then
@@ -36,7 +36,7 @@ endfunction
 function KLS_AltarCompleted takes nothing returns nothing
     local unit u = GetConstructedStructure()
     local integer p = GetPlayerId(GetOwningPlayer(u))
-    if p < 4 and GetUnitTypeId(u) == 'h000' then
+    if p < 4 and KLS_IsFactionAltar(GetUnitTypeId(u)) then
         set KLS_Altar[p] = u
     endif
     set u = null

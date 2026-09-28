@@ -40,6 +40,13 @@ _ROSTER = (
     ('Npal','Forsaken Paladin','Argent Revenants','ugho','Cleansing Pyre','hmpr','AHad',310,100,1000,39,400,135,740,30),
 )
 
+from hero_catalog import NEW_HEROES, HERO_RACES
+_ROSTER += tuple(
+    (hero['unit_id'], hero['name'], hero['company'][0], hero['company'][1],
+     hero['company'][2], hero['company'][3], hero['company'][12],
+     *hero['company'][4:12])
+    for hero in NEW_HEROES)
+
 HERO_COMPANIES = [
     {
         'hero_type': hero_type, 'hero_name': hero_name,
@@ -52,6 +59,7 @@ HERO_COMPANIES = [
         'support_lumber': support_lumber, 'support_hp': support_hp,
         'support_damage': support_damage, 'banner_ability': banner_ability,
         'banner_name': f'{hero_name} Banner',
+        'race': HERO_RACES[index],
     }
     for index, (hero_type, hero_name, company_name, company_parent,
                 support_name, support_parent, banner_ability, company_gold,
@@ -61,6 +69,7 @@ HERO_COMPANIES = [
 
 
 def company_script():
+    from faction_catalog import faction_script
     lines = ['function KLS_CompanyCatalogInit takes nothing returns nothing']
     for index, entry in enumerate(HERO_COMPANIES):
         lines += [
@@ -72,5 +81,5 @@ def company_script():
             f"    set KLS_CompanySupportGold[{index}] = {entry['support_gold']}",
             f"    set KLS_CompanySupportLumber[{index}] = {entry['support_lumber']}",
         ]
-    lines += ['endfunction']
+    lines += ['endfunction', faction_script()]
     return '\n'.join(lines)

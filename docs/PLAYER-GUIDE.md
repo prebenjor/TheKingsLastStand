@@ -9,15 +9,19 @@
 2. The installer archives old project maps and leaves one current map named `<build-id>-Development.w3m` in `Documents/Warcraft III/Maps/TheKingsLastStand/`. If Warcraft III currently has an older map open, close the game before installing so Windows releases the old file.
 3. Test that installed map from the already-open World Editor when it points at the current map, or select the same build in Warcraft III → Single Player → Custom Game. Do not make another test copy.
 4. Confirm the startup text includes the filename's build ID. Stop if a different or no build ID appears.
-5. Select one of 17 hero previews, read role/abilities, click Confirm. The roster includes Human Ilastar and the Forsaken Paladin from the installed campaign data. If no choice is made within 45 seconds, the fallback is Paladin.
+5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is development build `KLS-D-5b63d38dc0`, installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5b63d38dc0-Development.w3m`, and still needs its own in-game verification. The user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is development build `KLS-D-1a040d638c`, installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`. World Editor is open on this exact map; Test Map and Custom Game verification remain pending. The user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
+
+All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its five themed universal items and healing/mana potions. Talk to the settlement characters to start the optional four-chapter recovery story; it continues during active waves. The four Legendary Foundry patterns combine that race's Rare and Uncommon item into its Legendary item.
+
+On each level after 1, choose +3 Strength, Agility or Intelligence in the visible stat dialog. Every fifth level also grants a Vanguard, Skirmisher or Sage talent. Four Crownlands objectives can be started from their settlement characters at any time; they do not pause active waves.
 
 ## Match
 
 - Defend King Aldric. Keep attackers off him; the final boss must die before the king.
-- Work your own human base and command your own army. You cannot control a teammate's units.
+- Work your own race-matched base and command your own army. You cannot control a teammate's units.
 - Hire/use workers to mine gold, harvest nearby trees, and build within your own plot.
 - Build on your plot only. Keep the central road open for attackers, defenders, siege units, and bosses.
 - Use the separate Altar of Kings to choose/revive your hero.

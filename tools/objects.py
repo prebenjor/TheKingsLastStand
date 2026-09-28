@@ -20,7 +20,9 @@ def units():
     # The Altar is placed for every player at match start, so it does not
     # consume a Peasant build-card slot. Replace the ordinary Workshop button
     # with its hero-specific Siege Yard child; retain twelve usable buttons.
-    original = [record('hpea', '\0\0\0\0', {'ubui':'htow,hhou,hbar,hbla,h004,h001,h002,h003,kH00,kF00,kY00', 'ureq':''})]
+    from faction_catalog import FACTIONS
+    original = [record(faction['worker'], '\0\0\0\0', {
+        'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
     custom = [
         record('Hamg', 'H000', {'unam':'Priest','uhab':'AHhb,AHab,AHds,AHre','ureq':'','uhpm':600}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
@@ -30,17 +32,53 @@ def units():
         record('hctw', 'h002', {'unam':'Bombard Tower','ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
         record('hatw', 'h003', {'unam':'Sanctuary Tower','utub':'Restores 15 health to nearby allied units every 3 seconds. Range 650.','ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
-    from company_catalog import COMPANY_BUILDINGS, HERO_COMPANIES
-    for entry in COMPANY_BUILDINGS.values():
-        fields = {
-            'unam':entry['name'], 'utip':'Build '+entry['name'],
-            'utub':entry['tooltip'], 'ugol':entry['gold'],
-            'ulum':entry['lumber'], 'ubld':entry['build_time'],
-            'uhpm':entry['hit_points'], 'ureq':'hbar', 'ures':'', 'urev':0,
-        }
-        if entry['rawcode'] == COMPANY_BUILDINGS['siege_yard']['rawcode']:
-            fields['uabi'] = 'Aneu,Apit,Asid,Asud'
-        custom.append(record(entry['parent'],entry['rawcode'],fields))
+    from town_catalog import TOWNS, QUEST_RAWCODES
+    for town in TOWNS:
+        custom.append(record(town['worker'],QUEST_RAWCODES[town['quest_id']],{
+            'unam':town['quest'],'utip':town['quest'],'utub':'Optional shared Crownlands story objective. Select during a wave to begin or contribute; objectives never pause the defense.','ureq':'','uabi':'Avul','uhpm':500,
+        }))
+    from hero_catalog import NEW_HEROES
+    for hero in NEW_HEROES:
+        custom.append(record(hero['base'], hero['unit_id'], {
+            'unam':hero['name'], 'upro':hero['name'],
+            'uhab':','.join(hero['abilities']), 'ureq':'',
+        }))
+    from company_catalog import HERO_COMPANIES
+    from faction_catalog import _ARCANE_NAMES, _TOWER_NAMES
+    for faction in FACTIONS:
+        race = faction['race']
+        if faction['arcane'] != 'h004':
+            name = _ARCANE_NAMES[FACTIONS.index(faction)]
+            custom.append(record(faction['arcane_parent'],faction['arcane'],{
+                'unam':name,'utip':name,'utub':'Race-themed arcane support structure. Provides the same role as the Human Arcane Sanctum.',
+                'ugol':160,'ulum':70,'ubld':30,'uhpm':1100,'ureq':'','ures':'','urev':0,
+            }))
+        for tower_index, rawcode in enumerate(faction['towers']):
+            if rawcode in ('h001','h002','h003'):
+                continue
+            name = _TOWER_NAMES[race][tower_index]
+            gold,lumber,build_time,hit_points,damage = ((140,50,25,650,18),(260,100,35,850,70),(220,100,30,750,14))[tower_index]
+            custom.append(record(faction['tower_parents'][tower_index],rawcode,{
+                'unam':name,'utip':name,'utub':'Race-themed tower. Uses the same range, damage, cost, and support behavior as its Human counterpart.',
+                'ugol':gold,'ulum':lumber,'ubld':build_time,'uhpm':hit_points,'ua1b':damage,
+                'ureq':'','ures':'','urev':0,
+            }))
+        for role, entry in faction['company_buildings'].items():
+            fields = {
+                'unam':entry['name'], 'utip':'Build '+entry['name'],
+                'utub':entry['tooltip'], 'ugol':entry['gold'],
+                'ulum':entry['lumber'], 'ubld':entry['build_time'],
+                'uhpm':entry['hit_points'], 'ureq':faction['barracks'], 'ures':'', 'urev':0,
+            }
+            if role == 'siege_yard':
+                fields['uabi'] = 'Aneu,Apit,Asid,Asud'
+            custom.append(record(entry['parent'],entry['rawcode'],fields))
+        if faction['race'] != 'Human':
+            custom.append(record(faction['altar_parent'],faction['altar'],{
+                'unam':race+' Hero Shrine','utip':'Build '+race+' Hero Shrine',
+                'utub':'Select to choose your hero or revive the chosen hero. Hero creation is managed by the shared selection system.',
+                'ureq':'','utra':'','ures':'','urev':0,'ugol':160,'ulum':70,'ubld':30,'uhpm':900,
+            }))
     for entry in HERO_COMPANIES:
         company_fields = {
             'unam':entry['company_name'], 'utip':entry['company_name'],

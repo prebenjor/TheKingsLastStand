@@ -16,7 +16,7 @@ from test_equipment import decode, slk
 
 class CampaignHeroExpansion(unittest.TestCase):
     def test_verified_campaign_heroes_have_native_skills_ranks_and_signatures(self):
-        self.assertEqual(len(HERO_ABILITIES), 17)
+        self.assertEqual(len(HERO_ABILITIES), 25)
         self.assertEqual(HERO_ABILITIES['Hjsm'], ('AHas', 'AHsf', 'AHmc', 'AHsl'))
         self.assertEqual(HERO_ABILITIES['Npal'], ('AHcr', 'ANcp', 'AHpa', 'AHcl'))
 
@@ -43,7 +43,7 @@ class CampaignHeroExpansion(unittest.TestCase):
         self.assertIn('replaceabletextures\\commandbuttons\\btnholybolt.dds', command_buttons)
         self.assertIn('replaceabletextures\\commandbuttons\\btndispelmagic.dds', command_buttons)
 
-        self.assertEqual(len(SIGNATURES), 17)
+        self.assertEqual(len(SIGNATURES), 25)
         self.assertEqual(SIGNATURES[15][0], "Ilastar's Last Light")
         self.assertEqual(SIGNATURES[16][0], 'Cleansing Pyre')
         object_records = decode(abilities(), extended=True)
@@ -55,9 +55,9 @@ class CampaignHeroExpansion(unittest.TestCase):
         self.assertIn("heroType == 'Npal'", runtime)
         self.assertIn("KLS_HeroType[15] = 'Hjsm'", runtime)
         self.assertIn("KLS_HeroType[16] = 'Npal'", runtime)
-        self.assertIn('exitwhen n == 17', runtime)
-        self.assertIn('n >= 17', runtime)
-        self.assertIn('17 heroes', runtime)
+        self.assertIn('exitwhen n == KLS_HeroCount', runtime)
+        self.assertIn('n >= KLS_HeroCount', runtime)
+        self.assertIn('25 hero previews', runtime)
 
 
 if __name__ == '__main__':
