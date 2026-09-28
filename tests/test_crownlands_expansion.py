@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tests'))
 from equipment_catalog import CUSTOM_RACE_ITEMS, item_catalog
 from hero_catalog import HERO_COUNT, HERO_RACES, NEW_HEROES
 from faction_catalog import FACTIONS
-from hero_progression import HERO_ABILITIES
+from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
 from recipes import recipe_catalog
 from signature_spells import SIGNATURES
 from pipeline import runtime_script
@@ -115,10 +115,15 @@ class CrownlandsExpansion(unittest.TestCase):
 
     def test_each_hero_level_offers_three_attribute_points_and_fifth_levels_offer_talents(self):
         runtime = runtime_script('LEVEL-TEST')
-        for choice in ('KLS_StatStrengthButton', 'KLS_StatAgilityButton', 'KLS_StatIntelligenceButton',
-                       'KLS_TalentStrengthButton', 'KLS_TalentAgilityButton', 'KLS_TalentIntelligenceButton'):
-            self.assertIn(choice, runtime)
-        self.assertIn('ModifyHeroStat(bj_HEROSTAT_STR,hero,bj_MODIFYMETHOD_ADD,3)', runtime)
+        hero_records = decode(units())
+        for hero_id in HERO_ABILITIES:
+            learned_choices = hero_records[hero_id][1][('uhab', 0)][0].split(',')
+            self.assertTrue(set(STAT_ABILITY_IDS) <= set(learned_choices), hero_id)
+        for choice in ('KLS_TalentStrengthButton','KLS_TalentAgilityButton',
+                       'KLS_TalentIntelligenceButton'):
+            self.assertIn(choice,runtime)
+        self.assertNotIn('KLS_StatPending', runtime)
+        self.assertNotIn('DialogAddButton(KLS_ProgressionDialog[p],"+3 Strength"', runtime)
         self.assertIn('set milestone = GetHeroLevel(u) / 5', runtime)
         self.assertIn('KLS_TalentApply(p,', runtime)
         self.assertIn('UNIT_RF_HIT_POINTS_REGENERATION_RATE,current+2.0', runtime)

@@ -6,7 +6,7 @@ This document is the current detailed design for the kingdom expansion. It incor
 
 Players choose one of 25 heroes. That hero's race independently sets the owner's worker, Altar, Town Hall and build menu. Every player has a personal base and army, while all four allied communities help King Aldric hold the King's Road. Heroes grow from level 1 to a temporary cap of 50. Every level grants a choice to place three stat points; every five levels grants a separate talent choice. An optional four-part town-recovery story can be advanced during live waves without pausing or changing their enemy count.
 
-The product remains a 2–4 player co-op defense RPG: forty waves, bosses on waves 10, 20, 30 and 40, a 50-second ordinary intermission and a 180-second pre-boss intermission. New map content must preserve the gate, clear road, build plots, resource access, King Aldric and the team's ability to reach the invaders.
+The product remains a 2-4 player co-op defense RPG. Preserve the original 40-wave Crownlands story and bosses on waves 10, 20, 30 and 40, then continue automatically through the bounded ten-wave campaign crossover. Bosses recur every ten waves; only King Aldric's death ends the run, and the HUD shows the highest wave reached. Normal intermissions are 50 seconds and every pre-boss intermission is 180 seconds.
 
 ## Crownlands map and settlements
 
@@ -27,7 +27,9 @@ The product remains a 2–4 player co-op defense RPG: forty waves, bosses on wav
 
 ## Race identity and player companies
 
-Race is assigned per selected hero and per owner. It must not be inferred from lobby race, another player's hero, or the default map start. Choosing a Human, Orc, Night Elf or Undead hero replaces only that player's starting Town Hall, altar and five workers with the matching faction. In mixed-race matches, each build menu and constructed role stays matched to its owner.
+Race is assigned per selected hero and per owner. It must not be inferred from another player's hero or a fixed Human lobby preference. The map starts with race preference set to Random; confirming a Human, Orc, Night Elf or Undead hero sets only that player's Warcraft race preference and replaces their starting Town Hall, altar and five workers with the matching faction. In mixed-race matches, each build menu and constructed role stays matched to its owner.
+
+The Undead Acolyte can order a neutral gold mine to be haunted: the runtime replaces it with an owner-controlled Haunted Gold Mine, preserves its remaining gold, and sends the Acolyte to harvest. Night Elf Tree of Life's native Entangle Gold Mine order has a 1,450 range so it can reach the starting mine. Confirm both interactions in Warcraft; generated source checks do not prove native target acceptance.
 
 | Role | Human | Orc | Night Elf | Undead |
 |---|---|---|---|---|
@@ -75,12 +77,13 @@ Matching recruit models, gold/lumber prices, base health, base damage and banner
 ## Leveling, attributes and safe spell ranks
 
 - The selected hero starts at level 1. Temporary maximum is 50. King Aldric and wave-owned hero enemies retain their separately authored levels.
-- On each hero level gained, queue one stat investment. The player selects Strength, Agility or Intelligence; each selection adds +3 to that primary attribute. Queue investments rather than dropping choices when a hero gains multiple levels quickly.
+- On each hero level gained, the standard hero ability panel offers three separate native `+` skill choices: `KSTR` adds +3 Strength, `KAGI` adds +3 Agility, and `KINT` adds +3 Intelligence. The player spends the normal hero skill point on one choice. The per-level custom dialog has been removed, so choosing an attribute no longer opens a dialog that can interrupt everyone. Confirm the plus buttons and attribute changes in Warcraft.
 - Grant a separate talent point for every crossed five-level milestone (levels 5, 10, …, 50). A visible dialog offers:
   - **Vanguard / Strength:** +5 Strength, +200 maximum/current health and +2 health regeneration per second per talent.
   - **Skirmisher / Agility:** +5 Agility (therefore native attack-speed growth) and +2 percentage points evasion per talent.
   - **Sage / Intelligence:** +5 Intelligence, +100 maximum/current mana and +2 mana regeneration per second per talent.
 - Talent award bookkeeping is per hero owner, preserves points earned across multi-level jumps, and presents the option visibly. Do not spend a point until the player selects an option.
+- The five-level Vanguard/Skirmisher/Sage specialty remains its own dialog and needs a live multiplayer check; it is separate from per-level primary-stat choices.
 - Native skill ranks retain authored values through the installed maximum. For skills with explicitly registered scalable power fields only, rank 4 and 5 add 10% of the rank-3 value per rank; range, cooldown, mana cost, duration, targeting and unrelated fields stay at the last authored value. Unsupported skills retain their native cap.
 - Sacred Aura learned descriptions for both `AHas` and `AHpa` show the actual current rank and actual values. Learn descriptions separate current and next rank and show all five values. Rank 4 is 38.5% magic resistance / 27.5% increased healing; rank 5 is 42% / 30%. Generated descriptions and effect data must be produced together.
 

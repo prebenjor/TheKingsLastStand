@@ -79,7 +79,9 @@ function KLS_BossReward takes nothing returns nothing
     local integer i = 0
     local integer gear = 'I010'
     local item reward
-    if KLS_Wave == 20 then
+    if KLS_Wave >= 50 then
+        set gear = KLS_RandomCatalogDrop(4)
+    elseif KLS_Wave == 20 then
         set gear = 'I011'
     elseif KLS_Wave == 30 then
         set gear = 'I012'
@@ -221,11 +223,7 @@ function KLS_Death takes nothing returns nothing
                 call KLS_End(false)
             else
                 call KLS_BossReward()
-                if KLS_Wave == 40 then
-                    call KLS_End(true)
-                else
-                    call KLS_Message("Boss defeated! Clear the remaining enemies.")
-                endif
+                call KLS_Message("Boss defeated! Clear the remaining enemies.")
             endif
         endif
         if not KLS_Ended and KLS_Alive == 0 then
@@ -251,6 +249,7 @@ endfunction
 function KLS_Spawn takes nothing returns nothing
     local integer count = 0
     local integer n = 0
+    local integer rosterWave = 1
     local integer kind = 'ugho'
     local unit u
     local real hp
@@ -261,9 +260,10 @@ function KLS_Spawn takes nothing returns nothing
     set KLS_BossMechanic = 0
     call KLS_Log("Wave spawn started: " + I2S(KLS_Wave))
     set count = 7 + KLS_Wave * 2 + KLS_Players * 3
+    set rosterWave = KLS_RosterSourceWave(KLS_Wave)
     loop
         exitwhen n == count or spawnFailed or KLS_Ended
-        set kind = KLS_Roster[KLS_Wave*20+ModuloInteger(n,KLS_RosterSize[KLS_Wave])]
+        set kind = KLS_Roster[rosterWave*20+ModuloInteger(n,KLS_RosterSize[rosterWave])]
         set u = KLS_CreateUnit(Player(11), kind, I2R(ModuloInteger(n, 5) - 2) * 140, 6200 + I2R(n / 5) * 40, 270)
         if u != null then
             set hp = 180 + KLS_Wave * 55 + KLS_Players * 35
@@ -286,14 +286,7 @@ function KLS_Spawn takes nothing returns nothing
         set n = n + 1
     endloop
     if not spawnFailed and not KLS_Ended and ModuloInteger(KLS_Wave, 10) == 0 then
-        set kind = 'Udea'
-        if KLS_Wave == 20 then
-            set kind = 'Ulic'
-        elseif KLS_Wave == 30 then
-            set kind = 'Udre'
-        elseif KLS_Wave == 40 then
-            set kind = 'Uanb'
-        endif
+        set kind = KLS_BossUnitForWave(KLS_Wave)
         set u = KLS_CreateUnit(Player(11), kind, 0, 6800, 270)
         if u != null then
             set KLS_Boss = u
@@ -400,7 +393,7 @@ function KLS_Chat takes nothing returns nothing
         call SetPlayerState(p, PLAYER_STATE_RESOURCE_GOLD, gold+5000)
         call SetPlayerState(p, PLAYER_STATE_RESOURCE_LUMBER, wood+5000)
     elseif SubString(s, 0, 6) == "-wave " and KLS_Debug then
-        if S2I(SubString(s, 6, StringLength(s))) >= 1 and S2I(SubString(s, 6, StringLength(s))) <= 40 then
+        if S2I(SubString(s, 6, StringLength(s))) >= 1 and S2I(SubString(s, 6, StringLength(s))) <= 1000 then
             call ForGroup(KLS_Enemies, function KLS_DebugRemove)
             call GroupClear(KLS_Enemies)
             set KLS_Alive = 0
@@ -408,7 +401,7 @@ function KLS_Chat takes nothing returns nothing
             call KLS_Spawn()
         endif
     elseif s == "-help" then
-        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend King Aldric through 40 waves. Level-up dialogs offer +3 Strength, Agility or Intelligence each level and a secondary-stat talent every 5 levels. -repair and -upgrade contribute resources at the castle. The optional Crownlands story can be advanced during active waves.")
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend King Aldric through the 40-wave Crownlands campaign, then face endless crossover waves. The King's death ends the run. -wave 1–1000 is available in development diagnostics. The optional Crownlands story remains separate from wave counts.")
     endif
     set p = null
 endfunction
@@ -704,6 +697,7 @@ function KLS_Init takes nothing returns nothing
         set i = i+1
     endloop
     call KLS_CompanyInit()
+    call KLS_MiningInit()
     call KLS_CrownlandsInit()
     call KLS_ProgressionInit()
     call TriggerAddAction(leaves,function KLS_PlayerLeft)

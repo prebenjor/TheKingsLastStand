@@ -43,7 +43,7 @@ function KLS_HUDUpdate takes nothing returns nothing
         if KLS_Won then
             call KLS_HUDRow(0, "Result", "Final boss defeated")
         else
-            call KLS_HUDRow(0, "Result", "King defeated")
+            call KLS_HUDRow(0, "Result", "King defeated at wave " + I2S(wave))
         endif
         call KLS_HUDRow(2, "Match", "Finished")
     elseif KLS_Selecting then
@@ -51,14 +51,28 @@ function KLS_HUDUpdate takes nothing returns nothing
         call KLS_HUDRow(0, "Hero selection", "25 heroes")
         call KLS_HUDRow(2, "Choose within", KLS_TimeText(KLS_SelectionLeft))
     elseif KLS_Alive == 0 then
-        set wave = IMinBJ(40, wave + 1)
-        call KLS_HUDRow(0, "Next wave", I2S(wave) + " / 40")
+        set wave = wave + 1
+        if wave <= 40 then
+            call KLS_HUDRow(0, "Next wave", I2S(wave) + " / 40")
+        else
+            call KLS_HUDRow(0, "Next wave", I2S(wave) + " / Endless")
+        endif
         call KLS_HUDRow(2, "Next wave in", KLS_TimeText(KLS_Prep))
     else
-        call KLS_HUDRow(0, "Wave", I2S(wave) + " / 40")
+        if wave <= 40 then
+            call KLS_HUDRow(0, "Wave", I2S(wave) + " / 40")
+        else
+            call KLS_HUDRow(0, "Wave", I2S(wave) + " / Endless")
+        endif
         call KLS_HUDRow(2, "Enemies remaining", I2S(KLS_Alive))
     endif
-    call KLS_HUDRow(1, "Chapter", I2S((IMaxBJ(1, wave) - 1) / 10 + 1) + " / 4")
+    if KLS_Ended then
+        call KLS_HUDRow(1, "Highest wave", I2S(KLS_Wave))
+    elseif wave <= 40 then
+        call KLS_HUDRow(1, "Chapter", I2S((IMaxBJ(1, wave) - 1) / 10 + 1) + " / 4")
+    else
+        call KLS_HUDRow(1, "Endless cycle", I2S((wave - 41) / 10 + 1))
+    endif
     call KLS_HUDRow(3, "King health", I2S(IMaxBJ(0, R2I(GetWidgetLife(KLS_King)))) + " / " + I2S(BlzGetUnitMaxHP(KLS_King)))
     call KLS_HUDRow(4, "King upgrade", I2S(KLS_KingTier) + " / 5")
     // Local values affect presentation only; all handles are created on every client.

@@ -20,48 +20,54 @@ def units():
     # The Altar is placed for every player at match start, so it does not
     # consume a Peasant build-card slot. Replace the ordinary Workshop button
     # with its hero-specific Siege Yard child; retain twelve usable buttons.
-    from faction_catalog import FACTIONS
+    from faction_catalog import FACTIONS, _ALTAR_TOOLTIPS, _ARCANE_NAMES, _ARCANE_TOOLTIPS, _TOWER_NAMES, _TOWER_TOOLTIPS
+    from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
+    hero_choice_ids = STAT_ABILITY_IDS
+    from hero_catalog import NEW_HEROES
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
+    custom_hero_ids = {entry['unit_id'] for entry in NEW_HEROES} | {'H000'}
+    for hero_id, abilities in HERO_ABILITIES.items():
+        if hero_id not in custom_hero_ids:
+            original.append(record(hero_id, '\0\0\0\0', {
+                'uhab': ','.join(hero_choice_ids)}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':'AHhb,AHab,AHds,AHre','ureq':'','uhpm':600}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':','.join(hero_choice_ids),'ureq':'','uhpm':600}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
-        record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':'Select this altar to choose your hero before your choice is locked. Fallen heroes return here automatically after 20 seconds. Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
-        record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':'Trains Priests for healing and Sorceresses for battlefield control. Provides Priest and Sorceress training upgrades.','utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
-        record('hgtw', 'h001', {'unam':'Watchtower','ureq':'','uupt':'','ua1b':18,'ugol':140,'ulum':50,'ubld':25,'uhpm':650}),
-        record('hctw', 'h002', {'unam':'Bombard Tower','ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
-        record('hatw', 'h003', {'unam':'Sanctuary Tower','utub':'Restores 15 health to nearby allied units every 3 seconds. Range 650.','ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
+        record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
+        record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
+        record('hgtw', 'h001', {'unam':_TOWER_NAMES['Human'][0],'utip':_TOWER_NAMES['Human'][0],'utub':_TOWER_TOOLTIPS['Human'][0],'ureq':'','uupt':'','ua1b':18,'ugol':140,'ulum':50,'ubld':25,'uhpm':650}),
+        record('hctw', 'h002', {'unam':_TOWER_NAMES['Human'][1],'utip':_TOWER_NAMES['Human'][1],'utub':_TOWER_TOOLTIPS['Human'][1],'ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
+        record('hatw', 'h003', {'unam':_TOWER_NAMES['Human'][2],'utip':_TOWER_NAMES['Human'][2],'utub':_TOWER_TOOLTIPS['Human'][2],'ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
     from town_catalog import TOWNS, QUEST_RAWCODES
     for town in TOWNS:
         custom.append(record(town['worker'],QUEST_RAWCODES[town['quest_id']],{
             'unam':town['quest'],'utip':town['quest'],'utub':'Optional shared Crownlands story objective. Select during a wave to begin or contribute; objectives never pause the defense.','ureq':'','uabi':'Avul','uhpm':500,
         }))
-    from hero_catalog import NEW_HEROES
     for hero in NEW_HEROES:
         custom.append(record(hero['base'], hero['unit_id'], {
             'unam':hero['name'], 'upro':hero['name'],
-            'uhab':','.join(hero['abilities']), 'ureq':'',
+            'uhab':','.join(hero_choice_ids), 'ureq':'',
         }))
     from company_catalog import HERO_COMPANIES
-    from faction_catalog import _ARCANE_NAMES, _TOWER_NAMES
     for faction in FACTIONS:
         race = faction['race']
         if faction['arcane'] != 'h004':
             name = _ARCANE_NAMES[FACTIONS.index(faction)]
             custom.append(record(faction['arcane_parent'],faction['arcane'],{
-                'unam':name,'utip':name,'utub':'Race-themed arcane support structure. Provides the same role as the Human Arcane Sanctum.',
-                'ugol':160,'ulum':70,'ubld':30,'uhpm':1100,'ureq':'','ures':'','urev':0,
+                'unam':name,'utip':name,'utub':_ARCANE_TOOLTIPS[race],
+                'ugol':160,'ulum':70,'ubld':30,'uhpm':1100,'ureq':'',
             }))
         for tower_index, rawcode in enumerate(faction['towers']):
-            if rawcode in ('h001','h002','h003'):
+            if faction['race'] == 'Human':
                 continue
             name = _TOWER_NAMES[race][tower_index]
             gold,lumber,build_time,hit_points,damage = ((140,50,25,650,18),(260,100,35,850,70),(220,100,30,750,14))[tower_index]
             custom.append(record(faction['tower_parents'][tower_index],rawcode,{
-                'unam':name,'utip':name,'utub':'Race-themed tower. Uses the same range, damage, cost, and support behavior as its Human counterpart.',
+                'unam':name,'utip':name,'utub':_TOWER_TOOLTIPS[race][tower_index],
                 'ugol':gold,'ulum':lumber,'ubld':build_time,'uhpm':hit_points,'ua1b':damage,
-                'ureq':'','ures':'','urev':0,
+                'ureq':'',
             }))
         for role, entry in faction['company_buildings'].items():
             fields = {
@@ -76,7 +82,7 @@ def units():
         if faction['race'] != 'Human':
             custom.append(record(faction['altar_parent'],faction['altar'],{
                 'unam':race+' Hero Shrine','utip':'Build '+race+' Hero Shrine',
-                'utub':'Select to choose your hero or revive the chosen hero. Hero creation is managed by the shared selection system.',
+                'utub':_ALTAR_TOOLTIPS[race]+' Only one hero per player.',
                 'ureq':'','utra':'','ures':'','urev':0,'ugol':160,'ulum':70,'ubld':30,'uhpm':900,
             }))
     for entry in HERO_COMPANIES:

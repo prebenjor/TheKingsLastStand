@@ -6,15 +6,15 @@ This document preserves the approved gameplay target. Code presence is tracked s
 
 Authoritative match states:
 
-    INITIALIZING → HERO_SELECTION → PREPARATION → WAVE_ACTIVE → WON or LOST
+    INITIALIZING → HERO_SELECTION → PREPARATION ↔ WAVE_ACTIVE → KING_DEFEATED
 
 - Create gameplay only for occupied player slots. Diagnostic packages may run solo; release packages support 2–4 defenders.
 - Defenders are allied and share vision. Shared unit control is disabled. Undead invaders have a distinct hostile owner.
 - Each active player sees a 45-second hero selection. The fallback for a player who does not confirm is Paladin.
 - Players choose one of 25 hero previews: the original seventeen plus the eight race-themed heroes. Duplicate choices are allowed. The selected hero's race independently determines that player's starting worker and building menu. Create the selected hero once; do not leave or replace a usable placeholder hero.
 - After every active player selects, start the initial 45-second preparation period. Beginning troops stay held until the selection phase ends.
-- Normal cleared-wave breaks are 50 seconds. Breaks before waves 10, 20, 30, and 40 are 180 seconds. The 50-second ordinary break supersedes the earlier 90-second decision; the longer boss break remains.
-- Terminal victory/defeat stops spawns, timers, damage, rewards, and revival. King death takes precedence if it resolves in the same step as final-boss death.
+- Normal cleared-wave breaks are 50 seconds. Breaks before each boss wave (10, 20, 30, 40, 50, and every ten waves after) are 180 seconds. The 50-second ordinary break supersedes the earlier 90-second decision; the longer boss break remains.
+- The Wave 40 boss no longer ends the match. After Wave 40 clears, spawning continues automatically. King Aldric's death ends the run and the HUD shows the highest wave reached; terminal defeat stops spawns, timers, damage, rewards, and revival.
 - If a player leaves, remove their control and stop scaling them into future waves. Do not transfer their living army to another player; let its current orders continue.
 
 ## Player ownership and economy
@@ -75,7 +75,7 @@ King Aldric is the shared survival objective at the central castle. His castle i
 
 ## Waves, enemies, and difficulty
 
-- Exactly forty waves in four chapters. Chapter roles accumulate as described in WAVES-AND-BOSSES.md.
+- Preserve waves 1-40 as the four-chapter Crownlands story. Waves 41 onward reuse the generated ten-row campaign crossover roster with a bounded source index while count, health, damage, bounty, XP, and boss scaling continue to use the live wave number. See WAVES-AND-BOSSES.md.
 - Every spawn and summon joins the tracked enemy set exactly once. Death, removal, debug cleanup, and boss summons must decrement the live count once.
 - Enemy movement targets the king. Issue pathing recovery only when an enemy has no valid order or is demonstrably stuck; do not override ordinary combat repeatedly.
 - Every tracked enemy death pays the killer's defender owner one role-based bounty, plus the current wave number for normal units; no kill gold is shared. Bosses pay `100 + 5 × wave` for the killing defender. If King Aldric makes the killing blow, every active defender gets 25% of the bounty. See `WAVES-AND-BOSSES.md` for starting role values; tune from recorded matches.

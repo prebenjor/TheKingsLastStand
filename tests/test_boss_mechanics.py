@@ -23,6 +23,7 @@ class BossMechanics(unittest.TestCase):
             (20, 2, ('summon',)),
             (30, 3, ('tower_suppression',)),
             (40, 4, ('slam', 'summon', 'tower_suppression')),
+            (50, 5, ('slam', 'summon', 'tower_suppression')),
         )
         actual = tuple((row['wave'], row['id'], row['actions']) for row in BOSS_MECHANICS)
         self.assertEqual(actual, expected)
@@ -31,6 +32,7 @@ class BossMechanics(unittest.TestCase):
             'Skeletons and felguards are incoming.',
             'Defender towers will be suppressed.',
             'Dodge, then survive the horde and tower blackout.',
+            'Dodge the slam, stop the reinforcements, and weather the tower blackout.',
         ))
         for wave, mechanic, _ in expected:
             self.assertEqual(boss_mechanic_for_wave(wave), mechanic)
@@ -77,13 +79,15 @@ class BossMechanics(unittest.TestCase):
         self.assertRegex(summon, r'if summon != null then[\s\S]*?GroupAddUnit\(KLS_Enemies,summon\)[\s\S]*?set KLS_Alive = KLS_Alive\+1[\s\S]*?else\s+set spawnFailed = true')
         self.assertIn('call KLS_AbortForSpawnFailure("boss reinforcement", kind)', summon)
 
-    def test_boss_reward_is_once_on_boss_death_and_wave_40_wins_without_waiting_for_escorts(self):
+    def test_boss_reward_is_once_on_death_and_wave_40_continues_without_victory(self):
         script = runtime_script('KLS-D-TEST')
         death = function_body(script, 'KLS_Death')
         self.assertEqual(death.count('call KLS_BossReward()'), 1)
-        self.assertRegex(death, r'if dead == KLS_Boss then[\s\S]*?call KLS_BossReward\(\)[\s\S]*?if KLS_Wave == 40 then')
-        self.assertRegex(death, r'if GetWidgetLife\(KLS_King\) <= 0\.405 then\s+call KLS_End\(false\)[\s\S]*?else[\s\S]*?call KLS_BossReward\(\)[\s\S]*?if KLS_Wave == 40 then\s+call KLS_End\(true\)')
+        self.assertRegex(death, r'if dead == KLS_Boss then[\s\S]*?call KLS_BossReward\(\)[\s\S]*?call KLS_Message\("Boss defeated!')
+        self.assertRegex(death, r'if GetWidgetLife\(KLS_King\) <= 0\.405 then\s+call KLS_End\(false\)[\s\S]*?else[\s\S]*?call KLS_BossReward\(\)')
+        self.assertNotIn('call KLS_End(true)', death)
         self.assertNotRegex(death, r'if KLS_Alive == 0 then[\s\S]{0,180}call KLS_BossReward\(\)')
+        self.assertIn('if not KLS_Ended and KLS_Alive == 0 then', death)
         self.assertIn('set KLS_Boss = null', death)
 
     def test_spawn_wrappers_name_failures_and_abort_before_callers_use_null_handles(self):
@@ -129,15 +133,15 @@ class BossMechanics(unittest.TestCase):
         ):
             with self.subTest(function='KLS_Init', pattern=pattern):
                 self.assertRegex(init, pattern)
-        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 2,
-                         'the only direct unit creation outside the diagnostic wrapper is the optional spring visual')
+        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 3,
+                         'direct unit creation is limited to the optional spring visual and recoverable Undead mine conversion')
 
     def test_each_boss_action_is_limited_to_its_approved_wave_mechanics(self):
         script = runtime_script('KLS-D-TEST')
         execute = function_body(script, 'KLS_BossExecuteMechanic')
-        self.assertIn('if KLS_BossMechanic == 1 or KLS_BossMechanic == 4 then', execute)
-        self.assertIn('if KLS_BossMechanic == 2 or KLS_BossMechanic == 4 then', execute)
-        self.assertIn('if KLS_BossMechanic == 3 or KLS_BossMechanic == 4 then', execute)
+        self.assertIn('if KLS_BossMechanic == 1 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then', execute)
+        self.assertIn('if KLS_BossMechanic == 2 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then', execute)
+        self.assertIn('if KLS_BossMechanic == 3 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then', execute)
 
 
 if __name__ == '__main__':

@@ -12,15 +12,15 @@
 5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is development build `KLS-D-1a040d638c`, installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`. World Editor is open on this exact map; Test Map and Custom Game verification remain pending. The user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check the current status in ROADMAP-AND-ACCEPTANCE.md.
+The current package is development build `KLS-D-8669a44192` at `dist/KLS-D-8669a44192-Development.w3m`. It is not installed yet: World Editor still holds the previous `KLS-D-1a040d638c` file open, so the installer preserved an archive copy and stopped rather than replacing that file. Close the old editor document, then rerun `python -B tools/build_map.py --install-test-map`. Test Map and Custom Game checks for the current build remain pending. The user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check ROADMAP-AND-ACCEPTANCE.md for the current status.
 
 All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its five themed universal items and healing/mana potions. Talk to the settlement characters to start the optional four-chapter recovery story; it continues during active waves. The four Legendary Foundry patterns combine that race's Rare and Uncommon item into its Legendary item.
 
-On each level after 1, choose +3 Strength, Agility or Intelligence in the visible stat dialog. Every fifth level also grants a Vanguard, Skirmisher or Sage talent. Four Crownlands objectives can be started from their settlement characters at any time; they do not pause active waves.
+On each level after 1, open the hero ability panel and spend the normal skill point on `+3 Strength`, `+3 Agility`, or `+3 Intelligence` (the plus buttons replace the old level-up stat dialog). Every fifth level also grants a Vanguard, Skirmisher or Sage talent. Four Crownlands objectives can be started from their settlement characters at any time; they do not pause active waves.
 
 ## Match
 
-- Defend King Aldric. Keep attackers off him; the final boss must die before the king.
+- Defend King Aldric. The original Crownlands story lasts waves 1-40, then crossover assaults continue automatically. King Aldric's death ends the run; the HUD shows the highest wave reached.
 - Work your own race-matched base and command your own army. You cannot control a teammate's units.
 - Hire/use workers to mine gold, harvest nearby trees, and build within your own plot.
 - Build on your plot only. Keep the central road open for attackers, defenders, siege units, and bosses.
@@ -31,7 +31,7 @@ On each level after 1, choose +3 Strength, Agility or Intelligence in the visibl
 - A player-owned defender kill pays its full bounty only to that player's resources. King Aldric's kill pays 25% of the bounty to each active player. The exact amount should appear in a recipient-only gold popup. Stronger enemies pay larger bounties.
 - Each active player's hero within 1,200 range of a tracked enemy death receives the full XP award individually. Nearby heroes do not divide the XP; race and life state do not filter recipients. This custom award is source/package checked and needs in-game confirmation.
 - Use King Aldric's Castle for heal/upgrade buttons. Contributions cost personal resources.
-- Normal breaks: 50 seconds. Before waves 10, 20, 30, 40: 180 seconds.
+- Normal breaks: 50 seconds. Before every boss wave: 180 seconds.
 - The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range quietly recover 1% of maximum HP and 1% of maximum mana every second while missing either resource. It no longer produces a healing burst effect or per-tick text.
 
 ## Diagnostic-only shortcuts
@@ -42,7 +42,7 @@ These are for development/testing and must not be treated as release controls:
 |---|---|
 | -help | Show diagnostic help |
 | -diag | Show build ID and recent runtime creation/error diagnostics |
-| -wave N | Start a diagnostic-selected wave 1–40 |
+| -wave N | Start a diagnostic-selected wave 1-1000 |
 | -gold | Add diagnostic gold/lumber |
 | -repair | Exercise castle-heal transaction |
 | -upgrade | Exercise castle-upgrade transaction |

@@ -1,6 +1,6 @@
 # Hero-themed armies and Forsaken Kingdom expansion
 
-**Status: approved architecture; initial source implementation added.** The existing 40-wave design remains in force. Exact build/package and engine acceptance remain separate gates.
+**Status: approved architecture; initial source implementation added.** The original 40-wave Crownlands story remains intact and is followed by the approved endless campaign crossover. Exact build/package and engine acceptance remain separate gates.
 
 ## Design goal
 

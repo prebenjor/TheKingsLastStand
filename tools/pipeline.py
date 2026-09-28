@@ -24,7 +24,7 @@ from terrain import expanded_terrain, expanded_pathing
 from town_catalog import town_script
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'crownlands.j', 'game.j')
+MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'crownlands.j', 'game.j')
 BASELINE_SHA = '3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9'
 INFO_SHA = 'a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc'
 GAME = Path(r'C:\Program Files (x86)\Warcraft III')
@@ -123,7 +123,7 @@ def runtime_script(build_id):
         raise ValueError('Expected one baseline camera bounds call; update the camera generator.')
     config = ['function config takes nothing returns nothing', f'    call SetMapName("KLS DEVELOPMENT {build_id}")', '    call SetMapDescription("Diagnostic build: editor and game startup check")', '    call SetPlayers(4)', '    call SetTeams(1)', '    call SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)']
     for i, (x, y) in enumerate(PLOTS):
-        config += [f'    call DefineStartLocation({i}, {x}, {y})', f'    call SetPlayerStartLocation(Player({i}), {i})', f'    call SetPlayerColor(Player({i}), ConvertPlayerColor({i}))', f'    call SetPlayerRacePreference(Player({i}), RACE_PREF_HUMAN)', f'    call SetPlayerRaceSelectable(Player({i}), false)', f'    call SetPlayerController(Player({i}), MAP_CONTROL_USER)', f'    call SetPlayerSlotAvailable(Player({i}), MAP_CONTROL_USER)', f'    call SetPlayerTeam(Player({i}), 0)']
+        config += [f'    call DefineStartLocation({i}, {x}, {y})', f'    call SetPlayerStartLocation(Player({i}), {i})', f'    call SetPlayerColor(Player({i}), ConvertPlayerColor({i}))', f'    call SetPlayerRacePreference(Player({i}), RACE_PREF_RANDOM)', f'    call SetPlayerRaceSelectable(Player({i}), false)', f'    call SetPlayerController(Player({i}), MAP_CONTROL_USER)', f'    call SetPlayerSlotAvailable(Player({i}), MAP_CONTROL_USER)', f'    call SetPlayerTeam(Player({i}), 0)']
     config += ['    call InitGenericPlayerSlots()', 'endfunction']
     return 'globals\n'+'\n'.join(declarations)+'\nendglobals\n'+body+'\n'+main+'\n'+'\n'.join(config)+'\n'
 

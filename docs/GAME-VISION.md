@@ -2,7 +2,7 @@
 
 ## One-sentence promise
 
-Two to four friends choose different Warcraft heroes, build their own kingdom outposts along one defended road, and cooperate to keep King Aldric alive through forty escalating undead and demon assaults.
+Two to four friends choose different Warcraft heroes, build their own kingdom outposts along one defended road, and cooperate to keep King Aldric alive through the forty-wave Crownlands campaign and endless cross-campaign assaults.
 
 ## The experience
 
@@ -62,4 +62,4 @@ The current terrain target is a readable 192 × 192-cell battlefield. Connected 
 - The king is one neutral shared objective. His castle is the actual place to heal and upgrade him.
 - The Forsaken Kingdom's native backpack/equipment system is the intended inventory UX; keeping an item in a six-slot-only shop delivery must not make that item unusable.
 - Waves do not attack until selection and preparation timers complete.
-- Four bosses occur at the end of each ten-wave chapter: 10, 20, 30, and 40.
+- Keep the original chapter bosses at waves 10, 20, 30, and 40. After the Crownlands story, continue automatically into endless waves with a boss every ten waves; King Aldric's death ends the run.

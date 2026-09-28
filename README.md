@@ -1,28 +1,28 @@
 # The King's Last Stand
 
-**A cooperative, 40-wave Warcraft III Definitive Edition defense RPG.**
+**A cooperative Warcraft III Definitive Edition defense RPG with a 40-wave campaign and endless crossover assaults.**
 
 Players command distinct heroes and their own race-matched workers, buildings, and armies, build and upgrade four personal bases, and hold the King's Road against a changing undead and demonic invasion. King Aldric and his castle are the shared objective. The game combines hero progression and equipment with worker economy, construction, towers, boss fights, and personal boss rewards.
 
 ## Project status
 
-Current development build: **KLS-D-1a040d638c**.
+Current development build: **KLS-D-8669a44192**.
 
-- Map: `dist/KLS-D-1a040d638c-Development.w3m`
-- SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`
-- Installed test map: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m` (hash matches).
+- Map: `dist/KLS-D-8669a44192-Development.w3m`
+- SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`
+- The install command could not replace the prior test map because World Editor currently holds `KLS-D-1a040d638c-Development.w3m` open. A verified archive copy of that older file exists under `backups/installed-diagnostics/`; install the current package after closing its editor session.
 - Build manifest: dist/build-manifest.json
 
-This build expands the battlefield to 192×192 with four connected allied settlements; makes workers, build menus, structures and recruit roles match each selected hero's race; adds eight heroes, race-themed companies, level-up choices, a four-part optional story, and twenty race-themed rarity items with four Foundry recipes. Sacred Aura's rank 4/5 learned and learn-menu tooltips are generated from safe 38.5%/27.5% and 42%/30% effects for both ability IDs. The suite passes **87/87**; package readback and installed-editor API syntax pass. Previous versions are archived locally.
+This package includes the Crownlands settlements, four-race companies, hero progression and custom content. Per-level +3 Strength, Agility, or Intelligence choices now appear as native hero ability plus buttons; the global stat-choice dialog is removed. The Undead Temple inherits the correct Temple parent, race building tooltips describe their actual roles, Undead Acolytes can haunt mines, and the Night Elf mine order can reach the starting mine. After the preserved 40-wave story, ten installed campaign crossover rosters repeat with live-wave scaling, a five-force wave 49 convergence, a Lady Vashj wave 50 boss, rotating campaign leaders and personal Legendary catalog rewards. King Aldric's death ends the run. Sacred Aura ranks 4/5 retain the generated 38.5%/27.5% and 42%/30% effects for both ability IDs. The source regression suite passes **105/105**; package readback and installed-editor API syntax pass.
 
-This exact build still needs its own World Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and 40-wave endurance checks, so it remains Development. The suite passes **88/88**. The earlier user-reported Test Map success is a pass for `KLS-D-fd638ddcf5`. Use docs/ROADMAP-AND-ACCEPTANCE.md for current-build acceptance and docs/CROWNLANDS-EXPANSION.md for implementation details.
+This exact build still needs its own World Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks, so it remains Development. The earlier user-reported Test Map success is a pass for `KLS-D-fd638ddcf5`. Use docs/ROADMAP-AND-ACCEPTANCE.md for current-build acceptance and docs/CROWNLANDS-EXPANSION.md for implementation details.
 
 ## Start here
 
 - AGENTS.md — instructions and invariants for future agents.
 - docs/GAME-VISION.md — why the game exists and the experience to protect.
 - docs/GAMEPLAY-SPEC.md — match, economy, buildings, landscape, and player systems.
-- docs/CROWNLANDS-EXPANSION.md — current expansion contract: 192-cell map, four settlements, race-matched workers/buildings, 25 heroes, progression, optional story, and twenty-item catalog.
+- docs/CROWNLANDS-EXPANSION.md — current expansion contract: 192-cell map, four settlements, race-matched workers/buildings, 25 heroes, progression, optional story, twenty-item catalog, and endless campaign waves.
 - docs/HEROES-AND-ABILITIES.md — hero roster, native skills, safe ranks, and signature spells.
 - docs/HERO-THEMED-EXPANSION.md — proposed Forsaken Kingdom heroes, personal retinues, and hero-linked buildings/army research.
 - docs/ITEMS-AND-EQUIPMENT.md — Forsaken Kingdom backpack, quality progression, effects, books, recipes, relics, and shops.

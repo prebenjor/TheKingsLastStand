@@ -1,6 +1,6 @@
 # Waves, bosses, and invading forces
 
-The invasion lasts forty waves, divided into four ten-wave chapters. Normal waves retain earlier enemy roles as new units are introduced. Demons supplement the undead rather than replacing them. Living mercenary/creature escorts appear because hero spells and effects that interact with living beings need valid combat targets too.
+The Crownlands story lasts forty waves, divided into four ten-wave chapters. After Wave 40, the match automatically continues through an endless campaign crossover. Normal waves retain earlier enemy roles as new units are introduced. Demons supplement the undead rather than replacing them. Living mercenary/creature escorts appear because hero spells and effects that interact with living beings need valid combat targets too.
 
 ## Chapter roster progression
 
@@ -11,36 +11,42 @@ The invasion lasts forty waves, divided into four ten-wave chapters. Normal wave
 | 21–30 | The Siege Tide | Siege pressure and mixed escorts | Earlier waves, elites, necromancers, ranged and demonic support |
 | 31–40 | The Last Host | Endgame combinations and Infernals | Full prior roster with siege, elites, casters, demons, and escorts |
 
-The code stores forty explicit generated rosters in tools/wave_rosters.py. Spawn count grows as 7 + 2 × wave + 3 × active players. Ordinary wave enemies start from health 180 + 55 × wave + 35 × active players, and damage 6 + 2 × wave. Boss health scales from wave × 550 × (1 + 0.3 × active players), with boss base damage wave × 5. These are initial tuning formulas, not proven balanced values.
+The generator stores the original 40 rows and one ten-row endless roster (waves 41-50). Endless waves resolve to source row `41 + ((wave - 41) % 10)`, so roster indexing stays bounded while the live wave number continues to scale difficulty. Spawn count grows as 7 + 2 × wave + 3 × active players. Ordinary wave enemies start from health 180 + 55 × wave + 35 × active players, and damage 6 + 2 × wave. Boss health scales from wave × 550 × (1 + 0.3 × active players), with boss base damage wave × 5. These are initial tuning formulas, not proven balanced values.
 
-Current roster rawcodes include: ugho, uske, ucry, nska, nfel, hfoo, nfgu, unec, nsat, uabo, ndqn, nvdw, umtw, nbal, and ninf. Read names from the installed game table during builds; never invent a rawcode mapping from memory. The rawcode roster is intentionally maintained against installed DE object data.
+The crossover introduces installed campaign Naga (`nmyr`, `nnsw`, `nnmg`, `nnrg`, `nhyc`, `nwgs`), Blood Elf (`nbel`, `nbee`, `hbew`), Fel Orc / Chaos Orc (`nchg`, `nchr`, `nchw`, `nckb`), Burning Legion (`nfel`, `nfgu`, `nbal`, `ninf`), and Scourge (`uske`, `ugho`, `ucry`, `nska`, `unec`, `uabo`, `umtw`) forces. Wave 49 gathers all five factions. Wave 50's ordinary roster is followed by a separate Lady Vashj boss spawn. These unit IDs resolve to the locally installed Definitive Edition tables; their native campaign models, animations, and armor fields are inherited without custom unit replacements.
+
+The complete ordered rawcode sequences for story and crossover waves are maintained in the generated [wave roster catalog](WAVE-ROSTER-CATALOG.md). Read unit names and campaign status from the installed game tables during builds; never invent a rawcode mapping from memory. Crossover units keep their installed Definitive Edition model, animation set, and armor data.
 
 ## Combat gold bounty (initial tuning)
 
 Each tracked enemy death gives the role bounty to the defender player who owns the killing unit. Player kill gold is not shared. If King Aldric gets the killing blow, each active defender gets 25% of that enemy's bounty. A role's base bounty increases by the current wave number:
 
-| Role / unit rawcode | Base gold | Example at wave 1 |
-|---|---:|---:|
-| Skeleton Warrior (`uske`) | 5 | 6 |
-| Ghoul (`ugho`) | 8 | 9 |
-| Footman escort (`hfoo`) | 9 | 10 |
-| Crypt Fiend / Skeletal Archer (`ucry` / `nska`) | 12 | 13 |
-| Satyr Trickster (`nsat`) | 14 | 15 |
-| Succubus / Voidwalker (`ndqn` / `nvdw`) | 16 | 17 |
-| Fel Stalker (`nfel`) | 18 | 19 |
-| Necromancer (`unec`) | 22 | 23 |
-| Felguard (`nfgu`) | 24 | 25 |
-| Abomination (`uabo`) | 32 | 33 |
-| Meat Wagon (`umtw`) | 36 | 37 |
-| Doom Guard (`nbal`) | 40 | 41 |
-| Infernal (`ninf`) | 45 | 46 |
-| Chapter boss | 100 + 5 × wave | 150 |
+| Role / unit rawcode | Base bounty | Paid bounty formula |
+|---|---:|---|
+| Skeleton Warrior (`uske`) | 5 | base + live wave |
+| Ghoul (`ugho`) | 8 | base + live wave |
+| Footman escort (`hfoo`) | 9 | base + live wave |
+| Crypt Fiend / Skeletal Archer (`ucry` / `nska`) | 12 | base + live wave |
+| Satyr Trickster (`nsat`) | 14 | base + live wave |
+| Succubus / Voidwalker (`ndqn` / `nvdw`) | 16 | base + live wave |
+| Fel Stalker (`nfel`) | 18 | base + live wave |
+| Necromancer (`unec`) | 22 | base + live wave |
+| Felguard (`nfgu`) | 24 | base + live wave |
+| Abomination (`uabo`) | 32 | base + live wave |
+| Meat Wagon (`umtw`) | 36 | base + live wave |
+| Doom Guard (`nbal`) | 40 | base + live wave |
+| Infernal (`ninf`) | 45 | base + live wave |
+| Naga Myrmidon / Siren / Mur'gul Reaver (`nmyr` / `nnsw` / `nnmg`) | 28 / 24 / 28 | base + live wave |
+| Naga Royal Guard / Dragon Turtle / Couatl (`nnrg` / `nhyc` / `nwgs`) | 40 / 42 / 36 | base + live wave |
+| Blood Elf Lieutenant / Engineer / Siege Wagon (`nbel` / `nbee` / `hbew`) | 25 / 22 / 36 | base + live wave |
+| Fel Orc Grunt / Wolf Rider / Warlock / Kodo Beast (`nchg` / `nchr` / `nchw` / `nckb`) | 24 / 30 / 30 / 34 | base + live wave |
+| Chapter / endless boss | - | 100 + 5 × live wave |
 
-These are starting values for playtesting, not final balance. Bosses also retain their existing per-defender chapter reward and personal relic. Boss reinforcements use their own unit role's bounty when killed. The table is generated from `tools/wave_rosters.py`; every rawcode in the 40 wave rosters must have exactly one bounty entry.
+These are starting values for playtesting, not final balance. Bosses on waves 10-40 retain their existing per-defender gold reward and personal relic. Bosses from wave 50 onward grant one personal Legendary catalog item to each active player. Boss reinforcements use their own unit role's bounty when killed. The table is generated from `tools/wave_rosters.py`; every rawcode in the 50 generated roster rows must have exactly one bounty entry.
 
 For each tracked enemy death, each active defender hero within 1,200 world units independently receives the full normal unit-level XP award. The runtime disables native XP sharing and applies each full award, so nearby heroes do not divide one total. Hero race and life state do not filter recipients. Verify behavior with a dead hero in the installed game before calling it engine-proven.
 
-The full generated unit-code sequence for every wave, in order, is preserved in WAVE-ROSTER-CATALOG.md. At runtime, the spawn loop cycles through that wave's listed sequence if the player-scaled count is larger than the sequence.
+The full generated unit-code sequence for each of the 50 source rows, in order, is preserved in WAVE-ROSTER-CATALOG.md. At runtime, the spawn loop cycles through that row's sequence if the player-scaled count is larger than the sequence. Live wave 51 reuses row 41, wave 60 reuses row 50, and the ten-row pattern continues without growing the roster table.
 
 Each wave enemy is registered once in the authoritative tracked group. The spawn loop aborts with a diagnostic error if a required unit cannot be created; it must not leave the match waiting forever for a unit that never spawned. Death, boss summons, cleanup, and wave completion need exactly-once accounting.
 
@@ -52,11 +58,13 @@ Each wave enemy is registered once in the authoritative tracked group. The spawn
 | 20 | Grave Muster | Lich hero base | Summons reinforcements; count every summon |
 | 30 | Siege Blight | Dreadlord hero base | Suppresses/pause defender towers for 8 seconds |
 | 40 | The Last March | Crypt Lord hero base | Combines slam, summons, and tower blackout |
+| 50 | Vashj Ascendant | Campaign Lady Vashj (`Hvsh`) | Convergence slam, summons, and tower blackout |
 
 - Telegraph before action, keep the HUD and on-screen warning visible until resolution, and never hide a warning while its attack is pending.
 - Bosses are tracked as enemies. Each active defender receives one personal reward on boss death, even if escorts remain.
-- Defeating the final boss while the king is alive is the wave-40 victory condition. The king's death takes precedence if both resolve together. Wave-40 escorts cannot delay victory forever.
-- The design calls for one unique, unsellable relic per boss, awarded to every participating player. Current rawcodes are I010–I013; see ITEMS-AND-EQUIPMENT.md for the documented gap in names/effects and full-storage entitlement handling.
+- Bosses recur every ten waves. Waves 50, 60, 70, 80, and 90 rotate among the installed campaign leader records `Hvsh`, `Usyl`, `Uanb`, `Hjsm`, and `Ujsm`; the five-step leader cycle repeats.
+- Wave 40 is not a victory point. Defeating its boss and clearing the remaining enemies starts the next preparation countdown and the automatic Wave 41 assault. The match ends only when King Aldric falls; the final HUD shows the highest wave reached.
+- Waves 10-40 keep their personal relics (`I010`-`I013`). Each boss from Wave 50 onward grants each active player one personal Legendary catalog item. Existing owner binding, inventory delivery, fallback placement, bounty, XP, and ordinary boss-drop rules remain in effect.
 
 ## Composition and pathing guardrails
 

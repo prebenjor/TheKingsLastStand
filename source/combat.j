@@ -8,14 +8,10 @@ globals
     real KLS_BossY = 0
     integer array KLS_TalentPoints
     integer array KLS_LastTalentMilestone
-    integer array KLS_StatPending
     integer array KLS_TalentStrengthRank
     integer array KLS_TalentAgilityRank
     integer array KLS_TalentIntelligenceRank
     dialog array KLS_ProgressionDialog
-    button array KLS_StatStrengthButton
-    button array KLS_StatAgilityButton
-    button array KLS_StatIntelligenceButton
     button array KLS_TalentStrengthButton
     button array KLS_TalentAgilityButton
     button array KLS_TalentIntelligenceButton
@@ -26,20 +22,14 @@ function KLS_ProgressionShow takes integer p returns nothing
     if p < 0 or p >= 4 or not KLS_Active[p] or KLS_ProgressionDialog[p] == null then
         return
     endif
-    call DialogClear(KLS_ProgressionDialog[p])
-    if KLS_StatPending[p] > 0 then
-        call DialogSetMessage(KLS_ProgressionDialog[p],"Level-up stat investment: choose where to put this level's 3 points.")
-        set KLS_StatStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Strength",0)
-        set KLS_StatAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Agility",0)
-        set KLS_StatIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"+3 Intelligence",0)
-    elseif KLS_TalentPoints[p] > 0 then
-        call DialogSetMessage(KLS_ProgressionDialog[p],"Talent earned! Every 5 hero levels, choose one specialty.")
-        set KLS_TalentStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Vanguard: Strength, health and regeneration",0)
-        set KLS_TalentAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Skirmisher: Agility, attack speed and evasion",0)
-        set KLS_TalentIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Sage: Intelligence, mana and regeneration",0)
-    else
+    if KLS_TalentPoints[p] <= 0 then
         return
     endif
+    call DialogClear(KLS_ProgressionDialog[p])
+    call DialogSetMessage(KLS_ProgressionDialog[p],"Talent earned! Every 5 hero levels, choose one specialty.")
+    set KLS_TalentStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Vanguard: Strength, health and regeneration",0)
+    set KLS_TalentAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Skirmisher: Agility, attack speed and evasion",0)
+    set KLS_TalentIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Sage: Intelligence, mana and regeneration",0)
     call DialogDisplay(Player(p),KLS_ProgressionDialog[p],true)
 endfunction
 
@@ -83,13 +73,7 @@ function KLS_ProgressionClick takes nothing returns nothing
         return
     endif
     set hero = KLS_Hero[p]
-    if clicked == KLS_StatStrengthButton[p] then
-        call ModifyHeroStat(bj_HEROSTAT_STR,hero,bj_MODIFYMETHOD_ADD,3)
-    elseif clicked == KLS_StatAgilityButton[p] then
-        call ModifyHeroStat(bj_HEROSTAT_AGI,hero,bj_MODIFYMETHOD_ADD,3)
-    elseif clicked == KLS_StatIntelligenceButton[p] then
-        call ModifyHeroStat(bj_HEROSTAT_INT,hero,bj_MODIFYMETHOD_ADD,3)
-    elseif clicked == KLS_TalentStrengthButton[p] and KLS_TalentPoints[p] > 0 then
+    if clicked == KLS_TalentStrengthButton[p] and KLS_TalentPoints[p] > 0 then
         set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
         call KLS_TalentApply(p,0)
     elseif clicked == KLS_TalentAgilityButton[p] and KLS_TalentPoints[p] > 0 then
@@ -102,9 +86,6 @@ function KLS_ProgressionClick takes nothing returns nothing
         set hero = null
         return
     endif
-    if KLS_StatPending[p] > 0 then
-        set KLS_StatPending[p] = KLS_StatPending[p]-1
-    endif
     call DialogDisplay(Player(p),KLS_ProgressionDialog[p],false)
     call KLS_ProgressionShow(p)
     set hero = null
@@ -116,12 +97,11 @@ function KLS_TalentLevel takes nothing returns nothing
     local integer milestone
     if p >= 0 and p < 4 and u == KLS_Hero[p] then
         call KLS_ApplySpellRanks(u)
-        set KLS_StatPending[p] = KLS_StatPending[p]+1
         set milestone = GetHeroLevel(u) / 5
         if milestone > KLS_LastTalentMilestone[p] then
             set KLS_TalentPoints[p] = KLS_TalentPoints[p] + milestone - KLS_LastTalentMilestone[p]
             set KLS_LastTalentMilestone[p] = milestone
-            call DisplayTimedTextToPlayer(Player(p), 0, 0, 10, "Talent earned at level "+I2S(GetHeroLevel(u))+". Choose a primary-stat specialty after your stat investment.")
+            call DisplayTimedTextToPlayer(Player(p), 0, 0, 10, "Talent earned at level "+I2S(GetHeroLevel(u))+". Choose a primary-stat specialty.")
         endif
         call KLS_ProgressionShow(p)
     endif
@@ -402,16 +382,16 @@ function KLS_BossSummon takes nothing returns nothing
 endfunction
 
 function KLS_BossExecuteMechanic takes nothing returns nothing
-    if KLS_BossMechanic == 1 or KLS_BossMechanic == 4 then
+    if KLS_BossMechanic == 1 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then
         call KLS_BossSlam()
     endif
-    if KLS_BossMechanic == 2 or KLS_BossMechanic == 4 then
+    if KLS_BossMechanic == 2 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then
         call KLS_BossSummon()
     endif
-    if KLS_BossMechanic == 3 or KLS_BossMechanic == 4 then
+    if KLS_BossMechanic == 3 or KLS_BossMechanic == 4 or KLS_BossMechanic == 5 then
         set KLS_TowerSuppression = 8
         call KLS_SetTowersPaused(true)
-        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,8,"|cffff4444Siege Blight suppresses defender towers for 8 seconds!|r")
+        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,8,"|cffff4444The boss suppresses defender towers for 8 seconds!|r")
     endif
     set KLS_BossCast = 0
 endfunction

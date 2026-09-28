@@ -12,11 +12,67 @@ _COMPANY_NAMES = {
     'Undead': ('Bone Banner Hall','Wraithforged Smithy','Graveyard of Arms'),
 }
 _ARCANE_NAMES = ('Arcane Sanctum','Spirit Lodge','Ancient Lore Grove','Temple of the Damned')
+_ARCANE_TOOLTIPS = {
+    'Human': 'Human arcane college. Trains Priests to heal and Sorceresses to control the field; researches both orders’ spellcraft.',
+    'Orc': 'Orc Spirit Lodge. Trains Shamans, Witch Doctors and Spirit Walkers, with their native spell training and research.',
+    'Night Elf': 'Night Elf Ancient Lore Grove. Trains Druids of the Claw, Dryads and Mountain Giants, and researches their nature arts.',
+    'Undead': 'Undead Temple of the Damned. Trains Necromancers and Banshees and researches their native dark rituals.',
+}
+_ALTAR_TOOLTIPS = {
+    'Human': 'The Human Altar of Kings calls your chosen champion. Fallen heroes return here after 20 seconds.',
+    'Orc': 'The Orc Altar of Storms calls your chosen hero. Fallen heroes return here after 20 seconds.',
+    'Night Elf': 'The Night Elf Altar of Elders calls your chosen hero. Fallen heroes return here after 20 seconds.',
+    'Undead': 'The Undead Altar of Darkness calls your chosen hero. Fallen heroes return here after 20 seconds.',
+}
 _TOWER_NAMES = {
     'Human': ('Guard Tower','Cannon Tower','Sanctuary Tower'),
     'Orc': ('Watch Tower','War Drum Tower','Spirit Ward'),
     'Night Elf': ('Ancient Protector','Moonfire Spire','Moonwell Sentinel'),
     'Undead': ('Ziggurat Tower','Frost Tower','Soulwell Spire'),
+}
+_TOWER_TOOLTIPS = {
+    'Human': (
+        'A Human roadside watchtower. Its arrows deal 18 base damage to attackers.',
+        'A Human bombardment tower. Heavy shots deal 70 base damage to attackers.',
+        'A Human Sanctuary Tower. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+    ),
+    'Orc': (
+        'An Orc lookout tower. Its attacks deal 18 base damage to approaching enemies.',
+        'An Orc Redtusk heavy tower. Its crushing shots deal 70 base damage to attackers.',
+        'An Orc Spirit Ward. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+    ),
+    'Night Elf': (
+        'A Night Elf Ancient Protector guarding the woodland road. Its attacks deal 18 base damage.',
+        'A Night Elf Moonfire Spire that lashes invaders for 70 base damage.',
+        'A Night Elf Moonwell Sentinel. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+    ),
+    'Undead': (
+        'An Undead Ziggurat Tower guarding the approach. Its attacks deal 18 base damage.',
+        'An Undead Frost Tower that strikes invaders for 70 base damage.',
+        'An Undead Soulwell Spire. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+    ),
+}
+_COMPANY_TOOLTIPS = {
+    'Human': {
+        'hall': 'Raise the Lion Banner to unlock your chosen hero’s personal company at the Barracks.',
+        'foundry': 'Royal armorers strengthen your company and support troops: +20% maximum health and +20% base damage.',
+        'siege_yard': 'The King’s engineers prepare the support unit chosen for your hero. This yard stocks only your own company.',
+    },
+    'Orc': {
+        'hall': 'Beat the Redtusk war drums to unlock your chosen hero’s personal warband at the Barracks.',
+        'foundry': 'The Ashen forge hardens your warband: +20% maximum health and +20% base damage for company and support troops.',
+        'siege_yard': 'Orc war-drummers muster the support unit chosen for your hero. This lodge stocks only your own company.',
+    },
+    'Night Elf': {
+        'hall': 'Gather Sentinels beneath the Moonlit Banners to unlock your chosen hero’s company at the Ancient of War.',
+        'foundry': 'Moonbark runes empower your company: +20% maximum health and +20% base damage for its recruits and support.',
+        'siege_yard': 'The War Grove prepares the support unit chosen for your hero. Its stock belongs to you alone.',
+    },
+    'Undead': {
+        'hall': 'Raise the bone standard to unlock your chosen hero’s graveguard company at the Crypt.',
+        'foundry': 'Wraithforged arms fortify your company: +20% maximum health and +20% base damage for recruits and support.',
+        'siege_yard': 'The Graveyard of Arms musters the support unit chosen for your hero. This yard stocks only your own company.',
+    },
 }
 
 FACTIONS = [
@@ -30,7 +86,7 @@ FACTIONS = [
      'food':'emow','barracks':'eaow','blacksmith':'eaoe','arcane':'kR02','arcane_parent':'eaoe',
      'towers':('kT20','kT21','kT22'),'tower_parents':('etrp','etrp','etrp')},
     {'race':'Undead','worker':'uaco','town_hall':'unpl','altar':'kA03','altar_parent':'uaod',
-     'food':'uzig','barracks':'usep','blacksmith':'uslh','arcane':'kR03','arcane_parent':'umtw',
+     'food':'uzig','barracks':'usep','blacksmith':'uslh','arcane':'kR03','arcane_parent':'utod',
      'towers':('kT30','kT31','kT32'),'tower_parents':('uzig','uzg2','uzig')},
 ]
 
@@ -38,11 +94,11 @@ for race_index, faction in enumerate(FACTIONS):
     hall_name, foundry_name, yard_name = _COMPANY_NAMES[faction['race']]
     faction['company_buildings'] = {
         'hall': {'rawcode':f'kH0{race_index}','parent':('hcas','ofrt','etol','unpl')[race_index],
-                 'name':hall_name,'tooltip':'Raise the company banner for your chosen hero and unlock its personal Barracks recruit.'},
+                 'name':hall_name,'tooltip':_COMPANY_TOOLTIPS[faction['race']]['hall']},
         'foundry': {'rawcode':f'kF0{race_index}','parent':('hbla','ofor','eaoe','uslh')[race_index],
-                    'name':foundry_name,'tooltip':'Veteran arms grant your company and support troops +20% maximum health and +20% base damage.'},
+                    'name':foundry_name,'tooltip':_COMPANY_TOOLTIPS[faction['race']]['foundry']},
         'siege_yard': {'rawcode':f'kY0{race_index}','parent':('harm','obar','eaow','usep')[race_index],
-                       'name':yard_name,'tooltip':'Train the tactical support unit chosen for your hero. Stock belongs to this player.'},
+                       'name':yard_name,'tooltip':_COMPANY_TOOLTIPS[faction['race']]['siege_yard']},
     }
     for key, building in faction['company_buildings'].items():
         gold,lumber,build_time,hit_points = _COMPANY_COSTS[key]

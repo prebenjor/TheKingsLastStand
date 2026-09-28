@@ -2,23 +2,24 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-1a040d638c**
+Build: **KLS-D-8669a44192**
 
-Map SHA-256: **eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362**
+Map SHA-256: **b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
-| Source package / generated objects / archive inventory and readback | Current build inventory, component hashes and package-to-install equality checked | Passed statically |
+| Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 88 source-level tests, including four-race settlements, 25 heroes, company catalogs, story progression/multi-player escort credit, item catalogs/recipes, hero progression and both Sacred Aura tooltip variants | Passed for this source snapshot |
+| Focused automated regressions | 105 source-level tests, including race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
-| Editor save/reopen | World Editor is open and responsive on the exact current map; no save/close/reopen cycle has been run | Pending |
-| Current-build Test Map / Custom Game startup | `KLS-D-1a040d638c` installed; no current-build launch evidence yet. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Editor save/reopen | World Editor still holds the prior build open; this package has not been opened | Pending |
+| Current-build Test Map / Custom Game startup | `KLS-D-8669a44192` is packaged but not installed because the prior map is locked by World Editor. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; visual routes and playability need live inspection | Pending in game |
-| Four-race selection and construction | Per-player worker, hall, altar, build menu, towers, Hall of Banners, Foundry, Siege Yard and faction catalog are source/regression checked | Pending in mixed-race game |
+| Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, Acolyte mine haunting and Night Elf mine reach are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; visuals, ability behavior, company recruit and ownership need live checks | Pending in game |
-| Level 1–50 progression and talents | +3 attribute choice each level; separate talent choice every fifth level. Dialog rendering, multi-level queues and actual secondary stats need live checks | Pending in game |
+| Level 1–50 progression and talents | Per-level +3 Strength/Agility/Intelligence choices are native hero `+` skills; the stat-choice dialog was removed. Fifth-level specialty talent dialog and stat changes need live checks | Pending in game |
+| Endless waves after wave 40 | Ten repeating roster rows and rotating bosses scale from the live wave number | Pending in game |
 | Shops, rarity colors, drops, gear and Foundry recipes | Twenty catalog items, five rarity tiers, shop stock, drops and four racial recipes are package/regression checked; shop interface, equipment and craft interactions need live checks | Pending in game |
 | Optional Crownlands recovery story | Four chapters use a separate story enemy group and do not modify wave count/timer in source checks; all objective/reward paths need live play | Pending in game |
 | Sacred Aura `AHas` / `AHpa` descriptions and values | Generated ranks 1–5 and learned/learn-menu strings are regression checked; verify visible rank 4/5 text in Warcraft | Pending in game |
@@ -28,9 +29,9 @@ Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 | Restoring Spring cadence | Source restores 1% max health and mana per second silently within 450 range | Pending in game |
 | Wave-break timers | Normal break 50s; pre-boss break 180s | Pending in game |
 | All construction, gathering, king and tower systems | Source/regression evidence only | Pending live |
-| All forty waves, four boss mechanics and end states | Source/regression evidence only | Pending live |
+| Original waves 1-40 and endless crossover loop | Generator preserves the original roster fingerprint; 41-50 campaign units, bounded cycle, 50/60/70 boss rotation, rewards, and king-death outcome are regression checked | Pending live |
 | Real 2/3/4-player synchronization | No network session evidence | Pending |
-| Full 40-wave two- and four-player endurance | No normal-speed match evidence | Pending |
+| Full Crownlands plus endless two- and four-player endurance | No current-build normal-speed match evidence | Pending |
 
 Passing syntax or simulated tests never clears an in-game gate.
 
@@ -39,7 +40,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. The exact current build-ID-named map is open in World Editor. Save/reopen and Test Map are still pending; do not create another round-trip copy.
+2. World Editor holds the prior installed build open. The new package is not installed yet; release the old file handle, install the new build, then use that exact build for the editor save/reopen and Test Map checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -55,17 +56,17 @@ Passing syntax or simulated tests never clears an in-game gate.
 
 ### Gate 3 — waves, network, and endurance
 
-1. Run all 40 wave compositions, boss actions, summon accounting, last-enemy removal, final boss victory, king defeat, same-tick deaths, departures, and next-wave scaling.
+1. Preserve and run the original 40 wave compositions, then play through waves 40-50 and at least one later boss. Check bosses 50, 60, and 70, their telegraphs, summons, exactly-once bounties/XP/counts, and one personal Legendary item per active player. Wave 40 must continue; King Aldric's death must end the run and show the highest wave.
 2. Test actual 2-player and 4-player sessions with UI actions, ownership, shared vision/no shared control, purchases, rewards and synchronized outcomes. Check three-player initialization/scaling.
-3. Complete normal-speed 40-wave games with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
+3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
-2. `KLS-D-1a040d638c` is installed as the single current project map at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`. SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`; the installed file matches the package. Previous maps were archived outside the Custom Game folder.
-3. Current-build startup is pending. Open this exact map in World Editor and run Test Map, then launch the same installed map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
-4. Exercise a mixed-race selection, racial build menus and worker jobs; inspect new heroes/signatures, stat/talent dialogs, towns and road navigation; test item stock, equipment, drops, recipes, story rewards, and Sacred Aura rank 4/5 tooltips.
-5. Continue with the existing kill gold/XP, castle, shop/backpack, spring and 50/180-second break checks, followed by real multiplayer and 40-wave endurance acceptance.
+2. Package `KLS-D-8669a44192` is at `dist/KLS-D-8669a44192-Development.w3m`, SHA-256 `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`. Installation created a verified archive copy of the previous map, but World Editor still holds the original open, so no new file was installed. Close that old editor document and run `python -B tools/build_map.py --install-test-map`.
+3. Current-build startup is pending. Open the new exact map in World Editor and run Test Map, then launch that same installed map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
+4. Exercise mixed-race selection, racial build menus and worker jobs; inspect the Undead Temple icon/queues, + stat buttons, fifth-level talents, towns and road navigation; test item stock, equipment, drops, recipes, story rewards, Sacred Aura rank 4/5 tooltips, and both race-specific mine orders.
+5. Continue with the existing kill gold/XP, castle, shop/backpack, spring and 50/180-second break checks, then verify automatic wave 40 continuation, the wave 49 convergence, Lady Vashj at wave 50, and one later rotating boss. Confirm the optional Crownlands story stays outside wave accounting. Finish with real multiplayer and endless endurance acceptance.
 
 For the first item-system check after startup, click the Forsaken Field Pack and confirm its native UI opens. Then buy common boots, move them between backpack storage and the normal inventory, and sell them to a shop. Separately, stand at the spring with missing HP/mana and confirm both bars tick upward each second without a burst effect or message.
 

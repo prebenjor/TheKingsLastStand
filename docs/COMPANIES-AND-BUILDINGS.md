@@ -14,6 +14,17 @@ All prices are personal resources. All three structures require the player's Bar
 
 The Altar (`h000`) is created beside each starting Town Hall. The worker build card has twelve or fewer entries; `kY00` uses the native Workshop art and replaces a second, redundant Altar/Workshop button. The other Human buildings and all three tower roles remain on the worker card.
 
+### Race-specific support buildings and towers
+
+| Race | Arcane/support building (ID / native parent) | Role and tooltip identity | Towers (IDs) |
+|---|---|---|---|
+| Human | Arcane Sanctum `h004` / Arcane Sanctum `hars` | Priests, Sorceresses, and their native research | Guard `h001`, Cannon `h002`, Sanctuary `h003` |
+| Orc | Spirit Lodge `kR01` / Spirit Lodge `osld` | Shamans, Witch Doctors, Spirit Walkers, and their research | Watch `kT10`, War Drum `kT11`, Spirit Ward `kT12` |
+| Night Elf | Ancient Lore Grove `kR02` / Ancient of Lore `eaoe` | Druids of the Claw, Dryads, Mountain Giants, and nature research | Protector `kT20`, Moonfire `kT21`, Moonwell Sentinel `kT22` |
+| Undead | Temple of the Damned `kR03` / Temple of the Damned `utod` | Necromancers, Banshees, and dark-ritual research | Ziggurat `kT30`, Frost `kT31`, Soulwell Spire `kT32` |
+
+Race-specific altars, company buildings, arcane shops, and towers now carry descriptions for their actual faction and function. The Undead Temple inherits the native Temple's model, icon, training and research orders; its previous Meat Wagon parent (`umtw`) was incorrect. Sanitarium towers share the Human Sanctuary runtime: they heal allied units for 15 HP every 3 seconds within 650 range. Object names/tooltips and source hooks are catalog-driven in `tools/faction_catalog.py`; check the native queue, icons, and healing in the editor/game.
+
 ## Hero company catalog
 
 Each row is one selector choice in the same order as `tools/hero_progression.py`. `Company` recruits are stocked by the owner's Barracks only after their Hall is complete. `Support` recruits are stocked at that player's Siege Yard. Costs are gold/lumber; the Foundry upgrade is 20% HP and damage.

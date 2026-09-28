@@ -3,14 +3,33 @@
 
 ## Current package-proven build
 
-- Current task: implement and document the Crownlands kingdom expansion and correct Sacred Aura's learned/learn-menu tooltip ranks.
-- Build: **KLS-D-1a040d638c**.
-- Artifact: `dist/KLS-D-1a040d638c-Development.w3m`.
-- SHA-256: `eaee0e501b3e7ced381bda7c93c530d79499faad94f2bb80304a9aeb1340e362`.
-- Package member readback, installed-editor API syntax, package archive verification and the full automated regression suite (**88/88**) passed.
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-1a040d638c-Development.w3m`; package and installed SHA-256 match. Previous development and installed maps are preserved under `backups/development-builds/` and `backups/installed-diagnostics/`.
-- Implemented: 192×192 terrain/pathing/camera/minimap, four connected allied settlements, per-player race-matched workers and build menus, eight heroes and 16 hero-matched recruits, four-race structures, level 1–50 stat/talent progression, 20 catalog items/four Legendary recipes, optional four-stage story with multi-player escort credit, and generated rank-aware Sacred Aura descriptions.
-- Status: **development build**. World Editor is open and responsive on this exact installed map. Save/reopen, Test Map, Custom Game, live gameplay, multiplayer and endurance remain pending. The prior user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5** and is not counted as a failed step or as evidence for this new build.
+- Current task: preserve the 40-wave Crownlands campaign and add endless campaign crossover waves, recurring bosses, personal Legendary rewards, and King-only defeat.
+- Build: **KLS-D-8669a44192**.
+- Artifact: `dist/KLS-D-8669a44192-Development.w3m`.
+- SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`.
+- Package member readback and installed-editor API syntax passed. Full source regression suite: **105/105 passed** (`python -B -m unittest discover -s tests -v`).
+- Implemented: the original 40 rows are unchanged; waves 41-50 add Naga, Blood Elf, Fel Orc, Burning Legion, and Scourge forces, with all five represented at Wave 49. The bounded ten-row cycle repeats while live-wave scaling continues. Campaign leaders rotate as bosses every ten waves; bosses from Wave 50 grant each active player a personal Legendary catalog item. Existing tracked enemy accounting, bounties, XP, summons, and relic rewards for waves 10-40 remain covered by regressions. Wave 40 continues, King Aldric's death ends the run, and the HUD shows the highest wave.
+- Crossover units resolve against installed Definitive Edition tables and retain their native campaign models, animations, movement, and armor. The deterministic ordered roster catalog is `docs/WAVE-ROSTER-CATALOG.md`.
+- The install attempt made a verified archive copy of the previous `KLS-D-1a040d638c-Development.w3m` and stopped because World Editor still holds the original open. The new map is not installed. Close the old editor document, then run `python -B tools/build_map.py --install-test-map`.
+- Status: **development build**. Current-build editor save/reopen, Test Map, Custom Game, native plus-button behavior, mine orders, Temple UI, wave 40-50 and later-boss visuals/gameplay, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains a pass for **KLS-D-fd638ddcf5**.
+
+## 2026-09-28: endless campaign crossover and Crownlands runtime — KLS-D-8669a44192
+
+### Changes and evidence
+
+- Replaced the global per-level attribute Dialog with standard hero `+` skill choices for +3 Strength, +3 Agility, or +3 Intelligence. Every fifth level still awards the separate Vanguard/Skirmisher/Sage talent.
+- Set map default race preference to Random and changed the confirmed hero's owner's race preference before spawning the matching race base.
+- Corrected Undead Temple of the Damned rawcode `kR03` to inherit from `utod`; retained native Temple training/research fields so it uses the Temple's art and icon. Updated race-specific Altar, arcane/support, tower and company-building descriptions.
+- Added Undead Acolyte conversion of a neutral gold mine into an owner-controlled Haunted Gold Mine, preserving remaining gold. Extended Night Elf Tree of Life `Aent` range to 1,450.
+- Carried forward the user-requested first 40 waves and added ten bounded repeating post-40 campaign rosters, live-wave scaling, recurring installed-campaign bosses, and personal Legendary drops from Wave 50 onward. Wave 49 converges all five forces; Wave 40 continues; only King Aldric's death ends the run. The same package also contains the primary-stat plus skills and race-specific mine/building fixes listed above.
+- Full regressions: **105/105 passed**. Supported package readback and installed-editor API syntax checks passed.
+- Artifact SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`.
+- Installation is blocked only by the World Editor handle on the older map. The archive copy is verified; the original remains untouched. The exact current build is still available in `dist/`.
+
+### Next human checks
+
+- Close the prior map in World Editor, run the supported install command, open the newly installed build and check the startup ID. Verify the primary-stat plus buttons are visible and one selection increases only the matching attribute without a per-level dialog; also verify the separate fifth-level choice. Then play through waves 40-50 and one later boss to inspect the crossover campaign models/armor, warnings, summons, pathing and per-player reward.
+- In mixed-race play, confirm `utod` Temple icon and queues, Undead Acolyte mine haunting/resource harvest, and Night Elf Entangle access. Continue to the broader gameplay, multiplayer and endurance checks. Do not mark earlier successful Test Map evidence as failed; it stays with `KLS-D-fd638ddcf5`.
 
 ## Previous build record — KLS-D-b5ae4ab2fe
 

@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 
 from pipeline import misc_data, runtime_script
-from wave_rosters import BOUNTY_BY_UNIT, bounty_script, wave_rosters
+from wave_rosters import BOSS_UNIT_CODES, BOUNTY_BY_UNIT, all_wave_rosters, bounty_script
 
 
 def function_body(script, name):
@@ -20,7 +20,7 @@ def function_body(script, name):
 
 class EnemyBounties(unittest.TestCase):
     def test_every_roster_unit_has_an_explicit_role_bounty(self):
-        roster_units = {unit for roster in wave_rosters() for unit in roster}
+        roster_units = {unit for roster in all_wave_rosters() for unit in roster}
         self.assertTrue(roster_units.issubset(BOUNTY_BY_UNIT))
         self.assertEqual(roster_units, set(BOUNTY_BY_UNIT))
 
@@ -92,7 +92,8 @@ class EnemyBounties(unittest.TestCase):
     def test_bosses_and_boss_summons_use_strength_based_bounty(self):
         script = runtime_script('KLS-D-TEST')
         bounty = function_body(script, 'KLS_EnemyBounty')
-        self.assertIn("if unitCode == 'Udea' or unitCode == 'Ulic' or unitCode == 'Udre' or unitCode == 'Uanb' then\n        return 100 + KLS_Wave * 5", bounty)
+        boss_condition = ' or '.join("unitCode == '" + code + "'" for code in BOSS_UNIT_CODES)
+        self.assertIn('if ' + boss_condition + ' then\n        return 100 + KLS_Wave * 5', bounty)
         self.assertIn("if unitCode == 'nfgu' then\n        return 24 + KLS_Wave", bounty)
         self.assertIn("if unitCode == 'uske' then\n        return 5 + KLS_Wave", bounty)
 

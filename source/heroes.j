@@ -23,12 +23,23 @@ function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns n
     local integer raceId = KLS_HeroRace[heroIndex]
     local integer workerIndex = 0
     local integer rawcode
+    local racepreference racePreference
     local real x = KLS_X[p]
     local real y = KLS_Y[p]
     local unit candidate
     local unit created
     local group owned = CreateGroup()
     set KLS_PlayerRace[p] = raceId
+    if raceId == 0 then
+        set racePreference = RACE_PREF_HUMAN
+    elseif raceId == 1 then
+        set racePreference = RACE_PREF_ORC
+    elseif raceId == 2 then
+        set racePreference = RACE_PREF_NIGHTELF
+    else
+        set racePreference = RACE_PREF_UNDEAD
+    endif
+    call SetPlayerRacePreference(Player(p),racePreference)
     if raceId != 0 then
         call GroupEnumUnitsOfPlayer(owned,Player(p),null)
         loop
@@ -73,6 +84,7 @@ function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns n
     set owned = null
     set candidate = null
     set created = null
+    set racePreference = null
 endfunction
 
 function KLS_FinishSelection takes nothing returns nothing

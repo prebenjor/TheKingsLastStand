@@ -1,0 +1,114 @@
+"""Regression contracts for racial mine access and faction building roles."""
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+sys.path.insert(0, str(ROOT / 'tests'))
+
+from faction_catalog import FACTIONS
+from equipment_catalog import abilities
+from objects import units
+from pipeline import runtime_script
+from test_equipment import decode
+from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
+from hero_catalog import NEW_HEROES
+
+
+class RaceMiningAndBuildings(unittest.TestCase):
+    def test_undead_arcane_building_uses_temple_parent_and_keeps_native_stock(self):
+        undead = FACTIONS[3]
+        self.assertEqual(undead['arcane_parent'], 'utod')
+        base, fields = decode(units())[undead['arcane']]
+        self.assertEqual(base, 'utod')
+        self.assertNotIn(('utra', 0), fields)
+        self.assertNotIn(('ures', 0), fields)
+        self.assertNotIn(('urev', 0), fields)
+        self.assertIn('Necromancers', fields[('utub', 0)][0])
+        self.assertIn('Banshees', fields[('utub', 0)][0])
+        self.assertNotIn(('uico', 0), fields)
+
+    def test_each_racial_worker_menu_and_custom_building_role_is_serialized(self):
+        records = decode(units())
+        for faction in FACTIONS:
+            menu = records[faction['worker']][1][('ubui', 0)][0].split(',')
+            self.assertEqual(menu, faction['build_menu'], faction['race'])
+            self.assertEqual(len(menu), 12)
+            for role, entry in faction['company_buildings'].items():
+                base, fields = records[entry['rawcode']]
+                self.assertEqual(base, entry['parent'], (faction['race'], role))
+                self.assertEqual(fields[('utub', 0)][0], entry['tooltip'])
+
+    def test_custom_building_tooltips_name_race_and_explain_their_real_roles(self):
+        records = decode(units())
+        for role in ('hall', 'foundry', 'siege_yard'):
+            descriptions = [faction['company_buildings'][role]['tooltip'] for faction in FACTIONS]
+            self.assertEqual(len(set(descriptions)), 4, role)
+            self.assertTrue(all('Race-themed' not in description for description in descriptions))
+        for faction in FACTIONS:
+            race = faction['race']
+            arcane = records[faction['arcane']][1][('utub', 0)][0]
+            self.assertIn(race, arcane)
+            self.assertNotIn('same role as the Human', arcane)
+            for rawcode in faction['towers']:
+                tooltip = records[rawcode][1].get(('utub', 0), ('',))[0]
+                self.assertTrue(tooltip, (race, rawcode))
+                self.assertNotIn('Race-themed', tooltip)
+                self.assertIn(race, tooltip)
+        self.assertIn('15 health', records['h003'][1][('utub', 0)][0])
+        runtime = runtime_script('TOWER-ROLE-TEST')
+        for faction in FACTIONS:
+            self.assertIn("rawcode == '"+faction['towers'][2]+"'", runtime)
+        self.assertIn('GroupEnumUnitsInRange(targets,GetUnitX(tower),GetUnitY(tower),650,null)', runtime)
+        self.assertIn('GetWidgetLife(u)+15', runtime)
+        self.assertIn('ModuloInteger(KLS_Seconds,3) == 0', runtime)
+
+    def test_race_choice_sets_native_race_and_undead_workers_can_haunt_a_mine(self):
+        runtime = runtime_script('MINING-TEST')
+        self.assertIn('SetPlayerRacePreference(Player(p),racePreference)', runtime)
+        self.assertIn('EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER', runtime)
+        self.assertIn("GetUnitTypeId(worker) == 'uaco'", runtime)
+        self.assertIn("GetUnitTypeId(mine) == 'ngol'", runtime)
+        self.assertIn("CreateUnit(Player(p),'ugol'", runtime)
+        self.assertIn('SetResourceAmount(haunted,amount)', runtime)
+        self.assertIn('IssueTargetOrder(worker,"harvest",haunted)', runtime)
+        self.assertIn('SetPlayerRacePreference(Player(0), RACE_PREF_RANDOM)', runtime)
+        self.assertNotIn('RACE_PREF_HUMAN)', runtime[runtime.index('function config takes'):])
+
+    def test_night_elf_tree_entangle_reaches_the_starting_mine(self):
+        _, fields = decode(abilities(), extended=True)['Aent']
+        self.assertGreaterEqual(fields[('aran', 1)][0], 1400)
+        self.assertEqual(FACTIONS[2]['town_hall'], 'etol')
+
+    def test_all_racial_company_units_remain_connected_to_their_runtime_roles(self):
+        runtime = runtime_script('BUILDING-ROLES-TEST')
+        for fragment in ('EVENT_PLAYER_UNIT_CONSTRUCT_FINISH', 'KLS_IsFactionHall',
+                         'KLS_IsFactionFoundry', 'KLS_IsFactionSiegeYard',
+                         'AddUnitToStock(barracks,KLS_CompanyUnitId[KLS_HeroChoice[p]],99,99)',
+                         'AddUnitToStock(building,KLS_CompanySupportId[KLS_HeroChoice[p]],99,99)',
+                         'KLS_CompanyApplyFoundry'):
+            self.assertIn(fragment, runtime)
+
+    def test_each_hero_has_three_native_plus_button_stat_skills_and_no_stat_dialog(self):
+        unit_records = decode(units())
+        custom_heroes = {entry['unit_id'] for entry in NEW_HEROES} | {'H000'}
+        for hero_id, _skills in HERO_ABILITIES.items():
+            if hero_id in custom_heroes:
+                fields = unit_records[hero_id][1]
+            else:
+                fields = unit_records[hero_id][1]
+            choices = fields[('uhab', 0)][0].split(',')
+            self.assertTrue(set(STAT_ABILITY_IDS) <= set(choices), hero_id)
+        ability_records = decode(abilities(), extended=True)
+        for code in STAT_ABILITY_IDS:
+            base, fields = ability_records[code]
+            self.assertEqual(base, 'Aamk')
+            self.assertEqual(fields[('alev', 0)][0], 50)
+        runtime = runtime_script('SKILL-TEST')
+        self.assertNotIn('KLS_StatPending', runtime)
+        self.assertNotIn('DialogAddButton(KLS_ProgressionDialog[p],"+3 Strength"', runtime)
+
+
+if __name__ == '__main__':
+    unittest.main()

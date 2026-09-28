@@ -2,6 +2,19 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+
+## KLS-D-8669a44192 - 2026-09-28
+
+- Replaced the per-level stat dialog with three native hero `+` skills: `KSTR`, `KAGI`, and `KINT` each add three points to the chosen primary stat per rank. The separate every-fifth-level specialty choice remains.
+- Corrected the Undead Temple parent to native `utod`, retaining the Temple model, icon, training and research data. Added race-specific descriptions for altars, arcane/support buildings, towers, Hall of Banners, Foundries and Siege Yards. Sanctuary-style towers share a 15 HP / 3-second / 650-range ally-heal hook.
+- Added Undead Acolyte neutral-gold-mine haunting with gold preservation and owner harvest order. Extended Night Elf Tree of Life Entangle range to reach its starting mine. Default player race preference is Random; hero choice applies the selected race per player.
+- Preserved the authored first 40 waves and added ten bounded, repeating campaign rosters for Naga, Blood Elf, Fel Orc, Burning Legion, and Scourge forces. Wave 49 converges all five factions; Wave 50 adds the installed campaign Lady Vashj boss. Later bosses recur every ten waves, rotate through installed campaign leader records, and reuse the telegraphed slam, summon, and tower suppression mechanics.
+- Continued live-wave count, health, damage, bounty, XP, and tracked-enemy accounting through endless waves. Waves 50 and later grant each active player a personal Legendary item from the equipment catalog; waves 10-40 retain their existing relic rewards. Wave 40 continues automatically; King Aldric's death ends the run and the HUD records the highest wave.
+- Kept campaign unit models, animations, movement, and armor sourced from the installed Definitive Edition tables. Added a generated 50-row roster catalog and synchronized the wave, gameplay, Crownlands, decisions, roadmap, and contributor documents.
+- Full automated regression suite: **105/105 passed**. Build-manifest checks `archive_readback` and `syntax_installed_api` are recorded as passed; the packaged artifact hash matches the manifest.
+- Package SHA-256: `b7d0b41039d0cd4d655daf97d40a0329d443f987c62e9a927c87a8fc7bb995a0`.
+- Installation archived a verified copy of prior map `KLS-D-1a040d638c` but stopped because World Editor holds the original file open. The current map remains packaged in `dist/` and is not installed. Close the prior editor document and rerun `python -B tools/build_map.py --install-test-map`. Editor save/reopen, Test Map, Custom Game, plus-button behavior, race-specific mine orders, Temple UI, campaign-unit visuals and pathing, wave 40-50 and later-boss gameplay, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+
 ## KLS-D-1a040d638c - 2026-09-28
 
 - Carries forward the complete Crownlands expansion and Sacred Aura tooltip work described in the previous entry.

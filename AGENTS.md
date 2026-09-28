@@ -15,7 +15,7 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 ## Product rules
 
 - The game is a 2–4 player cooperative human-kingdom defense RPG with individual player armies and heroes. Players do not receive shared unit control.
-- Preserve the 40-wave, four-chapter structure and the bosses on waves 10, 20, 30, and 40.
+- Preserve the original waves 1-40 and four-chapter Crownlands story. After wave 40, continue automatically through the bounded repeating 41-50 campaign roster; boss waves recur every ten waves. King Aldric's death is the only run-ending condition, and the HUD shows the highest wave reached.
 - Preserve the user's battlefield: a broad north-to-south road, the undead/demon approach from the north, an open central gate in the northern wall, four separate player plots aligned across one horizontal row, King Aldric's castle at the defense line, and the shared market farther south.
 - Keep the 25-choice hero selector before the match proper. Duplicate choices are allowed. The selected hero's race independently sets that player's worker, altar, Town Hall and matching build menu; mixed-race allies retain separate identities. See docs/CROWNLANDS-EXPANSION.md.
 - Each hero unlocks their own Barracks company after completing a Hall of Banners, a matching support recruit at their Siege Yard, and a personal doctrine aura. Their Royal Foundry applies a one-time +20% health and base damage veteran upgrade to existing and future company recruits. Do not add company units to the tracked enemy group or enemy gold rewards.
