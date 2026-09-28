@@ -1,0 +1,8 @@
+*.w3m binary
+*.w3x binary
+*.w3n binary
+*.blp binary
+*.md text eol=lf
+*.j text eol=lf
+*.py text eol=lf
+*.json text eol=lf

@@ -1,0 +1,71 @@
+"""Native object editor modifications, kept as source data for reproducible builds."""
+import struct
+
+
+def record(base, custom, fields):
+    data = bytearray(base.encode() + custom.encode() + struct.pack('<I', len(fields)))
+    for key, value in fields.items():
+        typ = 3 if isinstance(value, str) else (2 if isinstance(value, float) else 0)
+        data.extend(key.encode() + struct.pack('<I', typ))
+        data.extend(value.encode()+b'\0' if typ == 3 else struct.pack('<f' if typ in (1,2) else '<i', value))
+        data.extend(custom.encode())
+    return bytes(data)
+
+
+def table(original, custom):
+    return struct.pack('<II', 2, len(original)) + b''.join(original) + struct.pack('<I', len(custom)) + b''.join(custom)
+
+
+def units():
+    original = [record('hpea', '\0\0\0\0', {'ubui':'htow,hhou,hbar,hbla,harm,h000,h004,h001,h002,h003', 'ureq':''})]
+    custom = [
+        record('Hamg', 'H000', {'unam':'Priest','uhab':'AHhb,AHab,AHds,AHre','ureq':'','uhpm':600}),
+        record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
+        record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':'Select this altar to choose your hero before your choice is locked. Fallen heroes return here automatically after 20 seconds. Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
+        record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':'Trains Priests for healing and Sorceresses for battlefield control. Provides Priest and Sorceress training upgrades.','utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
+        record('hgtw', 'h001', {'unam':'Watchtower','ureq':'','uupt':'','ua1b':18,'ugol':140,'ulum':50,'ubld':25,'uhpm':650}),
+        record('hctw', 'h002', {'unam':'Bombard Tower','ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
+        record('hatw', 'h003', {'unam':'Sanctuary Tower','utub':'Restores 15 health to nearby allied units every 3 seconds. Range 650.','ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
+    ]
+    custom.append(record('ngme','hS00',{'unam':'Kingdom Merchant','usei':'','umki':'','uabi':'Avul,Aneu,Apit,Asid,Asud','utub':'Select to browse equipment. Bring your hero within 700 range to buy.'}))
+    custom.append(record('hars','hS02',{'unam':"Sage's Archive",'utip':"Sage's Archive",'utub':'A quiet shop for permanent Strength, Agility and Intelligence tomes. Select your hero before buying.','uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
+    custom.append(record('hcas','hC01',{"unam":"King Aldric's Castle",'uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
+    custom.append(record('hpea','hS01',{'unam':'Frost effect','uabi':'Aloc,ASl0','umdl':'','umvs':0,'ucol':0.0,'umpm':100,'umpi':100,'ufoo':0}))
+    return table(original, custom)
+
+
+from equipment_catalog import item_catalog
+
+def items():
+    from equipment_catalog import attribute_books
+    from recipes import recipe_catalog
+
+    custom = [record('ebua','Ibpk',{'unam':'Forsaken Field Pack','utip':'Forsaken Field Pack','utub':'Native Forsaken Kingdom backpack: 30 storage slots and nine equipment slots. Keep this pack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
+    for entry in item_catalog():
+        fields={'unam':entry['name'],'utip':entry['name'],
+                'icla':'Equipment','igol':entry['price'],'iper':0,'iabi':entry['abilities'],'utub':entry['description'],'iusa':0,'ilev':1,'ilvo':1,'ilum':0,'iuse':0,
+                'idro':0,'ipaw':1,'isel':1}
+        custom.append(record(entry['parent'],entry['rawcode'],fields))
+    for book in attribute_books():
+        fields={'icla':'Power-ups','unam':book['name'],'utip':book['name'],
+                'utub':book['description'],'igol':book['price'],'iabi':'',
+                'iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':1}
+        custom.append(record(book['parent'],book['rawcode'],fields))
+    for recipe in recipe_catalog(item_catalog()):
+        fields={'icla':'Power-ups','unam':'Forge Recipe: '+recipe['name'],
+                'utip':'Forge Recipe: '+recipe['name'],'utub':recipe['description'],
+                'igol':recipe['price'],'iabi':'','iequ':0,'iusa':0,'iper':0,
+                'iuse':0,'idro':0,'ipaw':0,'isel':1}
+        custom.append(record('arsc',recipe['rawcode'],fields))
+    controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0})]
+    for tier in range(5):
+        raw='KUP'+str(tier+1)
+        cost=400+200*tier
+        controls.append(record('ckng',raw,{'icla':'Miscellaneous','unam':'Royal Defense Upgrade - Tier '+str(tier+1),'utip':'Royal Defense Upgrade - Tier '+str(tier+1),'utub':'Upgrade King Aldric: +4,000 maximum/current health and +30 damage. Tier '+str(tier+1)+' costs '+str(cost)+' gold and 150 lumber.','igol':cost,'ilum':150,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0}))
+    custom.extend(controls+[
+        record('ratf','I010',{'icla':'Equipment','unam':'Gravetide Cleaver','utip':'Gravetide Cleaver','utub':'Chapter I boss relic: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':0}),
+        record('rhth','I011',{'icla':'Equipment','unam':'Heart of the Watch','utip':'Heart of the Watch','utub':'Chapter II boss relic: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':0}),
+        record('lgdh','I012',{'icla':'Equipment','unam':'Crown of Dawn','utip':'Crown of Dawn','utub':'Chapter III boss relic: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':0}),
+        record('ckng','I013',{'icla':'Equipment','unam':'Oath of the Last King','utip':'Oath of the Last King','utub':'Chapter IV boss relic: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':0}),
+    ])
+    return table([], custom)

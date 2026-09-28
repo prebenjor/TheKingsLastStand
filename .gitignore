@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.log
+test-results/
+build/
+tools/reference/
+tools/vendor/lupa/
+tools/vendor/lupa-*.dist-info/
+tools/vendor/bin/
+tools/vendor/mpyq-*.dist-info/
+tools/vendor/casclib-*/
+tools/vendor/casclib-build/
+backups/*
+!backups/Blank-DE.w3m
+source/war3map.j
+Editor-Roundtrip.w3m
+TheKingsLastStand.w3m

@@ -1,0 +1,222 @@
+{
+  "build_id": "KLS-D-fd638ddcf5",
+  "status": "development: startup proof pending",
+  "output_path": "dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m",
+  "sha256": "48c960e485bd9c81154c13c4ce73ec0b33ac21059572a81a3add8436a268aafd",
+  "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
+  "source_hashes": {
+    "source/diagnostics.j": "b6ede9d3caa7b69da02267e09162a881b4131bf4523628a35da9b27658c9f558",
+    "source/heroes.j": "e706db4648b316e91c40f9a717a163c8161205fc88facce7fd03bfb576ecc8dc",
+    "source/backpack.j": "e65d65aa1a3a524a00d1047100db82e316eeb4ba5fab7e47da3a84ffa891a319",
+    "source/shops.j": "1a0dfe5c573930034e551bd3eb60cf98b215f4b966cbed580e917ff8ef95ca5b",
+    "source/equipment.j": "67f13ec2ee4c734da9d49c115984dc1dcac2046a7f3a1a7cd76ee1d4e5d13a85",
+    "source/hud.j": "4b0465bfe22a48e063c8011f3fed7d0ec6b9f2be69d78bc1f9c763498fc810aa",
+    "source/castle.j": "14639874a76fe03a6a1373c19ea8cb2ea294410505727cdc5f8946052325757e",
+    "source/combat.j": "403f58ccae1ddacab95ddf307885310393b84fff3ff98d1da30fa70d21f019ed",
+    "source/wave_environment.j": "60e52937a60cbec91f14094614cf60d7b0e3e7845e4d976dd04bd0356c4e9db8",
+    "source/signatures.j": "530e81fbea251e4cfa975876f2e4abb39e02ddaca1cd6ba27354883de565d25b",
+    "source/game.j": "34238d333a73de7e696f27ec6d298d93c67b1bcfa2d6c4d77dae4604a32f9dfd",
+    "tools/archive_pack.py": "3774ac9d0fab23472f343dedecbc8bf696a99bae1382b6cb764166d0da88e3b2",
+    "tools/build_map.py": "193e3b76651e5bad6d281fa6baedb21babc6257fdd25eb09a2b79687d1af4a26",
+    "tools/collect_test_logs.py": "87fa92a8750888d5962582edf5d7047172b5c92e5c556656c6aa0727ab4f3fbc",
+    "tools/equipment_catalog.py": "a9a37dddb87a9d9fb7c52e00049c9605266614706b752838af7cf4d95043026c",
+    "tools/extract_game_api.py": "eb1971e8ab7ced7313c432a1009fdd72e15f1dba86fd250e790f66d799fbbfa2",
+    "tools/gui_sources.py": "5c9e094f30dc29e8a68b860d0b8ed8886063423f1f337c85e59e61b6b8e99cb3",
+    "tools/hero_progression.py": "e8617fbba912d7819d2d77c094e5c5bd50d05d7f008eeada39a02b02c06c66dc",
+    "tools/install_diagnostic.py": "104bb4aa5436c4e07d55443a11c3ebc7b5693228a9ac1d0cde7d4b213f72236d",
+    "tools/map_archive.py": "669ae74d19df0ee217f6f3f202a3eedc281403f1f487255f4363c4777084ff43",
+    "tools/map_info.py": "49bb98b83f976b06b2f5088ec311cd1c965ce261333796323e6c49a6c7ee263a",
+    "tools/objects.py": "3edee0c95741e276ee1b70651b704b794f854a2825f2fa39c40b353a5a67e86e",
+    "tools/pack.py": "955d763127dabbb52e98ef3d1716d1dee4350a18f3abcba3fd106ef2608661b4",
+    "tools/pipeline.py": "2606774995a3ff51af3b71f7b2e3b2e5980095d0bcd3fa2231be8e3da2fbf8ba",
+    "tools/recipes.py": "f6282af62e138921e16d89df2be1d9ea1bfd4ead04ef2a082b95d646d1d693ea",
+    "tools/signature_spells.py": "e205eba976090522fcb2fe056e59ff2d5d63ac20cde393735a246d1ce15d259c",
+    "tools/terrain.py": "cafc897182d36fa9c378edcee8d664c86eecf43c0cf03a150150f67377f8fc66",
+    "tools/wave_rosters.py": "5baf3ef3ff657871f42f2082072302c8ae6417e9654dc9fc010fb4ee0e5f45f1",
+    "tools/reference/installed/ItemData.slk": "311f39bf506606d07078aedc6db4721cfc1f4fd6777cb67dfa64431bb5ce4173",
+    "tools/reference/installed/AbilityData.slk": "8e0f49e848ea7d9be8866e21a766a3d4833e3747fd4ca08979fd5be7531a13b2",
+    "tools/reference/installed/UnitMetaData.slk": "eaea4b8314bcdcba38b5330b2bdea500d02cd448df22a789558325df81be09a4",
+    "tools/reference/installed/AbilityMetaData.slk": "56c05ee81361d36b1c001a249562a0934fe621515b3d369fc3ed47b0aee86c02",
+    "tools/reference/installed/WorldEditStrings.txt": "ad5c5b55eb9c9b39d9a715bbab4cc07bd1cb1c7d53e5974a7a697e64aaa987e9",
+    "tools/reference/installed/UnitData.slk": "b4830f02053caeebe72defb55f1f24fbeb83343ff8af60456b2b92aaf59cb0d1",
+    "tools/reference/installed/ItemAbilityFunc.txt": "1316f482bbb23e27aebfad2aa86c2bdb120a544fef7d883726f0bdfce5600b6d",
+    "tools/reference/installed/commandbuttons.txt": "0d6a7b0a5f4c4495b22ad5e7a5fcf23f531d14e1e6f175f81a65a2f125b348ae"
+  },
+  "installed_api": {
+    "game_root": "C:\\Program Files (x86)\\Warcraft III",
+    "build_info_sha256": "9634415670e63868c82f3bc167dc8f8f127550382d817a63b561f99e77e1ffd4",
+    "files": {
+      "common.j": {
+        "archive_path": "war3.w3mod:scripts\\common.j",
+        "sha256": "6948e88800a3903afd995322f1b8516329d28eee75587977f6f731c3cfa438da",
+        "size": 382346
+      },
+      "blizzard.j": {
+        "archive_path": "war3.w3mod:scripts\\blizzard.j",
+        "sha256": "8398e1852cfed3660c3a2f473a89ecfb48efec32898eca290f5216c742e1595f",
+        "size": 506503
+      },
+      "ItemData.slk": {
+        "archive_path": "war3.w3mod:Units\\ItemData.slk",
+        "sha256": "311f39bf506606d07078aedc6db4721cfc1f4fd6777cb67dfa64431bb5ce4173",
+        "size": 282004
+      },
+      "UnitData.slk": {
+        "archive_path": "war3.w3mod:Units\\UnitData.slk",
+        "sha256": "b4830f02053caeebe72defb55f1f24fbeb83343ff8af60456b2b92aaf59cb0d1",
+        "size": 343550
+      },
+      "AbilityData.slk": {
+        "archive_path": "war3.w3mod:Units\\AbilityData.slk",
+        "sha256": "8e0f49e848ea7d9be8866e21a766a3d4833e3747fd4ca08979fd5be7531a13b2",
+        "size": 3527035
+      },
+      "UnitMetaData.slk": {
+        "archive_path": "war3.w3mod:Units\\UnitMetaData.slk",
+        "sha256": "eaea4b8314bcdcba38b5330b2bdea500d02cd448df22a789558325df81be09a4",
+        "size": 73808
+      },
+      "AbilityMetaData.slk": {
+        "archive_path": "war3.w3mod:Units\\AbilityMetaData.slk",
+        "sha256": "56c05ee81361d36b1c001a249562a0934fe621515b3d369fc3ed47b0aee86c02",
+        "size": 286781
+      },
+      "ItemAbilityFunc.txt": {
+        "archive_path": "war3.w3mod:Units\\ItemAbilityFunc.txt",
+        "sha256": "1316f482bbb23e27aebfad2aa86c2bdb120a544fef7d883726f0bdfce5600b6d",
+        "size": 11139
+      },
+      "commandbuttons.txt": {
+        "archive_path": "war3.w3mod:ReplaceableTextures\\CommandButtons\\BTN*",
+        "sha256": "0d6a7b0a5f4c4495b22ad5e7a5fcf23f531d14e1e6f175f81a65a2f125b348ae",
+        "size": 85830,
+        "file_count": 1534
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "(attributes)",
+      "size": 100,
+      "sha256": "561ee3c6a882390575e936c9641f26278df7f3df7f41fa7de5543b46f0f384b2"
+    },
+    {
+      "name": "(listfile)",
+      "size": 317,
+      "sha256": "2efd0e2f9d945a9a2ad2c92a25c2020e037020d681489463ce9a8d1388bb125d"
+    },
+    {
+      "name": "conversation.json",
+      "size": 64,
+      "sha256": "0b3d1bdf2b0e90a774b1e1278e038a670c5b3066019dd8e8849655a4cdea08cf"
+    },
+    {
+      "name": "war3map.doo",
+      "size": 24,
+      "sha256": "390abf3266720381e4d472a83ff09b0c394be471b990917b560f70b651b114a0"
+    },
+    {
+      "name": "war3map.j",
+      "size": 153865,
+      "sha256": "ff3ec4d7d2f4d42a533f7d574f616d2f719545e07f510eb12082d5399c7a24e5"
+    },
+    {
+      "name": "war3map.mmp",
+      "size": 24,
+      "sha256": "e64a2cdb7efad44401b4c843244011810b3a06f7a16bdee9c0f7384fda6ad879"
+    },
+    {
+      "name": "war3map.shd",
+      "size": 262144,
+      "sha256": "8a39d2abd3999ab73c34db2476849cddf303ce389b35826850f9a700589b4a90"
+    },
+    {
+      "name": "war3map.w3a",
+      "size": 213059,
+      "sha256": "15bde900d18c89a8bfc6709929fb8be9619bbd8627b18930bfba14bd5d0a27ff"
+    },
+    {
+      "name": "war3map.w3c",
+      "size": 8,
+      "sha256": "35be322d094f9d154a8aba4733b8497f180353bd7ae7b0a15f90b586b549f28b"
+    },
+    {
+      "name": "war3map.w3e",
+      "size": 133197,
+      "sha256": "c8b008d45a2e817b3a6090ba312a40e50c04c0873ab4280825273bbe7fa82e39"
+    },
+    {
+      "name": "war3map.w3grp",
+      "size": 12,
+      "sha256": "15ec7bf0b50732b49f8228e07d24365338f9e3ab994b00af08e5a3bffe55fd8b"
+    },
+    {
+      "name": "war3map.w3i",
+      "size": 592,
+      "sha256": "529b3b3855460b68a82fcd9cdb3714c752750ea78f97fc32ae502be67cdcc983"
+    },
+    {
+      "name": "war3map.w3l",
+      "size": 22,
+      "sha256": "e605b3c27b181866c487bdd0af804c4c08c593a5af30ec676d806cf22f64ebe5"
+    },
+    {
+      "name": "war3map.w3r",
+      "size": 8,
+      "sha256": "aae89fc0f03e2959ae4d701a80cc3915918c950b159f6abb6c92c1433b1a8534"
+    },
+    {
+      "name": "war3map.w3t",
+      "size": 43928,
+      "sha256": "75d3708b43917bd477f627bbfd4202cbcc95ca151344ad4ab5a0c2a40c137c4c"
+    },
+    {
+      "name": "war3map.w3u",
+      "size": 2128,
+      "sha256": "4d3d0dee41ce301f6645b5cb232b94464b899ca5856b77803a56b3c6b6856a0e"
+    },
+    {
+      "name": "war3map.wct",
+      "size": 148697,
+      "sha256": "e16d2f721c85215eccbc47a6455b17279569b91c69eeafcb6a137eca51b847e1"
+    },
+    {
+      "name": "war3map.wpm",
+      "size": 262160,
+      "sha256": "e63db8b1774d3798f8a77683af699167fff58387282846b8259edc6e5c5b9f91"
+    },
+    {
+      "name": "war3map.wtg",
+      "size": 3071,
+      "sha256": "5b7f5b8ca81ce77ca1aae192de8d29e8a737f1acccc1ce06ac4fea18f429cb34"
+    },
+    {
+      "name": "war3map.wts",
+      "size": 58,
+      "sha256": "2543d7316c61c73a54fea511b1d95f0f9308f56e9e582a2c06bb0a96e981bad0"
+    },
+    {
+      "name": "war3mapMap.blp",
+      "size": 8793,
+      "sha256": "19c4ad054532652043bee9f943e44053ea253f812230f2af802b3bc9f7471fb5"
+    },
+    {
+      "name": "war3mapMisc.txt",
+      "size": 24,
+      "sha256": "1dac1b66116e6c16391bd0cccb785f3f41d468572aa805ea00fbde59a3d656c8"
+    },
+    {
+      "name": "war3mapUnits.doo",
+      "size": 131,
+      "sha256": "f18435120b61f6ae74fbaafddd8991d561a338834b8740020067a8328494ee6a"
+    }
+  ],
+  "checks": {
+    "syntax_installed_api": "passed",
+    "archive_readback": "passed",
+    "editor_roundtrip": "pending",
+    "game_startup": "pending",
+    "multiplayer": "pending"
+  },
+  "installed_diagnostic_path": "C:\\Users\\asphy\\Documents\\Warcraft III\\Maps\\TheKingsLastStand\\DIAGNOSTIC-KLS-D-fd638ddcf5.w3m"
+}
