@@ -2,20 +2,22 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-b9e9b9dd33**
+Build: **KLS-D-dddc30394a**
 
-Map SHA-256: **3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a**
+Map SHA-256: **d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | 23 packaged members checked; current output hash recorded | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 59/59 passed on this build | Passed |
+| Focused automated regressions | 63/63 passed on this build; includes exact reward toast, gear movement/sale flags, spring cadence, and changelog checks | Passed |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | No evidence that a separate save/reopen cycle was performed | Pending |
-| Current-build Test Map / Custom Game startup | KLS-D-b9e9b9dd33 has not yet been installed or launched; the older Test Map pass remains recorded separately | Pending (not failed) |
-| Shop windows, backpack/equipment, purchases, crafting and full inventory | User reported empty/text-only shops and non-equippable items; exact current-build interaction not tested | Pending / known report |
+| Current-build Test Map / Custom Game startup | KLS-D-dddc30394a has not yet been tested; the earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Shop windows, backpack/equipment, purchases, crafting and full inventory | Regression covers native droppable/pawnable gear flags, but movement, equipment and buyback need the current-build game check | Pending / known report |
+| Kill-reward feedback | Regression confirms each active player sees the exact personal kill/boss gold payout; visual readability needs the current-build game check | Pending in game |
+| Restoring Spring cadence | Regression confirms 1% max health and mana per second; healing appearance and range need the current-build game check | Pending in game |
 | All construction, gathering, king and tower systems | Source/regression evidence only | Pending live |
 | All forty waves, four boss mechanics and end states | Source/regression evidence only | Pending live |
 | Real 2/3/4-player synchronization | No network session evidence | Pending |
@@ -50,9 +52,9 @@ Passing syntax or simulated tests never clears an in-game gate.
 
 ## Current exact human-run check
 
-1. Keep the open World Editor document untouched. The user asked us to use that session, but UI automation is unavailable; no editor input has been sent.
-2. Warcraft III is currently running with the old installed diagnostic open. After the user is done and closes Warcraft III, run `python -B tools/build_map.py --install-test-map`. The revised installer archives old project maps before installing the current map. It must leave one current project `.w3m`, named `<build-id>-Development.w3m`.
-3. Test `KLS-D-b9e9b9dd33` through the established World Editor Test Map workflow. The earlier build's Test Map is a passed user-reported result; this new build remains pending until tried.
+1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step. UI automation is unavailable in this session, so no editor input has been sent.
+2. Installing `KLS-D-dddc30394a` was blocked because Warcraft III PID 46920 holds `KLS-D-f89f212a3a-Development.w3m` open. Both the original and a hash-identical archive copy are preserved. After the user finishes testing and closes Warcraft III, run `python -B tools/build_map.py --install-test-map`; the installer should archive the old project maps and leave one current `<build-id>-Development.w3m`.
+3. Test `KLS-D-dddc30394a` through the established World Editor Test Map workflow. The earlier build's Test Map is a passed user-reported result; this new build remains pending until tried.
 4. Confirm the visible build ID, 15 selection previews, correct player plot and resources, castle and king, countdown, and absence of victory.
 5. Launch that exact map through Custom Game and report its ID and results.
 6. If anything is missing, type -diag, capture full output and screenshot, then collect logs with `python -B tools/collect_test_logs.py` from the repository root.

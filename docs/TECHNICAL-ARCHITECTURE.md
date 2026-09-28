@@ -75,7 +75,8 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - When a new build replaces a prior development map, the previous `dist/` map is archived under the ignored local `backups/development-builds/`; previous installed test maps are archived under `backups/installed-diagnostics/`. Git history preserves prior checked-in `dist/` snapshots for remote recovery.
 - The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
-- The current package-proven development artifact is `dist/KLS-D-b9e9b9dd33-Development.w3m`, SHA-256 `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
+- Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
+- The current package-proven development artifact is `dist/KLS-D-dddc30394a-Development.w3m`, SHA-256 `d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
 
 ## Network determinism and ownership
 

@@ -22,7 +22,7 @@ Authoritative match states:
 - Each player controls their hero, Human workers, trained units, and structures.
 - The team shares the battlefield, neutral vendors, enemy waves, boss encounter, king, and outcome; players do not share unit control or personal resources.
 - Workers use standard Warcraft mine and lumber gathering. Put an accessible mine and harvestable tree grove by every active plot. Trees must not block routes to the mine, Altar, buildable pad, or road.
-- Enemy combat bounty is divided equally among active defenders; assign remainder gold in ascending player-slot order. Boss gold and gear rewards are granted once per active participant.
+- Enemy combat bounty is divided equally among active defenders; assign remainder gold in ascending player-slot order. Show each recipient the exact gold credited on their kill-reward notification. Boss gold and gear rewards are granted once per active participant and boss gold is shown the same way.
 - Boss gear is personal. If the inventory cannot accept the reward, preserve an entitlement or safely place a retrievable personal item; never destroy it or make it public/lootable by another defender.
 - The market is one shared set of neutral shops accessible to all players. A purchase, tome, recipe, or castle contribution charges the buyer's personal resources.
 
@@ -84,7 +84,7 @@ King Aldric is the shared survival objective at the central castle. His castle i
 
 ## Recovery, shops, and progression spaces
 
-- King's Restoring Spring is below/south-west of the castle and outside the road. Within 450 range, every five seconds restore up to 200 HP and 120 mana to active living defender heroes.
+- King's Restoring Spring is below/south-west of the castle and outside the road. Within 450 range, restore 1% of maximum health and 1% of maximum mana to active living defender heroes every second, capped at their maximums. Stop emitting the recovery effect while both resources are full.
 - Six quality vendors (Common/Quartermaster, Uncommon/Veteran, Rare/Master Forge, Epic/Runic Reliquary, Legendary/Royal Vault, and Field Apothecary) are visible in the southern market. The implementation has separate shop objects for the five gear tiers' Arms & Armor and Apparel & Relics categories. Sage's Archive sits next to the Apothecary and sells personal permanent Strength/Agility/Intelligence tomes.
 - Gold alone gates equipment quality; all shop tiers are available from the beginning.
 - A shop must use an actual clickable item stock/window with icon, item identity, price, slot, stats, and special effect tooltip. A text-only page or empty list is a user-reported failure to resolve.

@@ -6,17 +6,17 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-b9e9b9dd33**.
+Current development build: **KLS-D-dddc30394a**.
 
-- Map: `dist/KLS-D-b9e9b9dd33-Development.w3m`
-- SHA-256: `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`
+- Map: `dist/KLS-D-dddc30394a-Development.w3m`
+- SHA-256: `d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab`
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback, JASS syntax against the installed editor API, and 59 source-level regression tests pass for the current build. The user reported that World Editor Test Map succeeded for the earlier build `KLS-D-fd638ddcf5`; that result is recorded as a pass for that build. The current build still needs its own editor/game checks, live gameplay, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+Package inventory/readback, JASS syntax against the installed editor API, and 63 source-level regression tests pass for the current build. It now shows personal combat gold rewards, enables native gear movement and buyback flags, and uses one-second 1% HP/mana spring ticks. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
 
-The dedicated Custom Game folder currently contains two older project maps, one held open by the running Warcraft III process. The current build is not installed there yet. Once Warcraft III is closed, run the install command below; the installer will archive old project maps and leave one current build.
+The dedicated Custom Game folder still contains older project maps. Installing the current build was blocked because Warcraft III holds one of those files open; after closing the game, run the install command below. The installer archives old project maps and leaves one current build.
 
-The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped, and UI panels can overflow. Source stock/catalog logic exists, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
+The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build changes the gear's native droppable/pawnable flags, but that interaction is not considered fixed until tested with this exact build in Warcraft III.
 
 ## Start here
 
@@ -32,6 +32,7 @@ The user has reported that shop windows can appear empty or as text lists, purch
 - docs/ROADMAP-AND-ACCEPTANCE.md — required order and pass/pending evidence.
 - docs/DECISIONS-AND-OPEN-ISSUES.md — preserved decisions and unresolved reports.
 - docs/PROGRESS-LEDGER.md — chronological implementation and verification record.
+- CHANGELOG.md — one build-ID and SHA-tagged change record for each package.
 - docs/PLAYER-GUIDE.md — current diagnostic controls and playtest flow.
 - docs/superpowers/plans/2026-09-28-hero-items-progression-and-pool.md — approved recent scope for attributes, recipes, level-100 spells, healing pool, and longer breaks.
 

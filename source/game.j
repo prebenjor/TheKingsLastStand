@@ -24,6 +24,12 @@ function KLS_Message takes string s returns nothing
     call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 8.0, s)
 endfunction
 
+function KLS_GoldToast takes integer p, integer amount returns nothing
+    if p >= 0 and p < 4 and amount > 0 then
+        call DisplayTimedTextToPlayer(Player(p),0,0.22,2.5,"|cffffcc00+"+I2S(amount)+" gold|r")
+    endif
+endfunction
+
 function KLS_End takes boolean won returns nothing
     local integer i = 0
     if KLS_Ended then
@@ -62,6 +68,7 @@ function KLS_BossReward takes nothing returns nothing
         exitwhen i == 4
         if KLS_Active[i] then
             call SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD) + 250 + KLS_Wave * 10)
+            call KLS_GoldToast(i,250 + KLS_Wave * 10)
             set reward = CreateItem(gear, KLS_X[i], KLS_Y[i])
             call SetItemPlayer(reward, Player(i), false)
             call SetItemUserData(reward, i+1)
@@ -104,6 +111,7 @@ function KLS_AwardBounty takes integer bounty returns nothing
                 set remainder = remainder - 1
             endif
             call SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD) + payout)
+            call KLS_GoldToast(i,payout)
         endif
         set i = i + 1
     endloop

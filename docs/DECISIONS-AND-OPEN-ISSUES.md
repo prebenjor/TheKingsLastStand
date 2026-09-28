@@ -34,7 +34,7 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 ## Open reported issues (must not be silently closed)
 
 1. **Backpack click/UX:** User expects it to open like the Forsaken Kingdom campaign. The native interface has not passed current-build interaction proof.
-2. **Gear equip:** User says bought items, including boots and every other item, cannot be equipped in backpack/armor slots. Current code and packaged APIs do not disprove this report.
+2. **Gear movement/equip/sale:** User says bought items, including boots, cannot move from the Forsaken backpack to normal inventory/equipment, and shop buyback says the item cannot be dropped. Catalog gear was emitted as undroppable (`idro=0`); the current source changes ordinary gear and boss relics to droppable while keeping ordinary gear pawnable and boss relics unpawnable. Native movement/equip/sale still needs live confirmation.
 3. **Shop stock UI:** User reported empty shops and later saw list-only purchase pages without visible item icons/stats. The source contains catalog/stock code, but exact current-build live shop window is not proven.
 4. **Castle panels:** Older screenshot showed overflowing dialog text. Current source uses castle native shop-card buttons; verify current layout, prices, refunds, and health/upgrade effects in game.
 5. **Altar model/role:** User observed a Sorceress in a structure expected to be the Altar of Kings and clarified the Chapel should be the Altar. Current source uses a custom lowercase h000 building record and selector logic; verify displayed model, portrait, construction object, and selection/spawn role in current build.
@@ -43,6 +43,8 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 8. **Missing models/icons/rawcodes:** Older logs included model creation failures while an older map was in Warcraft's log; the failures were not attributed to the current build. Always tie new log evidence to exact build ID/hash and installed API provenance.
 9. **Shop/gameplay behavior after build changes:** Re-run acceptance against current build only. A screenshot from an old build is not evidence the latest fixed or introduced the issue.
 10. **Starting worker portrait:** Starting units use the Human Peasant rawcode `hpea`, but the user sees an Acolyte portrait while workers are selected. Audit unit creation, native portrait/icon metadata, player-race UI context, and group selection in the supported editor; make the Peasant identity visible consistently.
+11. **Combat gold feedback:** Exact per-player ordinary and boss gold payouts now use a local timed notification in source; verify it is visible/readable during dense waves and matches credited resources in game.
+12. **Restoring Spring cadence:** Source now restores 1% of maximum HP and mana per second within the spring radius; verify its visual tick, exact regen, full-resource behavior and range in game.
 
 ## Process choices made for this repository
 

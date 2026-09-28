@@ -12,7 +12,7 @@
 5. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-b9e9b9dd33` has not yet been installed or run, so its exact-build checks remain pending. Check the status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-dddc30394a` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 
@@ -23,9 +23,11 @@ The current artifact is a development build. The user reports Test Map succeeded
 - Use the separate Altar of Kings to choose/revive your hero.
 - The southern market offers gear tiers. Inspect each shop's item icon and tooltip before buying. If stock is empty or the shop only shows unlabeled text, record the build ID and stop that shop test.
 - Use the Forsaken Kingdom backpack equipment panel to store/equip gear. If a purchase cannot be equipped, keep the item and report the full item name, slot, hero, build ID, and backpack screenshot.
+- To move bought gear between the 30-slot backpack, the five other normal inventory slots, and the nine equipment slots, drag the item through the native Forsaken Kingdom inventory panel. Gear can be sold back to a market vendor for half its listed price; boss relics remain unsellable.
+- Enemy kills show a gold popup for the personal share credited to each active defender. Stronger enemies pay larger bounties.
 - Use King Aldric's Castle for heal/upgrade buttons. Contributions cost personal resources.
 - Normal breaks: 90 seconds. Before waves 10, 20, 30, 40: 180 seconds.
-- The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range recover 200 HP and 120 mana every 5 seconds.
+- The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range recover 1% of maximum HP and 1% of maximum mana every second while missing either resource.
 
 ## Diagnostic-only shortcuts
 

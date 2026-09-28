@@ -493,3 +493,29 @@ The current artifact differs from the user's screenshot and needs an in-engine l
 
 - Preserve any edits in the existing World Editor tab before switching away from `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Open `build/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m`, Save As `build/Editor-Roundtrip-KLS-D-fd638ddcf5.w3m`, close/reopen that copy, and Test Map. Confirm the visible ID, 15-hero selector, custom resources, King Aldric/castle, countdown, and no victory. Then launch the sole installed map `DIAGNOSTIC-KLS-D-fd638ddcf5.w3m` through Custom Game.
 - If any structure, shop or unit is missing, capture a screenshot and full `-diag` output, then collect fresh engine logs. Only after this startup gate should we resume live item/backpack, tome, recipe, pool, wave, multiplayer and 40-wave endurance checks. Keep the build labelled development.
+
+## 2026-09-28: reward feedback, native gear movement, spring cadence — KLS-D-dddc30394a
+
+### Current task and last package-proven build
+
+- Current task: make per-kill gold visible, allow normal equipment to move between the native backpack/normal inventory and vendor buyback, make the restoration pool tick progressively, and maintain a per-build changelog.
+- Current development build: **KLS-D-dddc30394a**.
+- Workspace artifact: `dist/KLS-D-dddc30394a-Development.w3m`.
+- SHA-256: `d646a4a3de78b4e8cbeb1bed6ab5121344565227547dcca7c60c6255ee2d05ab`.
+- Changelog: `CHANGELOG.md`, section for this exact build. `tests/test_build_changelog.py` checks that the current manifest's build ID and hash are documented.
+- The earlier user-reported Test Map pass remains attached to `KLS-D-fd638ddcf5`. It is not a failed check and is not evidence for this build.
+
+### Changes and evidence
+
+- `KLS_AwardBounty` now shows each active defender the exact personal gold share that was credited. Boss participation gold also shows a separate per-player amount. The UI message is presentation only; payout math remains synchronized.
+- Installed `ItemData.slk` labels `idro` as `droppable` and `ipaw` as `Can Be Sold To Merchants`. Catalog gear changed from `idro=0` to `idro=1`; `ipaw=1` and `isel=1` remain. Boss relics became movable (`idro=1`) but stay unpawnable (`ipaw=0`, `isel=0`). Actual drag/equipment/sale behavior remains unverified in the engine.
+- The Restoring Spring now ticks once per second, restoring 1% of maximum HP and mana, capped at each maximum. Its effect only emits while at least one resource is missing.
+- Regression tests were added first and failed on the prior source (missing reward toast, droppable gear flags, and one-second percentage regeneration). After the source changes, the focused regressions passed.
+- Full suite: **63/63 passed**. Build reports installed-editor JASS syntax and MPQ package/readback passed for this build.
+- `build_map.py --install-test-map` could not install this build because Warcraft III PID 46920 held `KLS-D-f89f212a3a-Development.w3m` open. The installer preserved both prior map files. A byte-identical copy of `KLS-D-f89f212a3a-Development.w3m` exists under `backups/installed-diagnostics/20260928T102120988478Z-KLS-D-dddc30394a/`; both copies hash to `06ee04a3fb1cf5af35d27e0059d0b3cd33522ce93acc30f9914219188fa6f787`. No new build was copied into the live Warcraft III test folder.
+
+### Exact next action and remaining checks
+
+- After the user finishes and closes Warcraft III, rerun `python -B tools/build_map.py --install-test-map` from this repository. It should install `KLS-D-dddc30394a-Development.w3m` and archive prior project maps without overwriting them.
+- Then run one focused in-game check on this exact build: kill one basic enemy and verify the visible gold toast matches the gold increase. Next, verify moving one purchased gear item into normal inventory and selling an ordinary item back; test the spring's HP/mana tick afterward. Record each result against this build ID.
+- Keep editor round-trip/current-build Test Map, all gameplay, 2/3/4-player sessions, and 40-wave endurance pending until tested. Keep the map labelled development.

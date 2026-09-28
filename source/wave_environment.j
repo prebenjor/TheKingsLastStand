@@ -53,6 +53,8 @@ endfunction
 function KLS_PoolTick takes nothing returns nothing
     local integer p = 0
     local unit hero
+    local real maxHP
+    local real maxMana
     if KLS_Ended then
         call PauseTimer(KLS_PoolClock)
         return
@@ -61,9 +63,13 @@ function KLS_PoolTick takes nothing returns nothing
         exitwhen p == 4
         set hero = KLS_Hero[p]
         if KLS_Active[p] and hero != null and GetWidgetLife(hero) > 0.405 and IsUnitInRangeXY(hero,-900,-1600,450.0) then
-            call SetWidgetLife(hero,RMinBJ(BlzGetUnitMaxHP(hero),GetWidgetLife(hero)+200.0))
-            call SetUnitState(hero,UNIT_STATE_MANA,RMinBJ(GetUnitState(hero,UNIT_STATE_MAX_MANA),GetUnitState(hero,UNIT_STATE_MANA)+120.0))
-            call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl",hero,"origin"))
+            set maxHP = BlzGetUnitMaxHP(hero)
+            set maxMana = GetUnitState(hero,UNIT_STATE_MAX_MANA)
+            if GetWidgetLife(hero) < maxHP or GetUnitState(hero,UNIT_STATE_MANA) < maxMana then
+                call SetWidgetLife(hero,RMinBJ(maxHP,GetWidgetLife(hero)+maxHP*0.01))
+                call SetUnitState(hero,UNIT_STATE_MANA,RMinBJ(maxMana,GetUnitState(hero,UNIT_STATE_MANA)+maxMana*0.01))
+                call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl",hero,"origin"))
+            endif
         endif
         set p = p+1
     endloop
@@ -99,8 +105,8 @@ function KLS_WaveEnvironmentInit takes nothing returns nothing
     call SetUnitInvulnerable(KLS_RestorePool,true)
     call SetUnitPathing(KLS_RestorePool,false)
     set KLS_PoolClock = CreateTimer()
-    call TimerStart(KLS_PoolClock,5.0,true,function KLS_PoolTick)
+    call TimerStart(KLS_PoolClock,1.0,true,function KLS_PoolTick)
     set KLS_GroveClock = CreateTimer()
     call TimerStart(KLS_GroveClock,1,true,function KLS_GroveTick)
-    call KLS_Log("30 combat-grove trees planted; King's Restoring Spring at -900,-1600 pulses every 5 seconds. Mixed wave rosters initialized.")
+    call KLS_Log("30 combat-grove trees planted; King's Restoring Spring at -900,-1600 restores 1% of maximum health and mana every second. Mixed wave rosters initialized.")
 endfunction

@@ -51,6 +51,7 @@ If design and source differ, record the gap in docs/DECISIONS-AND-OPEN-ISSUES.md
 - Use the captured diagnostic logs and full KLS diagnostic output to investigate missing objects. Tie each conclusion to the current immutable build ID and map hash.
 - Keep output names versioned and preserve an editor-open file. Do not overwrite/delete the file World Editor currently has open.
 - Update the docs and progress ledger in the same change as behavior changes. Record build ID, SHA-256, exact checks, failures, and the single next human-run check.
+- Maintain root `CHANGELOG.md`: every newly packaged map gets one dated, immutable build-ID section with its package SHA-256, user-visible changes, verification evidence, and pending engine checks. Update the entry as part of that build's source change. A changelog section must never label a development map as a release.
 
 ## Pull request and handoff checklist
 

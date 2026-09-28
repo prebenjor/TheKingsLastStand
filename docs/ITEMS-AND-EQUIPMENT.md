@@ -11,6 +11,7 @@ The target is the backpack/equipment presentation used by the Forsaken Kingdom c
 - Normal six-slot hero inventory, with one space reserved for the persistent backpack item.
 - Native backpack/equipment UI and installed editor/game APIs, not a replacement 18-slot dialog.
 - All fifteen hero types may use the same equipment. Descriptions can recommend a role but must not enforce class or level restrictions.
+- Ordinary catalog gear is native-droppable and pawnable so the player can move it through the backpack, normal inventory, and equipment slots, and sell it to vendors for half its listed price. Boss relics are also movable/equippable, but remain unpawnable.
 
 Buying an item must deliver it in a location from which the same native inventory service can equip it. Storage, equip, unequip, ownership, stat changes, sell, and crafting must be atomic. Never remove an old item or consume a recipe part until delivery and final state are guaranteed.
 
@@ -112,4 +113,4 @@ These are personal, unsellable boss relics. The current reward function attempts
 
 ## Player-facing interaction acceptance
 
-For each shop: open the shop by clicking/approaching it, see icon stock, hover exact name/cost/slot/stat/effect, buy, find the buyer-owned item in the native backpack UI, equip it, verify stat/proc, unequip and verify removal. Repeat with full normal inventory/storage, two rings, two players buying simultaneously, and post-death revival. Test every shop, tier, recipe, tome, consumable, and reward. The user reported an empty shop window and non-equippable items; those symptoms remain open until this exact flow passes.
+For each shop: open the shop by clicking/approaching it, see icon stock, hover exact name/cost/slot/stat/effect, buy, find the buyer-owned item in the native backpack UI, move it between storage and normal inventory, equip it, verify stat/proc, unequip and verify removal, and sell ordinary gear back for half price. Confirm boss relics remain unpawnable. Repeat with full normal inventory/storage, two rings, two players buying simultaneously, and post-death revival. Test every shop, tier, recipe, tome, consumable, and reward. These native inventory interactions remain pending until this exact flow passes in game.

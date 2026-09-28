@@ -44,7 +44,10 @@ def items():
     for entry in item_catalog():
         fields={'unam':entry['name'],'utip':entry['name'],
                 'icla':'Equipment','igol':entry['price'],'iper':0,'iabi':entry['abilities'],'utub':entry['description'],'iusa':0,'ilev':1,'ilvo':1,'ilum':0,'iuse':0,
-                'idro':0,'ipaw':1,'isel':1}
+                # Native backpack dragging between storage, the normal hero
+                # inventory, and equipment requires the item to be droppable.
+                # Pawnability separately enables vendor buyback.
+                'idro':1,'ipaw':1,'isel':1}
         custom.append(record(entry['parent'],entry['rawcode'],fields))
     for book in attribute_books():
         fields={'icla':'Power-ups','unam':book['name'],'utip':book['name'],
@@ -63,9 +66,9 @@ def items():
         cost=400+200*tier
         controls.append(record('ckng',raw,{'icla':'Miscellaneous','unam':'Royal Defense Upgrade - Tier '+str(tier+1),'utip':'Royal Defense Upgrade - Tier '+str(tier+1),'utub':'Upgrade King Aldric: +4,000 maximum/current health and +30 damage. Tier '+str(tier+1)+' costs '+str(cost)+' gold and 150 lumber.','igol':cost,'ilum':150,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0}))
     custom.extend(controls+[
-        record('ratf','I010',{'icla':'Equipment','unam':'Gravetide Cleaver','utip':'Gravetide Cleaver','utub':'Chapter I boss relic: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':0}),
-        record('rhth','I011',{'icla':'Equipment','unam':'Heart of the Watch','utip':'Heart of the Watch','utub':'Chapter II boss relic: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':0}),
-        record('lgdh','I012',{'icla':'Equipment','unam':'Crown of Dawn','utip':'Crown of Dawn','utub':'Chapter III boss relic: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':0}),
-        record('ckng','I013',{'icla':'Equipment','unam':'Oath of the Last King','utip':'Oath of the Last King','utub':'Chapter IV boss relic: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':0}),
+        record('ratf','I010',{'icla':'Equipment','unam':'Gravetide Cleaver','utip':'Gravetide Cleaver','utub':'Chapter I boss relic: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('rhth','I011',{'icla':'Equipment','unam':'Heart of the Watch','utip':'Heart of the Watch','utub':'Chapter II boss relic: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('lgdh','I012',{'icla':'Equipment','unam':'Crown of Dawn','utip':'Crown of Dawn','utub':'Chapter III boss relic: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('ckng','I013',{'icla':'Equipment','unam':'Oath of the Last King','utip':'Oath of the Last King','utub':'Chapter IV boss relic: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':1}),
     ])
     return table([], custom)
