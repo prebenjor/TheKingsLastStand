@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-25463efa09 - 2026-09-28
+
+- Kept the requested level-up choices in the hero ability panel as native `+` skills: `KSTR`, `KAGI`, and `KINT` each grant +3 to one primary stat per level. The old global stat-choice dialog is absent from current source; only the separate fifth-level specialty talent uses a dialog.
+- Failed random enemy item drops now log the item name/rawcode, enemy type and coordinates, and killer player ID, so missing loot-object creation is visible in the diagnostic log.
+- Full source suite: **113/113 passed**. Package member readback and installed-editor JASS syntax checks passed.
+- Package SHA-256: `d1a5d81cc66998f526103738d0164388b24467306bdc9b73e9d6ec02f087b03d`.
+- Installation safely stopped because Warcraft III PID `36140` still holds the old `KLS-D-1a040d638c-Development.w3m`. The old test map and its verified archive remain intact; this build is packaged in `dist/` but not installed. Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending. The earlier user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-2f2397cf14 - 2026-09-28
 
 - Boss relics and Crownlands story items now share a guarded personal-reward delivery path. Failed `CreateItem` calls retain the item rawcode in that owner's queue and retry every five seconds during the match; full inventory leaves a visible owner-bound item at the owner's base.

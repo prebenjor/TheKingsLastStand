@@ -97,6 +97,11 @@ class EnemyBounties(unittest.TestCase):
         self.assertIn("if unitCode == 'nfgu' then\n        return 24 + KLS_Wave", bounty)
         self.assertIn("if unitCode == 'uske' then\n        return 5 + KLS_Wave", bounty)
 
+    def test_failed_random_item_drops_are_logged_with_item_enemy_and_position(self):
+        script = runtime_script('KLS-D-TEST')
+        drops = function_body(script, 'KLS_EnemyDrop')
+        self.assertRegex(drops, r'set drop = CreateItem\(itemCode,GetUnitX\(enemy\),GetUnitY\(enemy\)\)\s+if drop != null then[\s\S]*?GetItemName\(drop\)[\s\S]*?else\s+call KLS_Log\("ERROR enemy item drop creation failed: item="\+GetObjectName\(itemCode\)[\s\S]*?enemy="\+GetObjectName\(GetUnitTypeId\(enemy\)\)[\s\S]*?enemyXY="\+R2S\(GetUnitX\(enemy\)\)[\s\S]*?killerPlayerId="\+I2S\(p\)\)')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -358,6 +358,8 @@ def catalog_script():
         '            if p >= 0 and p < 4 then',
         '                call DisplayTimedTextToPlayer(Player(p),0,0,6,GetItemName(drop)+" dropped nearby.")',
         '            endif',
+        '        else',
+        '            call KLS_Log("ERROR enemy item drop creation failed: item="+GetObjectName(itemCode)+" rawcode="+I2S(itemCode)+" enemy="+GetObjectName(GetUnitTypeId(enemy))+" enemyXY="+R2S(GetUnitX(enemy))+","+R2S(GetUnitY(enemy))+" killerPlayerId="+I2S(p))',
         '        endif',
         '    endif',
         '    set drop = null',

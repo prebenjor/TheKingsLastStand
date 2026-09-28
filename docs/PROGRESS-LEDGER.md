@@ -1,7 +1,18 @@
 
 # Current status — 2026-09-28
 
-## Current package-proven build — KLS-D-2f2397cf14
+## Current package-proven build — KLS-D-25463efa09
+
+- Artifact: `dist/KLS-D-25463efa09-Development.w3m`.
+- SHA-256: `d1a5d81cc66998f526103738d0164388b24467306bdc9b73e9d6ec02f087b03d`.
+- Random enemy loot creation now checks the `CreateItem` result before display and logs an error with item name/rawcode, enemy type and location, and killer player ID if creation fails.
+- The requested level-up stat selection is already implemented in the current source as three native hero-panel `+` skills: `KSTR`, `KAGI`, and `KINT` each give +3 to one primary stat per level. The old per-level dialog is absent. The every-fifth-level specialty dialog remains separate.
+- Full source suite: **113/113 passed**. Package member readback and installed-editor JASS compilation passed.
+- Installation safely stopped because Warcraft III PID `36140` still locks `KLS-D-1a040d638c-Development.w3m`. Its original and verified archive at `backups/installed-diagnostics/20260928T192844325669Z-KLS-D-8669a44192/` remain intact; the current map is only in `dist/` and has not been installed.
+- Next human check: close Warcraft III completely, run `python -B tools/build_map.py --install-test-map`, then open the map with build ID `KLS-D-25463efa09`. Verify one player's `+3` choice appears in the hero ability panel and does not pause another player's game; the earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Current-build editor save/reopen, Test Map, Custom Game, live gameplay, multiplayer, and endurance checks remain pending.
+
+## Previous package-proven build — KLS-D-2f2397cf14
 
 - Artifact: `dist/KLS-D-2f2397cf14-Development.w3m`.
 - SHA-256: `e63d8c15d90458056887f056ac66d1194aa30326e20ec94847f5ac91e2d7310f`.
