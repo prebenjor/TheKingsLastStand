@@ -46,13 +46,19 @@ def slk(name):
     return {row[1]:row for row in rows.values() if 1 in row}
 
 class EquipmentRecords(unittest.TestCase):
-    def test_backpack_remains_clickable_and_permanent(self):
-        _,fields=decode(items())['Ibpk']
+    def test_backpack_preserves_native_identity_and_usable_flags(self):
+        base,fields=decode(items())['ebua']
+        self.assertEqual(base,'ebua')
         self.assertEqual(fields[('iusa',0)][0],1)
         self.assertEqual(fields[('iabi',0)][0],'AIni,AEqu,ASde')
         for field in ('idro','ipaw','isel','iper','iuse'):
             self.assertEqual(fields[(field,0)][0],0)
-        self.assertEqual(slk('ItemData.slk')['ebua'][13],'1')
+        installed_pack=slk('ItemData.slk')['ebua']
+        self.assertEqual(installed_pack[3],'EquipmentBackpackAnya')
+        self.assertEqual(installed_pack[13],'1')
+        heroes=(ROOT/'source/heroes.j').read_text()
+        self.assertIn("UnitAddItemById(KLS_Hero[p], 'ebua')",heroes)
+        self.assertNotIn("UnitAddItemById(KLS_Hero[p], 'Ibpk')",heroes)
 
     def test_every_emitted_ability_has_an_installed_parent_and_valid_fields(self):
         installed=slk('AbilityData.slk');metadata=slk('AbilityMetaData.slk')

@@ -33,8 +33,8 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 
 ## Open reported issues (must not be silently closed)
 
-1. **Backpack click/UX:** User expects it to open like the Forsaken Kingdom campaign. The native interface has not passed current-build interaction proof.
-2. **Gear movement/equip/sale:** User says bought items, including boots, cannot move from the Forsaken backpack to normal inventory/equipment, and shop buyback says the item cannot be dropped. Catalog gear was emitted as undroppable (`idro=0`); the current source changes ordinary gear and boss relics to droppable while keeping ordinary gear pawnable and boss relics unpawnable. Native movement/equip/sale still needs live confirmation.
+1. **Backpack click/UX:** The installed `ebua` record is `EquipmentBackpackAnya` and includes the native extended/equipment inventory abilities. A prior custom clone `Ibpk` inherited the 30-slot count but may not have retained the installed item's runtime behavior. The current build modifies `ebua` in place, removes `ATua` (Anya's talent ability), and grants that native item to each hero. Confirm click-to-open behavior in Warcraft III.
+2. **Gear movement/equip/sale:** Catalog gear is droppable (`idro=1`) and pawnable (`ipaw=1`); boss relics are movable but remain unpawnable. The current build must still be checked live for backpack-to-normal-inventory transfer, equipping, and shop resale.
 3. **Shop stock UI:** User reported empty shops and later saw list-only purchase pages without visible item icons/stats. The source contains catalog/stock code, but exact current-build live shop window is not proven.
 4. **Castle panels:** Older screenshot showed overflowing dialog text. Current source uses castle native shop-card buttons; verify current layout, prices, refunds, and health/upgrade effects in game.
 5. **Altar model/role:** User observed a Sorceress in a structure expected to be the Altar of Kings and clarified the Chapel should be the Altar. Current source uses a custom lowercase h000 building record and selector logic; verify displayed model, portrait, construction object, and selection/spawn role in current build.

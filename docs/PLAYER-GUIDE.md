@@ -12,7 +12,7 @@
 5. Select a hero preview, read role/abilities, click Confirm. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-3a0464e019` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
+The current artifact is a development build. The user reports Test Map succeeded on the earlier build `KLS-D-fd638ddcf5`; that pass is recorded for that build. The current map `KLS-D-2cd4884e7f` is not yet installed or run. Check the status in ROADMAP-AND-ACCEPTANCE.md.
 
 ## Match
 
@@ -22,7 +22,7 @@ The current artifact is a development build. The user reports Test Map succeeded
 - Build on your plot only. Keep the central road open for attackers, defenders, siege units, and bosses.
 - Use the separate Altar of Kings to choose/revive your hero.
 - The southern market offers gear tiers. Inspect each shop's item icon and tooltip before buying. If stock is empty or the shop only shows unlabeled text, record the build ID and stop that shop test.
-- Use the Forsaken Kingdom backpack equipment panel to store/equip gear. If a purchase cannot be equipped, keep the item and report the full item name, slot, hero, build ID, and backpack screenshot.
+- Click the Forsaken Field Pack in your hero's normal inventory to open the native backpack equipment panel. This build uses the installed `ebua` item identity. Confirm the panel shows 30 storage slots and nine equipment positions. If it does not open, keep the item and report the exact build ID with a screenshot.
 - To move bought gear between the 30-slot backpack, the five other normal inventory slots, and the nine equipment slots, drag the item through the native Forsaken Kingdom inventory panel. Gear can be sold back to a market vendor for half its listed price; boss relics remain unsellable.
 - Enemy kills show a gold popup for the personal share credited to each active defender. Stronger enemies pay larger bounties.
 - Use King Aldric's Castle for heal/upgrade buttons. Contributions cost personal resources.

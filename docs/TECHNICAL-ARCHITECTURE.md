@@ -76,7 +76,7 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The user currently has World Editor open on `build/DIAGNOSTIC-TheKingsLastStand.w3m`. Do not overwrite or close that live document during build publication. Use the current build-ID-named map from the designated test folder for new tests; do not create extra `Editor-Roundtrip-*` map copies.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current package-proven development artifact is `dist/KLS-D-3a0464e019-Development.w3m`, SHA-256 `c0bb8275469ffb3a2165930fd7ccd62ca6716bc8203a6fc5cc366d5d732365be`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
+- The current package-proven development artifact is `dist/KLS-D-2cd4884e7f-Development.w3m`, SHA-256 `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`. The builder reads back every member and validates hash lookup; see the current build manifest for the exact inventory.
 
 ## Network determinism and ownership
 

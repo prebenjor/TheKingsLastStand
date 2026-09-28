@@ -40,7 +40,11 @@ def items():
     from equipment_catalog import attribute_books
     from recipes import recipe_catalog
 
-    custom = [record('ebua','Ibpk',{'unam':'Forsaken Field Pack','utip':'Forsaken Field Pack','utub':'Native Forsaken Kingdom backpack: 30 storage slots and nine equipment slots. Keep this pack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
+    # Preserve the installed native item identity. The campaign record's
+    # EquipmentBackpackAnya script is bound to ebua; a custom child item can
+    # report 30 extended slots while missing the click-to-open UI behavior.
+    original = [record('ebua','\0\0\0\0',{'unam':'Forsaken Field Pack','utip':'Forsaken Field Pack','utub':'Native Forsaken Kingdom backpack: 30 storage slots and nine equipment slots. Keep this pack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
+    custom = []
     for entry in item_catalog():
         fields={'unam':entry['name'],'utip':entry['name'],
                 'icla':'Equipment','igol':entry['price'],'iper':0,'iabi':entry['abilities'],'utub':entry['description'],'iusa':0,'ilev':1,'ilvo':1,'ilum':0,'iuse':0,
@@ -71,4 +75,4 @@ def items():
         record('lgdh','I012',{'icla':'Equipment','unam':'Crown of Dawn','utip':'Crown of Dawn','utub':'Chapter III boss relic: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':1}),
         record('ckng','I013',{'icla':'Equipment','unam':'Oath of the Last King','utip':'Oath of the Last King','utub':'Chapter IV boss relic: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':1}),
     ])
-    return table([], custom)
+    return table(original, custom)

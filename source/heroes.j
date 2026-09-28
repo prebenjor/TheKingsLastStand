@@ -77,7 +77,7 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     call UnitAddAbility(KLS_Hero[p], KLS_SignatureId[n])
     call UnitMakeAbilityPermanent(KLS_Hero[p], true, KLS_SignatureId[n])
     call UnitAddItemById(KLS_Hero[p], 'stwp')
-    call UnitAddItemById(KLS_Hero[p], 'Ibpk')
+    call UnitAddItemById(KLS_Hero[p], 'ebua')
     if UnitExtendedInventorySize(KLS_Hero[p]) != 30 then
         call KLS_Log("ERROR FK backpack storage=" + I2S(UnitExtendedInventorySize(KLS_Hero[p])) + " expected=30")
     else

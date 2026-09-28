@@ -6,17 +6,17 @@ Players command distinct heroes and their own human kingdom armies, build and up
 
 ## Project status
 
-Current development build: **KLS-D-3a0464e019**.
+Current development build: **KLS-D-2cd4884e7f**.
 
-- Map: `dist/KLS-D-3a0464e019-Development.w3m`
-- SHA-256: `c0bb8275469ffb3a2165930fd7ccd62ca6716bc8203a6fc5cc366d5d732365be`
+- Map: `dist/KLS-D-2cd4884e7f-Development.w3m`
+- SHA-256: `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`
 - Build manifest: dist/build-manifest.json
 
-Package inventory/readback, JASS syntax against the installed editor API, and 65 source-level regression tests pass for the current build. It includes the previous combat reward, gear movement/buyback, and spring-cadence changes, plus `-diag` output for actual player race and worker identity. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
+Package inventory/readback, JASS syntax against the installed editor API, and 65 source-level regression tests pass for the current build. It uses the native `ebua` Forsaken backpack record; it also retains visible combat gold rewards, movable/sellable normal gear, and one-second percentage spring healing. These in-game interactions remain pending. The user-reported World Editor Test Map pass applies to the earlier build `KLS-D-fd638ddcf5`; it remains a pass for that build. The current build still needs its own editor/game checks, live feature proof, 2/3/4-player sessions, and 40-wave endurance runs, so it remains a development build.
 
 The dedicated Custom Game folder still contains older project maps. Installing the current build was blocked because Warcraft III PID 46920 holds one of those files open; after closing the game, run the install command below. The installer archives old project maps and leaves one current build.
 
-The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build changes the gear's native droppable/pawnable flags, but that interaction is not considered fixed until tested with this exact build in Warcraft III.
+The user has reported that shop windows can appear empty or as text lists, purchased gear cannot be equipped/sold, and UI panels can overflow. This build uses the native backpack object identity and current gear flags, but those interactions are not considered fixed until tested with this exact build in Warcraft III.
 
 ## Start here
 

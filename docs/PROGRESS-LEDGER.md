@@ -3,17 +3,42 @@
 
 ## Current package-proven build
 
-- Build: **KLS-D-b9e9b9dd33**.
-- Artifact: `dist/KLS-D-b9e9b9dd33-Development.w3m`.
-- SHA-256: `3bbcd7be9bb9d3f2ba02febd026b52c143f5ba28dfc9c52ef4ef1b52e149cc7a`.
+- Build: **KLS-D-2cd4884e7f**.
+- Artifact: `dist/KLS-D-2cd4884e7f-Development.w3m`.
+- SHA-256: `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`.
 - Manifest: `dist/build-manifest.json`.
-- Package readback and JASS syntax against installed API: passed. Full source regression suite: **59/59 passed**.
+- Package readback and JASS syntax against installed API: passed. Full source regression suite for the current build: **65/65 passed**.
 - Status: **development build**. The current exact build has not yet been installed or run in Warcraft III.
 
 ## User-reported engine result
 
 - World Editor Test Map succeeded on the earlier installed development build **KLS-D-fd638ddcf5**. This remains a pass for that build and is not listed as a failure.
 - Save/reopen, current-build Test Map, current-build Custom Game, live systems, multiplayer and endurance checks remain pending for their respective builds.
+
+## 2026-09-28: restore native backpack identity — KLS-D-2cd4884e7f
+
+### Current task and last package-proven build
+
+- Current task: resolve the Forsaken Field Pack click-to-open report, while keeping the user's gold feedback, transferable/resellable ordinary gear, and one-second spring healing in the same current package.
+- Current development build: **KLS-D-2cd4884e7f**.
+- Workspace artifact: `dist/KLS-D-2cd4884e7f-Development.w3m`.
+- SHA-256: `fb8a6adede04d1475c5668c44d1b77616fbff19215ec712d7150cdf64502a2cd`.
+- Changelog: `CHANGELOG.md`; package manifest: `dist/build-manifest.json`.
+
+### Changes and evidence
+
+- Installed `ItemData.slk` identifies native backpack `ebua` as `EquipmentBackpackAnya`, with `AIni,AEqu,ATua,ASde`; installed `AbilityData.slk` identifies `ATua` as Undead Anya's talent tree. The custom clone `Ibpk` was replaced with an in-place edit of native `ebua`, retaining `AIni,AEqu,ASde` and usability while omitting the unrelated talent ability. This is the best-supported explanation/fix for the click report, but the interaction remains unverified in the game.
+- Hero initialization grants `ebua`; backpack activation diagnostics now match `ebua`. Source regression failed before the rawcode change and passed afterward.
+- Current source still shows each active defender the gold amount actually credited on enemy/boss kills. Ordinary equipment flags permit movement and vendor resale; boss relics remain unsellable. The restoring spring uses a 1-second timer and restores 1% maximum HP and mana per tick. These require in-game confirmation.
+- Full regression suite: **65/65 passed**. Package member inventory/readback and installed-editor JASS syntax passed for the build. `dist/` contains one current map; the previous development package is archived locally.
+- The prior user-reported World Editor Test Map success remains a pass for `KLS-D-fd638ddcf5`. It is not treated as a failure or a current-build pass.
+- Warcraft III PID 46920 still has an older project map open; `KLS-D-2cd4884e7f` was not installed or run.
+
+### Exact next action and remaining checks
+
+- After the user closes Warcraft III, run `python -B tools/build_map.py --install-test-map`. Open that exact build through the established editor/Test Map and Custom Game workflows.
+- First live item check: click the native backpack; confirm its UI appears. Then buy Common Boots, transfer between backpack and normal inventory, equip, and sell them. In the same run, verify the visible kill-gold message and watch HP/mana restore at the spring for several consecutive one-second ticks.
+- Remain a development build until current-build gameplay, editor round-trip, multiplayer and endurance gates pass.
 
 ## Changes since the previous build
 
