@@ -249,7 +249,7 @@ function KLS_GearPawned takes nothing returns nothing
 endfunction
 
 function KLS_PackUsed takes nothing returns nothing
-    if GetItemTypeId(GetManipulatedItem()) == 'ebua' then
+    if GetItemTypeId(GetManipulatedItem()) == 'ebac' then
         call KLS_Log("Pack activated: storage="+I2S(UnitExtendedInventorySize(GetTriggerUnit())))
     endif
 endfunction

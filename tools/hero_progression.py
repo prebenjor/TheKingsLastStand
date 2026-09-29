@@ -7,8 +7,6 @@ MAX_HERO_LEVEL = 50
 MAX_SPELL_RANK = 5
 MAX_NATIVE_DATA_RANK = MAX_SPELL_RANK
 EXTRA_RANK_POWER_STEP = 0.10
-STAT_ABILITY_IDS = ('KSTR', 'KAGI', 'KINT')
-STAT_ABILITY_NAMES = ('+3 Strength', '+3 Agility', '+3 Intelligence')
 
 # Only fields whose installed meaning is a spell's power are extended. Every
 # other field is copied from the final authored rank, preserving costs,
@@ -305,38 +303,6 @@ def hero_ability_records(ability_builder):
         if len(fields) < 2:
             raise ValueError('No installed per-rank ability data found for ' + spell)
         records.append(ability_builder(spell, '\0' * 4, fields))
-    return records
-
-
-def hero_choice_ability_records(ability_builder):
-    """Create three distinct native + skills for repeatable single-stat choices."""
-    records = []
-    choices = zip(STAT_ABILITY_IDS, STAT_ABILITY_NAMES, (2, 0, 1))
-    for code, name, selected in choices:
-        label = name[3:]
-        fields = [
-            ('alev', 0, 0, 0, MAX_HERO_LEVEL),
-            ('arlv', 0, 0, 0, 1),
-            ('alsk', 0, 0, 0, 1),
-            ('anam', 3, 0, 0, name),
-            # The tooltip/name fields are Profile fields. They must be written
-            # at level zero; attaching them to AbilityData rank indices leaves
-            # every clone showing Aamk's identical default text in Warcraft.
-            ('atp1', 3, 0, 0, f'Learn {name}'),
-            ('aub1', 3, 0, 0,
-             f'Choosing this skill permanently adds 3 {label}. It can be chosen again with a future hero skill point.'),
-            ('aut1', 3, 0, 0, name),
-            ('auu1', 3, 0, 0,
-             f'Permanently adds 3 {label}. Choose it alongside your other hero abilities.'),
-        ]
-        for rank in range(1, MAX_HERO_LEVEL + 1):
-            total = rank * 3
-            fields.extend((
-                ('Iagi', 0, rank, 1, total if selected == 0 else 0),
-                ('Iint', 0, rank, 2, total if selected == 1 else 0),
-                ('Istr', 0, rank, 3, total if selected == 2 else 0),
-            ))
-        records.append(ability_builder('Aamk', code, fields))
     return records
 
 

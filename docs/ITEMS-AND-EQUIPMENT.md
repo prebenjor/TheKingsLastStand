@@ -13,6 +13,8 @@ The target is the backpack/equipment presentation used by the Forsaken Kingdom c
 - All 25 hero types may use the same equipment. Race-themed items remain universally equippable; descriptions can recommend a role but must not enforce class or level restrictions. The 20-item race catalog and four Legendary Foundry recipes are detailed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
 - Ordinary catalog gear is native-droppable and pawnable so the player can move it through the backpack, normal inventory, and equipment slots, and sell it to vendors for half its listed price. Boss relics are also movable/equippable, but remain unpawnable.
 
+Use the installed generic `Backpack` object (`ebac`) as the persistent item. Do not use Anya's character-specific pack (`ebua`) for every co-op hero. The generic item retains native 30-slot storage (`AIni`) and receives the equipment/stat-detail abilities (`AEqu`, `ASde`) through object data. The change avoids sharing a campaign-character backpack identity; independent open/close behavior still needs confirmation in a real multiplayer match.
+
 Buying an item must deliver it in a location from which the same native inventory service can equip it. Storage, equip, unequip, ownership, stat changes, sell, and crafting must be atomic. Never remove an old item or consume a recipe part until delivery and final state are guaranteed.
 
 Backpacks cannot be dropped, sold, duplicated, or lost on hero death. Equipment and storage survive death/revival. Purchased items and boss drops are personal. A full backpack must create a pending personal entitlement or retrievable owner-bound delivery; it must not discard the reward.

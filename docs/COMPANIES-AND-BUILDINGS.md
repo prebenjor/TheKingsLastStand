@@ -4,7 +4,7 @@
 
 ## Buildings
 
-All prices are personal resources. All three structures require the player's Barracks (`hbar`) and use the normal plot and full-footprint validation. The Altar of Kings is preplaced at each base; the player no longer needs a redundant Altar build button.
+All prices are personal resources. Each structure requires the player's race-matched Barracks (Human `hbar`, Orc `obar`, Night Elf Ancient of War `eaom`, or Undead Crypt `usep`) and uses normal plot and full-footprint validation. The Altar of Kings is preplaced at each base; the player no longer needs a redundant Altar build button.
 
 | Name | Rawcode / native parent | Cost | Build time / HP | Function |
 |---|---|---:|---:|---|
@@ -26,6 +26,8 @@ Hall models intentionally differ by race so none appears as a duplicate keep. Ea
 | Undead | Temple of the Damned `kR03` / Temple of the Damned `utod` | Necromancers, Banshees, and dark-ritual research | Ziggurat `kT30`, Frost `kT31`, Soulwell Spire `kT32` |
 
 Race-specific altars, company buildings, arcane shops, and towers now carry descriptions for their actual faction and function. The Undead Temple inherits the native Temple's model, icon, training and research orders; its previous Meat Wagon parent (`umtw`) was incorrect. Sanitarium towers share the Human Sanctuary runtime: they heal allied units for 15 HP every 3 seconds within 650 range. Object names/tooltips and source hooks are catalog-driven in `tools/faction_catalog.py`; check the native queue, icons, and healing in the editor/game.
+
+The Night Elf build menu uses Ancient of War (`eaom`) as its Barracks and Hunter's Hall (`edob`) as its upgrade building. Its separate Ancient Lore Grove remains based on Ancient of Lore (`eaoe`). Tree of Ages (`etoa`) requires the Tier One Ancient of War, Hunter's Hall and Night Elf Hero Shrine (`kA02`); Ancient of Wind (`eaow`) and Ancient of Lore require Tree of Ages, so neither may be a prerequisite for that upgrade.
 
 ## Hero company catalog
 

@@ -6,6 +6,7 @@ globals
     string array KLS_HeroName
     string array KLS_HeroDescription
     integer array KLS_HeroRace
+    integer array KLS_HeroPrimaryStat
     texttag array KLS_PreviewLabel
     unit array KLS_Preview
     integer array KLS_Candidate
@@ -177,12 +178,13 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     call DialogDisplay(Player(p), KLS_ClassDialog[p], false)
     call BlzSetUnitName(KLS_Hero[p], KLS_HeroName[n])
     call SetHeroLevel(KLS_Hero[p], 1, false)
+    set KLS_LastAutomaticStatLevel[p] = GetHeroLevel(KLS_Hero[p])
     call KLS_ApplySpellRanks(KLS_Hero[p])
     set KLS_LastTalentMilestone[p] = GetHeroLevel(KLS_Hero[p]) / 5
     call UnitAddAbility(KLS_Hero[p], KLS_SignatureId[n])
     call UnitMakeAbilityPermanent(KLS_Hero[p], true, KLS_SignatureId[n])
     call UnitAddItemById(KLS_Hero[p], 'stwp')
-    call UnitAddItemById(KLS_Hero[p], 'ebua')
+    call UnitAddItemById(KLS_Hero[p], 'ebac')
     if UnitExtendedInventorySize(KLS_Hero[p]) != 30 then
         call KLS_Log("ERROR FK backpack storage=" + I2S(UnitExtendedInventorySize(KLS_Hero[p])) + " expected=30")
     else

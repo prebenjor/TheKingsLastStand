@@ -246,8 +246,6 @@ def abilities():
     original=[ability('AEqu','\0'*4,[('equ1',0,level,6,0) for level in (1,2,3)])]
     from hero_progression import hero_ability_records
     original.extend(hero_ability_records(ability))
-    from hero_progression import hero_choice_ability_records
-    records.extend(hero_choice_ability_records(ability))
     # Entangle Gold Mine is a native Night Elf town-hall action. The mine is
     # 1,200 units from the starting Tree of Life, beyond the installed 500 range.
     original.append(ability('Aent','\0' * 4,[('aran',2,1,0,1450.0)]))

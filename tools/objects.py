@@ -21,13 +21,14 @@ def units():
     # consume a Peasant build-card slot. Replace the ordinary Workshop button
     # with its hero-specific Siege Yard child; retain twelve usable buttons.
     from faction_catalog import FACTIONS, _ALTAR_TOOLTIPS, _ARCANE_NAMES, _ARCANE_TOOLTIPS, _TOWER_NAMES, _TOWER_TOOLTIPS
-    from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
-    # The native hero learn list must retain the hero's four actual spells.
-    # Stat choices are additional entries in that list, not replacements for
-    # the regular skill tree.
+    from hero_progression import HERO_ABILITIES
+    # Keep each hero's native learn list limited to its four normal skills.
+    # Repeatable primary-stat choices are provided by owner-local UI buttons
+    # and consume the same hero skill point without becoming ranked abilities.
     def learned_hero_skills(hero_id):
-        return ','.join(dict.fromkeys((*HERO_ABILITIES[hero_id], *STAT_ABILITY_IDS)))
+        return ','.join(dict.fromkeys(HERO_ABILITIES[hero_id]))
     from hero_catalog import NEW_HEROES
+    zero_hero_growth = {'ustp':0.0,'uinp':0.0,'uagp':0.0}
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
     # Each race builds a custom altar child rather than Warcraft's stock altar.
@@ -37,7 +38,9 @@ def units():
     town_hall_upgrade_requirements = (
         ('hcas', 'hbar', 'hbla', 'h000'),
         ('ostr', 'obar', 'ofor', 'kA01'),
-        ('etoa', 'eaow', 'eaoe', 'kA02'),
+        # Night Elf Tier Two core upgrades must use Tier One buildings. The
+        # former Ancient of Wind/Lore requirements both require Tree of Ages.
+        ('etoa', 'eaom', 'edob', 'kA02'),
         ('unp1', 'usep', 'uslh', 'kA03'),
     )
     original.extend(record(town_hall, '\0\0\0\0', {
@@ -47,9 +50,9 @@ def units():
     for hero_id, abilities in HERO_ABILITIES.items():
         if hero_id not in custom_hero_ids:
             original.append(record(hero_id, '\0\0\0\0', {
-                'uhab': learned_hero_skills(hero_id)}))
+                'uhab': learned_hero_skills(hero_id), **zero_hero_growth}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':600}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':600,**zero_hero_growth}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
         record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
         record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
@@ -65,7 +68,7 @@ def units():
     for hero in NEW_HEROES:
         custom.append(record(hero['base'], hero['unit_id'], {
             'unam':hero['name'], 'upro':hero['name'],
-            'uhab':learned_hero_skills(hero['unit_id']), 'ureq':'',
+            'uhab':learned_hero_skills(hero['unit_id']), 'ureq':'', **zero_hero_growth,
         }))
     from company_catalog import HERO_COMPANIES
     for faction in FACTIONS:
@@ -136,10 +139,10 @@ def items():
     from equipment_catalog import attribute_books
     from recipes import recipe_catalog
 
-    # Preserve the installed native item identity. The campaign record's
-    # EquipmentBackpackAnya script is bound to ebua; a custom child item can
-    # report 30 extended slots while missing the click-to-open UI behavior.
-    original = [record('ebua','\0\0\0\0',{'unam':'Forsaken Field Pack','utip':'Forsaken Field Pack','utub':'Native Forsaken Kingdom backpack: 30 storage slots and nine equipment slots. Keep this pack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
+    # Use the installed generic Backpack identity, not Anya's campaign-specific
+    # `ebua` variant. Keep the native 30-slot inventory and grant the equipment
+    # panel/stat details needed by this co-op map through its item abilities.
+    original = [record('ebac','\0\0\0\0',{'unam':'Backpack','utip':'Backpack','utub':'Native Forsaken Kingdom Backpack: 30 storage slots and nine equipment slots. Keep this Backpack in your hero inventory.','iabi':'AIni,AEqu,ASde','iequ':0,'iusa':1,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,'iprn':0,'igol':0,'isto':1})]
     custom = []
     for entry in item_catalog():
         display_name=entry['colored_name']

@@ -2,31 +2,31 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-cfec99b8a2**
+Build: **KLS-D-921cb74251**
 
-Map SHA-256: **a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5**
+Map SHA-256: **2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | The prior source snapshot passed 147 checks for build `KLS-D-8a93630281`; no automated tests were run for this change | Pending for current source |
-| Test-folder installation | `KLS-D-cfec99b8a2-Development.w3m` is installed in the dedicated test folder; installed SHA-256 matches the packaged SHA-256 | Passed |
+| Focused automated regressions | No automated tests were run for this change; the supported build performed package/readback and installed-editor syntax checks | Not run for current source |
+| Test-folder installation | Build `KLS-D-921cb74251` is installed as the sole project map; package and installed hashes match | Passed |
 | Runtime diagnostic retention | `-diag` keeps the latest 32 ERROR/FATAL/WARN entries separately from routine events and displays the most recent eight. Recipe output creation/delivery and queued boss/story reward creation/retry failures join unit, scenery and random-drop errors in that buffer; the `-diag` header counts every ERROR once across categories with item, owner and location context | Source regression passed; live capture pending |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
-| Editor save/reopen | New package is installed; it has not been opened in the editor | Pending |
-| Current-build Test Map / Custom Game startup | Run the installed build and confirm visible ID `KLS-D-cfec99b8a2`. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Editor save/reopen | Current package is installed; save/reopen in World Editor has not been checked | Pending |
+| Current-build Test Map / Custom Game startup | Open the installed map and confirm visible ID `KLS-D-921cb74251`. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; compact base lumber stands now sit 500/700 units south of each hall; visual routes, tree clearance and playability need live inspection | Pending in game |
-| Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent and explicit Temple icon, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, native Acolyte haunting orders, and expected/actual mine status in `-diag` are source/regression checked | Pending in mixed-race game |
+| Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent and explicit Temple icon, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, native Acolyte haunting orders, and expected/actual mine status in `-diag` are source checked. Night Elf Barracks and upgrade structure now use Ancient of War (`eaom`) and Hunter's Hall (`edob`); Tree of Ages no longer requires its own Tier Two prerequisites | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; Keeper/Faelor suppress the tree-targeted native ability in favor of usable signatures; visuals, recruits and ownership need live checks | Pending in game |
-| Level 1–50 progression and talents | Each hero's native four skills are retained alongside +3 Strength/Agility/Intelligence `+` choices; current build fixes duplicated stat text and missing normal skills. Verify learn buttons, skill-point use, stat effects and fifth-level specialties | Pending in game |
+| Level 1–50 progression and talents | Each gained level automatically grants +3 primary stat and +1 to both secondary stats. Native growth fields are zeroed on selectable heroes; per-player level tracking handles multi-level jumps. Three owner-only `+3 STR` / `+3 AGI` / `+3 INT` buttons remain a separate use of the normal skill point, alongside four native spells. Verify stats, buttons, upgrades, talents and multiplayer continuity | Pending in game |
 | Endless waves after wave 40 | Ten repeating roster rows and rotating bosses scale from the live wave number | Pending in game |
 | Shops, rarity colors, drops, gear and Foundry recipes | Generic rarity shops, four matching town relic shops, three-pattern Master Forge stock, one owner-only matching Legendary pattern at each constructed racial Foundry, all-vendor 12-slot cap, four racial recipes, explicit 3%/10%/50% Normal/Elite/Boss gear chances, independent 4%/8%/18% potion rolls and personal drop ownership are package/regression checked; Hall appearance, shop interface, equipment and craft interactions need live checks | Pending in game |
 | Boss/story item reliability | Both reward sources use one null-safe owner queue; failed `CreateItem` retries every five seconds, while full inventory falls back to a visible owner-bound item at base | Source regression passed; injected failure and pickup remain pending in game |
 | Optional Crownlands recovery story | Four chapters use a separate story enemy group and do not modify wave count/timer in source checks; all objective/reward paths need live play | Pending in game |
 | Sacred Aura `AHas` / `AHpa` descriptions and values | Generated ranks 1–5 and learned/learn-menu strings are regression checked; verify visible rank 4/5 text in Warcraft | Pending in game |
-| Shop windows, backpack/equipment, purchases, crafting and full inventory | Pack modifies installed `ebua`; gear object flags and inventory/catalog relationships are source checked. Failed gear equip transactions now record buyer identity/state, available inventory, item location/ownership, catalog slot and retry attempt. Native click, transfer, equipment and buyback still need live checks | Pending / known report |
+| Shop windows, backpack/equipment, purchases, crafting and full inventory | Pack now uses generic installed `ebac` with 30-slot storage and nine equipment slots; gear object flags and inventory/catalog relationships are source checked. Shop transfer detaches the backpack item before creating its normal-inventory copy; recipe scrolls are guarded against duplicate craft starts. Multiplayer open/close independence, native click, transfer, equipment, duplication prevention and buyback still need live checks | Pending / known report |
 | Kill-reward feedback | Source pays full gold bounty to the player owning the killing unit; King Aldric awards 25% to each active player. Toast readability and owner attribution need the current-build game check | Pending in game |
 | Shared XP | Native XP is disabled; runtime gives the full per-unit XP award to each active hero within 1,200 range. Includes race and life-state cases | Pending in game |
 | Restoring Spring cadence | Source restores 1% max health and mana per second silently within 450 range | Pending in game |
@@ -43,7 +43,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Current package `dist/KLS-D-cfec99b8a2-Development.w3m` has SHA-256 `a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5` and is installed with a matching hash. Open this build and verify its visible ID before save/reopen or startup checks.
+2. Current package `dist/KLS-D-921cb74251-Development.w3m` has SHA-256 `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568` and is installed with a matching hash. Open this build and verify its visible ID before save/reopen or startup checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -64,16 +64,16 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
-The current package is `KLS-D-cfec99b8a2`, installed in the dedicated test folder with a matching package checksum. It restores the regular hero skill lists alongside three distinct stat choices. Confirm its visible ID and test hero skill selection, editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step.
+The current package `KLS-D-921cb74251` is installed and byte-verified. Open this exact build and check automatic main/secondary growth, local stat buttons, native spell `+` upgrades, fifth-level talents, the Night Elf path from Ancient of War/Hunter's Hall to Tree of Ages, and the shop/crafting duplicate fix. Continue with editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step.
 
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
-2. Current package `dist/KLS-D-cfec99b8a2-Development.w3m` has SHA-256 `a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5` and is installed with a matching hash. Open this build and verify its visible ID before save/reopen or startup checks.
-3. Current-build startup is pending. Open the new exact map in World Editor and run Test Map, then launch that same installed map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
+2. Current package `dist/KLS-D-921cb74251-Development.w3m` has SHA-256 `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568` and is installed with a matching hash. Open the map only after confirming it is the named current build.
+3. Current-build startup is pending. Open the installed package in World Editor and run Test Map, then launch that same map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
 4. Exercise mixed-race selection, racial build menus and worker jobs; inspect the Undead Temple icon/queues, + stat buttons, fifth-level talents, towns and road navigation; test item stock, equipment, drops, recipes, story rewards, Sacred Aura rank 4/5 tooltips, and both race-specific mine orders.
 5. Continue with the existing kill gold/XP, castle, shop/backpack, spring and 50/180-second break checks, then verify automatic wave 40 continuation, the wave 49 convergence, Lady Vashj at wave 50, and one later rotating boss. Confirm the optional Crownlands story stays outside wave accounting. Finish with real multiplayer and endless endurance acceptance.
 
-For the first item-system check after startup, click the Forsaken Field Pack and confirm its native UI opens. Then buy common boots, move them between backpack storage and the normal inventory, and sell them to a shop. If equipment behavior fails, type `-gear` and send all audit lines with `-diag`; the report identifies the item’s normal inventory, occupied backpack slot, or loadout location, catalog slot and owner marker. Separately, stand at the spring with missing HP/mana and confirm both bars tick upward each second without a burst effect or message.
+For the first item-system check after startup, click Backpack and confirm its native UI opens. Then buy common boots, move them between backpack storage and the normal inventory, and sell them to a shop. In multiplayer, open one player's Backpack while watching the other player's UI. If equipment behavior fails, type `-gear` and send all audit lines with `-diag`; the report identifies the item’s normal inventory, occupied backpack slot, or loadout location, catalog slot and owner marker. Separately, stand at the spring with missing HP/mana and confirm both bars tick upward each second without a burst effect or message.
 
 ## Release criterion
 

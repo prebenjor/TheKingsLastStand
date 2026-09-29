@@ -2,6 +2,49 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-921cb74251 - 2026-09-29
+
+- Prevented shop gear transfer from leaving a duplicate behind: the backpack item is explicitly detached before Warcraft creates its normal-inventory replacement, and the original is restored if insertion fails. Added a per-recipe-scroll transaction guard so the same purchase cannot start multiple crafts.
+- Carries forward the generic multiplayer Backpack, automatic +3 primary / +1 secondary stat growth, and corrected Night Elf Tree of Ages prerequisites.
+- Package archive readback and installed-editor JASS syntax checks passed. Automated tests were not run for this change.
+- Package: `dist/KLS-D-921cb74251-Development.w3m`; SHA-256: `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568`.
+- Installed as the sole project map in `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-921cb74251-Development.w3m`; the installed SHA-256 matches the package.
+- Current-build editor save/reopen, Test Map, Custom Game, purchase/crafting behavior, multiplayer and endurance remain pending. The earlier successful Test Map remains attributed to `KLS-D-fd638ddcf5`.
+
+## KLS-D-2110d9b22f - 2026-09-29
+
+- Added automatic +3 growth to each selected hero's primary damage attribute and +1 to both secondary attributes per gained level, while keeping the three unranked +3 stat choices and normal spell skill points.
+- Fixed the Night Elf Tree of Ages prerequisite loop: Ancient of War (`eaom`) is the racial Barracks, Hunter's Hall (`edob`) is the Tier One upgrade structure, and Tree of Ages requires those structures plus the Night Elf Hero Shrine (`kA02`).
+- Package/readback and installed-editor JASS syntax checks passed. Automated tests were not run for this change.
+- Package: `dist/KLS-D-2110d9b22f-Development.w3m`; SHA-256: `d127d8c71e73a70888befa9cfd2526b0a625c0ed103a0691846600820b5ae4cf`.
+- This build was not installed at the time; it was superseded by the installed `KLS-D-7e73f5578d` build. Current-build editor and gameplay checks remained pending.
+
+## KLS-D-7e73f5578d - 2026-09-29
+
+- Replaced the hero's persistent Anya-specific backpack (`ebua`) with the installed generic Backpack object (`ebac`), named it Backpack, and retained the native 30-slot storage plus the nine-slot equipment and stat-detail abilities (`AIni`, `AEqu`, `ASde`). Backpack tracking and diagnostics now recognize `ebac`.
+- Updated the equipment design, player instructions and multiplayer acceptance gate. The generic identity is now in the map; independent backpack panel open/close behavior still requires an actual two-player check.
+- Package/archive readback and installed-editor JASS syntax checks passed. Automated tests were not run for this change.
+- Package: `dist/KLS-D-7e73f5578d-Development.w3m`; SHA-256: `0599b0d68c34d70b511fe5a60e7162c267c4bf81356570be68521a7f8abf6e1e`.
+- Installed as the sole project map in `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-7e73f5578d-Development.w3m`; package and installed hashes match. Warcraft III remained open, but the map file was closed before installation. Editor Test Map, Custom Game, backpack use, multiplayer independence and endurance remain unverified. The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5`.
+- Next human step: open the installed build `KLS-D-7e73f5578d` and check that one player's Backpack can open while another player's panel stays unchanged.
+
+- Installed successfully on 2026-09-29 at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-2110d9b22f-Development.w3m`; package and installed SHA-256 matched. The build was replaced and archived when `KLS-D-7e73f5578d` was installed. No current-build editor or gameplay checks were performed.
+
+- Added automatic +3 growth to each selected hero's primary damage attribute and +1 to both secondary attributes per gained level. Set native selectable-hero growth fields to zero to prevent double growth, and catch up all levels when the hero gains multiple levels at once. Kept the three unranked +3 stat buttons as separate skill-point choices, with normal spells still available.
+- Fixed the Night Elf tech progression: the racial Barracks is now Ancient of War (`eaom`) and its upgrade building is Hunter's Hall (`edob`). Tree of Ages (`etoa`) requires those Tier One structures and Night Elf Hero Shrine (`kA02`), removing the previous Ancient of Wind/Lore circular prerequisite.
+- `python -B tools/build_map.py` passed package/readback and installed-editor JASS syntax checks. Automated tests were not run for this change.
+- Package: `dist/KLS-D-2110d9b22f-Development.w3m`; SHA-256: `d127d8c71e73a70888befa9cfd2526b0a625c0ed103a0691846600820b5ae4cf`.
+- Not installed: Warcraft III remained open (PID 54532), so the existing test-folder map was left untouched. Editor Test Map, Custom Game, progression behavior, Night Elf upgrades, multiplayer and endurance remain pending. The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5`.
+- Next human step: close Warcraft III and World Editor, install this exact build, then verify the automatic stat gains, independent stat buttons, and the Night Elf Tree of Ages prerequisites in Custom Game.
+
+## KLS-D-8b4add7c98 - 2026-09-29
+
+- Replaced the three ranked Attribute Bonus clones with three unranked, repeatable `+3 STR`, `+3 AGI`, and `+3 INT` owner-local buttons above the hero ability grid. A synchronized choice consumes one normal hero skill point and adds exactly three to the matching stat; normal spell learning remains available and the stat choices do not use a modal dialog.
+- Build/package readback and installed-editor JASS syntax checks passed. Automated tests were not run for this change.
+- Package: `dist/KLS-D-8b4add7c98-Development.w3m`; SHA-256: `d531a1e13a2908443acd5cc3a0edd56ffb816b2b9664803a82557f8ee59e53c3`.
+- Not installed: Warcraft III was running (PID 54532), so the existing test-folder map was left untouched. Editor Test Map, Custom Game, live skill selection, multiplayer and endurance checks remain pending. The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5`.
+- Next human step: close Warcraft III and World Editor, run `python -B tools/build_map.py --install-test-map`, open this exact build and verify the three choices beside normal spell upgrades.
+
 ## KLS-D-cfec99b8a2 - 2026-09-29
 
 - Restored every hero's four normal learnable abilities alongside the three +3 single-stat skill choices. The previous generated unit records replaced the normal spell list with only Strength, Agility and Intelligence, leaving those heroes unable to level their regular skills.

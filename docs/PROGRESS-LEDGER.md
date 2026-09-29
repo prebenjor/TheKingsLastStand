@@ -1,6 +1,33 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-cfec99b8a2
+## Current package-proven build — KLS-D-921cb74251
+
+- Artifact: `dist/KLS-D-921cb74251-Development.w3m`.
+- SHA-256: `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568`.
+- Shop purchase transfer detaches the extended-backpack item before creating its regular-inventory replacement, restoring the original on insertion failure. Craft recipes use a per-scroll guard against duplicate starts.
+- Carries forward the generic native Backpack, automatic +3 primary / +1 secondary stat growth, and corrected Night Elf Tree of Ages prerequisites.
+- `python -B tools/build_map.py --install-test-map` passed package/archive readback and installed-editor JASS syntax checks, then installed the map. Package and installed SHA-256 values match. Automated tests were not run.
+- Current-build editor save/reopen, Test Map, Custom Game, purchase/crafting behavior, gameplay, multiplayer and endurance remain pending. The earlier successful Test Map remains attributed to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-2110d9b22f
+
+- Artifact: `dist/KLS-D-2110d9b22f-Development.w3m`.
+- SHA-256: `d127d8c71e73a70888befa9cfd2526b0a625c0ed103a0691846600820b5ae4cf`.
+- Added automatic growth of +3 to each hero's installed primary damage stat and +1 to each other stat per gained level. All selectable hero growth fields are zeroed in object data; the runtime catches up once per crossed level, including jumps. Preserved the three separate unranked +3 stat buttons and normal skill point choice.
+- Fixed the Night Elf Tree of Ages prerequisite loop. The menu now uses Ancient of War (`eaom`) as Barracks and Hunter's Hall (`edob`) as its Tier One upgrade structure; Tree of Ages requires those structures and Night Elf Hero Shrine `kA02`, not Ancient of Wind/Lore.
+- `python -B tools/build_map.py` passed package/archive readback and installed-editor JASS syntax checks. Automated tests were not run for this change.
+- Warcraft III remained open (PID 54532), so this build was not installed and the prior test-folder map was left untouched. Current-build editor, Test Map, Custom Game, stat-growth behavior, Night Elf tech progression, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Next human step: close Warcraft III and World Editor, install this exact build, then check both stat progression and the Tree of Ages path in a Custom Game.
+
+## Previous package-proven build — KLS-D-8b4add7c98
+
+- Artifact: `dist/KLS-D-8b4add7c98-Development.w3m`.
+- SHA-256: `d531a1e13a2908443acd5cc3a0edd56ffb816b2b9664803a82557f8ee59e53c3`.
+- Replaced the three ranked Attribute Bonus clones with three unranked, repeatable `+3 STR`, `+3 AGI`, and `+3 INT` owner-local buttons above the native command card. Each click is synchronized, consumes one available native hero skill point, and adds exactly +3 to the chosen attribute. The four native hero skills remain in their normal learn list.
+- `python -B tools/build_map.py` passed package/readback and installed-editor JASS syntax checks. Automated tests were not run for this change.
+- Warcraft III was running (PID 54532), so the new build was not installed and the existing test-folder map was left untouched. Editor Test Map, Custom Game, visible button placement, stat choice, normal skill leveling, multiplayer and endurance remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-cfec99b8a2
 
 - Artifact: `dist/KLS-D-cfec99b8a2-Development.w3m`.
 - SHA-256: `a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5`.

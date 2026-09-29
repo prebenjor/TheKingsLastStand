@@ -28,7 +28,15 @@ The custom Human Priest is based on the map's custom hero type and has the four-
 
 ## Per-level primary-stat choices
 
-Every hero's learnable list contains its four native skills and three additional native `+` choices: `KSTR` adds only +3 Strength, `KAGI` adds only +3 Agility, and `KINT` adds only +3 Intelligence. A choice spends the same hero skill point as a normal ability and can be chosen again with a later point. Do not replace the hero's regular four-skill list with these choices, and do not show the former modal stat-allocation dialog. Each choice's learn and extended tooltips must name its one stat; do not reuse Attribute Bonus's all-stats description or list a separate stat progression ladder.
+Each hero keeps its four native skills in the standard learn list. When the selected hero has an unspent skill point, three owner-only buttons appear directly above the command-card ability grid: `+3 STR`, `+3 AGI`, and `+3 INT`. Selecting one consumes one normal hero skill point and permanently adds exactly three points to that stat. These are repeatable choices, not ranked abilities: show no ability level, rank counter, or per-rank ladder. Keep the ordinary spell `+` upgrades available at the same time; a stat pick and a spell rank spend the same pool of skill points. The buttons are non-modal and must not pause the match or interrupt other players. Only the owning player's selected hero exposes the buttons on that player's screen.
+
+Separately, every gained hero level automatically adds +3 to the hero's primary damage attribute and +1 to each of the other two attributes. This automatic growth is independent of the skill-point choice. The engine's built-in growth fields (`ustp`, `uagp`, `uinp`) are set to zero on all selectable hero records so values do not stack twice. Track the last processed level per player hero and apply the automatic growth once for every crossed level, even when one award jumps several levels. Primary stats come from the installed UnitBalance data and are inherited by the eight custom heroes from their base hero:
+
+| Primary attribute | Heroes |
+|---|---|
+| Strength | Paladin, Mountain King, Aveline Ashford, Toren Flintlock, Tauren Chieftain, Korgal Redtusk, Death Knight, Forsaken Paladin, Tharos Bonecrown |
+| Agility | Blademaster, Shadow Hunter, Demon Hunter, Priestess of the Moon, Warden, Dark Ranger, Morgra Ashcaller, Selyra Moonlance, Veyra Wraithveil |
+| Intelligence | Priest, Blood Mage, Far Seer, Keeper of the Grove, Ilastar, Faelor Briarward, Lich |
 
 ## Hero and native skill rawcodes
 
@@ -89,7 +97,7 @@ These effects are the current authored object/runtime values; visual assets, nat
 - Safely extend only abilities with a registered, installed, nonzero power field in `tools/hero_progression.py`. Each rank beyond the installed maximum adds 10% of the final authored power value; the increase is relative to the authored value, not compounded (for a three-rank ability, ranks 4 and 5 are 110% and 120%). Every other field copies from the final authored rank, including mana cost, cooldown, duration, range, targeting and mechanics.
 - The extension table is explicit and keyed by ability rawcode and AbilityData field ID: `AHhb/Hhb1`, `AHad/Had1`, `AHtb/Htb1`, `AHtc/Htc1`, `AHbh/Hbh1+Hbh3`, `AHav/Hav1+Hav2+Hav3`, `AHfs/Hfs1+Hfs3+Hfs6`, `AHbn/Hbn1`, `AHpa/hsa1+hsa2`, `AHas/hsa1+hsa2`, `AHfa/Hfa1`, `AOwk/Owk3`, `AOcr/Ocr2`, `AOww/Oww1`, `AOcl/Ocl1`, `AOsh/Osh1`, `AOws/Wrs1`, `AOae/Oae1+Oae2`, `AOhw/Ocl1`, `AEmb/Emb1`, `AEim/Eim1`, `AEev/Eev1`, `AEer/Eer1`, `AEah/Eah1`, `AEar/Ear1`, `AEfk/Efk1+Efk2`, `AEsh/Esh1+Esh5`, `AEtq/Etq1`, `AEme/Eme5`, `AEsf/Esf1`, `AUdc/Udc1`, `AUau/Uau1+Uau2`, `AUdr/Udp1`, `AUfn/Ufn1`, and `AUdd/Udd1`. These labels were checked against the installed editor's localized AbilityMetaData strings.
 - Unregistered abilities remain at their installed rank cap rather than receiving guessed scaling. The runtime advances ranks at ten-level milestones, to rank 5 at most. The custom signature ability system keeps its separate per-hero-level effects.
-- Each hero level queues one visible stat investment: +3 Strength, +3 Agility or +3 Intelligence. Every fifth level grants a separate talent choice; Strength adds health and health regeneration, Agility adds attack speed and evasion, and Intelligence adds mana and mana regeneration. The exact effects are listed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
+- Each gained hero level automatically adds +3 to primary attribute and +1 to the other two. The ordinary skill point remains a separate spell-or-stat-button choice. Every fifth level grants a separate talent choice; Strength adds health and health regeneration, Agility adds attack speed and evasion, and Intelligence adds mana and mana regeneration. The exact effects are listed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
 - Keep hero inventory/equipment through death and revive after 20 seconds at that player's Altar of Kings.
 
 ## Race-sensitive spell behavior

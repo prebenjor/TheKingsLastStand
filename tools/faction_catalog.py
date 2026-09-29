@@ -83,7 +83,7 @@ FACTIONS = [
      'food':'otrb','barracks':'obar','blacksmith':'ofor','arcane':'kR01','arcane_parent':'osld',
      'towers':('kT10','kT11','kT12'),'tower_parents':('owtw','owtw','owtw')},
     {'race':'Night Elf','worker':'ewsp','town_hall':'etol','altar':'kA02','altar_parent':'eate',
-     'food':'emow','barracks':'eaow','blacksmith':'eaoe','arcane':'kR02','arcane_parent':'eaoe',
+     'food':'emow','barracks':'eaom','blacksmith':'edob','arcane':'kR02','arcane_parent':'eaoe',
      'towers':('kT20','kT21','kT22'),'tower_parents':('etrp','etrp','etrp')},
     {'race':'Undead','worker':'uaco','town_hall':'unpl','altar':'kA03','altar_parent':'uaod',
      'food':'uzig','barracks':'usep','blacksmith':'uslh','arcane':'kR03','arcane_parent':'utod',
