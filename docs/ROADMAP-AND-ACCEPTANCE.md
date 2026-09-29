@@ -64,7 +64,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
-The current package `KLS-D-1739daf903` is at `dist/KLS-D-1739daf903-Development.w3m`, SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`; it is installed with a matching hash as the sole project map and is open in World Editor PID 61288. The editor window title confirms the exact installed path. This is an editor-load observation only: save/reopen, current-build Test Map, Custom Game, and gameplay remain pending. Record the visible build ID before gameplay checks.
+The current package `KLS-D-1739daf903` is at `dist/KLS-D-1739daf903-Development.w3m`, SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`; it is installed with a matching hash as the sole project map and is open in World Editor. The editor window title confirms the exact installed path. A direct client launch used the same path but did not produce a map-open log entry. These are load/launch observations only: save/reopen, current-build Test Map, Custom Game, and gameplay remain pending. Record the visible build ID before gameplay checks.
 
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
