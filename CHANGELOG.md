@@ -2,6 +2,15 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-cfec99b8a2 - 2026-09-29
+
+- Restored every hero's four normal learnable abilities alongside the three +3 single-stat skill choices. The previous generated unit records replaced the normal spell list with only Strength, Agility and Intelligence, leaving those heroes unable to level their regular skills.
+- Corrected the three stat-choice names and tooltips to use Warcraft's ability-wide profile fields. Strength, Agility and Intelligence now describe distinct bonuses; the tooltip no longer claims that one choice increases all attributes or lists a separate stat-level ladder.
+- Build/package readback and installed-editor JASS syntax checks passed. Automated regression tests were not run for this change.
+- Package: `dist/KLS-D-cfec99b8a2-Development.w3m`; SHA-256: `a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5`.
+- Installed successfully as the sole project map in `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-cfec99b8a2-Development.w3m`; installed and package hashes match. World Editor Test Map, Custom Game, gameplay skill selection, multiplayer and endurance checks remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Next human step: open this exact installed build and confirm the four native skills still have `+` buttons, and that each stat choice's tooltip names and grants only its matching +3 attribute.
+
 ## KLS-D-8a93630281 - 2026-09-29
 
 - Added `source/authored-map/editor-layer.zip`, captured from the exact prior development package `KLS-D-b0fccf974c` with SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. It preserves six checksummed World Editor layers: terrain, pathing, doodads/destructables, shadows, minimap markers and map preview. The bundle currently reflects the prior package's art; it prepares future hand-dressed terrain to survive builds.

@@ -22,7 +22,11 @@ def units():
     # with its hero-specific Siege Yard child; retain twelve usable buttons.
     from faction_catalog import FACTIONS, _ALTAR_TOOLTIPS, _ARCANE_NAMES, _ARCANE_TOOLTIPS, _TOWER_NAMES, _TOWER_TOOLTIPS
     from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
-    hero_choice_ids = STAT_ABILITY_IDS
+    # The native hero learn list must retain the hero's four actual spells.
+    # Stat choices are additional entries in that list, not replacements for
+    # the regular skill tree.
+    def learned_hero_skills(hero_id):
+        return ','.join(dict.fromkeys((*HERO_ABILITIES[hero_id], *STAT_ABILITY_IDS)))
     from hero_catalog import NEW_HEROES
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
@@ -43,9 +47,9 @@ def units():
     for hero_id, abilities in HERO_ABILITIES.items():
         if hero_id not in custom_hero_ids:
             original.append(record(hero_id, '\0\0\0\0', {
-                'uhab': ','.join(hero_choice_ids)}))
+                'uhab': learned_hero_skills(hero_id)}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':','.join(hero_choice_ids),'ureq':'','uhpm':600}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':600}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
         record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
         record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
@@ -61,7 +65,7 @@ def units():
     for hero in NEW_HEROES:
         custom.append(record(hero['base'], hero['unit_id'], {
             'unam':hero['name'], 'upro':hero['name'],
-            'uhab':','.join(hero_choice_ids), 'ureq':'',
+            'uhab':learned_hero_skills(hero['unit_id']), 'ureq':'',
         }))
     from company_catalog import HERO_COMPANIES
     for faction in FACTIONS:

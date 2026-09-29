@@ -1,8 +1,8 @@
 {
-  "build_id": "KLS-D-8a93630281",
+  "build_id": "KLS-D-cfec99b8a2",
   "status": "development: engine and multiplayer checks pending",
-  "output_path": "dist/KLS-D-8a93630281-Development.w3m",
-  "sha256": "bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec",
+  "output_path": "dist/KLS-D-cfec99b8a2-Development.w3m",
+  "sha256": "a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5",
   "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
   "source_hashes": {
     "source/diagnostics.j": "704a8bded4e5409007955a210831288d682993169bca11ccdb26a28ec356b902",
@@ -31,11 +31,11 @@
     "tools/faction_catalog.py": "c9e7890e81d6457c50300c22d50594d787d2f6e65f0f5da5e4781944e1b52574",
     "tools/gui_sources.py": "5c9e094f30dc29e8a68b860d0b8ed8886063423f1f337c85e59e61b6b8e99cb3",
     "tools/hero_catalog.py": "7b6f72a5706500c704c08a5534f7215eea1620451b4bf74010c8c093e1a7d7b6",
-    "tools/hero_progression.py": "f5e578b4c8c7ea8023b5c5fc478a98f6279c7063b4dede5064bf82390465cf0b",
+    "tools/hero_progression.py": "de2bfb65e86ef25dc9d1d40f93ae3b5d350ddd25d96ae606958cb77c92f4d483",
     "tools/install_diagnostic.py": "eb7e504c3867bc860be1091ba6b513c6dfe286b1c9594c4871db053b07348fd4",
     "tools/map_archive.py": "669ae74d19df0ee217f6f3f202a3eedc281403f1f487255f4363c4777084ff43",
     "tools/map_info.py": "b12be26c46ab4a0621cb0bc2ad8ff80e1d04276c2ee90252ac72312fe3ebd77f",
-    "tools/objects.py": "2abb4634be7e29b6baf8ba25f6a960fe24dbb9d1466bb00fcb5fe0871fc9858a",
+    "tools/objects.py": "e5f0b53c58435f440604b1359f1bf9449649f743a735b650064aa95781733800",
     "tools/pack.py": "955d763127dabbb52e98ef3d1716d1dee4350a18f3abcba3fd106ef2608661b4",
     "tools/pipeline.py": "a71373fdfaf0facb65a3e8bd22f840ee0d8ecef048c660be7a8d9f028cb8bd17",
     "tools/recipes.py": "979ad57502ca60e99cda01b39cc13667ef1f7c9fa79618a706b14e9d00c774ae",
@@ -164,7 +164,7 @@
     {
       "name": "(attributes)",
       "size": 100,
-      "sha256": "cdefff5a67ef9a295d444315b5fe4cdbb0b7a14081c2e5bb7678203fe7fbb3d1"
+      "sha256": "250c791e878e639a7c90e12542dc326fd13ef8541cc06d0289be3fd3b65da23a"
     },
     {
       "name": "(listfile)",
@@ -184,7 +184,7 @@
     {
       "name": "war3map.j",
       "size": 273835,
-      "sha256": "badd4d5a018294143ca594112fa2cd4aeb437f563e313530b3661e2ddc9ceeb9"
+      "sha256": "81e2551d19ac812d73af8033e1dab4cd7faa4b5fb9c342e6f8d43a90abd97de2"
     },
     {
       "name": "war3map.mmp",
@@ -198,8 +198,8 @@
     },
     {
       "name": "war3map.w3a",
-      "size": 157441,
-      "sha256": "e90a0978121f8f6e732c04741133a1bddba245d79dba0712285948c26a79d9fe"
+      "size": 127081,
+      "sha256": "a84c268ea7034d8d2aa52f23bc183b5f2ca46e7e8c3e1680058b5a59c13ac396"
     },
     {
       "name": "war3map.w3c",
@@ -219,7 +219,7 @@
     {
       "name": "war3map.w3i",
       "size": 592,
-      "sha256": "546e598161bb6ddabf70233e34a749801b5371a04c552dc0494dbe606542be2b"
+      "sha256": "69ee5ba13c317b0a9f91e10bc13c2c436707500c127cd4d43abb3d7063e659a7"
     },
     {
       "name": "war3map.w3l",
@@ -238,13 +238,13 @@
     },
     {
       "name": "war3map.w3u",
-      "size": 25716,
-      "sha256": "4437a2aa150c70bee155994516fbcc1c70bf6088375823d8fdd719265b3c199c"
+      "size": 26216,
+      "sha256": "9b1ddaee8b7d11204cfeff671de8dadcb75be8d44af2e3ba825a8a129797bf8a"
     },
     {
       "name": "war3map.wct",
       "size": 266129,
-      "sha256": "9cc6f31e6b9017b1bbe690f8eea0528b56355484737e226fb712bc888fac3442"
+      "sha256": "e32bb9ee26fea1b79291d1984ec5a3cd026fba092bb0ccad0149011ecb8b5f81"
     },
     {
       "name": "war3map.wpm",

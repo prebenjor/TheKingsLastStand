@@ -1,13 +1,19 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-8a93630281
+## Current package-proven build — KLS-D-cfec99b8a2
+
+- Artifact: `dist/KLS-D-cfec99b8a2-Development.w3m`.
+- SHA-256: `a757870a33fc370a304eaba649d2a3d669d00ff3766001c60c16e131f5dd2ae5`.
+- Restored each hero's four native learnable abilities alongside three distinct +3 Strength/Agility/Intelligence choices. Fixed tooltip fields so each choice describes only its own stat and removed the separate rank-by-rank stat table.
+- Build/package readback and installed-editor API syntax passed. Automated regressions were not run for this change.
+- `python -B tools/build_map.py --install-test-map` installed this exact artifact to `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-cfec99b8a2-Development.w3m`; package and installed SHA-256 values match. World Editor Test Map, Custom Game, hero skill selection, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-8a93630281
 
 - Artifact: `dist/KLS-D-8a93630281-Development.w3m`.
 - SHA-256: `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`.
-- Added a validated, checksummed World Editor art-layer bundle at `source/authored-map/editor-layer.zip`, captured from the exact prior package `KLS-D-b0fccf974c` (SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`). It currently preserves the package's existing terrain, pathing, doodads, shadows, minimap markers and preview; it is ready to carry forward future map dressing.
-- Added `tools/capture_authored_map.py --map <saved-map.w3m>` and pipeline support to preserve those six layers while continuing to generate all gameplay logic, object data and metadata from source. The capture refuses a different build ID or malformed map dimensions and keeps layer checksums/provenance in the bundle and build manifest.
-- Source regression suite: **147/147 passed**. Authored-layer capture, tamper rejection and pipeline archive readback passed; installed-editor JASS syntax and package readback passed.
-- `python -B tools/build_map.py --install-test-map` rebuilt this same package and tried installation. Windows returned `WinError 32` while removing the old test map. The installer left `KLS-D-b0fccf974c` intact as the sole map in the test folder and retained a verified archive at `backups/installed-diagnostics/20260929T111716941276Z-KLS-D-8a93630281/` (SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`). No new map was installed. Warcraft III PID 43560 still has the old file locked even though the map is closed; do not force-close it. Retry after the entire game process exits. Current-build editor, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending; the earlier Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+- Added a validated, checksummed World Editor art-layer bundle at `source/authored-map/editor-layer.zip`, captured from the exact prior package `KLS-D-b0fccf974c` (SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`). It preserves six World Editor visual layers; the bundle currently reflects the prior package's art.
+- Source regression suite passed **147/147** for this previous source snapshot. Current-build checks are documented above.
 
 ## Previous package-proven build — KLS-D-b0fccf974c
 

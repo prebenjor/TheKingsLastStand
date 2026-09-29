@@ -26,6 +26,10 @@ All selectable heroes start at level 1 and belong to a defending player's owners
 
 The custom Human Priest is based on the map's custom hero type and has the four-skill set above. Preserve that identity while verifying its portrait, order, icons, and native object IDs in the installed editor version.
 
+## Per-level primary-stat choices
+
+Every hero's learnable list contains its four native skills and three additional native `+` choices: `KSTR` adds only +3 Strength, `KAGI` adds only +3 Agility, and `KINT` adds only +3 Intelligence. A choice spends the same hero skill point as a normal ability and can be chosen again with a later point. Do not replace the hero's regular four-skill list with these choices, and do not show the former modal stat-allocation dialog. Each choice's learn and extended tooltips must name its one stat; do not reuse Attribute Bonus's all-stats description or list a separate stat progression ladder.
+
 ## Hero and native skill rawcodes
 
 These are the IDs currently present in tools/hero_progression.py and the selector source. Validate every ID against the locally extracted supported-edition tables before changing or extending the roster.
