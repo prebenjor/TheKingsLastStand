@@ -18,6 +18,21 @@ def function_body(script, name):
     return match.group()
 
 
+def generated_drop_rarity(script, loot_tier, roll):
+    body = function_body(script, 'KLS_EnemyDropRarity')
+    branches = re.findall(
+        r'if tier == (\d+) then([\s\S]*?)(?=\n    elseif tier == \d+ then|\n    endif)',
+        body,
+    )
+    branch = next((text for tier, text in branches if int(tier) == loot_tier), None)
+    if branch is None:
+        return -1
+    for bound, rarity in re.findall(r'(?:if|elseif) roll <= (\d+) then\s+return (-?\d+)', branch):
+        if roll <= int(bound):
+            return int(rarity)
+    return -1
+
+
 class EnemyBounties(unittest.TestCase):
     def test_every_roster_unit_has_an_explicit_role_bounty(self):
         roster_units = {unit for roster in all_wave_rosters() for unit in roster}
@@ -99,8 +114,71 @@ class EnemyBounties(unittest.TestCase):
 
     def test_failed_random_item_drops_are_logged_with_item_enemy_and_position(self):
         script = runtime_script('KLS-D-TEST')
+        delivery = function_body(script, 'KLS_DropEnemyItem')
+        self.assertIn('CreateItem(itemCode,GetUnitX(enemy)+offsetX,GetUnitY(enemy))', delivery)
+        self.assertIn('GetItemName(drop)+" dropped nearby."', delivery)
+        self.assertIn('ERROR enemy item drop creation failed', delivery)
+        self.assertIn('enemy="+GetObjectName(GetUnitTypeId(enemy))', delivery)
+        self.assertIn('enemyXY="+R2S(GetUnitX(enemy))+","+R2S(GetUnitY(enemy))', delivery)
+        self.assertIn('killerPlayerId="+I2S(p)', delivery)
+
+    def test_enemy_loot_uses_explicit_elite_tiers_and_preserves_probability_bands(self):
+        script = runtime_script('KLS-D-TEST')
+        tier_body = function_body(script, 'KLS_EnemyLootTier')
+        expected_elites = {
+            'hbew', 'nbal', 'nbee', 'nbel', 'nchg', 'nchr', 'nchw', 'nckb',
+            'ndqn', 'nfel', 'nfgu', 'nhyc', 'ninf', 'nmyr', 'nnmg', 'nnrg',
+            'nnsw', 'nvdw', 'nwgs', 'uabo', 'ucry', 'umtw', 'unec',
+        }
+        self.assertIn('if boss then\n        return 2', tier_body)
+        for unit_code in BOUNTY_BY_UNIT:
+            expected_tier = 1 if unit_code in expected_elites else 0
+            self.assertRegex(
+                tier_body,
+                rf"unitCode == '{unit_code}' then\s+return {expected_tier}",
+                unit_code,
+            )
+
+        # Check generated JASS outcomes at every rarity boundary.
+        expected_rolls = (
+            (0, 160, 0), (0, 161, 1), (0, 250, 1), (0, 251, 2),
+            (0, 290, 2), (0, 291, 3), (0, 298, 3), (0, 299, 4),
+            (0, 300, 4), (0, 301, -1),
+            (1, 350, 0), (1, 351, 1), (1, 650, 1), (1, 651, 2),
+            (1, 850, 2), (1, 851, 3), (1, 950, 3), (1, 951, 4),
+            (1, 1000, 4), (1, 1001, -1),
+            (2, 1500, 0), (2, 1501, 1), (2, 2800, 1), (2, 2801, 2),
+            (2, 4100, 2), (2, 4101, 3), (2, 4800, 3), (2, 4801, 4),
+            (2, 5000, 4), (2, 5001, -1),
+        )
+        for tier, roll, expected_rarity in expected_rolls:
+            self.assertEqual(generated_drop_rarity(script, tier, roll), expected_rarity,
+                             (tier, roll))
+
+    def test_equipment_and_potion_rolls_can_deliver_two_personal_drops(self):
+        script = runtime_script('KLS-D-TEST')
         drops = function_body(script, 'KLS_EnemyDrop')
-        self.assertRegex(drops, r'set drop = CreateItem\(itemCode,GetUnitX\(enemy\),GetUnitY\(enemy\)\)\s+if drop != null then[\s\S]*?GetItemName\(drop\)[\s\S]*?else\s+call KLS_Log\("ERROR enemy item drop creation failed: item="\+GetObjectName\(itemCode\)[\s\S]*?enemy="\+GetObjectName\(GetUnitTypeId\(enemy\)\)[\s\S]*?enemyXY="\+R2S\(GetUnitX\(enemy\)\)[\s\S]*?killerPlayerId="\+I2S\(p\)\)')
+        self.assertIn('set rarity = KLS_EnemyDropRarity(tier,roll)', drops)
+        self.assertIn('if potionRoll <= KLS_EnemyPotionThreshold(tier) then', drops)
+        self.assertIn('call KLS_DropEnemyItem(enemy,gearCode,p,0.0)', drops)
+        self.assertIn('call KLS_DropEnemyItem(enemy,potionCode,p,48.0)', drops)
+        self.assertIn('local integer potionRoll = GetRandomInt(1,1000)', drops)
+
+        potion = function_body(script, 'KLS_EnemyPotionThreshold')
+        self.assertIn('if tier == 2 then\n        return 180', potion)
+        self.assertIn('elseif tier == 1 then\n        return 80', potion)
+        self.assertIn('return 40', potion)
+
+        delivery = function_body(script, 'KLS_DropEnemyItem')
+        self.assertIn('call SetItemPlayer(drop,Player(p),false)', delivery)
+        self.assertIn('call SetItemUserData(drop,p+1)', delivery)
+        self.assertIn('CreateItem(itemCode,GetUnitX(enemy)+offsetX,GetUnitY(enemy))', delivery)
+        self.assertIn('enemy item drop creation failed', delivery)
+
+        pickup = function_body(script, 'KLS_BindPickup')
+        self.assertIn('elseif owner == 0 and LoadInteger(KLS_GearData,GetItemTypeId(gear),0) > 0 then', pickup)
+        self.assertIn('set owner = GetPlayerId(GetOwningPlayer(u))+1', pickup)
+        self.assertIn('call SetItemUserData(gear,owner)', pickup)
 
 
 if __name__ == '__main__':

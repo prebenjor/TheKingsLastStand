@@ -114,6 +114,12 @@ Design intent: four distinct personal, unsellable relics are awarded by the four
 
 These are personal, unsellable boss relics. Boss relics and Crownlands story items use the shared delivery service in `source/rewards.j`. It checks `CreateItem` before using the returned handle. If creation fails, the item rawcode stays in that owner's pending queue and is retried every five seconds while the match clock runs. If the hero cannot accept a successfully created item, it remains visible and owner-bound at that player's base. Both native item owner and the project owner marker are set so other players cannot claim the personal reward. Regression coverage checks boss/story routing, null-handle guards, full-inventory fallback and retry queue behavior; verify pickup, ownership and injected creation failures in Warcraft. Do not rename, replace, or rebalance the relics without updating this catalog and testing their actual native effects.
 
+## Ordinary enemy drops
+
+Enemy gear uses the shared general/racial catalog and explicit Normal, Elite, and Boss tiers from the wave roster. Normal enemies have a 3% gear chance, Elite roles 10%, and bosses 50%; Elite and Boss profiles give higher rarities greater weight. Potion chances are independent at 4% / 8% / 18% for Normal / Elite / Boss. Both rolls can succeed on one death, placing the gear and potion beside each other. Drops from an active defender's kill are owned by that killer; first pickup assigns the owner marker to any otherwise unbound catalog gear so its stats work when equipped. Boss and story completion rewards remain owner-bound through the reward queue.
+
+See [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md) for the per-rarity probability table and tiered roster.
+
 ## Player-facing interaction acceptance
 
 For each shop: open the shop by clicking/approaching it, see icon stock, hover exact name/cost/slot/stat/effect, buy, find the buyer-owned item in the native backpack UI, move it between storage and normal inventory, equip it, verify stat/proc, unequip and verify removal, and sell ordinary gear back for half price. Confirm boss relics remain unpawnable. Repeat with full normal inventory/storage, two rings, two players buying simultaneously, and post-death revival. Test every shop, tier, recipe, tome, consumable, and reward. These native inventory interactions remain pending until this exact flow passes in game.

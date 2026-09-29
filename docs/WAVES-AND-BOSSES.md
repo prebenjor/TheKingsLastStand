@@ -50,6 +50,18 @@ The full generated unit-code sequence for each of the 50 source rows, in order, 
 
 Each wave enemy is registered once in the authoritative tracked group. The spawn loop aborts with a diagnostic error if a required unit cannot be created; it must not leave the match waiting forever for a unit that never spawned. Death, boss summons, cleanup, and wave completion need exactly-once accounting.
 
+## Enemy gear and potion drops
+
+The wave roster explicitly classifies every ordinary role as Normal or Elite. Loot does not use wave-scaled bounty to infer toughness: durable Crypt Fiends, elite/caster units, siege roles, and heavier campaign fighters receive the Elite profile; basic infantry, Ghouls, Satyrs, and Skeletal Archers use Normal. The active boss flag selects Boss regardless of the unit's ordinary role.
+
+| Enemy tier | Common | Uncommon | Rare | Epic | Legendary | Total gear chance | Potion chance |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Normal | 1.6% | 0.9% | 0.4% | 0.08% | 0.02% | 3% | 4% |
+| Elite | 3.5% | 3% | 2% | 1% | 0.5% | 10% | 8% |
+| Boss | 15% | 13% | 13% | 7% | 2% | 50% | 18% |
+
+Gear and potion rolls are independent; a death can produce both items. Consumables are chosen uniformly from Potion of Healing (phea), Potion of Mana (pman), Scroll of Town Portal (stwp), and Scroll of Healing (shea). Both ground items are personalized to the active killing defender, including the item owner marker used by equipment effects; an otherwise unbound catalog item receives its marker on first pickup. Boss/story completion rewards remain separate personal rewards.
+
 ## Four named bosses
 
 | Wave | Boss | Current boss unit | Signature mechanic |

@@ -164,7 +164,7 @@ Each custom item object uses the listed native parent for its installed icon/art
 | Undead | Epic Mourning Reliquary | `I23R` / `eege` | Trinket | 8,000 | `A03R`, `A13R` |
 | Undead | Legendary Night’s Covenant | `I23V` / `ehls` | Offhand | 20,000 | `A03V`, `A13V`, `A23V` |
 
-Recipes consume components only when crafting succeeds. Failed craft attempts preserve every component and refund the full recipe fee. Drops use the same catalog: ordinary gear chance is 3% distributed across rarities; bosses use 50%, with higher-tier weights. Potions roll independently (4% ordinary enemy, 18% boss). Killer owns drops; story rewards are bound to contributors.
+Recipes consume components only when crafting succeeds. Failed craft attempts preserve every component and refund the full recipe fee. Ordinary enemy gear drops total 3%, durable/elite role drops total 10%, and bosses total 50%, with the higher tiers weighted toward better rarities. Potion chances are separate rolls: 4% for ordinary enemies, 8% for elites, and 18% for bosses. Since the gear and potion rolls are independent, one death can drop both; the second item is placed beside the first. Ordinary drops belong to the killing defender, while story rewards are bound to contributors. See [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md) for the exact rarity table and enemy-tier mapping.
 
 ## Build, evidence and maintenance
 

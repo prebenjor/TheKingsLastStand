@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-5604bb3f70 - 2026-09-29
+
+- Enemy loot now uses explicit Normal/Elite/Boss profiles. Gear chances are 3% / 10% / 50%, with higher rarity weights for stronger tiers. Independent potion chances are 4% / 8% / 18%; one death can drop both items. Active killers own their drops, and unbound catalog gear receives its owner marker when picked up so equipment stats apply.
+- Full source regression suite passed **136/136**. Installed-editor API syntax and MPQ package readback passed. Package SHA-256: `8e80a85f14a289f61bbf23260423754f1d3fee0441fee0882dfddefa479576bd`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5604bb3f70-Development.w3m`; its SHA-256 matches the package and it is the only project map in the test folder. The previous development artifact was archived under `backups/development-builds/20260929T032904554623Z-KLS-D-5604bb3f70/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T032904564518Z-KLS-D-5604bb3f70/`.
+- The user reported testing a build but has not identified its visible build ID or outcome. This build's editor save/reopen, Test Map, Custom Game, live drop/pickup behavior, gameplay, multiplayer and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-f97ab841cb - 2026-09-29
 
 - `-diag` now counts each logged `ERROR` once in its summary across unit, scenery, item, recipe and retry failures. The separate 32-entry ERROR/FATAL/WARN ring and recent-eight display remain in place.

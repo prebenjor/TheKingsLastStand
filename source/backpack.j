@@ -11,6 +11,9 @@ function KLS_BindPickup takes nothing returns nothing
     if owner != 0 and owner != GetPlayerId(GetOwningPlayer(u))+1 then
         call UnitRemoveItem(u, gear)
         call DisplayTimedTextToPlayer(GetOwningPlayer(u), 0, 0, 5, "That item belongs to another defender.")
+    elseif owner == 0 and LoadInteger(KLS_GearData,GetItemTypeId(gear),0) > 0 then
+        set owner = GetPlayerId(GetOwningPlayer(u))+1
+        call SetItemUserData(gear,owner)
     endif
     set gear = null
     set u = null

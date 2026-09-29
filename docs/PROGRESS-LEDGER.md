@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-f97ab841cb
+## Current package-proven build — KLS-D-5604bb3f70
+
+- Artifact: `dist/KLS-D-5604bb3f70-Development.w3m`.
+- SHA-256: `8e80a85f14a289f61bbf23260423754f1d3fee0441fee0882dfddefa479576bd`.
+- Enemy drops now classify every ordinary roster role as Normal or Elite and use a separate Boss profile. Gear chances are 3% / 10% / 50% with increasing rarity weight; independent potion chances are 4% / 8% / 18%. Both items can drop from one death. Active killers own their drops, and the pickup handler binds otherwise unowned catalog gear so equipped stats apply.
+- Full source regression suite: **136/136 passed**. Installed-editor API syntax and MPQ archive readback passed; `git diff --check` passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-5604bb3f70-Development.w3m`; package and installed SHA-256 match and the folder contains one project map. The previous package and installed map were preserved under `backups/development-builds/20260929T032904554623Z-KLS-D-5604bb3f70/` and `backups/installed-diagnostics/20260929T032904564518Z-KLS-D-5604bb3f70/`.
+- The user reported testing but has not identified the visible build ID or result. Editor save/reopen, Test Map, Custom Game, live drop/pickup, gameplay, multiplayer and endurance remain pending for this build. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-f97ab841cb
 
 - Artifact: `dist/KLS-D-f97ab841cb-Development.w3m`.
 - SHA-256: `0abf819494aa3829f972e89ddb5b4e8acd60f1432057fb7a77fd56ca196be8b5`.

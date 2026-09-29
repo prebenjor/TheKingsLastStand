@@ -67,6 +67,39 @@ BOUNTY_BY_UNIT = {
 
 BOSS_UNIT_CODES = ('Udea', 'Ulic', 'Udre', 'Uanb', 'Hvsh', 'Usyl', 'Hjsm', 'Ujsm')
 
+ENEMY_LOOT_TIER_BY_UNIT = {
+    # Recruits and basic infantry remain the baseline loot tier.
+    'uske': 'normal',
+    'ugho': 'normal',
+    'hfoo': 'normal',
+    'nska': 'normal',
+    'nsat': 'normal',
+    # Durable, elite, siege and high-threat campaign roles use richer drops.
+    'ucry': 'elite',
+    'ndqn': 'elite',
+    'nvdw': 'elite',
+    'nfel': 'elite',
+    'unec': 'elite',
+    'nfgu': 'elite',
+    'uabo': 'elite',
+    'umtw': 'elite',
+    'nbal': 'elite',
+    'ninf': 'elite',
+    'nmyr': 'elite',
+    'nnsw': 'elite',
+    'nnmg': 'elite',
+    'nnrg': 'elite',
+    'nhyc': 'elite',
+    'nwgs': 'elite',
+    'nbel': 'elite',
+    'nbee': 'elite',
+    'hbew': 'elite',
+    'nchg': 'elite',
+    'nchr': 'elite',
+    'nchw': 'elite',
+    'nckb': 'elite',
+}
+
 
 def bounty_script():
     boss_condition = ' or '.join(f"unitCode == '{unit_code}'" for unit_code in BOSS_UNIT_CODES)
