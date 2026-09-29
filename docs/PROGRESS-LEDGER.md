@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-660b4bdeea
+## Current package-proven build — KLS-D-1739daf903
+
+- Artifact: `dist/KLS-D-1739daf903-Development.w3m`.
+- SHA-256: `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`.
+- The log collector now records severity-tagged warnings and explicit spawn/load failures in `collection.json`, with a concise `diagnostic_summary`; `findings.txt` shows each full line and nearest preceding build ID as timing correlation only.
+- Full source regression suite: **142/142 passed**. Package readback and installed-editor API syntax checks passed.
+- Fresh log snapshot: `test-results/20260929T053054106327Z-KLS-D-1739daf903`; zero references to this build, six old-build map references, and eight spawn/load failures all correlated with older `KLS-D-1a040d638c` lines. These logs do not prove the new build was played.
+- World Editor PID 22184 remains open on `KLS-D-7951d852c3-Development.w3m`, so the new package is not installed. The old map and new dist package are preserved; save/close the editor normally before installing.
+- The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5`; current-build editor, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending.
+
+## Previous package-proven build — KLS-D-660b4bdeea
 
 - Artifact: `dist/KLS-D-660b4bdeea-Development.w3m`.
 - Manifest output path: `C:\Users\asphy\Documents\Warcraft3Maps\kings-last-stand\dist\KLS-D-660b4bdeea-Development.w3m`.

@@ -1,4 +1,4 @@
-# Generated item catalog — KLS-D-7951d852c3
+# Generated item catalog — KLS-D-1739daf903
 
 Generated from tools/equipment_catalog.py for the current development build. There are 80 tiered general equipment items, 20 race-themed relics (one Legendary recipe output per race), three original crafted outputs, and nine attribute books. Common-through-Epic racial relics appear in their matching town shops; racial Legendary relics are crafted from their Foundry recipes or may appear through existing enemy-drop rules. This file records names, rawcodes, slots, prices, stats, and authored effects; update it whenever the source catalog changes. Enemy loot tiers and probabilities are documented in [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md). The generated Object Editor data and live in-game values still need engine verification.
 
@@ -111,6 +111,6 @@ Generated from tools/equipment_catalog.py for the current development build. The
 - Normal equipment sells for 50%. The four personal boss relics (I010–I013) are not represented by the tier generator and still need a full names/stats/sellability audit.
 # Crownlands race relic additions
 
-Current generated package: `KLS-D-660b4bdeea`, manifest output path `C:\Users\asphy\Documents\Warcraft3Maps\kings-last-stand\dist\KLS-D-660b4bdeea-Development.w3m`, SHA-256 `719de46b17be26b7165d59d3f47e6d13b98117af9b77de1270077e39e78f74eb`.
+Current generated package: `KLS-D-1739daf903`, output path `dist/KLS-D-1739daf903-Development.w3m`, SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`.
 
 The approved twenty universally equippable items, rarity colors, effects, shop/drop integration and racial recipes are cataloged in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). Their rawcodes are I23C–I23V and their effects/stock/drop records are generated from tools/equipment_catalog.py. Recipes RCP4–RCP7 use a Rare plus an Uncommon item to produce their race's Legendary relic. The canonical table is generated from the same catalog; do not maintain a second competing list in code.

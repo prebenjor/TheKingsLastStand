@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-1739daf903 - 2026-09-29
+
+- Extended the local log collector to include warning-only lines and explicit spawn/load failures, and to serialize each finding with severity, event kind, file/line, nearest preceding build ID, and a correlation-only provenance label. `collection.json` now summarizes error, fatal, warning, failure, spawn/load, and total counts.
+- Full source regression suite passed **142/142**. Installed-editor JASS syntax and MPQ package/readback passed. Package SHA-256: `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`.
+- Fresh snapshot `test-results/20260929T053054106327Z-KLS-D-1739daf903` has no current-build references and does not confirm gameplay. It reports 8 spawn/load failures, all following older `KLS-D-1a040d638c` map-open lines; the raw lines identify model-creation failures. No warning/error/fatal lines were found in the captured logs.
+- Package `dist/KLS-D-1739daf903-Development.w3m`; prior dist package archived under `backups/development-builds/20260929T053034101646Z-KLS-D-1739daf903/`. Installation is pending: the prior installed map remains open in World Editor PID 22184; the new package is not installed.
+- Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending for this exact build. The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-660b4bdeea - 2026-09-29
 
 - Updated `tools/collect_test_logs.py` to extract build IDs from captured Warcraft/Editor logs, separate current-build references from other builds, and label errors with their nearest preceding build ID as correlation only. The output explicitly says a map-open reference is not proof of gameplay or causality.

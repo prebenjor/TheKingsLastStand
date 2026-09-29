@@ -2,7 +2,7 @@
 
 This file keeps design choices visible when implementation evolves. A newer explicit user direction supersedes older decisions; otherwise preserve the agreed target. The current approved decisions are authoritative; dated build evidence belongs in [PROGRESS-LEDGER.md](PROGRESS-LEDGER.md), and the implementation gates are in [ROADMAP-AND-ACCEPTANCE.md](ROADMAP-AND-ACCEPTANCE.md).
 
-**Current package:** `KLS-D-7951d852c3-Development`, SHA-256 `42922eb38fd46bd6f6071fef7df08f4329e4abd921d8773bdfc32286f9421b1c`. Source/package checks passed; current-build editor, Custom Game, multiplayer and endurance checks remain pending. Failed gear equip attempts now report transaction context, but live behavior remains unverified. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+**Current package:** `KLS-D-1739daf903-Development`, SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`. Source/package checks passed; the current package is not installed because World Editor PID 22184 still has the old map open. Current-build editor, Custom Game, multiplayer and endurance checks remain pending. Failed gear equip attempts now report transaction context, but live behavior remains unverified. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
 
 ## Current approved user decisions
 
@@ -43,7 +43,7 @@ The earlier Chapel/sorceress presentation is superseded by the explicit correcti
 
 ## Historical issue snapshots — verify against the current build
 
-These entries retain issue context from earlier builds and screenshots. Do not treat a historical package ID, test count or unverified observation below as evidence about `KLS-D-7951d852c3`; use the current [acceptance register](ROADMAP-AND-ACCEPTANCE.md) and [Progress Ledger](PROGRESS-LEDGER.md).
+These entries retain issue context from earlier builds and screenshots. Do not treat a historical package ID, test count or unverified observation below as evidence about `KLS-D-1739daf903`; use the current [acceptance register](ROADMAP-AND-ACCEPTANCE.md) and [Progress Ledger](PROGRESS-LEDGER.md).
 
 1. **Backpack click/UX:** The installed `ebua` record is `EquipmentBackpackAnya` and includes the native extended/equipment inventory abilities. A prior custom clone `Ibpk` inherited the 30-slot count but may not have retained the installed item's runtime behavior. The current build modifies `ebua` in place, removes `ATua` (Anya's talent ability), and grants that native item to each hero. Confirm click-to-open behavior in Warcraft III.
 2. **Gear movement/equip/sale:** Catalog gear is droppable (`idro=1`) and pawnable (`ipaw=1`); boss relics are movable but remain unpawnable. The current build must still be checked live for backpack-to-normal-inventory transfer, equipping, and shop resale.
