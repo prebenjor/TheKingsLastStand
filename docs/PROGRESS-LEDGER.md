@@ -7,8 +7,9 @@
 - `-diag` stores ERROR/FATAL/WARN messages in a separate 32-entry rolling buffer and displays its latest eight entries alongside the latest 12 regular runtime events. A regression confirms important spawn/setup failures stay visible after routine messages roll over.
 - Full source regression suite: **130/130 passed**. Installed-API JASS syntax and MPQ archive readback passed.
 - Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-f873a5b24f-Development.w3m`; package and installed SHA-256 match, and the test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T020518521798Z-KLS-D-f873a5b24f/` and `backups/installed-diagnostics/20260929T020518530798Z-KLS-D-f873a5b24f/`.
-- The user has closed the prior editor/map session. The current build is installed and ready, but it has not yet been opened or tested in Warcraft. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
-- Exact-build Editor save/reopen, Test Map, Custom Game, live inspection of retained spawn warnings, multiplayer, and endurance remain pending. The next human check is to open this exact installed build and verify its visible build ID; then use `-diag` after any observed missing spawn to confirm the retained error/warning section.
+- Captured local engine logs in `test-results/20260929T021428483932Z-KLS-D-f873a5b24f/`. The snapshot's editor/game opening records name only older build `KLS-D-1a040d638c-Development.w3m`; the manifest correctly leaves `played_build_confirmed` false. Model-load warnings in those old-build logs are not evidence about `KLS-D-f873a5b24f`, and in-game `-diag` messages are not persisted to `War3Log.txt`.
+- After installation, the user said they had opened the build. The captured editor/game logs do not corroborate the current build ID, so no runtime result can be tied to this artifact yet. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Exact-build ID/result, Editor save/reopen, current-build Test Map, Custom Game, live inspection of retained spawn warnings, multiplayer, and endurance remain pending. Confirm which build ID appeared and what the user observed; then use `-diag` after any missing spawn to inspect the retained error/warning section.
 
 ## Previous package-proven build — KLS-D-87a1bcd5c4
 
