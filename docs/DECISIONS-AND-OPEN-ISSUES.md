@@ -2,7 +2,7 @@
 
 This file keeps design choices visible when implementation evolves. A newer explicit user direction supersedes older decisions; otherwise preserve the agreed target. The current approved decisions are authoritative; dated build evidence belongs in [PROGRESS-LEDGER.md](PROGRESS-LEDGER.md), and the implementation gates are in [ROADMAP-AND-ACCEPTANCE.md](ROADMAP-AND-ACCEPTANCE.md).
 
-**Current package:** `KLS-D-b0fccf974c-Development`, SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. The package is installed in the dedicated Warcraft III test folder; installed and package hashes match, and it is the sole project map there. Installed Warcraft III `3.0.0.24268` has a new `.build.info` fingerprint; all 13 pinned extracted API/object/icon data tables are unchanged from the previous package. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+**Current package:** `KLS-D-8a93630281-Development`, SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. It is in `dist/` but not installed. Installation hit `WinError 32` on the old `KLS-D-b0fccf974c` map; the installer preserved the sole test-folder copy and retained a verified backup at `backups/installed-diagnostics/20260929T111716941276Z-KLS-D-8a93630281/` (SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`). Warcraft III PID 43560 still holds the old map, so retry after the process exits. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
 
 ## Current approved user decisions
 

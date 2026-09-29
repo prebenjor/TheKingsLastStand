@@ -12,7 +12,7 @@ Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
 | Focused automated regressions | 147 source-level tests, including structured warning/spawn/load log capture, stale/current build provenance, failed gear transaction context, closer lumber stands at every plot, once-only counting of unit, scenery, item, recipe and retry ERROR events, distinct Hall models, racial Foundry stock/returns, native-shop limits, spawn diagnostics, inventory delivery, hero progression, story, and documentation alignment | Passed for this source snapshot |
-| Test-folder installation | Not attempted: Warcraft III remained open, so the previously installed map was left untouched | Pending |
+| Test-folder installation | Attempted; `WinError 32` locked `KLS-D-b0fccf974c`. Installer restored/preserved the old map and kept a verified archive under `backups/installed-diagnostics/20260929T111716941276Z-KLS-D-8a93630281/`; new package not installed | Pending |
 | Runtime diagnostic retention | `-diag` keeps the latest 32 ERROR/FATAL/WARN entries separately from routine events and displays the most recent eight. Recipe output creation/delivery and queued boss/story reward creation/retry failures join unit, scenery and random-drop errors in that buffer; the `-diag` header counts every ERROR once across categories with item, owner and location context | Source regression passed; live capture pending |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | New package is in dist; it has not been installed or opened in the editor | Pending |
@@ -43,7 +43,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Current package `dist/KLS-D-8a93630281-Development.w3m` has SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. It is not installed because Warcraft III remained open. Install this exact package after the game closes, then verify its visible ID before save/reopen or startup checks.
+2. Current package `dist/KLS-D-8a93630281-Development.w3m` has SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. Installation hit `WinError 32` on the old `KLS-D-b0fccf974c` map; it remains intact with its verified backup under `backups/installed-diagnostics/20260929T111716941276Z-KLS-D-8a93630281/`. Close Warcraft III fully, install this package, then verify its visible ID before save/reopen or startup checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -64,7 +64,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
-The current package `KLS-D-8a93630281` is at `dist/KLS-D-8a93630281-Development.w3m`, SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. It is not installed yet: Warcraft III was still running when the package was built, so the test-folder map was not replaced. Close the game, install this exact build, then record its visible ID and editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance results. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step.
+The current package `KLS-D-8a93630281` is at `dist/KLS-D-8a93630281-Development.w3m`, SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. Installation was attempted with the map closed, but Warcraft III PID 43560 still locks the old `KLS-D-b0fccf974c` file. The installer preserved it as the only test-folder map and retained a verified copy at `backups/installed-diagnostics/20260929T111716941276Z-KLS-D-8a93630281/`. Exit Warcraft III completely, install this exact build, then record its visible ID and editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance results. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step.
 
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
