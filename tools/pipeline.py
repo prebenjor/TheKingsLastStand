@@ -22,6 +22,7 @@ from recipes import recipe_script
 from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
 from town_catalog import town_script
+from authored_map import read_authored_layer
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
@@ -205,6 +206,12 @@ def build():
     api = check_api()
     source_paths = [ROOT/'source'/n for n in MODULES] + sorted((ROOT/'tools').glob('*.py'))
     source_paths += [ROOT/'tools/reference/installed'/n for n in ('ItemData.slk','AbilityData.slk','UnitMetaData.slk','AbilityMetaData.slk','WorldEditStrings.txt','UnitData.slk','UnitBalance.slk','UnitUI.slk','UnitAbilities.slk','UnitWeapons.slk','ItemAbilityFunc.txt','commandbuttons.txt')]
+    authored_layer_path = ROOT/'source/authored-map/editor-layer.zip'
+    authored_metadata = None
+    authored_members = {}
+    if authored_layer_path.is_file():
+        authored_metadata, authored_members = read_authored_layer(authored_layer_path)
+        source_paths.append(authored_layer_path)
     hashes = {str(p.relative_to(ROOT)).replace('\\','/'): digest(p.read_bytes()) for p in source_paths}
     build_id = 'KLS-D-' + digest(json.dumps({'sources':hashes,'api':api}, sort_keys=True).encode())[:10]
     raw_script = runtime_script(build_id)
@@ -216,6 +223,9 @@ def build():
     title_end = info.index(b'\0', 28)+1
     info = info[:28] + ('KLS DEVELOPMENT '+build_id).encode()+b'\0'+info[title_end:]
     components = {'war3map.j':script.encode(), 'war3map.wtg':wtg, 'war3map.wct':wct, 'war3map.w3i':info, 'war3map.w3u':units(), 'war3map.w3t':items(), 'war3map.w3a':abilities(), 'war3map.w3e':expanded_terrain((ROOT/'source/template/war3map.w3e').read_bytes(), PLOTS), 'war3map.wpm':expanded_pathing((ROOT/'source/template/war3map.wpm').read_bytes()), 'war3map.shd':bytes((MAP_CELLS * 4) ** 2), 'war3mapMisc.txt':misc_data()}
+    # Reuse only the explicitly captured art layers. Runtime code, object data,
+    # scenario identity and generated metadata always come from source modules.
+    components.update(authored_members)
     if 'call Melee' in script or b'Melee Initialization' in wtg or b'call Melee' in wct:
         raise ValueError('Default melee initialization found in output')
     for name in ('war3map.w3u','war3map.w3t'):
@@ -259,7 +269,15 @@ def build():
     finally:
         if stage.exists():
             stage.unlink()
-    manifest = {'build_id':build_id,'status':'development: engine and multiplayer checks pending','output_path':str(output),'sha256':digest(output.read_bytes()),'baseline_sha256':BASELINE_SHA,'source_hashes':hashes,'installed_api':api,'components':inventory,'checks':{'syntax_installed_api':'passed','archive_readback':'passed','editor_test_map':'pending','editor_save_reopen':'pending','custom_game_startup':'pending','gameplay':'pending','multiplayer':'pending','endurance':'pending'}}
+    authored_summary = None
+    if authored_metadata is not None:
+        authored_summary = {
+            'format_version': authored_metadata['format_version'],
+            'source_build_id': authored_metadata['source_build_id'],
+            'source_map_sha256': authored_metadata['source_map_sha256'],
+            'members': authored_metadata['members'],
+        }
+    manifest = {'build_id':build_id,'status':'development: engine and multiplayer checks pending','output_path':str(output),'sha256':digest(output.read_bytes()),'baseline_sha256':BASELINE_SHA,'source_hashes':hashes,'installed_api':api,'authored_map':authored_summary,'components':inventory,'checks':{'syntax_installed_api':'passed','archive_readback':'passed','editor_test_map':'pending','editor_save_reopen':'pending','custom_game_startup':'pending','gameplay':'pending','multiplayer':'pending','endurance':'pending'}}
     (ROOT/'build/diagnostic-manifest.json').write_text(json.dumps(manifest,indent=2))
     published_manifest = dict(manifest)
     published_manifest['output_path'] = str(output.relative_to(ROOT)).replace('\\', '/')

@@ -1,13 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-b0fccf974c
+## Current package-proven build — KLS-D-8a93630281
 
-- Artifact: `dist/KLS-D-b0fccf974c-Development.w3m`.
-- SHA-256: `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`.
-- The installed Warcraft III version is `3.0.0.24268`; its `.build.info` fingerprint changed to `4c34d3d3c83e33afe5931333d51a6c87c6cc7767c196371688677b5816fcb677`. The 13 pinned API/object/icon table hashes are unchanged from `KLS-D-9f529add40`; no gameplay source changes were made for this package refresh.
-- `py -B tools/build_map.py --install-test-map` completed successfully. Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b0fccf974c-Development.w3m`; its SHA-256 matches the package and it is the only project map in the test folder. Older package and installed copies are preserved under `backups/`.
-- Full source regression suite: **142/142 passed** after aligning the current-build documents. Package readback, archive integrity and installed-editor JASS syntax checks passed.
-- The user confirmed the map is closed; no World Editor or Warcraft III process was running during installation. Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+- Artifact: `dist/KLS-D-8a93630281-Development.w3m`.
+- SHA-256: `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`.
+- Added a validated, checksummed World Editor art-layer bundle at `source/authored-map/editor-layer.zip`, captured from the exact prior package `KLS-D-b0fccf974c` (SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`). It currently preserves the package's existing terrain, pathing, doodads, shadows, minimap markers and preview; it is ready to carry forward future map dressing.
+- Added `tools/capture_authored_map.py --map <saved-map.w3m>` and pipeline support to preserve those six layers while continuing to generate all gameplay logic, object data and metadata from source. The capture refuses a different build ID or malformed map dimensions and keeps layer checksums/provenance in the bundle and build manifest.
+- Source regression suite: **147/147 passed**. Authored-layer capture, tamper rejection and pipeline archive readback passed; installed-editor JASS syntax and package readback passed.
+- Installation was not attempted because Warcraft III PID 40380 was still running after the map itself was closed. The new package remains in `dist/`; current-build install, editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-b0fccf974c
 
 ## Previous package-proven build — KLS-D-9f529add40
 

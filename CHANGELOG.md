@@ -2,6 +2,15 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-8a93630281 - 2026-09-29
+
+- Added `source/authored-map/editor-layer.zip`, captured from the exact prior development package `KLS-D-b0fccf974c` with SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. It preserves six checksummed World Editor layers: terrain, pathing, doodads/destructables, shadows, minimap markers and map preview. The bundle currently reflects the prior package's art; it prepares future hand-dressed terrain to survive builds.
+- Added `tools/authored_map.py` validation and `tools/capture_authored_map.py --map <saved-map.w3m>`. Capture requires the current embedded build ID, 192 × 192 supported dimensions, valid layer formats and a matching bundle manifest. The build pipeline includes the bundle in the build ID and manifest while keeping gameplay/object data source-generated.
+- Regression suite passed **147/147**. Capture round-trip, stale-ID rejection, malformed-dimension rejection, tamper detection, pipeline preservation/readback, MPQ package verification and installed-editor JASS syntax passed.
+- Package: `dist/KLS-D-8a93630281-Development.w3m`; SHA-256: `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`.
+- Installation was not attempted because Warcraft III was still running (PID 40380) after the map was closed. This build has not been tested in World Editor or a live game. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`, and is not recorded as a failure.
+- Next human step: close Warcraft III, install this exact build, then use it for editor save/reopen and the current-build Test Map / Custom Game checks.
+
 ## KLS-D-b0fccf974c - 2026-09-29
 
 - Rebuilt the current development package after the installed Warcraft III update changed `.build.info` (installed version `3.0.0.24268`). The 13 pinned extracted API/object/icon data tables are unchanged from the preceding package; no gameplay source changes were made for this rebuild.

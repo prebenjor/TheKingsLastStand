@@ -51,6 +51,61 @@ class DiagnosticOutputPaths(unittest.TestCase):
             self.assertEqual(published['output_path'], 'dist/' + output.name)
             self.assertEqual(published['sha256'], manifest['sha256'])
 
+    def test_build_preserves_captured_world_editor_art_layers_and_provenance(self):
+        import pipeline
+        from unittest.mock import patch
+
+        with tempfile.TemporaryDirectory() as folder:
+            project = Path(folder) / 'project'
+            build_dir = project / 'build'
+            build_dir.mkdir(parents=True)
+            dist_dir = project / 'dist'
+            dist_dir.mkdir(parents=True)
+            shutil.copytree(ROOT / 'source', project / 'source')
+            tools_dir = project / 'tools'
+            tools_dir.mkdir()
+            for source_file in (ROOT / 'tools').glob('*.py'):
+                shutil.copy2(source_file, tools_dir / source_file.name)
+            shutil.copytree(ROOT / 'tools/reference/installed', tools_dir / 'reference/installed')
+            backups_dir = project / 'backups'
+            backups_dir.mkdir()
+            shutil.copy2(ROOT / 'backups/Blank-DE.w3m', backups_dir / 'Blank-DE.w3m')
+
+            layer_path = project / 'source/authored-map/editor-layer.zip'
+            layer_path.parent.mkdir(parents=True, exist_ok=True)
+            layer_path.write_bytes(b'validated-capture-fixture')
+            provenance = {
+                'format_version': 1,
+                'source_build_id': 'KLS-D-AUTHORED01',
+                'source_map_sha256': 'a' * 64,
+                'members': {},
+            }
+            art_layers = {
+                'war3map.w3e': b'authored terrain',
+                'war3map.wpm': b'authored pathing',
+                'war3map.doo': b'authored doodads',
+                'war3map.shd': b'authored shadows',
+                'war3map.mmp': b'authored minimap markers',
+                'war3mapMap.blp': b'authored map preview',
+            }
+
+            with patch.object(pipeline, 'ROOT', project), \
+                    patch.object(pipeline, 'read_authored_layer', return_value=(provenance, art_layers)):
+                manifest = pipeline.build()
+
+            self.assertEqual(manifest['authored_map']['source_build_id'], 'KLS-D-AUTHORED01')
+            self.assertEqual(manifest['authored_map']['source_map_sha256'], 'a' * 64)
+            self.assertIn('source/authored-map/editor-layer.zip', manifest['source_hashes'])
+            output = Path(manifest['output_path'])
+            archive = MPQArchive(output, listfile=False)
+            try:
+                for name, data in art_layers.items():
+                    with self.subTest(member=name):
+                        self.assertEqual(read(archive, name), data)
+            finally:
+                archive.file.close()
+
+
 
 def read(a, name):
     entry = a.get_hash_table_entry(name)

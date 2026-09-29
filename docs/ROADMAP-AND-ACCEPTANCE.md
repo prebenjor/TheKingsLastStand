@@ -2,21 +2,21 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-b0fccf974c**
+Build: **KLS-D-8a93630281**
 
-Map SHA-256: **5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110**
+Map SHA-256: **bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 142 source-level tests, including structured warning/spawn/load log capture, stale/current build provenance, failed gear transaction context, closer lumber stands at every plot, once-only counting of unit, scenery, item, recipe and retry ERROR events, distinct Hall models, racial Foundry stock/returns, native-shop limits, spawn diagnostics, inventory delivery, hero progression, story, and documentation alignment | Passed for this source snapshot |
-| Test-folder installation | Current map is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-b0fccf974c-Development.w3m`; package and installed hashes match, and it is the sole project map. Previous builds were archived | Passed |
+| Focused automated regressions | 147 source-level tests, including structured warning/spawn/load log capture, stale/current build provenance, failed gear transaction context, closer lumber stands at every plot, once-only counting of unit, scenery, item, recipe and retry ERROR events, distinct Hall models, racial Foundry stock/returns, native-shop limits, spawn diagnostics, inventory delivery, hero progression, story, and documentation alignment | Passed for this source snapshot |
+| Test-folder installation | Not attempted: Warcraft III remained open, so the previously installed map was left untouched | Pending |
 | Runtime diagnostic retention | `-diag` keeps the latest 32 ERROR/FATAL/WARN entries separately from routine events and displays the most recent eight. Recipe output creation/delivery and queued boss/story reward creation/retry failures join unit, scenery and random-drop errors in that buffer; the `-diag` header counts every ERROR once across categories with item, owner and location context | Source regression passed; live capture pending |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
-| Editor save/reopen | The map is installed and the prior editor/game session is closed; no save/reopen evidence exists for this build | Pending |
-| Current-build Test Map / Custom Game startup | The current map is installed. Run it from the existing World Editor / Custom Game workflow and confirm the visible build ID. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Editor save/reopen | New package is in dist; it has not been installed or opened in the editor | Pending |
+| Current-build Test Map / Custom Game startup | Install and run this exact build after Warcraft III closes; confirm the visible build ID. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; compact base lumber stands now sit 500/700 units south of each hall; visual routes, tree clearance and playability need live inspection | Pending in game |
 | Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent and explicit Temple icon, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, native Acolyte haunting orders, and expected/actual mine status in `-diag` are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; Keeper/Faelor suppress the tree-targeted native ability in favor of usable signatures; visuals, recruits and ownership need live checks | Pending in game |
@@ -43,7 +43,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Current package `dist/KLS-D-b0fccf974c-Development.w3m` has SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. It is installed as the only project map in the designated test folder, with a matching hash. Verify its visible ID before save/reopen or startup checks.
+2. Current package `dist/KLS-D-8a93630281-Development.w3m` has SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. It is not installed because Warcraft III remained open. Install this exact package after the game closes, then verify its visible ID before save/reopen or startup checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -64,7 +64,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
-The current package `KLS-D-b0fccf974c` is at `dist/KLS-D-b0fccf974c-Development.w3m`, SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. It is installed in the dedicated test folder as the sole project map; installed and package hashes match. The map was closed before installation. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance have not yet been recorded for this build. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step. Start this exact installed map and record its visible build ID and results.
+The current package `KLS-D-8a93630281` is at `dist/KLS-D-8a93630281-Development.w3m`, SHA-256 `bd158009334e911f835d4b9c82d9f0068d89cf0bac9e6c218bd80f9bd97a56ec`. It is not installed yet: Warcraft III was still running when the package was built, so the test-folder map was not replaced. Close the game, install this exact build, then record its visible ID and editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance results. The earlier Test Map pass remains credited to `KLS-D-fd638ddcf5`; it is not a failed step.
 
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.

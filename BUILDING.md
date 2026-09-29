@@ -8,4 +8,16 @@ Read docs/TECHNICAL-ARCHITECTURE.md for the build contract. From the repository 
 
 Add --install-test-map to install the package-proven build in the one designated Warcraft III test folder. The older --install-diagnostic option remains an alias. A clean checkout must use the supported locally installed Warcraft III editor/API. Do not copy machine-local reference tables into Git.
 
-The current packaged development artifact is `dist/KLS-D-1739daf903-Development.w3m` (SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`). Package readback and installed-API JASS syntax passed; all 142 source regressions passed. It is installed as the sole project map in the designated test folder, and the installed hash matches the package. World Editor loaded this exact file, but save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending. The earlier Test Map pass remains attached only to `KLS-D-fd638ddcf5`. See docs/ROADMAP-AND-ACCEPTANCE.md.
+The current map and verified evidence are recorded in `README.md`, `dist/build-manifest.json`, and `docs/ROADMAP-AND-ACCEPTANCE.md`. The earlier Test Map pass remains attached only to `KLS-D-fd638ddcf5`.
+
+## Preserve World Editor terrain and dressing
+
+The authoritative World Editor art input is `source/authored-map/editor-layer.zip`. It stores only terrain (`war3map.w3e`), pathing (`war3map.wpm`), doodads/destructables (`war3map.doo`), shadows, minimap markers, and the map preview. Runtime code, object data, players and generated metadata still come from this repository's source.
+
+After dressing the current build in World Editor, save a copy and close the map. Capture its supported art layers by passing the saved map path:
+
+    python -B tools/capture_authored_map.py --map "C:\path\to\saved-current-build.w3m"
+
+The capture checks that the map carries the build ID in the current `dist/build-manifest.json`, validates the 192 × 192 terrain/pathing extent, stores source-map and per-layer checksums, and rejects unexpected archive members. If `--map` is omitted, the exact checksum-verified current package seeds or refreshes the authored layer. The next build hashes and includes this bundle; without a bundle, the existing procedural terrain generation remains the fallback. Inspect the result in World Editor after building because edited terrain, pathing and placed doodads must still agree for navigation.
+
+Do not capture an older build under the current ID. If the chosen saved map no longer identifies the current build, rebuild/install the current package first, then reopen that exact map and reapply or carry forward the desired art before capturing.
