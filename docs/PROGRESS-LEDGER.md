@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-2aa1705c84
+## Current package-proven build — KLS-D-2fd59dee88
+
+- Artifact: `dist/KLS-D-2fd59dee88-Development.w3m`.
+- SHA-256: `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`.
+- The Undead Acolyte mine-conversion handler now uses `KLS_CreateUnitOptional` with an `Undead gold mine haunt` context. A null or wrong-type spawn is counted and logged in diagnostic mode, remains nonfatal, and preserves the neutral mine and reserve.
+- The focused race/mining suite passed **12/12**. The full source suite passed **125/125**. Package archive readback and installed-editor API syntax checks passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-2fd59dee88-Development.w3m`; package and installed SHA-256 match. The test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T000816554434Z-KLS-D-2fd59dee88/` and `backups/installed-diagnostics/20260929T000816567687Z-KLS-D-2fd59dee88/`.
+- No current-build Warcraft gameplay capture has been made. The previous captured engine logs show only `KLS-D-1a040d638c` opening, so their model warnings are not attributed to this build. The editor and game were closed when the new build was installed.
+- Editor save/reopen, current-build Test Map, Custom Game, actual mine haunting, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-2aa1705c84
 
 - Artifact: dist/KLS-D-2aa1705c84-Development.w3m.
 - SHA-256: edd432c6f16f5c628f63c6956b842b97ab2e66faff9e531395e8b4012f84b5b0.

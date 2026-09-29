@@ -13,7 +13,7 @@ function KLS_HauntGoldMine takes nothing returns nothing
     if p >= 0 and p < 4 and KLS_Active[p] and KLS_PlayerRace[p] == 3 and GetUnitTypeId(worker) == 'uaco' then
         if mine != null and GetUnitTypeId(mine) == 'ngol' and (orderId == OrderId("smart") or orderId == OrderId("harvest") or orderId == OrderId("hauntgoldmine")) then
             set amount = GetResourceAmount(mine)
-            set haunted = CreateUnit(Player(p),'ugol',GetUnitX(mine),GetUnitY(mine),GetUnitFacing(mine))
+            set haunted = KLS_CreateUnitOptional(Player(p),'ugol',GetUnitX(mine),GetUnitY(mine),GetUnitFacing(mine),"Undead gold mine haunt")
             if haunted == null or GetUnitTypeId(haunted) != 'ugol' then
                 if haunted != null then
                     call RemoveUnit(haunted)

@@ -189,8 +189,8 @@ class BossMechanics(unittest.TestCase):
         ):
             with self.subTest(function='KLS_Init', pattern=pattern):
                 self.assertRegex(init, pattern)
-        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 2,
-                         'direct unit creation is limited to the checked wrapper and recoverable Undead mine conversion')
+        self.assertEqual(len(re.findall(r'(?<!KLS_)CreateUnit\(', script)), 1,
+                         'direct unit creation is limited to the checked spawn wrapper')
 
     def test_optional_spring_visual_uses_contextual_spawn_diagnostics_without_aborting(self):
         script = runtime_script('KLS-D-TEST')

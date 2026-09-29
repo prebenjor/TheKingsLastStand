@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-2fd59dee88 - 2026-09-29
+
+- Undead Acolyte conversion of a neutral Gold Mine now uses the shared optional checked-spawn helper. A missing or wrong-type Haunted Gold Mine is recorded with context, counted by `-diag`, and leaves the original mine and its gold intact without aborting the match.
+- The regression failed against the direct uncounted `CreateUnit` call, then passed after routing through the checked helper. Focused race-mining tests: **12/12 passed**; full source suite: **125/125 passed**.
+- Package archive readback and installed-editor API syntax checks passed. Package SHA-256: `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2fd59dee88-Development.w3m`; installed SHA-256 matches the package, and the test folder contains one project map.
+- Current-build Editor save/reopen, Test Map, Custom Game, mine-haunting gameplay, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-2aa1705c84 - 2026-09-29
 
 - Tier-two town-hall upgrades now require each faction's custom Altar rawcode and matching Barracks/upgrade building: Castle (hcas), Stronghold (ostr), Tree of Ages (etoa), and Halls of the Dead (unp1). This makes the Altars available in the racial build menus satisfy the native upgrade requirements.

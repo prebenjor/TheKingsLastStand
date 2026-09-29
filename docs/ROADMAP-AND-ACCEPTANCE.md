@@ -2,19 +2,19 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-fdee19fa63**
+Build: **KLS-D-2fd59dee88**
 
-Map SHA-256: **6e591f5af710a3c6654d65743c957bf3308902c291907f6fec6090361367fa14**
+Map SHA-256: **90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 124 source-level tests, including optional-versus-required spawn failures, contextual optional spring-visual and selected-unit diagnostics, installer failure/retry safety, personal reward delivery/retries, failed random item-drop diagnostics, expected/actual starting-mine diagnostics, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
+| Focused automated regressions | 125 source-level tests, including optional-versus-required spawn failures, contextual optional spring and Undead mine-conversion diagnostics, installer failure/retry safety, personal reward delivery/retries, failed random item-drop diagnostics, expected/actual starting-mine diagnostics, race-specific mine orders and buildings, 25 heroes, companies, endless rosters, story, item catalog, hero plus-skill stat choices and both Sacred Aura tooltip variants | Passed for this source snapshot |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
-| Editor save/reopen | `KLS-D-fdee19fa63` is installed in the designated test folder with a SHA-256 matching its manifest; editor save/reopen remains unverified | Pending |
-| Current-build Test Map / Custom Game startup | `KLS-D-fdee19fa63` is installed as the sole project map in the designated test folder. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Editor save/reopen | `KLS-D-2fd59dee88` is installed in the designated test folder with a SHA-256 matching its manifest; editor save/reopen remains unverified | Pending |
+| Current-build Test Map / Custom Game startup | `KLS-D-2fd59dee88` is installed as the sole project map in the designated test folder. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; visual routes and playability need live inspection | Pending in game |
 | Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, native Acolyte haunting orders, and expected/actual mine status in `-diag` are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; Keeper/Faelor suppress the tree-targeted native ability in favor of usable signatures; visuals, recruits and ownership need live checks | Pending in game |
