@@ -86,7 +86,7 @@ class RaceMiningAndBuildings(unittest.TestCase):
         checked = function_body(runtime, 'KLS_CreateUnitChecked')
         optional = function_body(runtime, 'KLS_CreateUnitOptional')
         self.assertIn('KLS_CreateUnitChecked(owner,kind,x,y,facing,false,context)', optional)
-        self.assertIn('KLS_DiagFailures = KLS_DiagFailures + 1', checked)
+        self.assertNotIn('KLS_DiagFailureEvents', checked)
         self.assertIn('optional unit spawn failed context=', checked)
         self.assertIn('SetPlayerRacePreference(Player(0), RACE_PREF_RANDOM)', runtime)
         self.assertNotIn('RACE_PREF_HUMAN)', runtime[runtime.index('function config takes'):])

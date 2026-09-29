@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-f97ab841cb - 2026-09-29
+
+- `-diag` now counts each logged `ERROR` once in its summary across unit, scenery, item, recipe and retry failures. The separate 32-entry ERROR/FATAL/WARN ring and recent-eight display remain in place.
+- Full source regression suite passed **134/134**. Installed-editor JASS syntax and MPQ package readback passed. Package SHA-256: `0abf819494aa3829f972e89ddb5b4e8acd60f1432057fb7a77fd56ca196be8b5`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-f97ab841cb-Development.w3m`; its SHA-256 matches the package and it is the only project map in the folder. The previous development artifact was archived under `backups/development-builds/20260929T025854076991Z-KLS-D-f97ab841cb/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T025854085811Z-KLS-D-f97ab841cb/`.
+- The user reported completing a test but did not give the visible build ID or result. Current-build Editor save/reopen, Test Map, Custom Game, error-count/`-diag` capture, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-6d3db36ecf - 2026-09-29
 
 - Failed recipe output delivery now logs the recipe, item, owner, buyer and coordinates before cleanup. Failed queued boss/story reward creation and each retry log the item name/code, owner and base coordinates; queue/retry behavior remains unchanged.

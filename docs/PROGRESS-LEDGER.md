@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-6d3db36ecf
+## Current package-proven build — KLS-D-f97ab841cb
+
+- Artifact: `dist/KLS-D-f97ab841cb-Development.w3m`.
+- SHA-256: `0abf819494aa3829f972e89ddb5b4e8acd60f1432057fb7a77fd56ca196be8b5`.
+- `-diag` now counts each logged `ERROR` once in its summary across unit, scenery, item, recipe and retry failures, while retaining the separate recent-error/warning ring.
+- Full source regression suite: **134/134 passed**. Installed-editor JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-f97ab841cb-Development.w3m`; package and installed SHA-256 match, and the folder contains one project map. Previous package and installed map were preserved under `backups/development-builds/20260929T025854076991Z-KLS-D-f97ab841cb/` and `backups/installed-diagnostics/20260929T025854085811Z-KLS-D-f97ab841cb/`.
+- The user reported completing a test but did not identify the tested build ID or observations. Current-build Editor save/reopen, Test Map, Custom Game, live error-count/`-diag` capture, gameplay, multiplayer and endurance therefore remain pending. The earlier Test Map success remains attributed to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-6d3db36ecf
 
 - Artifact: `dist/KLS-D-6d3db36ecf-Development.w3m`.
 - SHA-256: `4612c5a61bd95ee06ce46dec9bf67c2f01f413eca5771029c015de41b455a478`.

@@ -49,6 +49,28 @@ class WorkerIdentityDiagnostics(unittest.TestCase):
         self.assertIn('KLS_DiagErrorLines[ModuloInteger(errorIndex, 32)]', report)
         self.assertIn('IMaxBJ(0, KLS_DiagErrorCount - 8)', report)
 
+    def test_diag_error_total_counts_item_and_spawn_failures_once(self):
+        diagnostics = (ROOT / 'source' / 'diagnostics.j').read_text()
+        start = diagnostics.index('function KLS_Log')
+        end = diagnostics.index('endfunction', start)
+        logger = diagnostics[start:end]
+        self.assertIn('if SubString(message,0,5) == "ERROR" then', logger)
+        self.assertIn('set KLS_DiagFailureEvents = KLS_DiagFailureEvents + 1', logger)
+
+        start = diagnostics.index('function KLS_CreateUnitChecked')
+        end = diagnostics.index('endfunction', start)
+        checked_unit = diagnostics[start:end]
+        start = diagnostics.index('function KLS_CreateDestructableChecked')
+        end = diagnostics.index('endfunction', start)
+        checked_scenery = diagnostics[start:end]
+        self.assertNotIn('KLS_DiagFailureEvents', checked_unit)
+        self.assertNotIn('KLS_DiagFailureEvents', checked_scenery)
+
+        start = diagnostics.index('function KLS_ShowDiagnostics')
+        end = diagnostics.index('endfunction', start)
+        report = diagnostics[start:end]
+        self.assertIn('errors=" + I2S(KLS_DiagFailureEvents)', report)
+
 
 if __name__ == '__main__':
     unittest.main()

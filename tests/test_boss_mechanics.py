@@ -199,7 +199,7 @@ class BossMechanics(unittest.TestCase):
         self.assertNotIn('CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),\'nfoh\'', init)
         checked = function_body(script, 'KLS_CreateUnitChecked')
         self.assertIn('ERROR optional unit spawn failed context='+ '"+context+"', checked)
-        self.assertIn('KLS_DiagFailures = KLS_DiagFailures + 1', checked)
+        self.assertNotIn('KLS_DiagFailureEvents', checked)
         self.assertIn('if fatal then', checked)
         self.assertNotIn('ERROR restoring spring model unavailable', init)
         self.assertIn('set KLS_PoolClock = CreateTimer()', init)

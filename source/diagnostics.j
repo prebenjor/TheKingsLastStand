@@ -5,7 +5,7 @@ globals
     integer KLS_DiagErrorCount = 0
     integer KLS_DiagUnits = 0
     integer KLS_DiagDestructables = 0
-    integer KLS_DiagFailures = 0
+    integer KLS_DiagFailureEvents = 0
 endglobals
 
 function KLS_RaceName takes integer raceId returns string
@@ -34,6 +34,9 @@ function KLS_Log takes string message returns nothing
     endif
     set KLS_DiagLines[ModuloInteger(KLS_DiagCount, 64)] = "[KLS_BUILD_ID] " + message
     set KLS_DiagCount = KLS_DiagCount + 1
+    if SubString(message,0,5) == "ERROR" then
+        set KLS_DiagFailureEvents = KLS_DiagFailureEvents + 1
+    endif
     if SubString(message,0,5) == "ERROR" or SubString(message,0,5) == "FATAL" or SubString(message,0,4) == "WARN" then
         set KLS_DiagErrorLines[ModuloInteger(KLS_DiagErrorCount, 32)] = "[KLS_BUILD_ID] " + message
         set KLS_DiagErrorCount = KLS_DiagErrorCount + 1
@@ -76,7 +79,6 @@ function KLS_CreateUnitChecked takes player owner, integer kind, real x, real y,
     if u == null then
         if KLS_Debug then
             set KLS_DiagUnits = KLS_DiagUnits + 1
-            set KLS_DiagFailures = KLS_DiagFailures + 1
             if fatal then
                 call KLS_Log("ERROR required unit spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" owner="+I2S(GetPlayerId(owner))+" at "+R2S(x)+","+R2S(y))
             else
@@ -91,7 +93,6 @@ function KLS_CreateUnitChecked takes player owner, integer kind, real x, real y,
     if GetUnitTypeId(u) != kind then
         if KLS_Debug then
             set KLS_DiagUnits = KLS_DiagUnits + 1
-            set KLS_DiagFailures = KLS_DiagFailures + 1
             if fatal then
                 call KLS_Log("ERROR required unit has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetUnitTypeId(u))+" at "+R2S(x)+","+R2S(y))
             else
@@ -130,7 +131,6 @@ function KLS_CreateDestructableChecked takes integer kind, real x, real y, real 
     if d == null then
         if KLS_Debug then
             set KLS_DiagDestructables = KLS_DiagDestructables + 1
-            set KLS_DiagFailures = KLS_DiagFailures + 1
             if fatal then
                 call KLS_Log("ERROR required destructable spawn failed context="+context+" name="+GetObjectName(kind)+" type="+I2S(kind)+" at "+R2S(x)+","+R2S(y))
             else
@@ -145,7 +145,6 @@ function KLS_CreateDestructableChecked takes integer kind, real x, real y, real 
     if GetDestructableTypeId(d) != kind then
         if KLS_Debug then
             set KLS_DiagDestructables = KLS_DiagDestructables + 1
-            set KLS_DiagFailures = KLS_DiagFailures + 1
             if fatal then
                 call KLS_Log("ERROR required destructable has wrong type context="+context+" name="+GetObjectName(kind)+" expected="+I2S(kind)+" actual="+I2S(GetDestructableTypeId(d))+" at "+R2S(x)+","+R2S(y))
             else
@@ -205,7 +204,7 @@ function KLS_ShowDiagnostics takes player p returns nothing
     call DestroyGroup(selectedUnits)
     set selectedUnits = null
     set selectedUnit = null
-    call DisplayTimedTextToPlayer(p, 0, 0, 30, "KLS_BUILD_ID | units attempted=" + I2S(KLS_DiagUnits) + " scenery attempted=" + I2S(KLS_DiagDestructables) + " failures=" + I2S(KLS_DiagFailures))
+    call DisplayTimedTextToPlayer(p, 0, 0, 30, "KLS_BUILD_ID | units attempted=" + I2S(KLS_DiagUnits) + " scenery attempted=" + I2S(KLS_DiagDestructables) + " errors=" + I2S(KLS_DiagFailureEvents))
     loop
         exitwhen i == 4
         if KLS_Active[i] then
