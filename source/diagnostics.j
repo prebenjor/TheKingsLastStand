@@ -1,6 +1,8 @@
 globals
     string array KLS_DiagLines
+    string array KLS_DiagErrorLines
     integer KLS_DiagCount = 0
+    integer KLS_DiagErrorCount = 0
     integer KLS_DiagUnits = 0
     integer KLS_DiagDestructables = 0
     integer KLS_DiagFailures = 0
@@ -32,6 +34,10 @@ function KLS_Log takes string message returns nothing
     endif
     set KLS_DiagLines[ModuloInteger(KLS_DiagCount, 64)] = "[KLS_BUILD_ID] " + message
     set KLS_DiagCount = KLS_DiagCount + 1
+    if SubString(message,0,5) == "ERROR" or SubString(message,0,5) == "FATAL" or SubString(message,0,4) == "WARN" then
+        set KLS_DiagErrorLines[ModuloInteger(KLS_DiagErrorCount, 32)] = "[KLS_BUILD_ID] " + message
+        set KLS_DiagErrorCount = KLS_DiagErrorCount + 1
+    endif
 endfunction
 
 function KLS_AbortForSpawnFailure takes string context, integer kind returns nothing
@@ -169,6 +175,7 @@ endfunction
 function KLS_ShowDiagnostics takes player p returns nothing
     local integer n = IMaxBJ(0, KLS_DiagCount - 12)
     local integer i = 0
+    local integer errorIndex
     local integer mineType
     local integer mineOwner
     local string raceName
@@ -220,6 +227,15 @@ function KLS_ShowDiagnostics takes player p returns nothing
         endif
         set i = i + 1
     endloop
+    if KLS_DiagErrorCount > 0 then
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Recent errors/warnings:")
+        set errorIndex = IMaxBJ(0, KLS_DiagErrorCount - 8)
+        loop
+            exitwhen errorIndex >= KLS_DiagErrorCount
+            call DisplayTimedTextToPlayer(p, 0, 0, 30, KLS_DiagErrorLines[ModuloInteger(errorIndex, 32)])
+            set errorIndex = errorIndex + 1
+        endloop
+    endif
     loop
         exitwhen n >= KLS_DiagCount
         call DisplayTimedTextToPlayer(p, 0, 0, 30, KLS_DiagLines[ModuloInteger(n, 64)])

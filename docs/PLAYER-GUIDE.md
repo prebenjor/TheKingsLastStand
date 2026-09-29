@@ -12,7 +12,7 @@
 5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current package is development build `KLS-D-87a1bcd5c4` at `dist/KLS-D-87a1bcd5c4-Development.w3m` (SHA-256 `018fb3e6874134451308b961ea969e7f8a45c42c0e9c7123d1a7526aa404a5c1`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-87a1bcd5c4-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. Current-build editor, Test Map, Custom Game, and gameplay checks remain pending; the user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
+The current package is development build `KLS-D-f873a5b24f` at `dist/KLS-D-f873a5b24f-Development.w3m` (SHA-256 `30fd0594806fd7e2cf9294b6750bb6ecc6e3855d9261852e01ab03fbe51c6d6e`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-f873a5b24f-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. Current-build editor, Test Map, Custom Game, and gameplay checks remain pending; the user-reported Test Map success for earlier build `KLS-D-fd638ddcf5` remains a pass for that build only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
 
 All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its four Common-through-Epic universal items and healing/mana potions. Build your race's Foundry to buy one copy of its Legendary recipe, which combines that race's Rare and Uncommon items. The recipe pattern returns to your Foundry after success or failure. The Master Forge in the southern market stocks the three general recipes. Talk to settlement characters to start the optional four-chapter recovery story; it continues during active waves. When hero selection ends, Undead and Night Elf players already have their Haunted or Entangled Gold Mine at the base; Human and Orc players use a regular Gold Mine. Starting mines hold 1,000,000 gold.
 
@@ -42,7 +42,7 @@ These are for development/testing and must not be treated as release controls:
 | Chat text | Purpose |
 |---|---|
 | -help | Show diagnostic help |
-| -diag | Show build ID, recent runtime creation/error diagnostics, and each active player's expected/actual starting mine, owner, gold reserve and coordinates |
+| -diag | Show build ID, the latest 12 runtime events, the latest 8 ERROR/FATAL/WARN entries from a separate rolling buffer, and each active player's expected/actual starting mine, owner, gold reserve and coordinates |
 | -wave N | Start a diagnostic-selected wave 1-1000 |
 | -gold | Add diagnostic gold/lumber |
 | -repair | Exercise castle-heal transaction |
@@ -53,7 +53,7 @@ These are for development/testing and must not be treated as release controls:
 
 ## Reporting a problem
 
-Include the exact on-screen build ID. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. The starting-mine line appears after hero confirmation and reports expected/actual mine, owner player ID, remaining gold and position. Required racial-mine spawn failures use the context `starting racial gold mine`. For engine or editor errors, run:
+Include the exact on-screen build ID. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. Error and warning entries are retained separately from routine messages, so recent spawn failures remain visible even after later gameplay logs fill the ordinary event window. The starting-mine line appears after hero confirmation and reports expected/actual mine, owner player ID, remaining gold and position. Required racial-mine spawn failures use the context `starting racial gold mine`. For engine or editor errors, run:
 
     python -B tools/collect_test_logs.py
 

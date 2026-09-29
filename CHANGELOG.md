@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-f873a5b24f - 2026-09-29
+
+- `-diag` now records ERROR/FATAL/WARN messages in a separate 32-entry rolling buffer. The command displays the latest eight severity messages alongside the most recent 12 ordinary runtime events, so routine log traffic no longer pushes spawn and setup failures out of view.
+- Full source regression suite passed **130/130**. Installed-editor JASS syntax and MPQ package readback passed. Package SHA-256: `30fd0594806fd7e2cf9294b6750bb6ecc6e3855d9261852e01ab03fbe51c6d6e`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-f873a5b24f-Development.w3m`; the installed SHA-256 matches the package and it is the only project map in the folder. The prior development artifact was archived under `backups/development-builds/20260929T020518521798Z-KLS-D-f873a5b24f/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T020518530798Z-KLS-D-f873a5b24f/`.
+- Current-build editor save/reopen, Test Map, Custom Game, live inspection of retained spawn warnings, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-87a1bcd5c4 - 2026-09-29
 
 - Hardened recipe restocking for a destroyed Foundry: Warcraft may retain a unit type on a dead structure handle, so the transaction now checks that the seller is alive before restocking it and otherwise falls back to the Master Forge.

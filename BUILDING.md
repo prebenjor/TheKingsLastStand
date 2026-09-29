@@ -6,6 +6,6 @@ Read docs/TECHNICAL-ARCHITECTURE.md for the build contract. From the repository 
     python -B tools/build_map.py
     python -B -m unittest discover -s tests -v
 
-Add --install-diagnostic to install a package-proven build locally. A clean checkout must use the supported locally installed Warcraft III editor/API. Do not copy machine-local reference tables into Git.
+Add --install-test-map to install the package-proven build in the one designated Warcraft III test folder. The older --install-diagnostic option remains an alias. A clean checkout must use the supported locally installed Warcraft III editor/API. Do not copy machine-local reference tables into Git.
 
-The current checked-in development artifact is dist/DIAGNOSTIC-KLS-D-fd638ddcf5.w3m. It passes static package/API checks, but not World Editor round-trip, current-build engine startup, full gameplay, multiplayer, or endurance. See docs/ROADMAP-AND-ACCEPTANCE.md.
+The current development artifact is `dist/KLS-D-f873a5b24f-Development.w3m` (SHA-256 `30fd0594806fd7e2cf9294b6750bb6ecc6e3855d9261852e01ab03fbe51c6d6e`), installed as the sole project map in the designated test folder. Package readback, installed-API JASS syntax, and 130 source regressions pass; this exact build still needs World Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer, and endurance checks. See docs/ROADMAP-AND-ACCEPTANCE.md.

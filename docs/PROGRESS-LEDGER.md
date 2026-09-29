@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-87a1bcd5c4
+## Current package-proven build — KLS-D-f873a5b24f
+
+- Artifact: `dist/KLS-D-f873a5b24f-Development.w3m`.
+- SHA-256: `30fd0594806fd7e2cf9294b6750bb6ecc6e3855d9261852e01ab03fbe51c6d6e`.
+- `-diag` stores ERROR/FATAL/WARN messages in a separate 32-entry rolling buffer and displays its latest eight entries alongside the latest 12 regular runtime events. A regression confirms important spawn/setup failures stay visible after routine messages roll over.
+- Full source regression suite: **130/130 passed**. Installed-API JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-f873a5b24f-Development.w3m`; package and installed SHA-256 match, and the test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T020518521798Z-KLS-D-f873a5b24f/` and `backups/installed-diagnostics/20260929T020518530798Z-KLS-D-f873a5b24f/`.
+- The user has closed the prior editor/map session. The current build is installed and ready, but it has not yet been opened or tested in Warcraft. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Exact-build Editor save/reopen, Test Map, Custom Game, live inspection of retained spawn warnings, multiplayer, and endurance remain pending. The next human check is to open this exact installed build and verify its visible build ID; then use `-diag` after any observed missing spawn to confirm the retained error/warning section.
+
+## Previous package-proven build — KLS-D-87a1bcd5c4
 
 - Artifact: `dist/KLS-D-87a1bcd5c4-Development.w3m`.
 - SHA-256: `018fb3e6874134451308b961ea969e7f8a45c42c0e9c7123d1a7526aa404a5c1`.

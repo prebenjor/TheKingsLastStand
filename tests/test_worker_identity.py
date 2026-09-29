@@ -29,6 +29,26 @@ class WorkerIdentityDiagnostics(unittest.TestCase):
         self.assertIn('GetPlayerId(GetOwningPlayer(selectedUnit))', report)
         self.assertIn('DestroyGroup(selectedUnits)', report)
 
+    def test_diag_keeps_errors_and_warnings_visible_after_the_recent_log_window_rolls_over(self):
+        diagnostics = (ROOT / 'source' / 'diagnostics.j').read_text()
+        self.assertIn('string array KLS_DiagErrorLines', diagnostics)
+        self.assertIn('integer KLS_DiagErrorCount = 0', diagnostics)
+
+        start = diagnostics.index('function KLS_Log')
+        end = diagnostics.index('endfunction', start)
+        logger = diagnostics[start:end]
+        for severity in ('ERROR', 'FATAL'):
+            self.assertIn(f'SubString(message,0,5) == "{severity}"', logger)
+        self.assertIn('SubString(message,0,4) == "WARN"', logger)
+        self.assertIn('KLS_DiagErrorLines[ModuloInteger(KLS_DiagErrorCount, 32)]', logger)
+
+        start = diagnostics.index('function KLS_ShowDiagnostics')
+        end = diagnostics.index('endfunction', start)
+        report = diagnostics[start:end]
+        self.assertIn('Recent errors/warnings:', report)
+        self.assertIn('KLS_DiagErrorLines[ModuloInteger(errorIndex, 32)]', report)
+        self.assertIn('IMaxBJ(0, KLS_DiagErrorCount - 8)', report)
+
 
 if __name__ == '__main__':
     unittest.main()
