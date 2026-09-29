@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-b0fccf974c - 2026-09-29
+
+- Rebuilt the current development package after the installed Warcraft III update changed `.build.info` (installed version `3.0.0.24268`). The 13 pinned extracted API/object/icon data tables are unchanged from the preceding package; no gameplay source changes were made for this rebuild.
+- Package: `dist/KLS-D-b0fccf974c-Development.w3m`; SHA-256: `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`.
+- Installed successfully at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b0fccf974c-Development.w3m`. Its SHA-256 matches the package and it is the sole project map in the test folder. The replaced development package and installed map were archived under `backups/`.
+- Full source regression suite passed: **142/142**. Package readback and installed-editor JASS syntax checks passed. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer, and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-9f529add40 - 2026-09-29
 
 - Added an explicit `ReplaceableTextures\CommandButtons\BTNTempleOfTheDamned.dds` icon to the custom Undead Temple of the Damned (`kR03`). This addresses the reported Meat Wagon icon while retaining `utod` as its parent and preserving native building stock.

@@ -2,7 +2,7 @@
 
 This file keeps design choices visible when implementation evolves. A newer explicit user direction supersedes older decisions; otherwise preserve the agreed target. The current approved decisions are authoritative; dated build evidence belongs in [PROGRESS-LEDGER.md](PROGRESS-LEDGER.md), and the implementation gates are in [ROADMAP-AND-ACCEPTANCE.md](ROADMAP-AND-ACCEPTANCE.md).
 
-**Current package:** `KLS-D-9f529add40-Development`, SHA-256 `a1aa81f8ea2b3922226ea8dae49aa2d002759b63d1b79c749a10f783aaeb8297`. Source/package checks passed; installation is pending because Warcraft III and World Editor still have the prior `KLS-D-1739daf903` map open. The prior map remains installed, hash-matched and is the sole map in the test folder. The user confirmed starting that older build in Custom Game, but its visible ID and result are not captured. Current-build save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+**Current package:** `KLS-D-b0fccf974c-Development`, SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`. The package is installed in the dedicated Warcraft III test folder; installed and package hashes match, and it is the sole project map there. Installed Warcraft III `3.0.0.24268` has a new `.build.info` fingerprint; all 13 pinned extracted API/object/icon data tables are unchanged from the previous package. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
 
 ## Current approved user decisions
 

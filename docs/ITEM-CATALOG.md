@@ -1,4 +1,4 @@
-# Generated item catalog — KLS-D-9f529add40
+# Generated item catalog — KLS-D-b0fccf974c
 
 Generated from tools/equipment_catalog.py for the current development build. There are 80 tiered general equipment items, 20 race-themed relics (one Legendary recipe output per race), three original crafted outputs, and nine attribute books. Common-through-Epic racial relics appear in their matching town shops; racial Legendary relics are crafted from their Foundry recipes or may appear through existing enemy-drop rules. This file records names, rawcodes, slots, prices, stats, and authored effects; update it whenever the source catalog changes. Enemy loot tiers and probabilities are documented in [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md). The generated Object Editor data and live in-game values still need engine verification.
 
@@ -111,6 +111,6 @@ Generated from tools/equipment_catalog.py for the current development build. The
 - Normal equipment sells for 50%. The four personal boss relics (I010–I013) are not represented by the tier generator and still need a full names/stats/sellability audit.
 # Crownlands race relic additions
 
-Current generated package: `KLS-D-9f529add40`, output path `dist/KLS-D-9f529add40-Development.w3m`, SHA-256 `a1aa81f8ea2b3922226ea8dae49aa2d002759b63d1b79c749a10f783aaeb8297`.
+Current generated package: `KLS-D-b0fccf974c`, output path `dist/KLS-D-b0fccf974c-Development.w3m`, SHA-256 `5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110`.
 
 The approved twenty universally equippable items, rarity colors, effects, shop/drop integration and racial recipes are cataloged in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). Their rawcodes are I23C–I23V and their effects/stock/drop records are generated from tools/equipment_catalog.py. Recipes RCP4–RCP7 use a Rare plus an Uncommon item to produce their race's Legendary relic. The canonical table is generated from the same catalog; do not maintain a second competing list in code.
