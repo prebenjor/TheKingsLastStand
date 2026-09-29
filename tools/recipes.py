@@ -139,7 +139,7 @@ def recipe_script():
     lines += ['    endif', '    return 0', 'endfunction',
               'function KLS_StockRecipes takes nothing returns nothing']
     for recipe in recipes:
-        lines.append(f"    call AddItemToStock(KLS_Shops[4], '{recipe['rawcode']}', 1, 1)")
+        lines.append(f"    call AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)")
     lines += ['endfunction',
               'function KLS_RecipeFindOwned takes unit hero, integer wanted, integer ownerMark returns item',
               '    local integer slot = 0',
@@ -211,7 +211,7 @@ def recipe_script():
               '        call SetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD) + KLS_RecipePrice(itemCode))',
               '    endif',
               '    call RemoveItem(scroll)',
-              "    call AddItemToStock(KLS_Shops[4], itemCode, 1, 1)",
+              "    call AddItemToStock(KLS_Shops[12], itemCode, 1, 1)",
               '    call KLS_Log("No components consumed; recipe fee refunded")',
               '    if p >= 0 and p < 4 then',
               '        call DisplayTimedTextToPlayer(Player(p), 0, 0, 8, "Craft failed. Your components remain yours and the recipe fee was refunded.")',
@@ -245,7 +245,7 @@ def recipe_script():
               '                    call RemoveItem(first)',
               '                    call RemoveItem(second)',
               '                    call RemoveItem(scroll)',
-              '                    call AddItemToStock(KLS_Shops[4], itemCode, 1, 1)',
+              '                    call AddItemToStock(KLS_Shops[12], itemCode, 1, 1)',
               '                    if LoadInteger(KLS_GearData, GetItemTypeId(output), 0) > 0 then',
               '                        call UnitEquipItem(buyer, output)',
               '                    endif',

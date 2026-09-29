@@ -86,7 +86,9 @@ def town_script():
                   f'        call SetUnitAcquireRange(KLS_TownShop[{race_index}],0)',
                   '        set tier = 0',
                   '        loop',
-                  '            exitwhen tier == 5',
+                  # The Legendary relic is earned through the faction Foundry
+                  # recipe rather than sold as a finished item.
+                  '            exitwhen tier == 4',
                   f'            call AddItemToStock(KLS_TownShop[{race_index}],KLS_RaceItemId[{race_index}*5+tier],1,99)',
                   '            set tier = tier+1',
                   '        endloop',

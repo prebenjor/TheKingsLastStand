@@ -3,11 +3,13 @@ import re
 import struct
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
 from equipment_catalog import abilities,item_catalog,catalog_script
 from objects import items
+from recipes import recipe_catalog,recipe_script
 
 def decode(blob,extended=False):
     pos=0
@@ -104,7 +106,7 @@ class EquipmentRecords(unittest.TestCase):
         for item in catalog:
             tier=item['tier'];cat=0 if item['family_index']<7 else 1
             stock=f"AddItemToStock(KLS_Shops[{tier*2+cat}], '{item['rawcode']}', 1, 1)"
-            if item.get('crafted'):
+            if item.get('crafted') or item.get('race'):
                 self.assertNotIn(stock,script)
             else:
                 self.assertIn(stock,script)
@@ -113,4 +115,38 @@ class EquipmentRecords(unittest.TestCase):
             self.assertIn('+' , fields[('utub',0)][0])
             self.assertEqual(fields[('igol',0)][0],item['price'])
         self.assertIn("KLS_Shops[10]",Path(ROOT/'source/shops.j').read_text())
+
+    def test_race_relics_and_foundry_patterns_are_stocked_in_their_own_vendors(self):
+        from town_catalog import town_script
+        catalog=item_catalog()
+        generic=catalog_script()
+        towns=town_script()
+        recipes=recipe_script()
+        for item in catalog:
+            if item.get('race'):
+                tier=item['tier'];cat=0 if item['family_index']<7 else 1
+                generic_stock=f"AddItemToStock(KLS_Shops[{tier*2+cat}], '{item['rawcode']}', 1, 1)"
+                self.assertNotIn(generic_stock,generic)
+        self.assertIn('exitwhen tier == 4',towns)
+        for race_index in range(4):
+            self.assertIn(f'KLS_TownShop[{race_index}],KLS_RaceItemId[{race_index}*5+tier]',towns)
+        for recipe in recipe_catalog(catalog):
+            self.assertIn(f"AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)",recipes)
+        self.assertIn('KLS_Shops[12] = KLS_CreateUnit',Path(ROOT/'source/shops.j').read_text())
+        self.assertIn('AddItemToStock(KLS_Shops[12], rawcode, 1, 1)',
+                      Path(ROOT/'source/combat.j').read_text())
+
+    def test_native_shop_stock_stays_within_twelve_command_card_slots(self):
+        catalog=item_catalog()
+        stock_by_shop=Counter()
+        for shop,code in re.findall(r"AddItemToStock\(KLS_Shops\[(\d+)\], '([^']+)'",catalog_script()):
+            stock_by_shop[int(shop)] += 1
+        for shop,code in re.findall(r"AddItemToStock\(KLS_Shops\[(\d+)\], '([^']+)'",recipe_script()):
+            stock_by_shop[int(shop)] += 1
+        stock_by_shop[10] = 4
+        stock_by_shop[11] = 9
+        for race_index in range(4):
+            stock_by_shop[20+race_index] = 4 + 2
+        self.assertLessEqual(max(stock_by_shop.values()),12,
+                             'Native shop stock exceeds the 12-slot command card: '+str(dict(stock_by_shop)))
 

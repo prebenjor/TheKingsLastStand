@@ -55,11 +55,18 @@ function KLS_CreateShops takes nothing returns nothing
     call BlzSetUnitName(KLS_Shops[11],"Sage's Archive")
     call SetUnitInvulnerable(KLS_Shops[11],true)
     call SetUnitAcquireRange(KLS_Shops[11],0)
+    set KLS_Shops[12] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',4850,-3900,270)
+    if KLS_Shops[12] == null then
+        return
+    endif
+    call BlzSetUnitName(KLS_Shops[12],"Master Forge")
+    call SetUnitInvulnerable(KLS_Shops[12],true)
+    call SetUnitAcquireRange(KLS_Shops[12],0)
     call AddItemToStock(KLS_Shops[10],'phea',1,1)
     call AddItemToStock(KLS_Shops[10],'pman',1,1)
     call AddItemToStock(KLS_Shops[10],'stwp',1,1)
     call AddItemToStock(KLS_Shops[10],'shea',1,1)
     call KLS_StockCatalog()
     call KLS_StockRecipes()
-    call KLS_Log("Sixteen gear families stocked across five tiers; Apothecary, Sage's Archive, and Master Forge recipes created.")
+    call KLS_Log("Sixteen gear families stocked across five tiers; town relics, Apothecary, Sage's Archive, and Master Forge stocked.")
 endfunction

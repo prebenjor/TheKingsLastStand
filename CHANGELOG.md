@@ -2,6 +2,15 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-3bc9fcaf25 - 2026-09-29
+
+- Corrected vendor stock overflow that hid shop entries: generic rarity shops now stock only the sixteen general equipment families, each town vendor keeps its matching race relics, and all seven recipe patterns have a dedicated Master Forge vendor. Recipe scrolls return to the Forge after either successful or failed crafting.
+- Racial town shops sell their four Common-through-Epic items and two potions; their Legendary item is no longer directly stocked and can be crafted through its race's Foundry recipe. Existing enemy-drop rules remain active. Every vendor remains at or below Warcraft's twelve stock-slot limit.
+- The new regressions failed first against the mixed generic stock and overfilled Rare Arms vendor. Focused equipment/recipe/town/market tests passed **40/40**; full source regression suite passed **128/128**.
+- Installed-API syntax compilation and MPQ package readback passed. Package SHA-256: `ad398a4b564882b25406a7dd0b75b4d8627b31d7f47a4995979afd0d45f576b3`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-3bc9fcaf25-Development.w3m`; installed SHA-256 matches the package. Replaced package and test map are preserved in the local development and installed-map archives.
+- Current-build editor save/reopen, Test Map, Custom Game, native shop windows, Legendary crafting, multiplayer and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-2fd59dee88 - 2026-09-29
 
 - Undead Acolyte conversion of a neutral Gold Mine now uses the shared optional checked-spawn helper. A missing or wrong-type Haunted Gold Mine is recorded with context, counted by `-diag`, and leaves the original mine and its gold intact without aborting the match.

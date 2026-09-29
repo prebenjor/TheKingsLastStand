@@ -27,15 +27,16 @@ All qualities are available immediately; gold gates affordability rather than sh
 |---|---|---:|
 | Common | Quartermaster | 300 gold |
 | Uncommon | Veteran Armorer | 1,000 gold |
-| Rare | Master Forge | 3,000 gold |
+| Rare | Rare Arms & Armor / Rare Apparel & Relics | 3,000 gold |
 | Epic | Runic Reliquary | 8,000 gold |
 | Legendary | Royal Vault | 20,000 gold |
+| Recipes | Master Forge | Three original recipes plus four racial Legendary patterns |
 | Consumables | Field Apothecary | Existing Warcraft consumable prices |
 | Attribute books | Sage's Archive | 1,000 / 3,000 / 8,000 gold by tome size |
 
 Display item rarity with Warcraft color codes in item names, shop stock names, and tooltip headers: Common white (`#FFFFFF`), Uncommon green (`#1EFF00`), Rare blue (`#0070DD`), Epic purple (`#A335EE`), and Legendary gold (`#FF8000`). Boss relics use Rare for Gravetide Cleaver, Epic for Heart of the Watch and Crown of Dawn, and Legendary for Oath of the Last King. Keep the raw quality label and full stats in the tooltip so color is supplementary.
 
-The five quality levels are implemented as two neutral units per level: Arms & Armor and Apparel & Relics, plus the Field Apothecary and Sage's Archive. The two Rare Master Forge stock lists host the named recipe scrolls in the current implementation. Present them as recognizable vendor buildings around the southern market plaza, with the Archive beside the Apothecary. Shop windows must display icon buttons and stat-rich item tooltips, not a text-only list or an empty inventory.
+The five quality levels are implemented as two neutral units per level: Arms & Armor and Apparel & Relics. Generic vendors contain only the sixteen general equipment families, keeping each quality shop at seven Arms & Armor items and nine Apparel & Relics items. Matching Crownlands town shops sell their race's four Common-through-Epic relics plus health and mana potions. The racial Legendary relic is not directly stocked; its Foundry pattern crafts it from two racial components, and it remains eligible for the existing enemy-drop rules. A separate Master Forge in the southern market stocks the seven recipe patterns. Its patterns return there after a failed or completed craft. The Field Apothecary has four consumables, and Sage's Archive has nine tomes. Keep every vendor at twelve or fewer stock entries so all items fit the native command card. Present the market vendors as recognizable buildings around the southern plaza, with the Archive beside the Apothecary. Shop windows must display icon buttons and stat-rich item tooltips, not a text-only list or an empty inventory.
 
 ## Equipment families, stats, and scaling
 

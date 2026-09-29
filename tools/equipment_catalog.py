@@ -258,7 +258,9 @@ def catalog_script():
                 lines.append(f"    set KLS_RaceItemId[{race_index*5+entry['tier']}] = '{entry['rawcode']}'")
     lines+=['endfunction','function KLS_StockCatalog takes nothing returns nothing']
     for e in item_catalog():
-        if e.get('crafted'):
+        # Race-themed relics belong to their matching Crownlands town shop;
+        # Legendary race relics are outputs of their Foundry recipes.
+        if e.get('crafted') or e.get('race'):
             continue
         merchant=e['tier']*2+(0 if e['family_index']<7 else 1)
         lines.append(f"    call AddItemToStock(KLS_Shops[{merchant}], '{e['rawcode']}', 1, 1)")

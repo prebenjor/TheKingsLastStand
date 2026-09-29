@@ -72,6 +72,8 @@ This registry records project-owned object rawcodes that agents are likely to co
 | KSTR, KAGI, KINT | +3 Strength, Agility, Intelligence hero skill choices using the native Attribute Bonus ability |
 | KS05/10/20, KA05/10/20, KI05/10/20 | Strength, Agility, Intelligence attribute tomes |
 
+The native-shop stock map uses `KLS_Shops[0..9]` for the five rarity tiers' Arms & Armor and Apparel & Relics vendors, `[10]` for the Field Apothecary, `[11]` for Sage's Archive, and `[12]` for the Master Forge recipe vendor. Four `KLS_TownShop` instances stock each race's four non-Legendary relics plus health and mana potions. Racial Legendary relics are not directly stocked; each has a Foundry recipe and remains eligible for existing enemy-drop rules. Keep each vendor at twelve or fewer stock entries to fit Warcraft's native shop command card.
+
 The same case-sensitive collision caution applies to unit heroes, building IDs, abilities, and items. Let generator serialization, installed data validation, and archive object-record checks determine whether an ID is safe; do not infer safety from a missing visual icon.
 
 ## Packaging and outputs
@@ -80,10 +82,10 @@ The same case-sensitive collision caution applies to unit heroes, building IDs, 
 - The repository keeps one current map artifact in `dist/`, named `<build-id>-Development.w3m`. Build manifests, JASS, and temporary package stages live under `build/`; no second persistent map copy is written there.
 - `--install-test-map` copies that exact package-proven map into `Documents/Warcraft III/Maps/TheKingsLastStand/`, the user's designated live test folder. That folder contains one current project map so the Custom Game entry is unambiguous.
 - When a new build replaces a prior development map, the previous `dist/` map is archived under the ignored local `backups/development-builds/`; previous installed test maps are archived under `backups/installed-diagnostics/`. Git history preserves prior checked-in `dist/` snapshots for remote recovery.
-- Current package: `dist/KLS-D-2fd59dee88-Development.w3m`, SHA-256 `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`. It is installed as the sole project map in `Documents/Warcraft III/Maps/TheKingsLastStand/`; the installed file hash matches the manifest. Its predecessor remains in the local installed-map archive. Its `-diag` output reports expected and actual starting-mine state, optional spring-visual and Undead mine-conversion spawn failures, and selected-unit identities; current-build editor, game, multiplayer and endurance checks remain pending.
+- Current package: `dist/KLS-D-3bc9fcaf25-Development.w3m`, SHA-256 `ad398a4b564882b25406a7dd0b75b4d8627b31d7f47a4995979afd0d45f576b3`. It is installed as the sole project map in `Documents/Warcraft III/Maps/TheKingsLastStand/`; the installed file hash matches the manifest. Its predecessor remains in the local installed-map archive. Its `-diag` output reports expected and actual starting-mine state, optional spring-visual and Undead mine-conversion spawn failures, and selected-unit identities; current-build editor, game, multiplayer and endurance checks remain pending.
 - Manifest includes build ID, package SHA-256, source hashes, API provenance, member inventory and check states.
 - Root CHANGELOG.md carries one entry for every packaged build, including the build ID, package SHA-256, changes and exact verification/pending status. Update it with each build and verify the latest manifest against its entry.
-- The current source regression suite has 126 tests; all 126 passed for this repository snapshot. Package readback and installed-editor API syntax checks passed for the current package. The older user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`; current-build editor, game, multiplayer and endurance checks remain pending.
+- The current source regression suite has 128 tests; all 128 passed for this repository snapshot. Package readback and installed-editor API syntax checks passed for the current package. The older user-reported Test Map pass remains assigned to `KLS-D-fd638ddcf5`; current-build editor, game, multiplayer and endurance checks remain pending.
 
 ## Personal item rewards
 

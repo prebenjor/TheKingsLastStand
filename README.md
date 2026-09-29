@@ -6,11 +6,11 @@ Players command distinct heroes and their own race-matched workers, buildings, a
 
 ## Project status
 
-Current development build: **KLS-D-2fd59dee88**.
+Current development build: **KLS-D-3bc9fcaf25**.
 
-- Map: `dist/KLS-D-2fd59dee88-Development.w3m`
-- SHA-256: `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`
-- The package is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2fd59dee88-Development.w3m`; its SHA-256 matches and it is the only project map in the test folder.
+- Map: `dist/KLS-D-3bc9fcaf25-Development.w3m`
+- SHA-256: `ad398a4b564882b25406a7dd0b75b4d8627b31d7f47a4995979afd0d45f576b3`
+- The package is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-3bc9fcaf25-Development.w3m`; its SHA-256 matches and it is the only project map in the test folder.
 - Build manifest: dist/build-manifest.json
 
 This package carries the Crownlands settlements, four-race companies, hero progression and custom content forward. It also routes boss relics and story items through a guarded personal delivery service: failed item creation is queued per owner and retried, while full inventories receive a visible owner-bound item at their base. Per-level +3 Strength, Agility, or Intelligence choices are native hero ability plus buttons; the global stat-choice dialog is removed. Failed random item-drop creation now writes item, enemy, position and killer details to the diagnostic log. Optional scenery, effects, reinforcements, story spawns, and Undead mine conversion use contextual checked-spawn diagnostics; optional failures do not end the match. Core setup and wave spawns remain fatal. The Undead Temple inherits the correct Temple parent, race building tooltips describe their actual roles, and Undead and Night Elf players now begin with their own Haunted or Entangled Gold Mine holding 1,000,000 gold. Keeper of the Grove and Faelor now use their tree-free Treant signatures without also showing the unusable tree-target spell. Gear prices now rise from 300 gold for Common to 20,000 for Legendary; hand weapons cost 1.5×, Foundry fees are doubled, and attribute tomes cost 1,000/3,000/8,000. Consumable prices and equipment stats are unchanged. After the preserved 40-wave story, ten installed campaign crossover rosters repeat with live-wave scaling, a five-force wave 49 convergence, a Lady Vashj wave 50 boss, rotating campaign leaders and personal Legendary catalog rewards. King Aldric's death ends the run. Sacred Aura ranks 4/5 retain the generated 38.5%/27.5% and 42%/30% effects for both ability IDs. The current source regression suite passes **126/126**; package readback and installed-editor API syntax pass.

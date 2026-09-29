@@ -1,14 +1,13 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-2fd59dee88
+## Current package-proven build — KLS-D-3bc9fcaf25
 
-- Artifact: `dist/KLS-D-2fd59dee88-Development.w3m`.
-- SHA-256: `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`.
-- The Undead Acolyte mine-conversion handler now uses `KLS_CreateUnitOptional` with an `Undead gold mine haunt` context. A null or wrong-type spawn is counted and logged in diagnostic mode, remains nonfatal, and preserves the neutral mine and reserve.
-- The focused race/mining suite passed **12/12**. The full source suite was **125/125** when the map was packaged; it now passes **126/126** after adding a regression that keeps current-build references synchronized across project docs. Package archive readback and installed-editor API syntax checks passed.
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-2fd59dee88-Development.w3m`; package and installed SHA-256 match. The test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T000816554434Z-KLS-D-2fd59dee88/` and `backups/installed-diagnostics/20260929T000816567687Z-KLS-D-2fd59dee88/`.
-- No current-build Warcraft gameplay capture has been made. The previous captured engine logs show only `KLS-D-1a040d638c` opening, so their model warnings are not attributed to this build. The editor and game were closed when the new build was installed.
-- Editor save/reopen, current-build Test Map, Custom Game, actual mine haunting, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Artifact: `dist/KLS-D-3bc9fcaf25-Development.w3m`.
+- SHA-256: `ad398a4b564882b25406a7dd0b75b4d8627b31d7f47a4995979afd0d45f576b3`.
+- Fixed native shop overflow: generic rarity vendors no longer contain race relics; town shops stock the matching race's four Common-through-Epic relics; racial Legendary relics are recipe-only. A dedicated Master Forge at the southern market stocks all seven recipes and receives scrolls back after success or failure. All shops remain within the native 12-entry stock limit.
+- Full source regression suite: **128/128 passed**. Focused equipment, crafting, town, and market regressions: **40/40 passed**. Installed-API JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-3bc9fcaf25-Development.w3m`; package and installed SHA-256 match. The test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T005203779336Z-KLS-D-3bc9fcaf25/` and `backups/installed-diagnostics/20260929T005203787718Z-KLS-D-3bc9fcaf25/`.
+- Editor save/reopen, current-build Test Map, Custom Game, native shop windows, recipe crafting, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
 
 ## Previous package-proven build — KLS-D-2aa1705c84
 

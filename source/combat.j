@@ -263,7 +263,7 @@ function KLS_MarketBuy takes nothing returns nothing
                 call DisplayTimedTextToPlayer(Player(p), 0, 0, 8, "Buy recipes with your living hero. The fee was refunded.")
             endif
             call RemoveItem(gear)
-            call AddItemToStock(KLS_Shops[4], rawcode, 1, 1)
+            call AddItemToStock(KLS_Shops[12], rawcode, 1, 1)
         endif
     elseif KLS_BookAmount(rawcode) > 0 then
         if p >= 0 and p < 4 and KLS_Active[p] and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 then
