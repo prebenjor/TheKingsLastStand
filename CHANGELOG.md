@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-b1609a439c - 2026-09-29
+
+- Moved each base's eight-tree lumber stand closer to its hall, from roughly 650/850 map units south to 500/700. The trees remain on the rear-right side, away from the north-side mine route and western Altar approach.
+- Full source regression suite passed **138/138**, including the new base-tree placement check. Installed-editor API syntax and MPQ package readback passed. Package SHA-256: `a3fef077af70c0395591f5862e71f431ac4d394062ad2c526ec82787fabd4221`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-b1609a439c-Development.w3m`; installed SHA-256 matches the package and it is the only project map in the test folder. The previous development artifact was archived under `backups/development-builds/20260929T042649668175Z-KLS-D-b1609a439c/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T042649676236Z-KLS-D-b1609a439c/`.
+- The user confirmed testing a build but did not identify its build ID or result. This build's editor save/reopen, Test Map, Custom Game, tree harvesting/path clearance, gameplay, multiplayer and endurance checks remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-0235a0878b - 2026-09-29
 
 - Extended the development-only `-gear` audit to list occupied backpack positions through the installed `UnitItemInBagSlot` API, in addition to all six normal inventory and nine equipment slots. Rows include item name/type, catalog family and equipment slot, plus owner marker; the header reports backpack occupancy and capacity.

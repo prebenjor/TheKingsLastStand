@@ -501,16 +501,16 @@ function KLS_BuildLandscape takes nothing returns nothing
     loop
         exitwhen i == 4
         call KLS_StampPlot(KLS_X[i], KLS_Y[i])
-        // Compact rear-right lumber stand: 650-850 south of the hall.
-        // Keep the altar at (-650,-500), mine route and worker spawn clear.
+        // Bring each harvest stand closer while keeping the town-hall core,
+        // north-side mine route, worker line, and western altar approach open.
         set j = 0
         loop
             exitwhen j == 4
-            call KLS_AddTree(KLS_X[i]+180+j*180,KLS_Y[i]-650)
+            call KLS_AddTree(KLS_X[i]+150+j*150,KLS_Y[i]-500)
             if KLS_Ended then
                 return
             endif
-            call KLS_AddTree(KLS_X[i]+180+j*180,KLS_Y[i]-850)
+            call KLS_AddTree(KLS_X[i]+150+j*150,KLS_Y[i]-700)
             if KLS_Ended then
                 return
             endif

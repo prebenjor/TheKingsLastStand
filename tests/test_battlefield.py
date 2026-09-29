@@ -103,6 +103,13 @@ class BattlefieldRegression(unittest.TestCase):
                        '6200 + I2R(n / 5) * 40', 'KLS_CreateShops()']:
             self.assertIn(marker, script)
 
+    def test_base_lumber_stands_are_closer_without_occupying_the_hall_or_altar_side(self):
+        script = runtime_script('BASE-TREE-SPACING')
+        self.assertIn('KLS_AddTree(KLS_X[i]+150+j*150,KLS_Y[i]-500)', script)
+        self.assertIn('KLS_AddTree(KLS_X[i]+150+j*150,KLS_Y[i]-700)', script)
+        self.assertNotIn('KLS_AddTree(KLS_X[i]+180+j*180,KLS_Y[i]-650)', script)
+        self.assertNotIn('KLS_AddTree(KLS_X[i]+180+j*180,KLS_Y[i]-850)', script)
+
     def test_closed_slots_create_no_mines_halls_altars_or_workers(self):
         import re
         script = runtime_script('CLOSED-SLOTS')

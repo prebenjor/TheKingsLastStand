@@ -2,21 +2,21 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-0235a0878b**
+Build: **KLS-D-b1609a439c**
 
-Map SHA-256: **70bce2bdbb91cdfbc762a182022a6552cfd96a027ae06579fea610a0709c0608**
+Map SHA-256: **a3fef077af70c0395591f5862e71f431ac4d394062ad2c526ec82787fabd4221**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
 |---|---|---|
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed statically |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated | Passed statically |
-| Focused automated regressions | 137 source-level tests, including once-only counting of unit, scenery, item, recipe and retry ERROR events, separate ERROR/FATAL/WARN retention, distinct Hall models, racial Foundry pattern stock/returns, native-shop limits, race-town relic stock, spawn diagnostics, inventory delivery, hero progression, story, item-slot diagnostics and documentation alignment | Passed for this source snapshot |
+| Focused automated regressions | 138 source-level tests, including closer lumber stands at every plot, once-only counting of unit, scenery, item, recipe and retry ERROR events, separate ERROR/FATAL/WARN retention, distinct Hall models, racial Foundry pattern stock/returns, native-shop limits, race-town relic stock, spawn diagnostics, inventory delivery, hero progression, story, item-slot diagnostics and documentation alignment | Passed for this source snapshot |
 | Runtime diagnostic retention | `-diag` keeps the latest 32 ERROR/FATAL/WARN entries separately from routine events and displays the most recent eight. Recipe output creation/delivery and queued boss/story reward creation/retry failures join unit, scenery and random-drop errors in that buffer; the `-diag` header counts every ERROR once across categories with item, owner and location context | Source regression passed; live capture pending |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
-| Editor save/reopen | `KLS-D-0235a0878b` is installed in the designated test folder with a SHA-256 matching its manifest; editor save/reopen remains unverified | Pending |
-| Current-build Test Map / Custom Game startup | `KLS-D-0235a0878b` is installed as the sole project map in the designated test folder. The earlier Test Map pass remains recorded separately | Pending (not failed) |
-| 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; visual routes and playability need live inspection | Pending in game |
+| Editor save/reopen | `KLS-D-b1609a439c` is installed in the designated test folder with a SHA-256 matching its manifest; editor save/reopen remains unverified | Pending |
+| Current-build Test Map / Custom Game startup | `KLS-D-b1609a439c` is installed as the sole project map in the designated test folder. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; compact base lumber stands now sit 500/700 units south of each hall; visual routes, tree clearance and playability need live inspection | Pending in game |
 | Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent, race-specific role descriptions, pre-owned Undead Haunted and Night Elf Entangled starting mines at 1,000,000 gold, native Acolyte haunting orders, and expected/actual mine status in `-diag` are source/regression checked | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Object/catalog links and installed parent IDs are regression checked; Keeper/Faelor suppress the tree-targeted native ability in favor of usable signatures; visuals, recruits and ownership need live checks | Pending in game |
 | Level 1–50 progression and talents | Per-level +3 Strength/Agility/Intelligence choices are native hero `+` skills; the stat-choice dialog was removed. Fifth-level specialty talent dialog and stat changes need live checks | Pending in game |
@@ -42,7 +42,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Current package `dist/KLS-D-0235a0878b-Development.w3m` is installed in the designated test folder and matches the package manifest. Open that exact map for editor save/reopen and current-build startup checks.
+2. Current package `dist/KLS-D-b1609a439c-Development.w3m` is installed in the designated test folder and matches the package manifest. Open that exact map for editor save/reopen and current-build startup checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -63,11 +63,11 @@ Passing syntax or simulated tests never clears an in-game gate.
 3. Complete normal-speed runs through at least one endless boss with 2 and 4 players. Record stalls, resource pressure, pathing, frame rate, and all balance edits by build ID.
 
 ## Current exact human-run check
-The user reported completing a test but did not include the displayed build ID or observations. That report is unassigned and does not verify `KLS-D-0235a0878b`.
+The user confirmed running a test but did not include the displayed build ID or outcome. That report is unassigned and does not verify `KLS-D-b1609a439c`.
 
 
 1. The user's earlier Test Map success remains recorded for `KLS-D-fd638ddcf5`; it is not a failed step.
-2. Current package `KLS-D-0235a0878b` is at `dist/KLS-D-0235a0878b-Development.w3m`, SHA-256 `70bce2bdbb91cdfbc762a182022a6552cfd96a027ae06579fea610a0709c0608`. It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-0235a0878b-Development.w3m`; the installed hash matches and the folder contains one project map. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` and is not a failed step.
+2. Current package `KLS-D-b1609a439c` is at `dist/KLS-D-b1609a439c-Development.w3m`, SHA-256 `a3fef077af70c0395591f5862e71f431ac4d394062ad2c526ec82787fabd4221`. It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-b1609a439c-Development.w3m`; the installed hash matches and the folder contains one project map. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` and is not a failed step.
 3. Current-build startup is pending. Open the new exact map in World Editor and run Test Map, then launch that same installed map through Warcraft III → Single Player → Custom Game. Confirm its visible build ID and that the match starts without errors or premature victory.
 4. Exercise mixed-race selection, racial build menus and worker jobs; inspect the Undead Temple icon/queues, + stat buttons, fifth-level talents, towns and road navigation; test item stock, equipment, drops, recipes, story rewards, Sacred Aura rank 4/5 tooltips, and both race-specific mine orders.
 5. Continue with the existing kill gold/XP, castle, shop/backpack, spring and 50/180-second break checks, then verify automatic wave 40 continuation, the wave 49 convergence, Lady Vashj at wave 50, and one later rotating boss. Confirm the optional Crownlands story stays outside wave accounting. Finish with real multiplayer and endless endurance acceptance.
