@@ -22,6 +22,16 @@ Use this generated reference as inspiration while hand-editing the map in World 
 
 The reference is meant to guide manual terrain dressing; it does not prescribe changes to the 192 × 192 map bounds or the approved defense layout.
 
+## New map-dressing references — 2026-09-29
+
+The overview below suggests how to make the Crownlands feel inhabited and varied. Treat the arrangement as mood and terrain inspiration; keep the actual map's King's Road, gate, keep, settlement entrances, base plots, mines, and boss route in their current positions.
+
+![Crownlands overview concept with a central stone road, branching paths, allied settlements, grass, trees and rocky borders](visuals/Crownlands-Kingdom-Dressing-Overview.png)
+
+Use this element sheet for details that can be reproduced with World Editor terrain tiles and doodads. Scatter each group with gaps and rotation variation; preserve open movement and build space.
+
+![Six terrain examples showing road transitions, grass clumps, boulders, low rocky rises, tree groves, and a blight edge](visuals/Crownlands-Terrain-Elements-Sheet.png)
+
 ## Full-map composition studies — 2026-09-29
 
 These two additional generated images compare a more formal kingdom-road arrangement with a less symmetrical landscape. They are visual references, not exact map screenshots or tile-by-tile build instructions.
