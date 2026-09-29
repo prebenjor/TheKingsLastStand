@@ -73,8 +73,17 @@ class NativeMarketControls(unittest.TestCase):
         self.assertIn('LoadInteger(KLS_GearData,key,22)', equip)
         self.assertIn('TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)', equip)
         self.assertIn('KLS_Log("ERROR native equip rejected shop item after transfer:', equip)
-        self.assertIn('equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2))', equip)
+        self.assertIn('equipment-slot=', function_body(self.script, 'KLS_MarketEquipContext'))
         self.assertIn('SetItemUserData(gear,p+1)', market)
+
+    def test_failed_gear_purchase_diagnostic_reports_buyer_capacity_and_item_location(self):
+        equip = function_body(self.script, 'KLS_MarketEquipPurchased')
+        context = function_body(self.script, 'KLS_MarketEquipContext')
+        self.assertIn('KLS_MarketEquipContext(buyer,gear,attempt)', equip)
+        for field in ('buyer-type=', 'buyer-owner=', 'alive=', 'normal-free=',
+                      'backpack=', 'gear-position=', 'item-owner=',
+                      'catalog-family=', 'equipment-slot=', 'attempt='):
+            self.assertIn(field, context)
 
     def test_purchase_fallback_places_a_backpack_item_in_a_real_free_inventory_slot(self):
         move = function_body(self.script, 'KLS_MovePurchaseToRegularInventory')

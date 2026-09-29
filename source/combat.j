@@ -170,6 +170,75 @@ function KLS_MovePurchaseToRegularInventory takes unit buyer, item gear returns 
     return gear
 endfunction
 
+function KLS_MarketEquipContext takes unit buyer, item gear, integer attempt returns string
+    local integer playerId = -1
+    local integer slot = 0
+    local integer bagSize = 0
+    local integer normalFree = 0
+    local integer itemType = 0
+    local integer family = 0
+    local integer equipmentSlot = 0
+    local integer itemOwner = 0
+    local item current = null
+    local string buyerName = "NULL"
+    local string buyerType = "NULL"
+    local string buyerOwner = "unknown"
+    local string alive = "unknown"
+    local string backpack = "0/0"
+    local string position = "not-on-buyer"
+    local string itemName = "NONE"
+    if buyer != null then
+        set playerId = GetPlayerId(GetOwningPlayer(buyer))
+        set buyerName = GetUnitName(buyer)
+        set buyerType = GetObjectName(GetUnitTypeId(buyer))+"("+I2S(GetUnitTypeId(buyer))+")"
+        set buyerOwner = "p"+I2S(playerId+1)
+        set alive = R2S(GetWidgetLife(buyer))
+        set bagSize = UnitExtendedInventorySize(buyer)
+        set backpack = I2S(UnitExtendedInventoryCount(buyer))+"/"+I2S(bagSize)
+        set slot = 0
+        loop
+            exitwhen slot == 6
+            set current = UnitItemInSlot(buyer,slot)
+            if current == null then
+                set normalFree = normalFree+1
+            elseif gear != null and current == gear then
+                set position = "inventory-slot="+I2S(slot)
+            endif
+            set current = null
+            set slot = slot+1
+        endloop
+        set slot = 0
+        loop
+            exitwhen slot >= bagSize
+            set current = UnitItemInBagSlot(buyer,slot)
+            if gear != null and current == gear then
+                set position = "backpack-slot="+I2S(slot)
+            endif
+            set current = null
+            set slot = slot+1
+        endloop
+        set slot = 0
+        loop
+            exitwhen slot == 9
+            set current = UnitItemInEquipmentSlot(buyer,ConvertLoadoutSlot(slot))
+            if gear != null and current == gear then
+                set position = "equipment-slot="+I2S(slot)
+            endif
+            set current = null
+            set slot = slot+1
+        endloop
+    endif
+    if gear != null then
+        set itemName = GetItemName(gear)
+        set itemType = GetItemTypeId(gear)
+        set family = LoadInteger(KLS_GearData,itemType,0)
+        set equipmentSlot = LoadInteger(KLS_GearData,itemType,2)
+        set itemOwner = GetItemUserData(gear)
+    endif
+    set current = null
+    return " buyer="+buyerName+" buyer-type="+buyerType+" buyer-owner="+buyerOwner+" alive="+alive+" normal-free="+I2S(normalFree)+"/6 backpack="+backpack+" gear-position="+position+" item="+itemName+" item-type="+I2S(itemType)+" item-owner="+I2S(itemOwner)+" catalog-family="+I2S(family)+" equipment-slot="+I2S(equipmentSlot)+" attempt="+I2S(attempt)
+endfunction
+
 function KLS_MarketEquipPurchased takes nothing returns nothing
     local timer equipTimer = GetExpiredTimer()
     local integer key = GetHandleId(equipTimer)
@@ -185,7 +254,7 @@ function KLS_MarketEquipPurchased takes nothing returns nothing
         if p >= 0 and p < 4 and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 and LoadInteger(KLS_GearData,rawcode,0) > 0 then
             set gear = KLS_MovePurchaseToRegularInventory(buyer,gear)
             if UnitEquipItem(buyer,gear) then
-                call KLS_Log("Shop purchase equipped after transfer: "+GetItemName(gear)+" owner=p"+I2S(p+1)+" equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2)))
+                call KLS_Log("Shop purchase equipped after transfer:"+KLS_MarketEquipContext(buyer,gear,attempt))
             else
                 if attempt < 8 then
                     set attempt = attempt+1
@@ -194,12 +263,12 @@ function KLS_MarketEquipPurchased takes nothing returns nothing
                     call TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)
                     set retry = true
                 else
-                    call KLS_Log("ERROR native equip rejected shop item after transfer: "+GetItemName(gear)+" item type="+I2S(rawcode)+" equipment slot id="+I2S(LoadInteger(KLS_GearData,rawcode,2)))
+                    call KLS_Log("ERROR native equip rejected shop item after transfer:"+KLS_MarketEquipContext(buyer,gear,attempt))
                     call DisplayTimedTextToPlayer(GetOwningPlayer(buyer),0,0,8,"Your gear is safe in your normal inventory or backpack, but Warcraft has not equipped it. Make room in the six inventory slots, then try the equipment panel again.")
                 endif
             endif
         else
-            call KLS_Log("ERROR purchased gear cannot equip: buyer is not the living owning hero; item="+GetItemName(gear)+" player="+I2S(p+1))
+            call KLS_Log("ERROR purchased gear cannot equip: buyer is not the living owning hero"+KLS_MarketEquipContext(buyer,gear,attempt))
         endif
     else
         call KLS_Log("ERROR deferred equipment lost its buyer or item handle")

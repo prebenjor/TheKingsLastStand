@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-7951d852c3 - 2026-09-29
+
+- Expanded failed gear-purchase/equip diagnostics with the buyer's unit type, owner and life state; free normal-inventory slots; backpack occupancy; item location (normal inventory, backpack, equipped or missing); item type/owner; catalog family and equipment slot; and the retry attempt. The equip behavior itself is unchanged pending a playtest that captures these states.
+- Full source regression suite passed **139/139**. Installed-editor API syntax and MPQ package readback passed. Package SHA-256: `42922eb38fd46bd6f6071fef7df08f4329e4abd921d8773bdfc32286f9421b1c`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-7951d852c3-Development.w3m`; installed SHA-256 matches the package and it is the only project map in the test folder. The previous development artifact was archived under `backups/development-builds/20260929T044600046703Z-KLS-D-7951d852c3/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T044600056810Z-KLS-D-7951d852c3/`.
+- Editor save/reopen, Test Map, Custom Game, live gear purchase/transfer/equip/sale, gameplay, multiplayer and endurance remain pending for this build. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-b1609a439c - 2026-09-29
 
 - Moved each base's eight-tree lumber stand closer to its hall, from roughly 650/850 map units south to 500/700. The trees remain on the rear-right side, away from the north-side mine route and western Altar approach.

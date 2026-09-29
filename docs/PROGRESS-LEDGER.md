@@ -1,13 +1,22 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-b1609a439c
+## Current package-proven build — KLS-D-7951d852c3
+
+- Artifact: `dist/KLS-D-7951d852c3-Development.w3m`.
+- SHA-256: `42922eb38fd46bd6f6071fef7df08f4329e4abd921d8773bdfc32286f9421b1c`.
+- Expanded failed gear purchase/equip diagnostics with buyer type, owner and life state; normal inventory free slots; backpack occupancy; exact gear location; item type/owner; catalog family and equipment slot; and retry attempt. Equip behavior itself remains unverified and unchanged.
+- Full source regression suite: **139/139 passed**. Installed-editor API syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-7951d852c3-Development.w3m`; package and installed SHA-256 match, and the folder contains one project map. The previous package and installed map were preserved under `backups/development-builds/20260929T044600046703Z-KLS-D-7951d852c3/` and `backups/installed-diagnostics/20260929T044600056810Z-KLS-D-7951d852c3/`.
+- Editor save/reopen, Test Map, Custom Game, gear purchase/transfer/equip/sale, gameplay, multiplayer and endurance remain pending for this build. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-b1609a439c
 
 - Artifact: `dist/KLS-D-b1609a439c-Development.w3m`.
 - SHA-256: `a3fef077af70c0395591f5862e71f431ac4d394062ad2c526ec82787fabd4221`.
 - Moved each plot's eight-tree lumber stand closer: two rows are now 500/700 map units south of the hall on its rear-right side, with the north-side mine route and west-side Altar approach kept open.
 - Full source regression suite: **138/138 passed**. Installed-editor API syntax and MPQ archive readback passed.
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b1609a439c-Development.w3m`; package and installed SHA-256 match, and the folder contains one project map. The previous package and installed map were preserved under `backups/development-builds/20260929T042649668175Z-KLS-D-b1609a439c/` and `backups/installed-diagnostics/20260929T042649676236Z-KLS-D-b1609a439c/`.
-- The user confirmed running a test but did not provide its visible build ID or result. This build's Editor save/reopen, Test Map, Custom Game, tree-harvest/path-clearance, gameplay, multiplayer and endurance checks remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-b1609a439c-Development.w3m`; package and installed SHA-256 matched. The package and installed map were preserved when replaced by the current build.
+- The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`; current-build gameplay checks were pending.
 
 ## Previous package-proven build — KLS-D-0235a0878b
 
