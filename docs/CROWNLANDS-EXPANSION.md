@@ -36,6 +36,8 @@ Race is assigned per selected hero and per owner. It must not be inferred from a
 
 When a hero is confirmed, the Undead player's starting neutral mine is replaced with an owner-controlled Haunted Gold Mine, and the Night Elf player's with an owner-controlled Entangled Gold Mine. Both retain the full 1,000,000-gold reserve and the same plot location. Human and Orc players keep a neutral Gold Mine. The Undead order handler also recognizes Warcraft's native `hauntgoldmine` order for any additional neutral mine; the Night Elf Tree of Life's native Entangle range is 1,450. Confirm these native mine types and worker routes in Warcraft; source checks do not prove engine harvesting behavior.
 
+The custom Undead Temple of the Damned (`kR03`, parent `utod`) explicitly uses `ReplaceableTextures\CommandButtons\BTNTempleOfTheDamned.dds`. Keep the icon override: the user reported the inherited command button displaying the Meat Wagon icon even though the building inherited the correct Temple parent. The object-data regression checks both parent and icon path.
+
 | Role | Human | Orc | Night Elf | Undead |
 |---|---|---|---|---|
 | Worker | Peasant `hpea` | Peon `opeo` | Wisp `ewsp` | Acolyte `uaco` |

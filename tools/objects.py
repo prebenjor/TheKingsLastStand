@@ -68,10 +68,15 @@ def units():
         race = faction['race']
         if faction['arcane'] != 'h004':
             name = _ARCANE_NAMES[FACTIONS.index(faction)]
-            custom.append(record(faction['arcane_parent'],faction['arcane'],{
+            arcane_fields = {
                 'unam':name,'utip':name,'utub':_ARCANE_TOOLTIPS[race],
                 'ugol':160,'ulum':70,'ubld':30,'uhpm':1100,'ureq':'',
-            }))
+            }
+            if race == 'Undead':
+                # The custom Temple inherited the Meat Wagon command icon in
+                # Warcraft III despite using utod as its object-data parent.
+                arcane_fields['uico'] = r'ReplaceableTextures\CommandButtons\BTNTempleOfTheDamned.dds'
+            custom.append(record(faction['arcane_parent'],faction['arcane'],arcane_fields))
         for tower_index, rawcode in enumerate(faction['towers']):
             if faction['race'] == 'Human':
                 continue

@@ -1,6 +1,16 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-1739daf903
+## Current package-proven build — KLS-D-9f529add40
+
+- Artifact: `dist/KLS-D-9f529add40-Development.w3m`.
+- SHA-256: `a1aa81f8ea2b3922226ea8dae49aa2d002759b63d1b79c749a10f783aaeb8297`.
+- The custom Undead Temple of the Damned (`kR03`) now explicitly sets the installed `BTNTempleOfTheDamned.dds` icon path; parent `utod` and native building stock are preserved. The focused test failed before the change because the generated record omitted `uico`, then passed after the change.
+- Focused race/building tests: **12/12 passed**. Full regression suite: **142/142 passed**. Installed-editor JASS syntax and MPQ package/readback passed.
+- `py -B tools/build_map.py --install-test-map` built the map and archived the prior package, then failed during installation with `WinError 32`. The old map was restored and remains hash-matched as the only project map in the Warcraft test folder. The archive is under `backups/installed-diagnostics/20260929T062442988973Z-KLS-D-9f529add40/`; the prior dist package is under `backups/development-builds/20260929T062442979354Z-KLS-D-9f529add40/`.
+- `World Editor.exe` PID 61288 and `Warcraft III.exe` PID 16152 still launch with the exact old installed map path. Do not force-close either app. The user confirmed a Custom Game start for the previous build, but no visible build ID/result or fresh log entry is available; that attempt does not verify this package.
+- Editor round-trip, current-build Test Map/Custom Game, visible icon, gameplay, multiplayer and endurance remain pending. Retry installation when both applications release the old map; keep the build labeled Development.
+
+## Previous package-proven build — KLS-D-1739daf903
 
 - Artifact: `dist/KLS-D-1739daf903-Development.w3m`.
 - SHA-256: `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`.

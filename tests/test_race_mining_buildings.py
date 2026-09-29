@@ -35,7 +35,8 @@ class RaceMiningAndBuildings(unittest.TestCase):
         self.assertNotIn(('urev', 0), fields)
         self.assertIn('Necromancers', fields[('utub', 0)][0])
         self.assertIn('Banshees', fields[('utub', 0)][0])
-        self.assertNotIn(('uico', 0), fields)
+        self.assertEqual(fields[('uico', 0)][0],
+                         r'ReplaceableTextures\CommandButtons\BTNTempleOfTheDamned.dds')
 
     def test_each_racial_worker_menu_and_custom_building_role_is_serialized(self):
         records = decode(units())

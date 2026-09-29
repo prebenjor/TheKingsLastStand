@@ -2,7 +2,7 @@
 
 This file keeps design choices visible when implementation evolves. A newer explicit user direction supersedes older decisions; otherwise preserve the agreed target. The current approved decisions are authoritative; dated build evidence belongs in [PROGRESS-LEDGER.md](PROGRESS-LEDGER.md), and the implementation gates are in [ROADMAP-AND-ACCEPTANCE.md](ROADMAP-AND-ACCEPTANCE.md).
 
-**Current package:** `KLS-D-1739daf903-Development`, SHA-256 `807f84919dd59097d31157fd8aabfe8de1c11661b32951a4df028114a06d1940`. Source/package checks passed; the current package is installed, hash-matched, and loaded in World Editor. Save/reopen, Test Map, Custom Game, multiplayer and endurance remain pending. A direct game launch attempt used the right installed path but did not log that the map opened, so startup is unconfirmed. Failed gear equip attempts now report transaction context, but live behavior remains unverified. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+**Current package:** `KLS-D-9f529add40-Development`, SHA-256 `a1aa81f8ea2b3922226ea8dae49aa2d002759b63d1b79c749a10f783aaeb8297`. Source/package checks passed; installation is pending because Warcraft III and World Editor still have the prior `KLS-D-1739daf903` map open. The prior map remains installed, hash-matched and is the sole map in the test folder. The user confirmed starting that older build in Custom Game, but its visible ID and result are not captured. Current-build save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
 
 ## Current approved user decisions
 

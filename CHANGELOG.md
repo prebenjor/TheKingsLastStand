@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-9f529add40 - 2026-09-29
+
+- Added an explicit `ReplaceableTextures\CommandButtons\BTNTempleOfTheDamned.dds` icon to the custom Undead Temple of the Damned (`kR03`). This addresses the reported Meat Wagon icon while retaining `utod` as its parent and preserving native building stock.
+- Regression reproduced before the fix: the generated Temple record had no `uico` override. After the fix, the focused race/building suite passed **12/12** and the complete source suite passed **142/142**. Installed-editor JASS syntax and MPQ package/readback checks passed.
+- Package: `dist/KLS-D-9f529add40-Development.w3m`; SHA-256: `a1aa81f8ea2b3922226ea8dae49aa2d002759b63d1b79c749a10f783aaeb8297`.
+- Installation was attempted with `py -B tools/build_map.py --install-test-map`. The previous installed map was archived, but Windows returned `WinError 32`: both `World Editor.exe` (PID 61288) and `Warcraft III.exe` (PID 16152) still point at `KLS-D-1739daf903-Development.w3m`. The installer restored/preserved that map; the new build is not installed yet. The archived package and installed map are retained under `backups/`.
+- Editor round-trip, current-build Test Map, Custom Game, gameplay, multiplayer and endurance remain pending for this build. The user's Custom Game confirmation and running processes refer to the older installed build, not `KLS-D-9f529add40`.
+
 ## KLS-D-1739daf903 - 2026-09-29
 
 - Extended the local log collector to include warning-only lines and explicit spawn/load failures, and to serialize each finding with severity, event kind, file/line, nearest preceding build ID, and a correlation-only provenance label. `collection.json` now summarizes error, fatal, warning, failure, spawn/load, and total counts.
