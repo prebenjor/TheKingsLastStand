@@ -63,7 +63,7 @@ function KLS_PersonalRewardEnqueue takes integer p, integer itemCode, string sou
     if KLS_PersonalRewardRetry[p] <= 0 then
         set KLS_PersonalRewardRetry[p] = 5
     endif
-    call KLS_Log("ERROR "+source+" item creation failed; personal reward queued owner=p"+I2S(p+1)+" item="+GetObjectName(itemCode))
+    call KLS_Log("ERROR "+source+" item creation failed; personal reward queued owner=p"+I2S(p+1)+" item="+GetObjectName(itemCode)+" itemCode="+I2S(itemCode)+" at "+R2S(KLS_X[p])+","+R2S(KLS_Y[p]))
     call DisplayTimedTextToPlayer(Player(p),0,0,10,"Your personal reward could not be created yet. It will be retried automatically.")
 endfunction
 
@@ -87,7 +87,7 @@ function KLS_PersonalRewardTick takes nothing returns nothing
                         if KLS_PersonalRewardDeliver(p,itemCode) then
                             call SaveInteger(KLS_PersonalRewardData,p,entry,0)
                         else
-                            call KLS_Log("ERROR personal reward retry failed owner=p"+I2S(p+1)+" item="+GetObjectName(itemCode))
+                            call KLS_Log("ERROR personal reward retry failed owner=p"+I2S(p+1)+" item="+GetObjectName(itemCode)+" itemCode="+I2S(itemCode)+" at "+R2S(KLS_X[p])+","+R2S(KLS_Y[p]))
                         endif
                     endif
                     set entry = entry+1

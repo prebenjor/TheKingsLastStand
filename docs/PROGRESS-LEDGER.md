@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-ca295479e8
+## Current package-proven build — KLS-D-6d3db36ecf
+
+- Artifact: `dist/KLS-D-6d3db36ecf-Development.w3m`.
+- SHA-256: `4612c5a61bd95ee06ce46dec9bf67c2f01f413eca5771029c015de41b455a478`.
+- Failed recipe output delivery and queued boss/story reward creation or retry failures now include item context, owner and coordinates in `-diag`. Craft failure still restores both components and refunds the fee; personal rewards remain queued for retry.
+- Full source regression suite: **133/133 passed**. Installed-editor JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-6d3db36ecf-Development.w3m`; package and installed SHA-256 match, and the folder contains one project map. Previous package and installed map were preserved under `backups/development-builds/20260929T025141544693Z-KLS-D-6d3db36ecf/` and `backups/installed-diagnostics/20260929T025141553541Z-KLS-D-6d3db36ecf/`.
+- The user reported completing a test but did not identify the tested build ID or observations. Current-build Editor save/reopen, Test Map, Custom Game, live failure injection/`-diag`, gameplay, multiplayer and endurance therefore remain pending. The earlier Test Map success remains attributed to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-ca295479e8
 
 - Artifact: `dist/KLS-D-ca295479e8-Development.w3m`.
 - SHA-256: `d18491eab2479068d3a46e3b6065956bc6d858ffeebd3df9e73d9023329d1697`.

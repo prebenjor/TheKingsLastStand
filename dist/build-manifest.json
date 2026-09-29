@@ -1,8 +1,8 @@
 {
-  "build_id": "KLS-D-ca295479e8",
+  "build_id": "KLS-D-6d3db36ecf",
   "status": "development: engine and multiplayer checks pending",
-  "output_path": "dist/KLS-D-ca295479e8-Development.w3m",
-  "sha256": "d18491eab2479068d3a46e3b6065956bc6d858ffeebd3df9e73d9023329d1697",
+  "output_path": "dist/KLS-D-6d3db36ecf-Development.w3m",
+  "sha256": "4612c5a61bd95ee06ce46dec9bf67c2f01f413eca5771029c015de41b455a478",
   "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
   "source_hashes": {
     "source/diagnostics.j": "054ef7f878dd492692234f8d9157416fa614d53b0cc7177ee21d3fd1c3e38dac",
@@ -17,7 +17,7 @@
     "source/combat.j": "188d4221717a4374a8d56ba210534dedf09bc8a9c339ce42b41b47f1cdbf9a28",
     "source/wave_environment.j": "38b66494cb7dcc3eede17c5f62d390acbcf1deb014c815477751c72705e930f6",
     "source/signatures.j": "5d9aca202780663f4421584b6d42f09b0dfb16ca46e3d2af105867aaae61e3c6",
-    "source/rewards.j": "f9f0cc8acc3527fc19b78966460c0950c35600fb6b562bf417376b1317cf157b",
+    "source/rewards.j": "aa5fb18e10da68f398687a6e12a4ff033b2b16233bfedb131b45d8c927d465c7",
     "source/crownlands.j": "6104edfa705ec09338b3e6b680108bd9030892b5c48676701092aa5f3a45cd17",
     "source/game.j": "6f60587b09f43cbde384914deed8829b6e0660be3abf08c57fd14661e054d9e7",
     "tools/archive_pack.py": "3774ac9d0fab23472f343dedecbc8bf696a99bae1382b6cb764166d0da88e3b2",
@@ -130,7 +130,7 @@
     {
       "name": "(attributes)",
       "size": 100,
-      "sha256": "ba63d5c02cf0f59bb56ad9b0177e6665cba5d67093a4fbb84f814551495be084"
+      "sha256": "e7969b05b785918b057e9ca386bc721b71a615ead8b940911c2304b4dd2e830c"
     },
     {
       "name": "(listfile)",
@@ -149,8 +149,8 @@
     },
     {
       "name": "war3map.j",
-      "size": 265769,
-      "sha256": "f0f48e7823ed1082e0ca3acbf7d983f0ce8d2cc8bf97f6a320e70bbd37506535"
+      "size": 265917,
+      "sha256": "85302df46886f6fa752a10c5b495ed887be3bf0253efb13a8cfff876d0e93d66"
     },
     {
       "name": "war3map.mmp",
@@ -185,7 +185,7 @@
     {
       "name": "war3map.w3i",
       "size": 592,
-      "sha256": "bcdcfbfd90f87159089198425166b7470e9aed83f72d7e4fc277d9dc62653142"
+      "sha256": "774a299dffeb7bd57b29d360e5033932f64768c63c9382b9e4310cb31eab05bc"
     },
     {
       "name": "war3map.w3l",
@@ -209,8 +209,8 @@
     },
     {
       "name": "war3map.wct",
-      "size": 258068,
-      "sha256": "a6353de42e4c4c1f3fe29df1564c27e3b08e3d0006a7b09077f0022ec664a248"
+      "size": 258216,
+      "sha256": "799d4a35aeb0405318fe97c6a1519f063bd15437fd33cb26a94dbf0b6efe6667"
     },
     {
       "name": "war3map.wpm",

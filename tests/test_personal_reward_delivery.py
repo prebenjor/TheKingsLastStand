@@ -41,6 +41,18 @@ class PersonalRewardDelivery(unittest.TestCase):
         enqueue = function_body(self.script, 'KLS_PersonalRewardEnqueue')
         self.assertRegex(enqueue, r'if KLS_PersonalRewardDeliver\(p,itemCode\) then\s+return\s+endif[\s\S]*?SaveInteger\(KLS_PersonalRewardData,p,KLS_PersonalRewardTail\[p\],itemCode\)')
 
+    def test_reward_creation_and_retry_errors_log_item_rawcode_owner_and_position(self):
+        enqueue = function_body(self.script, 'KLS_PersonalRewardEnqueue')
+        retry = function_body(self.script, 'KLS_PersonalRewardTick')
+        self.assertIn('ERROR "+source+" item creation failed', enqueue)
+        self.assertIn('ERROR personal reward retry failed', retry)
+        for detail in ('GetObjectName(itemCode)', 'I2S(itemCode)',
+                       'I2S(p+1)', 'R2S(KLS_X[p])', 'R2S(KLS_Y[p])'):
+            with self.subTest(stage='enqueue', detail=detail):
+                self.assertIn(detail, enqueue)
+            with self.subTest(stage='retry', detail=detail):
+                self.assertIn(detail, retry)
+
     def test_full_inventory_leaves_a_personal_retrievable_item_at_the_player_plot(self):
         deliver = function_body(self.script, 'KLS_PersonalRewardDeliver')
         self.assertRegex(deliver, r'if hero != null then\s+set stored = UnitAddItem\(hero,reward\)\s+endif\s+if stored then[\s\S]*?else[\s\S]*?SetItemPosition\(reward,KLS_X\[p\],KLS_Y\[p\]\)[\s\S]*?endif[\s\S]*?return true')
