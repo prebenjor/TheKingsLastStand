@@ -5,7 +5,7 @@ Keep one entry for every packaged build. The entry names the exact immutable bui
 ## KLS-D-2fd59dee88 - 2026-09-29
 
 - Undead Acolyte conversion of a neutral Gold Mine now uses the shared optional checked-spawn helper. A missing or wrong-type Haunted Gold Mine is recorded with context, counted by `-diag`, and leaves the original mine and its gold intact without aborting the match.
-- The regression failed against the direct uncounted `CreateUnit` call, then passed after routing through the checked helper. Focused race-mining tests: **12/12 passed**; full source suite: **125/125 passed**.
+- The regression failed against the direct uncounted `CreateUnit` call, then passed after routing through the checked helper. Focused race-mining tests: **12/12 passed**; the full source suite was **125/125** when the map was packaged. A follow-up manifest-alignment regression keeps current-build references synchronized across the README and guides; the current source suite is **126/126 passed**.
 - Package archive readback and installed-editor API syntax checks passed. Package SHA-256: `90204c470bd78cfb9c31abb4bf9768af31aea420d7f9330a1887664231456f91`.
 - Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2fd59dee88-Development.w3m`; installed SHA-256 matches the package, and the test folder contains one project map.
 - Current-build Editor save/reopen, Test Map, Custom Game, mine-haunting gameplay, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
