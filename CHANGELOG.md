@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-69ca4b4a50 - 2026-09-29
+
+- Failed recipe-output item creation now writes a contextual `ERROR` entry to `-diag` with the recipe pattern, expected output item/rawcode, owner, and buyer coordinates. The existing component restoration and full recipe-fee refund remain in the failure path.
+- Full source regression suite passed **131/131**. Installed-editor JASS syntax and MPQ package readback passed. Package SHA-256: `e79ff920dba8f96dcab993b3b6f1e8fad487670f7cf86102580e5e8ec7423352`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-69ca4b4a50-Development.w3m`; its SHA-256 matches the package and it is the only project map in the folder. The previous development artifact was archived under `backups/development-builds/20260929T022610362928Z-KLS-D-69ca4b4a50/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T022610371251Z-KLS-D-69ca4b4a50/`.
+- Current-build Editor save/reopen, Test Map, Custom Game, injected recipe-output failure, live `-diag` capture, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-f873a5b24f - 2026-09-29
 
 - `-diag` now records ERROR/FATAL/WARN messages in a separate 32-entry rolling buffer. The command displays the latest eight severity messages alongside the most recent 12 ordinary runtime events, so routine log traffic no longer pushes spawn and setup failures out of view.

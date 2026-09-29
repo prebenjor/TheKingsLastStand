@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-f873a5b24f
+## Current package-proven build — KLS-D-69ca4b4a50
+
+- Artifact: `dist/KLS-D-69ca4b4a50-Development.w3m`.
+- SHA-256: `e79ff920dba8f96dcab993b3b6f1e8fad487670f7cf86102580e5e8ec7423352`.
+- Failed recipe output item creation now logs recipe pattern, expected item/rawcode, owner, and buyer coordinates through `KLS_Log`; component restoration and fee refund remain unchanged. The diagnostic ring surfaces this error after routine logs roll over.
+- Full source regression suite: **131/131 passed**. Installed-API JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-69ca4b4a50-Development.w3m`; package and installed SHA-256 match and the folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T022610362928Z-KLS-D-69ca4b4a50/` and `backups/installed-diagnostics/20260929T022610371251Z-KLS-D-69ca4b4a50/`.
+- Current-build Editor save/reopen, Test Map, Custom Game, live recipe failure injection/`-diag` capture, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-f873a5b24f
 
 - Artifact: `dist/KLS-D-f873a5b24f-Development.w3m`.
 - SHA-256: `30fd0594806fd7e2cf9294b6750bb6ecc6e3855d9261852e01ab03fbe51c6d6e`.

@@ -252,6 +252,7 @@ def recipe_script():
               '            call UnitRemoveItem(buyer, second)',
               '            set output = CreateItem(KLS_RecipeOutput(itemCode), GetUnitX(buyer), GetUnitY(buyer))',
               '            if output == null then',
+              '                call KLS_Log("ERROR recipe output creation failed: recipe="+GetItemName(scroll)+" recipeRawcode="+I2S(itemCode)+" item="+GetObjectName(KLS_RecipeOutput(itemCode))+" rawcode="+I2S(KLS_RecipeOutput(itemCode))+" owner=p"+I2S(p + 1)+" buyerXY="+R2S(GetUnitX(buyer))+","+R2S(GetUnitY(buyer)))',
               '                call KLS_RecipeRestoreIngredients(buyer, first, second)',
               '                call KLS_RecipeRefund(buyer, scroll, vendor)',
               '            else',

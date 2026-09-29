@@ -188,6 +188,18 @@ class RecipeTransactions(unittest.TestCase):
         self.assertRegex(script, r'function KLS_RecipeRestoreIngredients[\s\S]*?UnitAddItem\(buyer, first\)[\s\S]*?UnitAddItem\(buyer, second\)[\s\S]*?UnitEquipItem\(buyer, first\)[\s\S]*?UnitEquipItem\(buyer, second\)')
         self.assertRegex(script, r'set output = CreateItem\([\s\S]*?if output == null then[\s\S]*?KLS_RecipeRestoreIngredients\(buyer, first, second\)[\s\S]*?KLS_RecipeRefund\(buyer, scroll, vendor\)[\s\S]*?else[\s\S]*?SetItemPlayer\(output')
 
+    def test_failed_recipe_output_creation_logs_recipe_item_owner_and_position(self):
+        script = recipe_script()
+        complete = re.search(r'^function KLS_RecipeComplete takes [\s\S]*?^endfunction$',
+                              script, re.M).group()
+        start = complete.index('if output == null then')
+        end = complete.index('\n            else', start)
+        failure_branch = complete[start:end]
+        for detail in ('recipe output creation failed', 'GetItemName(scroll)',
+                       'KLS_RecipeOutput(itemCode)', 'I2S(p + 1)',
+                       'GetUnitX(buyer)', 'GetUnitY(buyer)'):
+            self.assertIn(detail, failure_branch)
+
     def test_successful_recipe_delivery_does_not_also_run_failure_refund(self):
         script = recipe_script()
         match = re.search(r'^function KLS_RecipeComplete takes [\s\S]*?^endfunction$',
