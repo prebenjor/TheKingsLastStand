@@ -1,4 +1,4 @@
-# Generated item catalog — KLS-D-3bc9fcaf25
+# Generated item catalog — KLS-D-87a1bcd5c4
 
 Generated from tools/equipment_catalog.py for the current development build. There are 80 tiered general equipment items, 20 race-themed relics (one Legendary recipe output per race), three original crafted outputs, and nine attribute books. Common-through-Epic racial relics appear in their matching town shops; racial Legendary relics are crafted from their Foundry recipes or may appear through existing enemy-drop rules. This file records names, rawcodes, slots, prices, stats, and authored effects; update it whenever the source catalog changes. The generated Object Editor data and live in-game values still need engine verification.
 

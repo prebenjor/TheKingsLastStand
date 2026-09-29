@@ -20,6 +20,7 @@ globals
     integer array KLS_FactionTowerId
     integer array KLS_FactionHallId
     integer array KLS_FactionFoundryId
+    integer array KLS_FactionFoundryRecipeId
     integer array KLS_FactionSiegeYardId
     integer array KLS_PlayerRace
     unit array KLS_CompanyHall
@@ -174,12 +175,18 @@ function KLS_CompanyConstructed takes nothing returns nothing
             call KLS_Log("Hall of Banners completed for p"+I2S(p+1)+" doctrine="+GetObjectName(doctrine))
         elseif KLS_IsFactionFoundry(rawcode) then
             set KLS_CompanyFoundry[p] = true
+            call UnitAddAbility(building,'Aneu')
+            call UnitAddAbility(building,'Apit')
+            call UnitAddAbility(building,'Asid')
+            call UnitAddAbility(building,'Asud')
+            call AddItemToStock(building,KLS_FactionFoundryRecipeId[KLS_PlayerRace[p]],1,1)
+            call SetUnitAcquireRange(building,0)
             set owned = CreateGroup()
             call GroupEnumUnitsOfPlayer(owned,Player(p),null)
             call ForGroup(owned,function KLS_CompanyFoundryEnum)
             call DestroyGroup(owned)
             set owned = null
-            call KLS_Log("Royal Foundry veteran upgrades completed for p"+I2S(p+1))
+            call KLS_Log("Royal Foundry veteran upgrades and racial Legendary pattern stock completed for p"+I2S(p+1))
         elseif KLS_IsFactionSiegeYard(rawcode) then
             set KLS_CompanyYard[p] = building
             call UnitAddAbility(building,'Aneu')

@@ -131,10 +131,17 @@ class EquipmentRecords(unittest.TestCase):
         for race_index in range(4):
             self.assertIn(f'KLS_TownShop[{race_index}],KLS_RaceItemId[{race_index}*5+tier]',towns)
         for recipe in recipe_catalog(catalog):
-            self.assertIn(f"AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)",recipes)
+            if recipe['rawcode'] in {'RCP1', 'RCP2', 'RCP3'}:
+                self.assertIn(f"AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)",recipes)
+            else:
+                self.assertNotIn(f"AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)",recipes)
+        self.assertIn('SaveUnitHandle(KLS_GearData, key, 32, vendor)', recipes)
+        self.assertIn('KLS_RecipeRestockVendor(vendor, itemCode)', recipes)
+        self.assertIn('GetWidgetLife(vendor) > 0.405', recipes)
         self.assertIn('KLS_Shops[12] = KLS_CreateUnit',Path(ROOT/'source/shops.j').read_text())
-        self.assertIn('AddItemToStock(KLS_Shops[12], rawcode, 1, 1)',
+        self.assertIn('AddItemToStock(shop, rawcode, 1, 1)',
                       Path(ROOT/'source/combat.j').read_text())
+        self.assertIn('KLS_RecipeBegin(buyer, gear, shop)',Path(ROOT/'source/combat.j').read_text())
 
     def test_native_shop_stock_stays_within_twelve_command_card_slots(self):
         catalog=item_catalog()

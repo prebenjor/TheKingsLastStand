@@ -55,22 +55,22 @@ _TOWER_TOOLTIPS = {
 _COMPANY_TOOLTIPS = {
     'Human': {
         'hall': 'Raise the Lion Banner to unlock your chosen hero’s personal company at the Barracks.',
-        'foundry': 'Royal armorers strengthen your company and support troops: +20% maximum health and +20% base damage.',
+        'foundry': 'Royal smiths grant company/support +20% health and base damage. Sells the Last King’s Oath pattern.',
         'siege_yard': 'The King’s engineers prepare the support unit chosen for your hero. This yard stocks only your own company.',
     },
     'Orc': {
         'hall': 'Beat the Redtusk war drums to unlock your chosen hero’s personal warband at the Barracks.',
-        'foundry': 'The Ashen forge hardens your warband: +20% maximum health and +20% base damage for company and support troops.',
+        'foundry': 'The Ashen forge grants warband/support +20% health and base damage. Sells the Worldrend pattern.',
         'siege_yard': 'Orc war-drummers muster the support unit chosen for your hero. This lodge stocks only your own company.',
     },
     'Night Elf': {
         'hall': 'Gather Sentinels beneath the Moonlit Banners to unlock your chosen hero’s company at the Ancient of War.',
-        'foundry': 'Moonbark runes empower your company: +20% maximum health and +20% base damage for its recruits and support.',
+        'foundry': 'Moonbark runes grant company/support +20% health and base damage. Sells the Silvermoon Vigil pattern.',
         'siege_yard': 'The War Grove prepares the support unit chosen for your hero. Its stock belongs to you alone.',
     },
     'Undead': {
         'hall': 'Raise the bone standard to unlock your chosen hero’s graveguard company at the Crypt.',
-        'foundry': 'Wraithforged arms fortify your company: +20% maximum health and +20% base damage for recruits and support.',
+        'foundry': 'Wraithforged arms grant company/support +20% health and base damage. Sells the Night’s Covenant pattern.',
         'siege_yard': 'The Graveyard of Arms musters the support unit chosen for your hero. This yard stocks only your own company.',
     },
 }
@@ -93,7 +93,7 @@ FACTIONS = [
 for race_index, faction in enumerate(FACTIONS):
     hall_name, foundry_name, yard_name = _COMPANY_NAMES[faction['race']]
     faction['company_buildings'] = {
-        'hall': {'rawcode':f'kH0{race_index}','parent':('hcas','ofrt','etol','unpl')[race_index],
+        'hall': {'rawcode':f'kH0{race_index}','parent':('hgra','obea','edob','utom')[race_index],
                  'name':hall_name,'tooltip':_COMPANY_TOOLTIPS[faction['race']]['hall']},
         'foundry': {'rawcode':f'kF0{race_index}','parent':('hbla','ofor','eaoe','uslh')[race_index],
                     'name':foundry_name,'tooltip':_COMPANY_TOOLTIPS[faction['race']]['foundry']},
@@ -112,6 +112,12 @@ for race_index, faction in enumerate(FACTIONS):
         entry['build_time'] = _COMPANY_COSTS[entry['role']][2]
 
 def faction_script():
+    from equipment_catalog import item_catalog
+    from recipes import recipe_catalog
+
+    foundry_recipes = {recipe['race']: recipe['rawcode']
+                       for recipe in recipe_catalog(item_catalog())
+                       if recipe.get('race')}
     lines=['function KLS_FactionCatalogInit takes nothing returns nothing']
     for index, faction in enumerate(FACTIONS):
         for key, field in (('TownHall','town_hall'),('Worker','worker'),('Altar','altar'),
@@ -121,6 +127,7 @@ def faction_script():
             lines.append(f"    set KLS_FactionTowerId[{index*3+index_tower}] = '{rawcode}'")
         for key in ('hall','foundry','siege_yard'):
             lines.append(f"    set KLS_Faction{key.title().replace('_','')}Id[{index}] = '{faction['company_buildings'][key]['rawcode']}'")
+        lines.append(f"    set KLS_FactionFoundryRecipeId[{index}] = '{foundry_recipes[faction['race']]}'")
     lines.append('endfunction')
     for role in ('Hall','Foundry','SiegeYard','Barracks','Altar','Tower','SanctuaryTower'):
         lines.append(f'function KLS_IsFaction{role} takes integer rawcode returns boolean')

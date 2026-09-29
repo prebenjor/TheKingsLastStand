@@ -256,14 +256,21 @@ function KLS_MarketBuy takes nothing returns nothing
         call RemoveItem(gear)
     elseif KLS_IsRecipe(rawcode) then
         if p >= 0 and p < 4 and KLS_Active[p] and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 then
-            call KLS_RecipeBegin(buyer, gear)
+            if KLS_IsFactionFoundry(GetUnitTypeId(shop)) and GetOwningPlayer(shop) != GetOwningPlayer(buyer) then
+                call SetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD) + KLS_RecipePrice(rawcode))
+                call DisplayTimedTextToPlayer(Player(p), 0, 0, 8, "Use your own faction's Foundry to buy its personal pattern. The fee was refunded.")
+                call RemoveItem(gear)
+                call KLS_RecipeRestockVendor(shop, rawcode)
+            else
+                call KLS_RecipeBegin(buyer, gear, shop)
+            endif
         else
             if p >= 0 and p < 4 then
                 call SetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD) + KLS_RecipePrice(rawcode))
                 call DisplayTimedTextToPlayer(Player(p), 0, 0, 8, "Buy recipes with your living hero. The fee was refunded.")
             endif
             call RemoveItem(gear)
-            call AddItemToStock(KLS_Shops[12], rawcode, 1, 1)
+            call KLS_RecipeRestockVendor(shop, rawcode)
         endif
     elseif KLS_BookAmount(rawcode) > 0 then
         if p >= 0 and p < 4 and KLS_Active[p] and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 then

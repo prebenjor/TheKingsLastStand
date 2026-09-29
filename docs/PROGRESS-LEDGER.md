@@ -1,13 +1,13 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-3bc9fcaf25
+## Current package-proven build — KLS-D-87a1bcd5c4
 
-- Artifact: `dist/KLS-D-3bc9fcaf25-Development.w3m`.
-- SHA-256: `ad398a4b564882b25406a7dd0b75b4d8627b31d7f47a4995979afd0d45f576b3`.
-- Fixed native shop overflow: generic rarity vendors no longer contain race relics; town shops stock the matching race's four Common-through-Epic relics; racial Legendary relics are recipe-only. A dedicated Master Forge at the southern market stocks all seven recipes and receives scrolls back after success or failure. All shops remain within the native 12-entry stock limit.
-- Full source regression suite: **128/128 passed**. Focused equipment, crafting, town, and market regressions: **40/40 passed**. Installed-API JASS syntax and MPQ archive readback passed.
-- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-3bc9fcaf25-Development.w3m`; package and installed SHA-256 match. The test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T005203779336Z-KLS-D-3bc9fcaf25/` and `backups/installed-diagnostics/20260929T005203787718Z-KLS-D-3bc9fcaf25/`.
-- Editor save/reopen, current-build Test Map, Custom Game, native shop windows, recipe crafting, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+- Artifact: `dist/KLS-D-87a1bcd5c4-Development.w3m`.
+- SHA-256: `018fb3e6874134451308b961ea969e7f8a45c42c0e9c7123d1a7526aa404a5c1`.
+- Gave each Hall of Banners a distinct installed race building model. The Master Forge now stocks the three general recipes; each constructed race Foundry stocks its owner's racial Legendary pattern. Recipe scrolls return to their selling Foundry or Forge after success/failure; a destroyed seller falls back to the Master Forge. The Foundry's existing company/support bonus remains.
+- Full source regression suite: **129/129 passed**. Focused building, equipment, recipe, Crownlands and mine regressions: **50/50 passed**. Installed-API JASS syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-87a1bcd5c4-Development.w3m`; package and installed SHA-256 match. The test folder contains one project map. Previous versions were archived under `backups/development-builds/20260929T012822061855Z-KLS-D-87a1bcd5c4/` and `backups/installed-diagnostics/20260929T012822070939Z-KLS-D-87a1bcd5c4/`.
+- Exact-build Editor save/reopen, Test Map, Custom Game, Hall appearance, Foundry shop/crafting, gameplay, multiplayer, and endurance remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
 
 ## Previous package-proven build — KLS-D-2aa1705c84
 

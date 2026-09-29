@@ -8,11 +8,13 @@ All prices are personal resources. All three structures require the player's Bar
 
 | Name | Rawcode / native parent | Cost | Build time / HP | Function |
 |---|---|---:|---:|---|
-| Hall of Banners | `kH00` / Castle `hcas` | 240 gold, 100 lumber | 35 s / 1,400 | Adds the selected hero's personal doctrine aura to this hall and unlocks that player's company at every owned Barracks. |
-| Royal Foundry | `kF00` / Blacksmith `hbla` | 360 gold, 150 lumber | 45 s / 1,600 | Permanently grants the owner's company and support recruits +20% max HP and +20% base damage. Applies once to current units and automatically to later recruits. |
+| Hall of Banners | `kH00`–`kH03` / Gryphon Aviary `hgra`, Orc Bestiary `obea`, Hunter's Hall `edob`, Tomb of Relics `utom` | 240 gold, 100 lumber | 35 s / 1,400 | Uses a distinct race-native building model, adds the selected hero's personal doctrine aura to the Hall and unlocks that player's company at every owned Barracks. |
+| Royal Foundry | `kF00`–`kF03` / race-native smiths | 360 gold, 150 lumber | 45 s / 1,600 | Permanently grants the owner's company and support recruits +20% max HP and +20% base damage. Also sells one stock of its race's 9,000-gold Legendary pattern. Applies the troop bonus once to current units and automatically to later recruits. |
 | Siege Yard | `kY00` / Workshop `harm` | 300 gold, 125 lumber | 40 s / 1,500 | Sells the hero-matched tactical support unit. Its stock belongs to the yard owner. |
 
 The Altar (`h000`) is created beside each starting Town Hall. The worker build card has twelve or fewer entries; `kY00` uses the native Workshop art and replaces a second, redundant Altar/Workshop button. The other Human buildings and all three tower roles remain on the worker card.
+
+Hall models intentionally differ by race so none appears as a duplicate keep. Each built Foundry has the native item-shop command card and exposes only its matching recipe: Human Crownward (`RCP4`), Orc Redtusk (`RCP5`), Night Elf Moonbark (`RCP6`), or Undead Wraith (`RCP7`). The Master Forge keeps the three general recipes. Craft scrolls return to the vendor that sold them after success or failure; if that vendor has been destroyed, they return to the Master Forge. A Foundry's racial pattern remains personal to its owner.
 
 ### Race-specific support buildings and towers
 
@@ -61,15 +63,15 @@ These custom unit records inherit their native parent model, portrait/icon, and 
 
 ## Engineering source of truth
 
-- `tools/company_catalog.py` owns the hero-to-company pairing, all 25 unit stats/costs, banner choices, building models and prices.
+- `tools/company_catalog.py` owns the hero-to-company pairing, all 25 unit stats/costs, banner choices and shared company building prices. `tools/faction_catalog.py` owns the race-specific Hall model parents and Foundry identities.
 - `tools/objects.py` serializes all 12 race-flavored structures and 50 recruit unit records; `tools/pipeline.py` inserts the generated company runtime.
-- `source/companies.j` handles Hall/Barracks/Siege Yard unlocks, owner checks, recruiting, stock replenishment, and the permanent Foundry upgrade.
+- `source/companies.j` handles Hall/Barracks/Siege Yard unlocks, owner checks, recruiting, stock replenishment, the racial Foundry recipe shop, and the permanent Foundry upgrade. `tools/recipes.py` generates recipe identities and stores each transaction's selling vendor so the pattern returns to the right stock.
 - `source/heroes.j` stores the selector index on the player before company shops can unlock.
 - Regression coverage is in `tests/test_company_expansion.py`. Tests prove catalog/metadata/package rules, not visual placement, shop UI, aura behavior, or multiplayer correctness in Warcraft III.
 
 ## Still to verify in game
 
-Build one Barracks, Hall, Royal Foundry, and Siege Yard. Confirm the Hall adds only the correct hero's recruit to that player's Barracks, each Siege Yard sells its matching support recruit, a teammate cannot buy another player's company, and all recruits retain their current orders/control ownership. Build the Foundry before and after recruiting, and verify the +20% max HP/base damage applies once. Confirm none of the friendly recruits affects enemy counts or combat gold.
+Build one Barracks, Hall, Royal Foundry, and Siege Yard for each race. Confirm the four distinct Hall models appear, the Hall adds only the correct hero's recruit to that player's Barracks, each Siege Yard sells its matching support recruit, and a teammate cannot buy another player's company or racial Foundry pattern. Buy and craft each Foundry pattern; confirm the correct race's pattern appears, the +20% max HP/base damage applies once, and the scroll returns to that same Foundry after both successful and failed crafts. Confirm none of the friendly recruits affects enemy counts or combat gold.
 # Current four-race implementation
 
 The earlier Human-only company design is superseded by the user-approved mixed-race rule. Hero selection gives each player the corresponding Peasant, Peon, Wisp or Acolyte. Their Town Hall, altar, worker menu, three tower roles, Arcane/support building, Hall, Foundry and Siege Yard are race-themed while shared role costs and behavior stay aligned. The complete rawcode/catalog table is in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md) and tools/faction_catalog.py.

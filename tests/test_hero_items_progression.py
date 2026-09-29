@@ -186,7 +186,7 @@ class RecipeTransactions(unittest.TestCase):
     def test_failed_native_output_creation_restores_components_and_refunds_recipe(self):
         script = recipe_script()
         self.assertRegex(script, r'function KLS_RecipeRestoreIngredients[\s\S]*?UnitAddItem\(buyer, first\)[\s\S]*?UnitAddItem\(buyer, second\)[\s\S]*?UnitEquipItem\(buyer, first\)[\s\S]*?UnitEquipItem\(buyer, second\)')
-        self.assertRegex(script, r'set output = CreateItem\([\s\S]*?if output == null then[\s\S]*?KLS_RecipeRestoreIngredients\(buyer, first, second\)[\s\S]*?KLS_RecipeRefund\(buyer, scroll\)[\s\S]*?else[\s\S]*?SetItemPlayer\(output')
+        self.assertRegex(script, r'set output = CreateItem\([\s\S]*?if output == null then[\s\S]*?KLS_RecipeRestoreIngredients\(buyer, first, second\)[\s\S]*?KLS_RecipeRefund\(buyer, scroll, vendor\)[\s\S]*?else[\s\S]*?SetItemPlayer\(output')
 
     def test_successful_recipe_delivery_does_not_also_run_failure_refund(self):
         script = recipe_script()
@@ -202,8 +202,8 @@ class RecipeTransactions(unittest.TestCase):
         after_delivery = complete[delivery_end + len('                endif'):]
 
         self.assertIn('Craft complete:', success_branch)
-        self.assertNotIn('KLS_RecipeRefund(buyer, scroll)', success_branch)
-        self.assertIn('KLS_RecipeRefund(buyer, scroll)', failure_branch)
+        self.assertNotIn('KLS_RecipeRefund(buyer, scroll, vendor)', success_branch)
+        self.assertIn('KLS_RecipeRefund(buyer, scroll, vendor)', failure_branch)
         next_statement = next(line.strip() for line in after_delivery.splitlines()
                               if line.strip())
         self.assertEqual(next_statement, 'endif')

@@ -27,24 +27,28 @@ _RECIPES = (
     },
     {
         'rawcode': 'RCP4', 'name': 'Crownward Foundry Pattern',
+        'race': 'Human',
         'components_by_name': ('Aldric’s Aegis','Lionroad Mantle'),
         'component_tiers': (2,1), 'output_name': 'Last King’s Oath', 'price': 9000,
         'description': 'Forge the Last King’s Oath from Aldric’s Aegis and Lionroad Mantle. Costs 9,000 gold; ingredients are consumed only after the personal output is delivered.',
     },
     {
         'rawcode': 'RCP5', 'name': 'Redtusk Foundry Pattern',
+        'race': 'Orc',
         'components_by_name': ('Stormscar Bracers','Ashen War Drum'),
         'component_tiers': (2,1), 'output_name': 'Worldrend Standard', 'price': 9000,
         'description': 'Forge the Worldrend Standard from Stormscar Bracers and Ashen War Drum. Costs 9,000 gold; ingredients are consumed only after the personal output is delivered.',
     },
     {
         'rawcode': 'RCP6', 'name': 'Moonbark Foundry Pattern',
+        'race': 'Night Elf',
         'components_by_name': ('Duskwatch Longbow','Starleaf Quiver'),
         'component_tiers': (2,1), 'output_name': 'Silvermoon Vigil', 'price': 9000,
         'description': 'Forge Silvermoon Vigil from the Duskwatch Longbow and Starleaf Quiver. Costs 9,000 gold; ingredients are consumed only after the personal output is delivered.',
     },
     {
         'rawcode': 'RCP7', 'name': 'Wraith Foundry Pattern',
+        'race': 'Undead',
         'components_by_name': ('Soulreaper’s Fang','Wraithsilk Cape'),
         'component_tiers': (2,1), 'output_name': 'Night’s Covenant', 'price': 9000,
         'description': 'Forge Night’s Covenant from Soulreaper’s Fang and Wraithsilk Cape. Costs 9,000 gold; ingredients are consumed only after the personal output is delivered.',
@@ -63,7 +67,7 @@ def recipe_catalog(catalog):
         tiers = recipe.get('component_tiers', (default_tier, default_tier))
         components = [exact[(name, tier)] for name, tier in zip(recipe['components_by_name'], tiers)]
         output = outputs[recipe['output_name']]
-        resolved.append({
+        resolved_recipe = {
             'rawcode': recipe['rawcode'],
             'name': recipe['name'],
             'components': tuple(item['rawcode'] for item in components),
@@ -71,7 +75,10 @@ def recipe_catalog(catalog):
             'output_slot': output['slot'],
             'price': recipe['price'],
             'description': recipe['description'],
-        })
+        }
+        if recipe.get('race'):
+            resolved_recipe['race'] = recipe['race']
+        resolved.append(resolved_recipe)
     return resolved
 
 
@@ -139,8 +146,16 @@ def recipe_script():
     lines += ['    endif', '    return 0', 'endfunction',
               'function KLS_StockRecipes takes nothing returns nothing']
     for recipe in recipes:
-        lines.append(f"    call AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)")
+        if not recipe.get('race'):
+            lines.append(f"    call AddItemToStock(KLS_Shops[12], '{recipe['rawcode']}', 1, 1)")
     lines += ['endfunction',
+              'function KLS_RecipeRestockVendor takes unit vendor, integer itemCode returns nothing',
+              '    if vendor != null and GetUnitTypeId(vendor) != 0 and GetWidgetLife(vendor) > 0.405 then',
+              '        call AddItemToStock(vendor, itemCode, 1, 1)',
+              '    elseif KLS_Shops[12] != null then',
+              '        call AddItemToStock(KLS_Shops[12], itemCode, 1, 1)',
+              '    endif',
+              'endfunction',
               'function KLS_RecipeFindOwned takes unit hero, integer wanted, integer ownerMark returns item',
               '    local integer slot = 0',
               '    local item candidate',
@@ -204,14 +219,14 @@ def recipe_script():
               '        call UnitEquipItem(buyer, second)',
               '    endif',
               'endfunction',
-              'function KLS_RecipeRefund takes unit buyer, item scroll returns nothing',
+              'function KLS_RecipeRefund takes unit buyer, item scroll, unit vendor returns nothing',
               '    local integer itemCode = GetItemTypeId(scroll)',
               '    local integer p = GetPlayerId(GetOwningPlayer(buyer))',
               '    if p >= 0 and p < 4 then',
               '        call SetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(Player(p), PLAYER_STATE_RESOURCE_GOLD) + KLS_RecipePrice(itemCode))',
               '    endif',
               '    call RemoveItem(scroll)',
-              "    call AddItemToStock(KLS_Shops[12], itemCode, 1, 1)",
+              '    call KLS_RecipeRestockVendor(vendor, itemCode)',
               '    call KLS_Log("No components consumed; recipe fee refunded")',
               '    if p >= 0 and p < 4 then',
               '        call DisplayTimedTextToPlayer(Player(p), 0, 0, 8, "Craft failed. Your components remain yours and the recipe fee was refunded.")',
@@ -222,6 +237,7 @@ def recipe_script():
               '    local integer key = GetHandleId(craftTimer)',
               '    local unit buyer = LoadUnitHandle(KLS_GearData, key, 30)',
               '    local item scroll = LoadItemHandle(KLS_GearData, key, 31)',
+              '    local unit vendor = LoadUnitHandle(KLS_GearData, key, 32)',
               '    local integer itemCode = GetItemTypeId(scroll)',
               '    local integer p = GetItemUserData(scroll) - 1',
               '    local item first = null',
@@ -237,7 +253,7 @@ def recipe_script():
               '            set output = CreateItem(KLS_RecipeOutput(itemCode), GetUnitX(buyer), GetUnitY(buyer))',
               '            if output == null then',
               '                call KLS_RecipeRestoreIngredients(buyer, first, second)',
-              '                call KLS_RecipeRefund(buyer, scroll)',
+              '                call KLS_RecipeRefund(buyer, scroll, vendor)',
               '            else',
               '                call SetItemPlayer(output, Player(p), false)',
               '                call SetItemUserData(output, p + 1)',
@@ -245,7 +261,7 @@ def recipe_script():
               '                    call RemoveItem(first)',
               '                    call RemoveItem(second)',
               '                    call RemoveItem(scroll)',
-              '                    call AddItemToStock(KLS_Shops[12], itemCode, 1, 1)',
+              '                    call KLS_RecipeRestockVendor(vendor, itemCode)',
               '                    if LoadInteger(KLS_GearData, GetItemTypeId(output), 0) > 0 then',
               '                        call UnitEquipItem(buyer, output)',
               '                    endif',
@@ -254,32 +270,34 @@ def recipe_script():
               '                else',
               '                    call RemoveItem(output)',
               '                    call KLS_RecipeRestoreIngredients(buyer, first, second)',
-              '                    call KLS_RecipeRefund(buyer, scroll)',
+              '                    call KLS_RecipeRefund(buyer, scroll, vendor)',
               '                endif',
               '            endif',
               '        else',
-              '            call KLS_RecipeRefund(buyer, scroll)',
+              '            call KLS_RecipeRefund(buyer, scroll, vendor)',
               '        endif',
               '    else',
-              '        call KLS_RecipeRefund(buyer, scroll)',
+              '        call KLS_RecipeRefund(buyer, scroll, vendor)',
               '    endif',
               '    call FlushChildHashtable(KLS_GearData, key)',
               '    call PauseTimer(craftTimer)',
               '    call DestroyTimer(craftTimer)',
               '    set craftTimer = null',
               '    set buyer = null',
+              '    set vendor = null',
               '    set scroll = null',
               '    set first = null',
               '    set second = null',
               '    set output = null',
               'endfunction',
-              'function KLS_RecipeBegin takes unit buyer, item scroll returns nothing',
+              'function KLS_RecipeBegin takes unit buyer, item scroll, unit vendor returns nothing',
               '    local integer p = GetPlayerId(GetOwningPlayer(buyer))',
               '    local timer craftTimer = CreateTimer()',
               '    local integer key = GetHandleId(craftTimer)',
               '    call SetItemUserData(scroll, p + 1)',
               '    call SaveUnitHandle(KLS_GearData, key, 30, buyer)',
               '    call SaveItemHandle(KLS_GearData, key, 31, scroll)',
+              '    call SaveUnitHandle(KLS_GearData, key, 32, vendor)',
               '    call TimerStart(craftTimer, 0.05, false, function KLS_RecipeComplete)',
               '    set craftTimer = null',
               'endfunction']

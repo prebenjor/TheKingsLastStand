@@ -88,8 +88,9 @@ def units():
                 'utub':entry['tooltip'], 'ugol':entry['gold'],
                 'ulum':entry['lumber'], 'ubld':entry['build_time'],
                 'uhpm':entry['hit_points'], 'ureq':faction['barracks'], 'ures':'', 'urev':0,
+                'uabi':'', 'utra':'', 'uupt':'',
             }
-            if role == 'siege_yard':
+            if role in ('foundry','siege_yard'):
                 fields['uabi'] = 'Aneu,Apit,Asid,Asud'
             custom.append(record(entry['parent'],entry['rawcode'],fields))
         if faction['race'] != 'Human':

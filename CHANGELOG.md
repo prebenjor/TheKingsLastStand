@@ -2,6 +2,30 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-87a1bcd5c4 - 2026-09-29
+
+- Hardened recipe restocking for a destroyed Foundry: Warcraft may retain a unit type on a dead structure handle, so the transaction now checks that the seller is alive before restocking it and otherwise falls back to the Master Forge.
+- Full source regression suite passed **129/129**. Installed-API syntax compilation and MPQ package readback passed. Package SHA-256: `018fb3e6874134451308b961ea969e7f8a45c42c0e9c7123d1a7526aa404a5c1`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-87a1bcd5c4-Development.w3m`; installed SHA-256 matches the package and it is the only project map in the folder. Its predecessor was preserved in `backups/development-builds/20260929T012822061855Z-KLS-D-87a1bcd5c4/` and `backups/installed-diagnostics/20260929T012822070939Z-KLS-D-87a1bcd5c4/`.
+- Exact-build Editor save/reopen, Test Map, Custom Game, Hall appearance, Foundry shop/crafting, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## KLS-D-91a75a0cc8 - 2026-09-29
+
+- Cleared native parent abilities, training stock, and upgrades from the custom Hall/Foundry/Siege Yard records before applying their intended runtime behavior; this prevents the distinct Hall models from exposing unrelated native buttons. Tightened race-specific Foundry flavor text to fit the building tooltip.
+- Full source regression suite passed **129/129**. Package tests also confirmed all four Hall parents and Foundry shop abilities exist in installed Warcraft data.
+- Installed-API syntax compilation and MPQ package readback passed. Package SHA-256: `678a5fdf6c3af59381e107589fbc0c598da0e91a6e497bc3e42e9f04cd958a77`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-91a75a0cc8-Development.w3m`; installed SHA-256 matches the package and it is the only project map in the folder. The preceding Development package remains in the local archive.
+- Exact-build Editor save/reopen, Test Map, Custom Game, Hall appearance, Foundry shop/crafting, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## KLS-D-cd91ba0b91 - 2026-09-29
+
+- Replaced the duplicate keep/Town Hall parents on the four Halls of Banners with distinct installed race buildings: Gryphon Aviary, Orc Bestiary, Hunter's Hall, and Tomb of Relics.
+- The Master Forge now stocks only the three general recipes. Each constructed racial Foundry opens an item shop with its own owner's matching Legendary pattern; the existing +20% company/support troop upgrade remains. Recipes return to the vendor that sold them after success or failure, and a destroyed vendor falls back to the Master Forge.
+- Added regressions first; they failed against the duplicate Hall models and central-only Foundry stock. Focused race-building, equipment, recipe, Crownlands, and mining suites passed **50/50**; full source suite passed **129/129**.
+- Installed-API syntax compilation and MPQ package readback passed. Package SHA-256: `529f8f825be5bfb550113f310a946c9ee7f157e792841cab32a01b34e60636eb`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-cd91ba0b91-Development.w3m`; installed SHA-256 matches the package and it is the only project map in the folder. Prior development and installed maps were preserved in `backups/development-builds/20260929T011713544264Z-KLS-D-cd91ba0b91/` and `backups/installed-diagnostics/20260929T011713552898Z-KLS-D-cd91ba0b91/`.
+- Exact-build Editor save/reopen, Test Map, Custom Game, Hall appearance, Foundry shop/crafting, multiplayer, and endurance checks remain pending. The earlier user-reported Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
 ## KLS-D-3bc9fcaf25 - 2026-09-29
 
 - Corrected vendor stock overflow that hid shop entries: generic rarity shops now stock only the sixteen general equipment families, each town vendor keeps its matching race relics, and all seven recipe patterns have a dedicated Master Forge vendor. Recipe scrolls return to the Forge after either successful or failed crafting.

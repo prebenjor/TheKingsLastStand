@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / 'tests'))
 
 from company_catalog import COMPANY_BUILDINGS, HERO_COMPANIES
 from equipment_catalog import abilities
+from faction_catalog import FACTIONS
 from hero_progression import HERO_ABILITIES
 from objects import units
 from pipeline import runtime_script
@@ -45,7 +46,7 @@ class HeroCompanyExpansion(unittest.TestCase):
         worker = unit_objects['hpea'][1][('ubui', 0)][0].split(',')
         self.assertLessEqual(len(worker), 12)
         self.assertEqual(set(COMPANY_BUILDINGS), {'hall', 'foundry', 'siege_yard'})
-        expected_parents = {'hall': 'hcas', 'foundry': 'hbla', 'siege_yard': 'harm'}
+        expected_parents = {'hall': 'hgra', 'foundry': 'hbla', 'siege_yard': 'harm'}
         for role, entry in COMPANY_BUILDINGS.items():
             with self.subTest(building=role):
                 self.assertIn(entry['rawcode'], worker)
@@ -55,6 +56,37 @@ class HeroCompanyExpansion(unittest.TestCase):
                 self.assertGreater(fields[('ugol', 0)][0], 0)
                 self.assertGreater(fields[('ulum', 0)][0], 0)
                 self.assertIn('hbar', fields[('ureq', 0)][0])
+
+    def test_racial_halls_have_distinct_models_and_foundries_sell_their_legendary_pattern(self):
+        records = decode(units())
+        expected_halls = ('hgra', 'obea', 'edob', 'utom')
+        expected_patterns = ('RCP4', 'RCP5', 'RCP6', 'RCP7')
+        runtime = runtime_script('FOUNDRY-TEST')
+        installed_units = slk('UnitData.slk')
+        installed_abilities = slk('AbilityData.slk')
+
+        for index, faction in enumerate(FACTIONS):
+            hall = faction['company_buildings']['hall']
+            foundry = faction['company_buildings']['foundry']
+            with self.subTest(race=faction['race']):
+                self.assertEqual(hall['parent'], expected_halls[index])
+                self.assertIn(expected_halls[index], installed_units)
+                self.assertEqual(records[hall['rawcode']][0], expected_halls[index])
+                hall_fields = records[hall['rawcode']][1]
+                self.assertEqual(hall_fields[('uabi', 0)][0], '')
+                self.assertEqual(hall_fields[('utra', 0)][0], '')
+                self.assertEqual(hall_fields[('uupt', 0)][0], '')
+                foundry_fields = records[foundry['rawcode']][1]
+                for ability in ('Aneu', 'Apit', 'Asid', 'Asud'):
+                    self.assertIn(ability, foundry_fields[('uabi', 0)][0])
+                    self.assertIn(ability, installed_abilities)
+                self.assertIn(
+                    f"KLS_FactionFoundryRecipeId[{index}] = '{expected_patterns[index]}'",
+                    runtime,
+                )
+
+        self.assertIn("call AddItemToStock(building,KLS_FactionFoundryRecipeId[KLS_PlayerRace[p]],1,1)", runtime)
+        self.assertIn("KLS_IsFactionFoundry(GetUnitTypeId(shop))", runtime)
 
     def test_company_units_are_serialized_and_recruited_only_after_matching_doctrine(self):
         unit_objects = decode(units())

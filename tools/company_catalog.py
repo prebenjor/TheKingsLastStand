@@ -2,7 +2,7 @@
 
 COMPANY_BUILDINGS = {
     'hall': {
-        'rawcode': 'kH00', 'parent': 'hcas', 'name': 'Hall of Banners',
+        'rawcode': 'kH00', 'parent': 'hgra', 'name': 'Hall of Banners',
         'gold': 240, 'lumber': 100, 'build_time': 35, 'hit_points': 1400,
         'tooltip': 'Raise your hero banner. Grants your company a personal doctrine aura and unlocks its Barracks recruit.',
     },
