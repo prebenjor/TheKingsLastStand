@@ -111,4 +111,6 @@ Generated from tools/equipment_catalog.py for the current development build. The
 - Normal equipment sells for 50%. The four personal boss relics (I010–I013) are not represented by the tier generator and still need a full names/stats/sellability audit.
 # Crownlands race relic additions
 
+Current generated package: `KLS-D-660b4bdeea`, manifest output path `C:\Users\asphy\Documents\Warcraft3Maps\kings-last-stand\dist\KLS-D-660b4bdeea-Development.w3m`, SHA-256 `719de46b17be26b7165d59d3f47e6d13b98117af9b77de1270077e39e78f74eb`.
+
 The approved twenty universally equippable items, rarity colors, effects, shop/drop integration and racial recipes are cataloged in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). Their rawcodes are I23C–I23V and their effects/stock/drop records are generated from tools/equipment_catalog.py. Recipes RCP4–RCP7 use a Rare plus an Uncommon item to produce their race's Legendary relic. The canonical table is generated from the same catalog; do not maintain a second competing list in code.

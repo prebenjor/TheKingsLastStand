@@ -2,6 +2,14 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-660b4bdeea - 2026-09-29
+
+- Updated `tools/collect_test_logs.py` to extract build IDs from captured Warcraft/Editor logs, separate current-build references from other builds, and label errors with their nearest preceding build ID as correlation only. The output explicitly says a map-open reference is not proof of gameplay or causality.
+- A fresh capture at `test-results/20260929T051531256402Z-KLS-D-660b4bdeea` contains only older `KLS-D-1a040d638c` references. The captured model-creation failures follow those older map-open lines; there are no references to this build and no evidence it was played.
+- Full source regression suite passed **141/141**. Installed-editor JASS syntax and MPQ package/readback passed. Package SHA-256: `719de46b17be26b7165d59d3f47e6d13b98117af9b77de1270077e39e78f74eb`.
+- Package: `dist/KLS-D-660b4bdeea-Development.w3m`; prior dist package archived under `backups/development-builds/20260929T051420156254Z-KLS-D-660b4bdeea/`. Installation was attempted after the user closed the visible editor, but Windows returned `WinError 32` while removing the prior installed `KLS-D-7951d852c3-Development.w3m`. Windows Restart Manager identified a remaining `World Editor.exe` process (PID 22184) as the lock holder. The prior map remains in the test folder; the installer preserved an additional copy under `backups/installed-diagnostics/20260929T051420166893Z-KLS-D-660b4bdeea/`. The current build is not installed.
+- Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending for this exact build. The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-7951d852c3 - 2026-09-29
 
 - Expanded failed gear-purchase/equip diagnostics with the buyer's unit type, owner and life state; free normal-inventory slots; backpack occupancy; item location (normal inventory, backpack, equipped or missing); item type/owner; catalog family and equipment slot; and the retry attempt. The equip behavior itself is unchanged pending a playtest that captures these states.

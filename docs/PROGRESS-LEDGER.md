@@ -1,5 +1,16 @@
 # Current status — 2026-09-29
 
+## Current package-proven build — KLS-D-660b4bdeea
+
+- Artifact: `dist/KLS-D-660b4bdeea-Development.w3m`.
+- Manifest output path: `C:\Users\asphy\Documents\Warcraft3Maps\kings-last-stand\dist\KLS-D-660b4bdeea-Development.w3m`.
+- SHA-256: `719de46b17be26b7165d59d3f47e6d13b98117af9b77de1270077e39e78f74eb`.
+- Updated the log collector to list observed build IDs separately from the target manifest build, and label the nearest preceding ID on each matching diagnostic as timing correlation only. It explicitly refuses to treat map-open entries as proof of gameplay or causality.
+- Full source regression suite: **141/141 passed**. Package archive/readback and installed-API JASS syntax checks passed.
+- Fresh capture: `test-results/20260929T051531256402Z-KLS-D-660b4bdeea`. It contains six references to older `KLS-D-1a040d638c`, no references to `KLS-D-660b4bdeea`, and model-creation failures following the older map-open entries. The capture does not establish that the current build was played.
+- The first editor/game process query used the wrong process-name filter. Windows Restart Manager identified a remaining `World Editor.exe` process, PID 22184, as the holder of the old map after the user had closed the visible editor window. `python -B tools/build_map.py --install-test-map` failed with `WinError 32` when attempting to remove prior installed `KLS-D-7951d852c3-Development.w3m`. The old map remains in the live test folder; the new artifact was retained at `dist/` and copied to `backups/installed-diagnostics/20260929T051420166893Z-KLS-D-660b4bdeea/`. Do not force-close the editor or delete the locked map; it may contain unsaved work. After the editor is saved and closed normally, retry the supported installer.
+- The earlier user-reported Test Map success remains attached to `KLS-D-fd638ddcf5` only. Editor save/reopen, current-build Test Map, Custom Game startup, gameplay, multiplayer and endurance remain pending.
+
 ## Current package-proven build — KLS-D-7951d852c3
 
 - Artifact: `dist/KLS-D-7951d852c3-Development.w3m`.

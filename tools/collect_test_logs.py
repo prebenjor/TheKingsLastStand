@@ -6,6 +6,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+BUILD_ID_RE = re.compile(r'\bKLS-[A-Z0-9]-[A-Z0-9]{4,32}\b', re.I)
+DIAGNOSTIC_LINE_RE = re.compile(r'error|fail|missing|exception', re.I)
 
 def collect():
     manifest = json.loads((ROOT / 'build/diagnostic-manifest.json').read_text())
@@ -18,7 +20,8 @@ def collect():
     (out / 'build-manifest.json').write_text(json.dumps(manifest, indent=2))
     folder = Path.home() / 'Documents/Warcraft III/Logs'
     records = []
-    findings = []
+    findings = [f"Target build ID: {manifest['build_id']}"]
+    build_references = []
     for name in ('War3Log.txt', 'War3EditorLog.txt', 'selection.log'):
         path = folder / name
         if not path.exists():
@@ -28,12 +31,40 @@ def collect():
         (out / name).write_bytes(data)
         records.append({'file': name, 'bytes': len(data), 'modified_unix': path.stat().st_mtime,
                         'sha256': hashlib.sha256(data).hexdigest()})
+        last_build_id = None
         for number, line in enumerate(data.decode('utf-8', errors='replace').splitlines(), 1):
-            if re.search(r'error|fail|missing|exception|KingsLastStand|KLS-', line, re.I):
-                findings.append(f'{name}:{number}: {line}')
+            line_build_ids = BUILD_ID_RE.findall(line)
+            for build_id in line_build_ids:
+                build_references.append({'file': name, 'line': number,
+                                         'build_id': build_id, 'text': line})
+            if line_build_ids:
+                last_build_id = line_build_ids[-1]
+            if DIAGNOSTIC_LINE_RE.search(line) or 'KingsLastStand' in line or 'KLS-' in line:
+                if last_build_id:
+                    provenance = f'last build reference={last_build_id}; correlation only'
+                else:
+                    provenance = 'no preceding build reference'
+                findings.append(f'{name}:{number} [{provenance}]: {line}')
+    current_build_references = [reference for reference in build_references
+                                if reference['build_id'].casefold() == manifest['build_id'].casefold()]
+    other_build_ids = sorted({reference['build_id'] for reference in build_references
+                              if reference['build_id'].casefold() != manifest['build_id'].casefold()})
+    if current_build_references:
+        findings.insert(1, f"Current build {manifest['build_id']} is referenced in "
+                        f"{len(current_build_references)} captured log line(s); references do not confirm gameplay.")
+    else:
+        findings.insert(1, f"No captured log references current build {manifest['build_id']}; "
+                        "copied error lines cannot be attributed to the current build.")
+    if other_build_ids:
+        findings.insert(2, 'Other or older build IDs referenced: ' + ', '.join(other_build_ids))
+    findings.insert(3, 'The last preceding build ID is a timing correlation only. '
+                    'Map-open references and copied engine errors do not confirm gameplay or causality.')
     report = {'collected_utc': stamp, 'associated_build': manifest['build_id'],
               'played_build_confirmed': False, 'logs': records,
-              'note': 'Logs may be stale or buffered and map-opening entries may be menu scans. Confirm the in-game identifier. Spawn diagnostics are currently in-game only (-diag).'}
+              'build_references': build_references,
+              'current_build_references': current_build_references,
+              'other_build_ids': other_build_ids,
+              'note': 'Copied logs can be stale or buffered. Build IDs and nearest preceding IDs are provenance hints only; map-opening entries may be menu scans and do not confirm gameplay. Confirm the visible in-game identifier. Spawn diagnostics are currently in-game only (-diag).'}
     (out / 'collection.json').write_text(json.dumps(report, indent=2))
     (out / 'findings.txt').write_text('\n'.join(findings), encoding='utf-8')
     print(out)
