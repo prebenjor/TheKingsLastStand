@@ -2,6 +2,13 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-ca295479e8 - 2026-09-29
+
+- Recipe output delivery rejection now writes a contextual `ERROR` entry to `-diag` before removing the unaccepted item. The log includes recipe/output names, owner, buyer and coordinates; ingredients are restored and the recipe fee is refunded as before.
+- Full source regression suite passed **132/132**. Installed-editor JASS syntax and MPQ package readback passed. Package SHA-256: `d18491eab2479068d3a46e3b6065956bc6d858ffeebd3df9e73d9023329d1697`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-ca295479e8-Development.w3m`; its SHA-256 matches the package and it is the only project map in the folder. The previous development artifact was archived under `backups/development-builds/20260929T023958709775Z-KLS-D-ca295479e8/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T023958717683Z-KLS-D-ca295479e8/`.
+- The user reported completing a test but did not give the visible build ID or result. Current-build Editor save/reopen, Test Map, Custom Game, injected delivery failure, live `-diag` capture, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains a pass for `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-69ca4b4a50 - 2026-09-29
 
 - Failed recipe-output item creation now writes a contextual `ERROR` entry to `-diag` with the recipe pattern, expected output item/rawcode, owner, and buyer coordinates. The existing component restoration and full recipe-fee refund remain in the failure path.

@@ -269,6 +269,7 @@ def recipe_script():
               '                    call DisplayTimedTextToPlayer(Player(p), 0, 0, 10, "Craft complete: " + GetItemName(output) + ". Your new item is personal.")',
               '                    call KLS_Log("Recipe completed: " + GetItemName(output) + " owner=p" + I2S(p + 1))',
               '                else',
+              '                    call KLS_Log("ERROR recipe output delivery rejected: recipe="+GetItemName(scroll)+" item="+GetItemName(output)+" owner=p"+I2S(p + 1)+" buyer="+GetUnitName(buyer)+" buyerXY="+R2S(GetUnitX(buyer))+","+R2S(GetUnitY(buyer)))',
               '                    call RemoveItem(output)',
               '                    call KLS_RecipeRestoreIngredients(buyer, first, second)',
               '                    call KLS_RecipeRefund(buyer, scroll, vendor)',

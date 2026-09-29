@@ -200,6 +200,23 @@ class RecipeTransactions(unittest.TestCase):
                        'GetUnitX(buyer)', 'GetUnitY(buyer)'):
             self.assertIn(detail, failure_branch)
 
+    def test_failed_recipe_output_delivery_logs_reason_and_restores_transaction(self):
+        script = recipe_script()
+        complete = re.search(r'^function KLS_RecipeComplete takes [\s\S]*?^endfunction$',
+                              script, re.M).group()
+        start = complete.index('if UnitAddItem(buyer, output) then')
+        end = complete.index('\n                endif', start)
+        delivery_branch = complete[start:end]
+        failure_start = delivery_branch.index('\n                else')
+        failure_branch = delivery_branch[failure_start:]
+        for detail in ('recipe output delivery rejected', 'GetItemName(scroll)',
+                       'GetItemName(output)', 'I2S(p + 1)',
+                       'GetUnitX(buyer)', 'GetUnitY(buyer)',
+                       'RemoveItem(output)',
+                       'KLS_RecipeRestoreIngredients(buyer, first, second)',
+                       'KLS_RecipeRefund(buyer, scroll, vendor)'):
+            self.assertIn(detail, failure_branch)
+
     def test_successful_recipe_delivery_does_not_also_run_failure_refund(self):
         script = recipe_script()
         match = re.search(r'^function KLS_RecipeComplete takes [\s\S]*?^endfunction$',
