@@ -171,6 +171,64 @@ function KLS_CreateDestructableOptional takes integer kind, real x, real y, real
     return KLS_CreateDestructableChecked(kind,x,y,facing,scale,variation,false,context)
 endfunction
 
+function KLS_GearDiagnosticLine takes player p, string area, integer slot, item gear returns nothing
+    local integer itemCode
+    local integer family
+    local integer catalogSlot
+    local integer owner
+    if gear == null then
+        call DisplayTimedTextToPlayer(p,0,0,30,"Gear audit "+area+"["+I2S(slot)+"] item=EMPTY")
+    else
+        set itemCode = GetItemTypeId(gear)
+        set family = LoadInteger(KLS_GearData,itemCode,0)
+        set catalogSlot = LoadInteger(KLS_GearData,itemCode,2)
+        set owner = GetItemUserData(gear)
+        call DisplayTimedTextToPlayer(p,0,0,30,"Gear audit "+area+"["+I2S(slot)+"] item="+GetItemName(gear)+" id="+I2S(itemCode)+" family="+I2S(family)+" catalog-slot="+I2S(catalogSlot)+" owner-marker="+I2S(owner))
+    endif
+endfunction
+
+function KLS_ShowGearDiagnostics takes player p returns nothing
+    local integer playerIndex = GetPlayerId(p)
+    local integer slot = 0
+    local integer storageSize
+    local unit hero
+    local item gear
+    if not KLS_Debug or playerIndex < 0 or playerIndex >= 4 then
+        return
+    endif
+    set hero = KLS_Hero[playerIndex]
+    if hero == null then
+        call DisplayTimedTextToPlayer(p,0,0,30,"Gear audit player="+I2S(playerIndex+1)+" hero=NOT CREATED")
+        return
+    endif
+    set storageSize = UnitExtendedInventorySize(hero)
+    call DisplayTimedTextToPlayer(p,0,0,30,"Gear audit hero="+GetUnitName(hero)+" player=p"+I2S(playerIndex+1)+" backpack="+I2S(UnitExtendedInventoryCount(hero))+"/"+I2S(storageSize))
+    loop
+        exitwhen slot == 6
+        set gear = UnitItemInSlot(hero,slot)
+        call KLS_GearDiagnosticLine(p,"inventory",slot,gear)
+        set slot = slot+1
+    endloop
+    set slot = 0
+    loop
+        exitwhen slot >= storageSize
+        set gear = UnitItemInBagSlot(hero,slot)
+        if gear != null then
+            call KLS_GearDiagnosticLine(p,"backpack",slot,gear)
+        endif
+        set slot = slot+1
+    endloop
+    set slot = 0
+    loop
+        exitwhen slot == 9
+        set gear = UnitItemInEquipmentSlot(hero,ConvertLoadoutSlot(slot))
+        call KLS_GearDiagnosticLine(p,"equipment",slot,gear)
+        set slot = slot+1
+    endloop
+    set hero = null
+    set gear = null
+endfunction
+
 function KLS_ShowDiagnostics takes player p returns nothing
     local integer n = IMaxBJ(0, KLS_DiagCount - 12)
     local integer i = 0

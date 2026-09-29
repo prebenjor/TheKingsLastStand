@@ -2,6 +2,20 @@
 
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
 
+## KLS-D-0235a0878b - 2026-09-29
+
+- Extended the development-only `-gear` audit to list occupied backpack positions through the installed `UnitItemInBagSlot` API, in addition to all six normal inventory and nine equipment slots. Rows include item name/type, catalog family and equipment slot, plus owner marker; the header reports backpack occupancy and capacity.
+- Full source regression suite passed **137/137**. Installed-editor API syntax and MPQ package readback passed. Package SHA-256: `70bce2bdbb91cdfbc762a182022a6552cfd96a027ae06579fea610a0709c0608`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-0235a0878b-Development.w3m`; its SHA-256 matches the package and it is the only project map in the test folder. The previous development artifact was archived under `backups/development-builds/20260929T035722408473Z-KLS-D-0235a0878b/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T035722417789Z-KLS-D-0235a0878b/`.
+- The user reported testing a build but did not include its visible build ID or result. This build’s editor save/reopen, Test Map, Custom Game, gear purchase/equip flow, gameplay, multiplayer and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only.
+
+## KLS-D-2e8d369d67 - 2026-09-29
+
+- Added a development-only `-gear` audit. It reports all six normal inventory slots and nine native equipment slots, including item name/type, catalog family and equipment slot, owner marker, and backpack capacity. This distinguishes a transfer failure from a slot or ownership problem during the next playtest.
+- Full source regression suite passed **137/137**. Installed-editor API syntax and MPQ package readback passed. Package SHA-256: `e4460019b48eb32ce11afafed4fa776259e14d99182d652c9aac60470b59434b`.
+- Installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-2e8d369d67-Development.w3m`; its SHA-256 matches the package and it is the only project map in the test folder. The previous development artifact was archived under `backups/development-builds/20260929T035024781689Z-KLS-D-2e8d369d67/`; the replaced installed map was preserved under `backups/installed-diagnostics/20260929T035024790640Z-KLS-D-2e8d369d67/`.
+- The user reported testing a build but did not include its visible build ID or result. This build’s editor save/reopen, Test Map, Custom Game, item purchase/equip flow, gameplay, multiplayer and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only.
+
 ## KLS-D-5604bb3f70 - 2026-09-29
 
 - Enemy loot now uses explicit Normal/Elite/Boss profiles. Gear chances are 3% / 10% / 50%, with higher rarity weights for stronger tiers. Independent potion chances are 4% / 8% / 18%; one death can drop both items. Active killers own their drops, and unbound catalog gear receives its owner marker when picked up so equipment stats apply.

@@ -1,6 +1,15 @@
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-5604bb3f70
+## Current package-proven build — KLS-D-0235a0878b
+
+- Artifact: `dist/KLS-D-0235a0878b-Development.w3m`.
+- SHA-256: `70bce2bdbb91cdfbc762a182022a6552cfd96a027ae06579fea610a0709c0608`.
+- The development-only `-gear` audit now reports six normal inventory slots, occupied backpack positions, and nine equipment slots. It shows item ID/name, registered catalog family/slot, owner marker, and backpack occupancy/capacity.
+- Full source regression suite: **137/137 passed**. Installed-editor API syntax and MPQ archive readback passed.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-0235a0878b-Development.w3m`; package and installed SHA-256 match and the folder contains one project map. The previous package and installed map were preserved under `backups/development-builds/20260929T035722408473Z-KLS-D-0235a0878b/` and `backups/installed-diagnostics/20260929T035722417789Z-KLS-D-0235a0878b/`.
+- The user reported testing a build but has not provided its visible build ID or result. Current-build editor save/reopen, Test Map, Custom Game, gear purchase/transfer/equip/sale, gameplay, multiplayer and endurance remain pending. The earlier Test Map success remains assigned to `KLS-D-fd638ddcf5`.
+
+## Previous package-proven build — KLS-D-5604bb3f70
 
 - Artifact: `dist/KLS-D-5604bb3f70-Development.w3m`.
 - SHA-256: `8e80a85f14a289f61bbf23260423754f1d3fee0441fee0882dfddefa479576bd`.

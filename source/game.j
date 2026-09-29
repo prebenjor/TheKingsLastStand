@@ -371,6 +371,9 @@ function KLS_Chat takes nothing returns nothing
     if s == "-diag" then
         call KLS_ShowDiagnostics(p)
         return
+    elseif s == "-gear" then
+        call KLS_ShowGearDiagnostics(p)
+        return
     endif
     if KLS_Ended then
         return
@@ -393,7 +396,7 @@ function KLS_Chat takes nothing returns nothing
             call KLS_Spawn()
         endif
     elseif s == "-help" then
-        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend King Aldric through the 40-wave Crownlands campaign, then face endless crossover waves. The King's death ends the run. -wave 1–1000 is available in development diagnostics. The optional Crownlands story remains separate from wave counts.")
+        call DisplayTimedTextToPlayer(p, 0, 0, 30, "Defend King Aldric through the 40-wave Crownlands campaign, then face endless crossover waves. The King's death ends the run. Development commands: -diag, -gear, -wave 1–1000. The optional Crownlands story remains separate from wave counts.")
     endif
     set p = null
 endfunction

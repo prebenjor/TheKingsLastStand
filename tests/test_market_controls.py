@@ -84,6 +84,26 @@ class NativeMarketControls(unittest.TestCase):
         self.assertIn('SetItemCharges(moved,GetItemCharges(gear))', move)
         self.assertIn('RemoveItem(gear)', move)
 
+    def test_debug_gear_report_shows_normal_and_equipped_slots_with_catalog_owner_data(self):
+        report = function_body(self.script, 'KLS_ShowGearDiagnostics')
+        self.assertIn('UnitItemInSlot(hero,slot)', report)
+        self.assertIn('UnitItemInBagSlot(hero,slot)', report)
+        self.assertIn('UnitItemInEquipmentSlot(hero,ConvertLoadoutSlot(slot))', report)
+        self.assertIn('KLS_GearDiagnosticLine(p,"inventory",slot,gear)', report)
+        self.assertIn('KLS_GearDiagnosticLine(p,"backpack",slot,gear)', report)
+        self.assertIn('KLS_GearDiagnosticLine(p,"equipment",slot,gear)', report)
+
+        line = function_body(self.script, 'KLS_GearDiagnosticLine')
+        self.assertIn('LoadInteger(KLS_GearData,itemCode,2)', line)
+        self.assertIn('GetItemUserData(gear)', line)
+        self.assertIn('catalog-slot=', line)
+        self.assertIn('owner-marker=', line)
+
+        chat = function_body(self.script, 'KLS_Chat')
+        self.assertIn('s == "-gear"', chat)
+        self.assertIn('call KLS_ShowGearDiagnostics(p)', chat)
+        self.assertIn('not KLS_Debug', report)
+
     def test_native_successful_pawn_is_logged_and_confirmed_to_the_player(self):
         pawn = function_body(self.script, 'KLS_GearPawned')
         init = function_body(self.script, 'KLS_GearInit')

@@ -12,7 +12,7 @@
 5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
 6. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current package is development build `KLS-D-5604bb3f70` at `dist/KLS-D-5604bb3f70-Development.w3m` (SHA-256 `8e80a85f14a289f61bbf23260423754f1d3fee0441fee0882dfddefa479576bd`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-5604bb3f70-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. The user reported testing a build but did not include its visible build ID or outcome, so that report is not assigned to this package. Its editor, Test Map, Custom Game, and gameplay checks remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
+The current package is development build `KLS-D-0235a0878b` at `dist/KLS-D-0235a0878b-Development.w3m` (SHA-256 `70bce2bdbb91cdfbc762a182022a6552cfd96a027ae06579fea610a0709c0608`). It is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-0235a0878b-Development.w3m`; its SHA-256 matches the package manifest, and it is the only project map in that folder. The user reported testing a build but did not include its visible build ID or outcome, so that report is not assigned to this package. Its editor, Test Map, Custom Game, and gameplay checks remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
 
 All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its four Common-through-Epic universal items and healing/mana potions. Build your race's Foundry to buy one copy of its Legendary recipe, which combines that race's Rare and Uncommon items. The recipe pattern returns to your Foundry after success or failure. The Master Forge in the southern market stocks the three general recipes. Talk to settlement characters to start the optional four-chapter recovery story; it continues during active waves. When hero selection ends, Undead and Night Elf players already have their Haunted or Entangled Gold Mine at the base; Human and Orc players use a regular Gold Mine. Starting mines hold 1,000,000 gold.
 
@@ -42,6 +42,7 @@ These are for development/testing and must not be treated as release controls:
 | Chat text | Purpose |
 |---|---|
 | -help | Show diagnostic help |
+| -gear | Report the hero’s six normal inventory slots, occupied backpack positions and nine equipment slots, showing each item’s catalog family/slot and owner marker |
 | -diag | Show build ID, the latest 12 runtime events, the latest 8 ERROR/FATAL/WARN entries from a separate rolling buffer, and each active player's expected/actual starting mine, owner, gold reserve and coordinates |
 | -wave N | Start a diagnostic-selected wave 1-1000 |
 | -gold | Add diagnostic gold/lumber |
@@ -53,7 +54,7 @@ These are for development/testing and must not be treated as release controls:
 
 ## Reporting a problem
 
-Include the exact on-screen build ID. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. Error and warning entries are retained separately from routine messages, so recent spawn failures remain visible even after later gameplay logs fill the ordinary event window. The starting-mine line appears after hero confirmation and reports expected/actual mine, owner player ID, remaining gold and position. Required racial-mine spawn failures use the context `starting racial gold mine`. For engine or editor errors, run:
+Include the exact on-screen build ID. For gear that will not transfer or equip, type `-gear` and provide its complete output plus `-diag`; occupied backpack slots are listed too. For missing units/buildings/items, type -diag and provide its complete output plus a screenshot. Error and warning entries are retained separately from routine messages, so recent spawn failures remain visible even after later gameplay logs fill the ordinary event window. The starting-mine line appears after hero confirmation and reports expected/actual mine, owner player ID, remaining gold and position. Required racial-mine spawn failures use the context `starting racial gold mine`. For engine or editor errors, run:
 
     python -B tools/collect_test_logs.py
 
