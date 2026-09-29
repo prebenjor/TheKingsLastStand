@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Make hero advancement a meaningful per-level choice, let the group set a match-wide challenge level, reserve high-rarity equipment for earned milestones, rebalance outlier equipment and recipes, and let the group start the next wave early only when everyone is ready.
+Make hero advancement a meaningful per-level choice, let the group set a match-wide challenge level, reserve high-rarity equipment for earned milestones, rebalance outlier equipment and recipes, equalize the starting mine reserve across races, model the hero/item power curve from generated catalogs, and let the group start the next wave early only when everyone is ready.
 
 This specification follows the user's current direction. It supersedes earlier notes that gave heroes automatic `+3` primary and `+1` secondary stats per level. Existing personal gold, nearby full XP awards, 50-second ordinary breaks, 180-second pre-boss breaks, the wave roster, and King Aldric's loss condition remain intact.
 
@@ -50,8 +50,22 @@ Round wave counts to the nearest integer and keep at least one regular enemy. Bo
 - Elite enemies have a 1% equipment-drop chance, but may drop only Common or Uncommon items. They cannot drop Rare, Epic, or Legendary items.
 - Bosses remain the primary source of high-rarity gear. Every boss grants one personal reward to each active player; remove the additional random boss world-gear roll to avoid an uncontrolled second equipment award. Scale the guaranteed reward by boss milestone: Uncommon at wave 10, Rare at wave 20, Epic at wave 30, and Legendary from wave 40 onward, including later ten-wave bosses.
 - Preserve player ownership for boss rewards. Keep player-specific kill gold, XP rules, potion drops, shop stock, and recipes unchanged except where an item is rebalanced.
-- Audit all equipment and recipes using one catalog-derived power score that includes attributes, direct damage/armor/health/mana, and the expected value of proc or passive effects. Compare items by equipment slot and rarity. Keep same-tier peers within a 25% band around their tier-and-slot median; require each tier's median to exceed the preceding tier's median; and keep the strongest item in any tier at or below the next tier's median for the same slot. Recipe outputs count their effects in the same budget as shop items; crafted Legendary items must be comparable to other Legendary slot peers, not exceed them by one or two tiers.
+- Rebalance the general 80-item catalog, twenty racial relics, and recipe outputs together. Race flavor comes from names, presentation, and distinct effects; it does not grant a separate higher stat budget. The current outliers are Epic Grudgebreaker (`I23P`, +168 damage, +28 Strength), Legendary Worldrend Standard (`I23T`, +220 damage, +99 Strength), and their comparison point, general Legendary Kingswrath (`I11C`, +66 damage and a 35% cleave effect).
+- Create one shared item-power report from catalog-derived base stats and effect fields. Compare entries by equipment slot and rarity. Keep same-tier peers within a 25% band around their tier-and-slot median for each comparable component, require each tier's median to exceed the preceding tier's median, and flag any lower-tier item component more than 25% above the next tier's median for the same slot. Report damage, attributes, armor, health, mana, and speed separately; show named effect magnitude, trigger, duration, and cooldown as separate values instead of hiding them in an opaque aggregate. Recipe outputs use the same budget as shop items.
 - Preserve the rarity palette and item names. Adjust item stats, effect strength, cooldowns, or recipe inputs/fees only as needed to meet the power budget; do not compensate for an overpowered effect solely by raising its purchase price.
+
+## Stat power-curve report
+
+- Add `tools/power_curve.py`, using `hero_catalog.py`, `equipment_catalog.py`, and the installed `UnitBalance.slk` data from the existing API extraction flow. Custom heroes use their declared parent hero's base stats.
+- Generate `docs/STAT-POWER-CURVE.md` with one row per level from 1 through 50 for all 25 heroes. Show base stats, zero automatic growth, normal skill points remaining, and three stat-allocation scenarios: all points spent on spells, all stat choices spent on the hero's primary stat, and all stat choices spent on each of STR, AGI, and INT. Include each of the three fifth-level talent paths as distinct projections.
+- Support command-line overrides for a level, per-attribute stat-point allocations, talent selections, purchased tomes, and equipped item rawcodes. Reject allocations that spend more normal skill points than the selected level provides, and reject invalid item codes or equipment slot collisions.
+- Show catalog item power components grouped by rarity and equipment slot, including named effect magnitude, trigger, duration, and cooldown. Flag stat-component outliers against the shared tier budgets. The report is deterministic, repeatable, and does not modify runtime balance data.
+- If installed reference data is missing or does not match the installed-game provenance, fail with the existing API extraction command rather than silently using guessed hero base stats.
+
+## Race economy parity
+
+- Every player's starting mine reserve is set to 1,000,000 gold, using the high reserve requested earlier for the map. Undead and Night Elf keep their race-specific Haunted and Entangled mine units; Human and Orc keep their neutral Gold Mine unit. Only the reserve is normalized.
+- Each player retains five starting workers and personal gold income. The mine change does not alter worker identity, worker count, bounty ownership, or race build menus.
 
 ## Unanimous next-wave vote
 
@@ -65,7 +79,8 @@ Round wave counts to the nearest integer and keep at least one regular enemy. Bo
 
 - Keep synchronized match state in `source/game.j`: selected difficulty, per-player difficulty votes, per-player current-wave ready votes, tally helpers, vote reset, and spawn-time scaling.
 - Keep hero-level handling in `source/combat.j` and `source/heroes.j`. Remove automatic-stat state and use the existing local stat controls and Warcraft skill points.
-- Keep item eligibility, rarity limits, and rarity reward selection in `tools/equipment_catalog.py` and `tools/wave_rosters.py`, generated into the existing runtime. Keep all item stats/effects/recipes in the shared item catalog.
+- Keep item eligibility, rarity limits, rarity reward selection, item stats/effects/recipes, and effect-power components in `tools/equipment_catalog.py` and `tools/wave_rosters.py`, generated into the existing runtime. Keep mine reserve setup in `source/heroes.j`.
+- Add `tools/power_curve.py` as a read-only report generator and `docs/STAT-POWER-CURVE.md` as its generated, checked-in output.
 - Reuse the current frame/sync-event conventions for owner-local controls. Do not introduce globally pausing dialogs for difficulty or skip voting.
 - Update the approved gameplay/design docs, agent guidance, progress ledger, and per-build changelog with the final implementation and exact evidence.
 
@@ -83,9 +98,11 @@ Round wave counts to the nearest integer and keep at least one regular enemy. Bo
 2. Every hero's spell ranks can be learned with normal skill points through their supported rank cap; ranks 4–5 retain the generated 10% safe effect scaling and do not auto-rank on hero-level gain.
 3. Each difficulty can be selected before the first wave, ties/defaults resolve to Normal, HUD/diagnostics report the result, and the four enemy scaling profiles apply to regular waves, bosses, and boss reinforcements without changing compositions.
 4. Standard enemies cannot produce equipment; elites cannot produce Rare-or-higher items; boss awards are personal and follow the milestone rarity schedule. Consumable drops and player-specific gold remain independent.
-5. Catalog power ratings identify outliers across all rarity tiers and recipe outputs; the strongest item in each tier is no stronger than the next tier's same-slot median, and recipe effects are included in the rating.
-6. A Ready vote is local to its owner, does not pause the match, visibly reflects progress, starts only on unanimity, resets between waves, and leaves the existing 50/180-second fallback intact.
-7. Package, source/object serialization, installed-editor JASS syntax, installed-map hash, and changelog/progress records are current. Gameplay, multiplayer, and balance acceptance still require human testing in Warcraft III and must not be claimed from static checks.
+5. All four races start with the same 1,000,000 reserve; Undead/Elf mine models remain race-specific, Human/Orc remain neutral mines, and worker counts/income ownership remain personal.
+6. The power-curve report deterministically covers 25 heroes × 50 levels, chosen stat points, all three fifth-level talent paths, optional tomes/loadout, and all general/racial/crafted item tiers. Catalog outliers include Grudgebreaker and Worldrend Standard until their budgets are corrected.
+7. No racial item makes the general same-slot catalog obsolete; recipe effects are included in the item-power report and each item's budget.
+8. A Ready vote is local to its owner, does not pause the match, visibly reflects progress, starts only on unanimity, resets between waves, and leaves the existing 50/180-second fallback intact.
+9. Package, source/object serialization, installed-editor JASS syntax, installed-map hash, power-curve report, and changelog/progress records are current. Gameplay, multiplayer, and balance acceptance still require human testing in Warcraft III and must not be claimed from static checks.
 
 ## Verification boundaries
 
