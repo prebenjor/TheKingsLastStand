@@ -7,7 +7,7 @@
 - The log collector now records severity-tagged warnings and explicit spawn/load failures in `collection.json`, with a concise `diagnostic_summary`; `findings.txt` shows each full line and nearest preceding build ID as timing correlation only.
 - Full source regression suite: **142/142 passed**. Package readback and installed-editor API syntax checks passed.
 - Fresh log snapshot: `test-results/20260929T053054106327Z-KLS-D-1739daf903`; zero references to this build, six old-build map references, and eight spawn/load failures all correlated with older `KLS-D-1a040d638c` lines. These logs do not prove the new build was played.
-- World Editor PID 22184 remains open on `KLS-D-7951d852c3-Development.w3m`, so the new package is not installed. The old map and new dist package are preserved; save/close the editor normally before installing.
+- World Editor PID 22184 closed normally. `KLS-D-1739daf903` is installed at `Documents/Warcraft III/Maps/TheKingsLastStand/KLS-D-1739daf903-Development.w3m`; its SHA-256 matches the package and it is the only project map in the folder. The replaced map is preserved under `backups/installed-diagnostics/20260929T051420166893Z-KLS-D-660b4bdeea/`.
 - The earlier Test Map pass remains assigned to `KLS-D-fd638ddcf5`; current-build editor, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending.
 
 ## Previous package-proven build — KLS-D-660b4bdeea
