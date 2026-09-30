@@ -31,3 +31,13 @@ It would not automatically update this project's runtime spawning catalogs. A mo
 8. Adopt it for authoring only if the round-trip is acceptable; source generators remain authoritative for gameplay. Document any unsupported native fields before using it for broader changes.
 
 This is an evaluation proposal, not installation authorization or a completed compatibility result. No project map was modified during this assessment.
+
+## Result — 2026-09-30 (branch `wc3-forge`)
+
+wc3-forge v1.0.7 was installed on the user's PC and the work copy `KLS-D-68303d69bf-Forge.w3m` was opened via File → Open Map File. It failed before loading anything:
+
+    open failed: parse war3map.w3i: w3i: tech count 12800 exceeds 291 bytes remaining (min 8 bytes/element) at offset 309: unexpected EOF
+
+Cause: our `war3map.w3i` is format version 39 (World Editor 2.0, game 2.0.3.24268), inherited unchanged from the Blizzard DE starter in `source/template/war3map.w3i`. wc3-forge's parser (`internal/formats/w3i/w3i.go`, identical on `main` at 2026-09-05) only knows layouts up to version 33 and reads v39 with the v33 shape, so it misaligns after the loading-screen fields. This is an upstream wc3-forge limitation, not a defect in our build. Any map saved by the current World Editor will hit it.
+
+The map was not modified. The MCP lockfile (`~/.wc3-forge/mcp/<pid>.lock`) showed the editor's MCP listener running; the Claude desktop app had not yet registered the `wc3-forge` local server at the time of the test.
