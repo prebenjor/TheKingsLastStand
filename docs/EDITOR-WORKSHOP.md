@@ -44,7 +44,7 @@ Open tools through **Module**. See Blizzard's [editor introduction](https://news
 
 ### Finding things without guessing
 
-- Press **Space** for selection; double-click an existing unit to inspect it. Use the minimap to reach the quarter of the map you need, then zoom in.
+- For shops/buildings/heroes, first switch the Tool Palette dropdown to **Unit Palette** (or choose **Layer → Units**), then press **Space** for the Selection Brush. Space changes the brush on the active layer; a Terrain/Doodad brush cannot select unit references. Click an existing unit to select it, drag it to move it, or double-click to inspect it. Use the minimap to reach the quarter of the map you need, then zoom in.
 - In Object Editor, enable **View → Display Values As Raw Data**. Find by name and rawcode. Custom objects may be listed under the parent race/category; runtime proper names may differ.
 - Write down a rawcode before editing. A spelling change is harmless to the rawcode; deleting/recreating an object can break scripts that reference its ID.
 - Existing references belong to **Neutral Extra**. Leave that owner intact: startup removes them before real units spawn. The base references look Human before play; hero confirmation decides the actual race.

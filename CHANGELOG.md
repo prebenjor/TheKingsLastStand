@@ -3,6 +3,7 @@
 ## 2026-09-30 — Editor Workshop tooling (no new map package)
 
 - Added the approved finite eight-chapter editor guide, source navigation, checklists and human handoff form.
+- Clarified that selecting/moving shop references requires the Unit layer before using Space/Selection Brush. A cropped screenshot cannot establish the active layer; successful editor interaction remains a human check.
 - Added native baseline preservation and review reports for terrain, unit creation identities/moves/facing, v2/v3 object fields/ranks, and trigger/custom script changes. Complete original archives are preserved; gameplay integration remains an explicit source review step.
 - Current gameplay/terrain copies remain KLS-D-68303d69bf. Chapter 0 awaits the human's native save/close. No workshop edits or current engine passes are claimed by this tooling entry.
 - Verification: 12 workshop regressions and the final full 200-test suite passed. Final review's missing-listfile coverage finding was corrected. Native/generated unit/object decoding and archive inventory coverage were checked; both current map hashes remain unchanged.
