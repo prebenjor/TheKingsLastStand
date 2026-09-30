@@ -13,12 +13,12 @@ This branch is the sandbox for editing the map with [wc3-forge](https://github.c
 
 ## One-time setup on Windows
 
-1. Download the latest Windows installer or portable zip from the [releases page](https://github.com/StephenSHorton/wc3-forge/releases) (v1.0.7 at setup time) and install it. Default path: `C:\Program Files\wc3-forge\wc3-forge.exe`. Warcraft III: Reforged must be installed; wc3-forge reads its game data (CASC) for models, icons and object data.
+1. Download the latest Windows installer or portable zip from the [releases page](https://github.com/StephenSHorton/wc3-forge/releases) (v1.0.7 at setup time) and install it. Default path: `C:\Program Files\wc3-forge\wc3-forge\wc3-forge.exe`. Warcraft III: Reforged must be installed; wc3-forge reads its game data (CASC) for models, icons and object data.
 2. Launch wc3-forge and open `workshop\wc3-forge\KLS-D-68303d69bf-Forge.w3m` from your local checkout of this branch.
 3. Connect Claude to it, with either option:
-   - **Claude desktop app:** add a local MCP server named `wc3-forge` with command `C:\Program Files\wc3-forge\wc3-forge.exe` and argument `--mcp`. Tools from local MCP servers are available to Claude sessions linked to that computer.
+   - **Claude desktop app:** add a local MCP server named `wc3-forge` with command `C:\Program Files\wc3-forge\wc3-forge\wc3-forge.exe` and argument `--mcp`. Tools from local MCP servers are available to Claude sessions linked to that computer.
    - **Claude Code on the same PC:** run `claude` from the repository root. `.mcp.json` registers the server; approve it when prompted. Alternatively register it for every project:
-     `claude mcp add wc3-forge --scope user -- "C:\Program Files\wc3-forge\wc3-forge.exe" --mcp`
+     `claude mcp add wc3-forge --scope user -- "C:\Program Files\wc3-forge\wc3-forge\wc3-forge.exe" --mcp`
      Then check that `claude mcp list` shows `wc3-forge ✓ Connected`.
 4. The `--mcp` process is a stdio proxy to the **running** editor (JSON-RPC over TCP on 127.0.0.1), so wc3-forge must be open with the map loaded while Claude works. Press Ctrl+` inside wc3-forge to see the Agent Console showing each tool call as it happens.
 
