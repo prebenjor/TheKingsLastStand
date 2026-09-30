@@ -1,5 +1,10 @@
 # Build changelog
 
+## 2026-10-01 — Forge missing unit/scenery rendering repair
+
+- Added DE asset fallback, modern model skin/light parsing, mode-specific stock model keys and the stock decal casing correction. The visible corrected editor loads 98 units, four start markers and all 1,100 doodads with no skipped or empty models.
+- Preserved both map hashes and every user placement; no map save or gameplay rebuild. One cliff-cell rendering warning remains. Updated reproducible patch and MCP executable registration.
+
 ## 2026-10-01 — Forge runtime asset dependency correction
 
 - Restored the missing zlib1.dll dependency beside the patched CascLib.dll. Restarted the visible Forge window and reopened the unchanged working map.

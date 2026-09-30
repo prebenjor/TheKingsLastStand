@@ -1,5 +1,10 @@
 # Current status — 2026-10-01
 
+## Missing unit and building scenery rendering repaired
+
+- Current visible renderer: 98 units + four start markers; 1,100 doodads; zero skipped/failed/empty unit and doodad models. Current executable is wc3-forge-render-compatible.exe.
+- Both map hashes unchanged; no saves or layout edits. One cliff cell and cliff/texture lookup warnings remain. Computer-use screenshot inspection unavailable, so this is diagnostic coverage rather than a full visual pass.
+
 ## Native forge compatibility implemented
 
 - The earlier map-load blocker below is resolved by the separate patched forge build. MCP opens the native human map with 102 units; the diagnostic preserves 1,100 doodads and W3I39 byte-for-byte.

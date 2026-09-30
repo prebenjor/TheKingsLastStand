@@ -1,3 +1,205 @@
+diff --git a/cmd/nativecheck/main.go b/cmd/nativecheck/main.go
+new file mode 100644
+index 0000000..6117360
+--- /dev/null
++++ b/cmd/nativecheck/main.go
+@@ -0,0 +1,53 @@
++// nativecheck verifies the approved native-format compatibility round trip.
++package main
++
++import (
++	"bytes"
++	"fmt"
++	"github.com/StephenSHorton/wc3-forge/internal/formats/doodadsdoo"
++	"github.com/StephenSHorton/wc3-forge/internal/formats/unitsdoo"
++	"github.com/StephenSHorton/wc3-forge/internal/formats/w3i"
++	"os"
++	"path/filepath"
++)
++
++func main() {
++	dir := os.Args[1]
++	for _, name := range []string{"war3map.w3i", "war3mapUnits.doo", "war3map.doo"} {
++		raw, err := os.ReadFile(filepath.Join(dir, name))
++		if err != nil {
++			panic(err)
++		}
++		var out []byte
++		switch name {
++		case "war3map.w3i":
++			var f *w3i.Info
++			f, err = w3i.Parse(raw)
++			if err == nil {
++				out, err = w3i.Encode(f)
++				fmt.Printf("metadata version=%d players=%d\n", f.FileVersion, len(f.Players))
++			}
++		case "war3mapUnits.doo":
++			var f *unitsdoo.File
++			f, err = unitsdoo.Parse(raw)
++			if err == nil {
++				out, err = unitsdoo.Encode(f)
++				fmt.Printf("units version=%d count=%d\n", f.Version, len(f.Entities))
++			}
++		case "war3map.doo":
++			var f *doodadsdoo.File
++			f, err = doodadsdoo.Parse(raw)
++			if err == nil {
++				out, err = doodadsdoo.Encode(f)
++				fmt.Printf("doodads version=%d count=%d\n", f.Version, len(f.Doodads))
++			}
++		}
++		if err != nil {
++			panic(fmt.Errorf("%s: %w", name, err))
++		}
++		if !bytes.Equal(raw, out) {
++			panic(fmt.Errorf("%s: round trip differs (%d/%d bytes)", name, len(raw), len(out)))
++		}
++		fmt.Printf("%s: byte-identical round trip (%d bytes)\n", name, len(raw))
++	}
++}
+diff --git a/frontend/src/mdx-parser-patch.ts b/frontend/src/mdx-parser-patch.ts
+index ab93c62..258cf28 100644
+--- a/frontend/src/mdx-parser-patch.ts
++++ b/frontend/src/mdx-parser-patch.ts
+@@ -113,6 +113,103 @@ export function patchMdxParser(): void {
+     throw new Error('mdx-parser-patch: cannot find Layer/Material classes')
+   }
+ 
++  // Schema: HiveWE mdx_reader.cpp read_GEOS/read_LITE, confirmed with installed VERS=1800 assets.
++  // DE widens SKIN elements to uint16 from VERS 1400. Keep renderer data byte based.
++  const ParserGeoset = MV.parsers.mdlx.Geoset
++  const originalGeosetRead = ParserGeoset.prototype.readMdx
++  ParserGeoset.prototype.readMdx = function(this: any, stream: any, version: number): void {
++    if (version < 1400) return originalGeosetRead.call(this, stream, version)
++
++    stream.readUint32(); // Inclusive geoset size; the model reader bounds the GEOS chunk.
++    stream.skip(4); // VRTX
++    this.vertices = stream.readFloat32Array(stream.readUint32() * 3);
++    stream.skip(4); // NRMS
++    this.normals = stream.readFloat32Array(stream.readUint32() * 3);
++    stream.skip(4); // PTYP
++    this.faceTypeGroups = stream.readUint32Array(stream.readUint32());
++    stream.skip(4); // PCNT
++    this.faceGroups = stream.readUint32Array(stream.readUint32());
++    stream.skip(4); // PVTX
++    this.faces = stream.readUint16Array(stream.readUint32());
++    stream.skip(4); // GNDX
++    this.vertexGroups = stream.readUint8Array(stream.readUint32());
++    stream.skip(4); // MTGC
++    this.matrixGroups = stream.readUint32Array(stream.readUint32());
++    stream.skip(4); // MATS
++    this.matrixIndices = stream.readUint32Array(stream.readUint32());
++    this.materialId = stream.readUint32();
++    this.selectionGroup = stream.readUint32();
++    this.selectionFlags = stream.readUint32();
++    if (version > 800) {
++        this.lod = stream.readInt32();
++        this.lodName = stream.read(80);
++    }
++    this.extent.readMdx(stream);
++    for (let i = 0, l = stream.readUint32(); i < l; i++) {
++        const extent = new this.extent.constructor();
++        extent.readMdx(stream);
++        this.sequenceExtents.push(extent);
++    }
++    // Non-reforged models that come with reforged are saved with version >800, however they don't have TANG and SKIN.
++    if (version > 800) {
++        if (stream.readBinary(4) === 'TANG') {
++            this.tangents = stream.readFloat32Array(stream.readUint32() * 4);
++        }
++        else {
++            stream.skip(-4);
++        }
++        if (stream.readBinary(4) === 'SKIN') {
++            const count = stream.readUint32();
++            if (version >= 1400) {
++                const wide = stream.readUint16Array(count);
++                // Viewer uses byte bone indices and weights. Refuse overflow rather than silently wrapping.
++                if (wide.some((v: number) => v > 255)) throw new Error('MDX skin exceeds viewer byte range');
++                this.skin = Uint8Array.from(wide);
++            } else this.skin = stream.readUint8Array(count);
++        }
++        else {
++            stream.skip(-4);
++        }
++    }
++    stream.skip(4); // UVAS
++    for (let i = 0, l = stream.readUint32(); i < l; i++) {
++        stream.skip(4); // UVBS
++        this.uvSets.push(stream.readFloat32Array(stream.readUint32() * 2));
++    }
++  }
++  // Modern lights add static fields ahead of their animation tracks.
++  const Light = MV.parsers.mdlx.Light
++  const ParserModel = MV.parsers.mdlx.Model
++  const originalDynamicLoad = ParserModel.prototype.loadDynamicObjects
++  ParserModel.prototype.loadDynamicObjects = function(this: any, out: any[], ctor: any, stream: any, size: number): void {
++    if (ctor !== Light) return originalDynamicLoad.call(this, out, ctor, stream, size)
++    const end = stream.index + size
++    while (stream.index < end) {
++      const light = new Light()
++      light.readMdx(stream, this.version)
++      out.push(light)
++    }
++  }
++  const originalLightRead = Light.prototype.readMdx
++  const GenericObject = Object.getPrototypeOf(Light.prototype)
++  Light.prototype.readMdx = function(this: any, stream: any, version: number): void {
++    if (version < 1200) return originalLightRead.call(this, stream)
++    const start = stream.index
++    const size = stream.readUint32()
++    GenericObject.readMdx.call(this, stream)
++    this.type = stream.readUint32()
++    if (version >= 1300) stream.skip(4)
++    stream.readFloat32Array(this.attenuation)
++    stream.readFloat32Array(this.color)
++    this.intensity = stream.readFloat32()
++    stream.readFloat32Array(this.ambientColor)
++    this.ambientIntensity = stream.readFloat32()
++    stream.skip(4) // shadow intensity
++    if (version >= 1300) stream.skip(8)
++    if (version >= 1600) stream.skip(12)
++    this.readAnimations(stream, size - (stream.index - start))
++  }
++
+   // Save the lib's original Layer.readMdx so files with VERS < 1100 still
+   // go through the lib's well-tested path.
+   const origLayerReadMdx = Layer.prototype.readMdx
+diff --git a/frontend/src/scene-instances.ts b/frontend/src/scene-instances.ts
+index f847c83..1cfee9e 100644
+--- a/frontend/src/scene-instances.ts
++++ b/frontend/src/scene-instances.ts
+@@ -1708,7 +1708,7 @@ export function createScene(canvas: HTMLCanvasElement, reforged: boolean = false
+   // returns the placed instance, or null if the type has no MDX.
+   async function placeUnit(unit: any, types: Record<string, UnitTypeInfo>): Promise<any | null> {
+     const info = types[unit.type_id]
+-    if (!info || !info.file) return null
++    if (!info || !info.file) { flogWarn('[unit missing type/model]', unit.type_id, unit.skin_id); return null }
+     const path = mdxPath(info.file)
+     let model: any
+     try {
+diff --git a/internal/casc/casc.go b/internal/casc/casc.go
+index cb49901..815612d 100644
+--- a/internal/casc/casc.go
++++ b/internal/casc/casc.go
+@@ -302,6 +302,8 @@ var sdCascPrefixes = []string{
+ 	"war3.w3mod:_hd.w3mod:",
+ 	"war3.w3mod:_locales\\enus.w3mod:",
+ 	"war3.w3mod:_deprecated.w3mod:",
++	"war3.w3mod:_de.w3mod:",
++	"war3.w3mod:_de.w3mod:_locales\\enus.w3mod:",
+ }
+ 
+ // hdCascPrefixes are the CASC mount paths we try in HD (Reforged) mode.
+@@ -312,6 +314,8 @@ var hdCascPrefixes = []string{
+ 	"war3.w3mod:",
+ 	"war3.w3mod:_locales\\enus.w3mod:",
+ 	"war3.w3mod:_deprecated.w3mod:",
++	"war3.w3mod:_de.w3mod:",
++	"war3.w3mod:_de.w3mod:_locales\\enus.w3mod:",
+ }
+ 
+ // cascPrefixes is retained as the SD default for back-compat with callers
 diff --git a/internal/forge/mpq_write_source.go b/internal/forge/mpq_write_source.go
 index 3dc95bc..bfebf35 100644
 --- a/internal/forge/mpq_write_source.go
@@ -625,3 +827,71 @@ index 3197a83..bc41fbb 100644
  		if p.FixedStartPosition, err = r.i32(); err != nil {
  			return nil, err
  		}
+diff --git a/typeindex.go b/typeindex.go
+index e3d4de9..0418a77 100644
+--- a/typeindex.go
++++ b/typeindex.go
+@@ -200,6 +200,16 @@ func resolveDisplay(raw string, mapStrings wts.Strings) string {
+ // here so each row picks up its proper `Name=Paladin` (the stock SLK only
+ // has internal lowercase identifiers like "paladin"). Same with the Doodad/
+ // Destructable SkinStrings files for display names.
++// Per-mode skin keys are used even in Classic installations for several stock units.
++func firstAssetString(row slk.MappedRow, key string) string {
++	for _, k := range []string{key, key + ":sd", key + ":hd"} {
++		if v := strings.TrimSpace(row.String(k)); v != "" {
++			return v
++		}
++	}
++	return ""
++}
++
+ func buildTypeIndex() {
+ 	units := slk.New()
+ 	loadSLKs(units, []string{
+@@ -232,12 +242,36 @@ func buildTypeIndex() {
+ 		"Units/destructableSkin.txt",
+ 	})
+ 
++	// Blizzard's SLK uses Ycgd while its skin table uses YCgd. Resolve only
++	// missing doodad skin data, only from one unambiguous case-insensitive donor.
++	// Never fold unit IDs: Hpal and hpal are distinct Warcraft unit types.
++	for id, row := range doodads.Rows {
++		if firstAssetString(row, "file") != "" {
++			continue
++		}
++		var donor slk.MappedRow
++		matches := 0
++		for skinID, skin := range doodads.Rows {
++			if skinID != id && strings.EqualFold(skinID, id) && firstAssetString(skin, "file") != "" {
++				donor = skin
++				matches++
++			}
++		}
++		if matches == 1 {
++			for key, value := range donor {
++				if strings.TrimSpace(row.String(key)) == "" {
++					row[key] = value
++				}
++			}
++		}
++	}
++
+ 	wes := wesStrings()
+ 
+ 	unitIndex = make(map[string]UnitTypeInfo, len(units.Rows))
+ 	for id, row := range units.Rows {
+ 		info := UnitTypeInfo{
+-			File:       row.String("file"),
++			File:       firstAssetString(row, "file"),
+ 			ModelScale: row.Number("modelScale"),
+ 			MoveHeight: row.Number("moveHeight"),
+ 			Red:        int(row.Number("red")),
+@@ -258,7 +292,7 @@ func buildTypeIndex() {
+ 	doodIndex = make(map[string]DoodadTypeInfo, len(doodads.Rows))
+ 	for id, row := range doodads.Rows {
+ 		info := DoodadTypeInfo{
+-			File:     row.String("file"),
++			File:     firstAssetString(row, "file"),
+ 			NumVar:   int(row.Number("numVar")),
+ 			FixedRot: row.Number("fixedRot"),
+ 			// Doodads use defScale; modelScale is the unit-side name. The
