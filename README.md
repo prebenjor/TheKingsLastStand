@@ -2,6 +2,8 @@
 
 ## World Editor workshop
 
+Latest authored [layout/story revision](docs/EDITOR-LAYOUT-REVISION.md): Orc village removed, gates replaced by cliffs, troll camp added. Documentation is updated; runtime integration awaits the saved/closed editor handoff. See the [wc3-forge assessment](docs/WC3-FORGE-ASSESSMENT.md) for the potential MCP authoring workflow.
+
 Follow the approved [eight-chapter Editor Workshop](docs/EDITOR-WORKSHOP.md), starting with Chapter 0 on the current Terrain copy. The [handoff protocol](docs/EDITOR-WORKSHOP-HANDOFF.md) preserves a native baseline and reports terrain, reference moves, object/rank fields and trigger changes before source integration. Chapter 0 awaits the user's save/close; the gameplay package remains KLS-D-68303d69bf.
 
 ## Saved terrain and editor layout — 2026-09-30

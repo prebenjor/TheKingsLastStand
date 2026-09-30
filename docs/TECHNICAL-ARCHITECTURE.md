@@ -78,7 +78,7 @@ This registry records project-owned object rawcodes that agents are likely to co
 | AK00–AK24 | Twenty-five custom hero signature spells in hero-selector order |
 | Havl, Htor, Okrg, Omor, Esly, Efal, Uvyr, Utha | Eight custom selectable heroes based on installed race-native hero models |
 | kH00–kH03, kF00–kF03, kY00–kY03 | Four race-themed Hall, Foundry and Siege Yard roles |
-| kQ00–kQ03 | Crownlands story characters for the four settlements |
+| kQ00–kQ03 | Crownlands story characters; preserve IDs while relocating Northwatch from the deleted Orc village (pending integration) |
 | I23C–I23V | Twenty race-themed item records, five per race |
 | RCP4–RCP7 | Four race-themed Legendary Foundry recipes |
 | I010–I013 | Four boss relic items; see ITEMS-AND-EQUIPMENT.md |

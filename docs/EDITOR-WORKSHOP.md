@@ -2,12 +2,14 @@
 
 Approved 2026-09-30. Eight chapters, numbered **0–7**. Finish one chapter, save and close, then hand it back before starting the next. This workshop ends after Chapter 7; full endurance acceptance is separate.
 
+**Latest layout revision:** the user has removed Redtusk Hold, replaced gates with cliffs and added a troll camp. Preserve these edits; the user's authored composition is the visual direction. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). If those edits preceded a clean native baseline, preserve the complete save and review conservatively rather than calling it an unchanged Chapter 0 save.
+
 ## Start here — Chapter 0 only
 
 Current working map: `C:\Users\asphy\Documents\Warcraft3Maps\kings-last-stand\build\KLS-D-68303d69bf-Development-Terrain.w3m`.
 
 1. Open that **Terrain** copy in World Editor using **File → Open Map**.
-2. Look for the castle, shops, four villages/quest sites and the 25 hero previews. These are disposable layout references; the installed gameplay map creates its real units at startup.
+2. Look for the castle, shops, surviving villages/quest sites and 25 hero previews. Respect deliberate deletions. These are disposable layout references; the installed gameplay map creates its real units at startup.
 3. Use **File → Save Map**, without making more changes. Allow the editor to finish saving.
 4. Close the map. Send: **“Chapter 0 baseline saved and closed.”** Mention any missing references or save warnings.
 
@@ -63,7 +65,7 @@ Open tools through **Module**. See Blizzard's [editor introduction](https://news
 | King Aldric | `(0, 350)` |
 | Restoring Spring | `(-900, -1600)` |
 | Market | Around `Y = -3900`; a second row is farther south |
-| Northern gate | Around `Y = 5200` |
+| Former northern gate / new cliffs | Former runtime gates were around `Y = 5200`; inspect the user's authored passages |
 
 Do these in order:
 
@@ -121,14 +123,13 @@ Gameplay checks: choose one hero of **each race**, inspect worker/mine/build men
 
 **Stop when:** every race has a pass or an individually described failure. Save/close and hand off Chapter 2. Moving one base must not accidentally shift all bases that currently share mine/altar offsets; the agent will introduce individual placement overrides as needed and review plot bounds, start markers and camera positions.
 
-## Chapter 3 — Four villages and their roads
+## Chapter 3 — Surviving villages, troll camp and their roads
 
-**Goal:** four recognizable, reachable settlements. Complete them in this order:
+**Goal:** three recognizable, reachable settlements plus preservation of the user's troll camp. Complete the settlements in this order:
 
 | Settlement | Approximate location | Direction |
 |---|---|---|
 | Crownshire | `(0, -9000)` | Homes, farms, market activity, worn roads |
-| Redtusk Hold | `(-9000, 0)` | Timber, hides, training space, rough paths |
 | Moonbark Glade | `(9000, 0)` | Curving paths, groves, moonwell space, clearings |
 | Wraithfall | `(0, 9000)` | Crypts, broken stone, sparse vegetation, dark ground |
 
@@ -139,11 +140,13 @@ For each village:
 3. Connect entrances with paths; connect the village to the kingdom road.
 4. Cluster scenery around edges instead of scattering identical pieces uniformly.
 5. Make its quest site noticeable and reachable.
-6. Check the route with several units. Leave Wraithfall's invasion approach and gate opening clear.
+6. Check the route with several units. Leave Wraithfall's invasion approach and cliff passages clear. Do not replace cliffs with the former gates.
 
-Quest-site rawcodes are `kQ00`–`kQ03` in race order Human, Orc, Night Elf, Undead. Use these identities when reporting moves.
+Redtusk Hold was removed entirely; do not recreate it. Inspect the troll camp as a separate authored landmark and record its units, ownership, scenery and accessible approach. Its story role has not been decided. Orc player structures and heroes remain.
 
-**Stop when:** all villages have connected routes and distinct scenery. Save/close and hand off Chapter 3. Agent reviews moved buildings, quest sites, escort destination/routes, encounter positions and refuge ranges together. Story remains optional, shared and persistent for that match; waves keep running.
+Existing quest-site rawcodes are `kQ00`–`kQ03` in race order Human, Orc, Night Elf, Undead. Report the deleted/relocated `kQ01` explicitly so Northwatch's story can be relocated without reviving Redtusk Hold. Use existing identities when reporting moves.
+
+**Stop when:** the remaining villages have connected routes/distinct scenery and the troll camp is documented. Save/close and hand off Chapter 3. Agent reviews deleted/moved buildings, relocated Northwatch, Orc item access, troll units, escort routes, encounters and three refuge ranges together. Story remains optional, shared and persistent for that match; waves keep running.
 
 ## Chapter 4 — Heroes and their companies
 

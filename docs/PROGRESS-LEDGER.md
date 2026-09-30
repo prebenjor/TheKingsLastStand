@@ -1,5 +1,13 @@
 # Current status — 2026-09-30
 
+## User-authored layout revision — reported, source integration pending
+
+- User reports removing the entire Orc village, replacing gates with cliffs and placing a troll camp. Their authored doodad/unit/terrain composition becomes the visual direction. Updated the game vision/spec, Crownlands story, workshop and future-agent rules; [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) records the changes and pending source dependencies.
+- Revised story preserves four stages: Northwatch contact relocates to surviving allied ground; Crownshire escort follows authored routes; restoration activates three extant quarters; Wraithfall ritual remains. Preserve all four playable races/companies/items, and relocate displaced Orc shop stock without resurrecting Redtusk Hold. Exact contact positions and troll behavior await inspection/handoff.
+- Live read-only Computer Use was requested and attempted. Initialization failed twice (including a kernel reset) with `failed to write kernel assets: The system cannot find the path specified. (os error 3)`. No screenshot, window enumeration or editor inputs occurred. User was asked for overview/cliff/camp screenshots; do not claim observed style details.
+- wc3-forge's repository/README/releases were reviewed. [Assessment](WC3-FORGE-ASSESSMENT.md): promising standalone editor with MCP/shared undo/JASS support, alpha, no currently callable tool connection and no exact-map round-trip test. No installation, launch, conversion or map save was performed.
+- Documentation-only update; current package remains KLS-D-68303d69bf. No tests requested/run this turn and no map capture/build/install performed. `tools/town_catalog.py` and `source/game.j` still spawn the old Orc settlement/gates; `source/crownlands.j` still assumes four sites. Reconcile them after the user saves/closes this revision, preserving complete unit data as well as the six art layers.
+
 ## Editor Workshop setup — current map remains KLS-D-68303d69bf
 
 - Approved editor-first eight-chapter walkthrough is implemented in [EDITOR-WORKSHOP.md](EDITOR-WORKSHOP.md), with a finite end at Chapter 7 and [handoff/integration protocol](EDITOR-WORKSHOP-HANDOFF.md). Human chapters remain pending, beginning with Chapter 0's clean native save/close.

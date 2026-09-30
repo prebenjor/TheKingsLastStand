@@ -1,5 +1,7 @@
 # World Editor visual polish handoff — 2026-09-29
 
+Historical checkpoint. The September 30 [editor layout revision](EDITOR-LAYOUT-REVISION.md) supersedes its gate/four-settlement assumptions: preserve the Orc village deletion, new cliffs and troll camp. Current runtime reconciliation awaits the saved/closed map; do not restore the former layout from the notes below.
+
 Status: repository and related chats reviewed; no map edits or new package made.
 
 Current package verified by SHA-256: `KLS-D-4e6ae863df`, `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`. Existing uncommitted gameplay work was preserved.

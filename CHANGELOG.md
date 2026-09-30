@@ -1,5 +1,11 @@
 # Build changelog
 
+## 2026-09-30 — Authored layout/story revision (documentation; integration pending)
+
+- Recorded the user's removed Orc village, gate-to-cliff replacement and added troll camp; their hand-authored composition sets the visual direction.
+- Revised the specification/story to three surviving settlements, a relocated Northwatch contact, three refuges, preserved Orc player identity and relocated Orc relic access. Detailed source changes await saved-map handoff; no new gameplay package is claimed.
+- Assessed wc3-forge as a potential separate MCP-enabled authoring editor. No installation or compatibility test performed. Live editor observation could not start because the Computer Use helper failed to initialize; visual evidence remains pending.
+
 ## 2026-09-30 — Editor Workshop tooling (no new map package)
 
 - Added the approved finite eight-chapter editor guide, source navigation, checklists and human handoff form.

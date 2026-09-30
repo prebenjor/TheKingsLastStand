@@ -2,6 +2,10 @@
 
 This document preserves the approved gameplay target. Code presence is tracked separately from live verification in ROADMAP-AND-ACCEPTANCE.md.
 
+## September 30 authored layout decision
+
+The user removed Redtusk Hold entirely, replaced gates with cliffs and placed a troll camp. Preserve that authored terrain/doodad/unit composition after the saved-map handoff. The three surviving settlements are Crownshire, Moonbark Glade and Wraithfall; all four playable races and personal bases remain. The optional four-stage story relocates Northwatch's contact and restores three extant refuges, with no prerequisite on a deleted Orc town. Troll-camp behavior is undecided. Exact positions, camp ownership and cliff-route validation remain pending; see [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). Current runtime still creates four towns and old gates and must be reconciled before the next integrated build.
+
 ## Match state and opening
 
 Authoritative match states:
@@ -61,8 +65,8 @@ Construction rules:
 - Reject a building or upgrade whose footprint intersects the central unbuildable road, leaves the owner's plot, overlaps prohibited structures, or blocks the only enemy route.
 - An invalid placement is completely refunded and leaves no abandoned construction site.
 - Place tower frontage facing the road. Prove coverage of the road before scenery decoration.
-- Confirm worker pathing to the mine and trees and enemy pathing from northern spawns through the open gate to King Aldric before adding decorative blocking objects.
-- The north wall must have the requested long runs on both sides and a permanent central opening. It is visual fortification, not a closed AI path.
+- Confirm worker pathing to the mine and trees and enemy pathing from northern spawns through the authored cliff passages to King Aldric before adding blocking objects.
+- Preserve the user's cliff-based frontier instead of restoring deleted gates. Leave a navigable invasion route wide enough for bosses and siege units.
 
 ## King Aldric and his castle
 
@@ -100,7 +104,7 @@ King Aldric is the shared survival objective at the central castle. His castle i
 ## Recovery, shops, and progression spaces
 
 - King's Restoring Spring is below/south-west of the castle and outside the road. Within 450 range, restore 1% of maximum health and 1% of maximum mana to active living defender heroes every second, capped at their maximums. This is quiet regeneration: no healing effect, floating text, or per-tick notification.
-- Five rarity vendors (Common/Quartermaster, Uncommon/Veteran, Rare Arms & Armor and Rare Apparel & Relics, Epic/Runic Reliquary, and Legendary/Royal Vault) sell general gear in the southern market. The Master Forge stocks three general recipes; each player's constructed race-themed Foundry sells one copy of that race's Legendary pattern. Each race's Crownlands town shop sells four themed relics and potions; Legendary race relics are recipe outputs. Sage's Archive sits next to the Apothecary and sells personal permanent Strength/Agility/Intelligence tomes. All stock fits the native 12-slot shop command card.
+- Five rarity vendors (Common/Quartermaster, Uncommon/Veteran, Rare Arms & Armor and Rare Apparel & Relics, Epic/Runic Reliquary, and Legendary/Royal Vault) sell general gear in the southern market. The Master Forge stocks three general recipes; each player's constructed race-themed Foundry sells one copy of that race's Legendary pattern. The three surviving town shops sell their four themed relics and potions. Move the removed Orc shop's four relics to existing matching-rarity market vendors, preserving recipe component access and checking capacity. Legendary race relics remain recipe outputs. Sage's Archive sits next to the Apothecary and sells personal permanent Strength/Agility/Intelligence tomes. All stock fits the native 12-slot shop command card. Revised sources remain pending integration.
 - Gold alone gates equipment quality; all shop tiers are available from the beginning.
 - A shop must use an actual clickable item stock/window with icon, item identity, price, slot, stats, and special effect tooltip. A text-only page or empty list is a user-reported failure to resolve.
 - The Altar of Kings and selection courtyard are before wave 1. It must match the familiar hero-building role and show the user's chosen hero flow rather than an unrelated unit/model.

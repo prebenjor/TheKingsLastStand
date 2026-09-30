@@ -47,7 +47,7 @@ The current editor working copy is `build/KLS-D-8048eea39b-Development-Terrain.w
 
 Startup no longer stamps stone plot borders or repaints the central road in `source/game.j`. The W3E layer owns those textures; the procedural fallback already supplies roads and plot markers. Runtime resource trees and northern gate structures remain. This prevents subsequent editor art from being overwritten when a match starts.
 
-Remaining work: soften the repeated square grass patches, finish the castle-town composition, dress all four settlements, add low hills and mixed boulder groups, review scripted building positions against the authored clearings, then save/capture the art and package one new Development build. Navigation, mines, gate and boss clearance require exact-build engine checks. Do not describe this pass as finished from the source regression alone.
+Latest direction: use the user's current authored composition as the style reference. They removed Redtusk Hold, replaced gates with cliffs and added a troll camp; preserve those choices. Dress only surviving settlements and inspect camp units/ownership. Capture after save/close, review deleted/moved runtime references and update source before packaging. Navigation, mines, cliff passages and boss clearance require exact-build engine checks. Live observation of the latest layout is pending due to Computer Use initialization failure; see [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). Earlier four-panel examples are inspiration, not instructions to reconstruct the removed village/gates.
 
 ### Editor continuation checkpoint
 

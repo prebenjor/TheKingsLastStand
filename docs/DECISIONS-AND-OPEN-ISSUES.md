@@ -17,13 +17,15 @@ This file keeps design choices visible when implementation evolves. A newer expl
 
 ## Current approved user decisions
 
+- September 30 editor revision: the user removed the entire Orc village, replaced gates with cliffs and added a troll camp. Their authored terrain/doodads/units set the visual direction. Live observation failed at Computer Use initialization; exact saved placement/ownership/style details remain pending. Do not regenerate the removed village or gates after integration. Relocate Northwatch and Orc vendor services, activate only existing refuges, and keep all four player races. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). This supersedes the older four-town/open-gate specification.
+
 - Create a new RPG/defense map on the supplied blank map instead of deprotecting the original map considered at the start.
 - Co-op defense: defenders hold the south-side kingdom and enemies attack down the road from the north toward the neutral king.
 - Two to four players; solo allowed for diagnostic builds.
 - Each player controls only their own hero, builders/workers, army, and base. No shared unit control.
 - Allied Human, Orc, Night Elf and Undead defenders. A player's confirmed hero independently selects the matching worker, building menu, structures and recruits; the factions cooperate under King Aldric.
-- Choose one main route, four individual bases aligned horizontally across one horizontal defense row, broad northern wall with an open gate, King Aldric's castle centered on the defense row, and a shared market farther south.
-- Battlefield target is 192×192 cells, with connected Human, Orc, Night Elf and Undead allied settlements around Aldric's keep. The main road, plots, mine/tree routes, gates, bounds and minimap must remain readable and navigable.
+- Choose one main route, four individual bases aligned horizontally across the defense row, the user's cliff-based frontier passages, King Aldric's castle and a shared market farther south.
+- Battlefield target is 192×192 cells, with surviving Human, Night Elf and Undead settlements around Aldric's keep plus the authored troll camp. Orc defenders retain their player-base identity. Roads, plots, mine/tree routes, cliff passages, bounds and minimap must remain readable and navigable.
 - Preserve the original escalating 40-wave, four-chapter Crownlands story and bosses on 10/20/30/40. The latest explicit decision supersedes the former 40-wave cap: continue automatically into the repeating campaign crossover roster, spawn another boss every ten waves, and end the run only when King Aldric dies. Show the highest wave reached.
 - Varied undead and demon invasion forces, with enough living/other units in the broader rosters for abilities that need living targets to remain usable.
 - Classic worker economy, plus combat gold. Markets are shared structures; purchases and reward gear remain personal.
