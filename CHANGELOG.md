@@ -1,5 +1,12 @@
 # Build changelog
 
+## 2026-10-01 — Native wc3-forge compatibility (no new gameplay package)
+
+- Built a separate patched forge supporting native W3I39 and unit/doodad13 read/write, preserving groups, tilt, lights and native scale values. Updated MCP registration to the patched executable.
+- Fixed archive listfile preservation. Final isolated MCP save retained all 26 members; only the listfile index changed. Metadata, 102 units and 1,100 doodads passed byte-identical parser/writer checks.
+- Opened a separate Development-Forge editing copy. Original Terrain save and immutable backup remain unchanged at f9c9276256ed. No map layout/gameplay edits, rebuild or installation.
+- Reproducible patch, diagnostic and precise limitations: docs/WC3-FORGE-NATIVE-COMPATIBILITY.md. In-game/visual/general object and trigger-edit acceptance remains pending.
+
 ## 2026-09-30 — wc3-forge MCP setup (no new map package)
 
 - Registered and exercised the owner's installed wc3-forge MCP connection: initialization, 153-tool discovery and selection of the live editor succeeded.

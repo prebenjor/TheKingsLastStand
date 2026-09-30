@@ -1,6 +1,10 @@
 # wc3-forge MCP connection — 2026-09-30
 
-## Result
+## Update — 1 October 2026
+
+The historical load blocker below is resolved by the separate patched native build. See [native compatibility implementation and evidence](WC3-FORGE-NATIVE-COMPATIBILITY.md) for the new MCP executable, working copy, preservation checks and remaining limits.
+
+## Historical result
 
 The owner explicitly requested an MCP connection to their installed wc3-forge and map editing. **The connection is configured and responding. Map editing through forge is blocked by its metadata parser.** No map save, format conversion or gameplay/terrain edit occurred.
 

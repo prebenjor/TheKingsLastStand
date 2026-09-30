@@ -1,3 +1,12 @@
+# Current status — 2026-10-01
+
+## Native forge compatibility implemented
+
+- The earlier map-load blocker below is resolved by the separate patched forge build. MCP opens the native human map with 102 units; the diagnostic preserves 1,100 doodads and W3I39 byte-for-byte.
+- Final isolated placement-writer/archive save: all 26 members retained, no unlisted files, only listfile text differs. Original Terrain map and immutable f9c9276256ed backup unchanged.
+- Separate Development-Forge copy is loaded in patched forge; MCP configuration updated. Patch and build instructions are in [WC3-FORGE-NATIVE-COMPATIBILITY.md](WC3-FORGE-NATIVE-COMPATIBILITY.md).
+- Gameplay package remains KLS-D-68303d69bf Development. Human layout/runtime integration and current engine/multiplayer/endurance acceptance remain pending.
+
 # Current status — 2026-09-30
 
 ## Authorized wc3-forge MCP connection — map-load compatibility blocker

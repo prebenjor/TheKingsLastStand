@@ -1,0 +1,627 @@
+diff --git a/internal/forge/mpq_write_source.go b/internal/forge/mpq_write_source.go
+index 3dc95bc..bfebf35 100644
+--- a/internal/forge/mpq_write_source.go
++++ b/internal/forge/mpq_write_source.go
+@@ -245,6 +245,13 @@ func (m *mpqSource) flushLocked(force bool) error {
+ 	hashCount := m.a.HashTableSize()
+ 	sectorShift := m.a.SectorSizeShift()
+ 	emitListfile := m.a.Has("(listfile)")
++	if emitListfile {
++		listData, listErr := m.a.Read("(listfile)")
++		if listErr != nil {
++			return fmt.Errorf("preserve source listfile: %w", listErr)
++		}
++		named = append(named, mpq.FileEntry{Name: "(listfile)", Data: listData})
++	}
+ 
+ 	// Preserve the original preheader (HM3W / user-data shunt) verbatim. We
+ 	// read it from disk NOW, while the archive handle is still open and the
+diff --git a/internal/formats/doodadsdoo/doodadsdoo.go b/internal/formats/doodadsdoo/doodadsdoo.go
+index 2d578f1..ff8a180 100644
+--- a/internal/formats/doodadsdoo/doodadsdoo.go
++++ b/internal/formats/doodadsdoo/doodadsdoo.go
+@@ -43,11 +43,11 @@ import (
+ 
+ // File is the parsed contents of a war3map.doo file.
+ type File struct {
+-	Format        [4]byte // always "W3do" for valid files
+-	Version       uint32  // 7=RoC, 8=TFT/Reforged
+-	SubVersion    uint32  // commonly 9 or 11
+-	Doodads       []Doodad
+-	SpecialFormat uint32 // version of the trailing special-doodads section (commonly 0)
++	Format         [4]byte // always "W3do" for valid files
++	Version        uint32  // 7=RoC, 8=TFT/Reforged
++	SubVersion     uint32  // commonly 9 or 11
++	Doodads        []Doodad
++	SpecialFormat  uint32 // version of the trailing special-doodads section (commonly 0)
+ 	SpecialDoodads []SpecialDoodad
+ }
+ 
+@@ -56,11 +56,15 @@ type File struct {
+ // the two at the wire level; callers classify by looking the TypeID up in
+ // doodads.slk (decorative) vs destructibles.slk (destructible).
+ type Doodad struct {
+-	TypeID    string     // FourCC, exactly 4 ASCII bytes. May be a random-set ID (e.g. "YOtf") rather than a real doodad — preserved verbatim.
+-	Variation uint32     // model variation index
+-	Position  [3]float32 // game coords (x, y, z) — pass-through, no scaling
+-	Rotation  float32    // facing angle as stored in file (radians for sloc-style / engine-placed; possibly degrees for user-placed entries — same documented ambiguity as unitsdoo)
+-	Scale     [3]float32 // natural scale (1.0 = default). On-disk values are stored multiplied by 128; Parse divides to match runtime convention.
++	DEUnknown   uint32     // v13+ opaque word before creation ID
++	GroupID     uint32     // v13+ editor group identity
++	Roll, Pitch float32    // v13+ orientation
++	LightData   []byte     // v13+ native light records, 36 bytes per record
++	TypeID      string     // FourCC, exactly 4 ASCII bytes. May be a random-set ID (e.g. "YOtf") rather than a real doodad — preserved verbatim.
++	Variation   uint32     // model variation index
++	Position    [3]float32 // game coords (x, y, z) — pass-through, no scaling
++	Rotation    float32    // facing angle as stored in file (radians for sloc-style / engine-placed; possibly degrees for user-placed entries — same documented ambiguity as unitsdoo)
++	Scale       [3]float32 // natural scale (1.0 = default). On-disk values are stored multiplied by 128; Parse divides to match runtime convention.
+ 
+ 	// SkinID is the Reforged "skin" override FourCC. Present unconditionally
+ 	// at subversion >= 11. At subversion 9 it MAY or MAY NOT be present
+@@ -279,6 +283,11 @@ func readDoodad(r *reader, version uint32) (Doodad, error) {
+ 		d.skinIDPresent = true
+ 	}
+ 
++	if version >= 13 {
++		if d.GroupID, err = r.readU32(); err != nil {
++			return d, err
++		}
++	}
+ 	if d.Flags, err = r.readU8(); err != nil {
+ 		return d, fmt.Errorf("flags: %w", err)
+ 	}
+@@ -342,10 +351,35 @@ func readDoodad(r *reader, version uint32) (Doodad, error) {
+ 		d.MapItemTable = -1
+ 	}
+ 
++	if version >= 13 {
++		if d.DEUnknown, err = r.readU32(); err != nil {
++			return d, err
++		}
++	}
+ 	if d.CreationNumber, err = r.readU32(); err != nil {
+ 		return d, fmt.Errorf("creation_number: %w", err)
+ 	}
+ 
++	if version >= 13 {
++		if d.Roll, err = r.readF32(); err != nil {
++			return d, err
++		}
++		if d.Pitch, err = r.readF32(); err != nil {
++			return d, err
++		}
++		lightCount, lerr := r.readU32()
++		if lerr != nil {
++			return d, lerr
++		}
++		if uint64(lightCount) > uint64((len(r.buf)-r.pos)/36) {
++			return d, fmt.Errorf("invalid native light count %d", lightCount)
++		}
++		raw, lerr := r.readBytes(int(lightCount) * 36)
++		if lerr != nil {
++			return d, lerr
++		}
++		d.LightData = append([]byte(nil), raw...)
++	}
+ 	return d, nil
+ }
+ 
+diff --git a/internal/formats/doodadsdoo/encode.go b/internal/formats/doodadsdoo/encode.go
+index 5ed41b9..5054cbe 100644
+--- a/internal/formats/doodadsdoo/encode.go
++++ b/internal/formats/doodadsdoo/encode.go
+@@ -93,6 +93,9 @@ func writeDoodad(w *writer, d *Doodad, version uint32) error {
+ 		w.writeBytes([]byte(d.SkinID))
+ 	}
+ 
++	if version >= 13 {
++		w.writeU32(d.GroupID)
++	}
+ 	w.writeU8(d.Flags)
+ 	w.writeU8(d.Life)
+ 
+@@ -134,7 +137,19 @@ func writeDoodad(w *writer, d *Doodad, version uint32) error {
+ 		}
+ 	}
+ 
++	if version >= 13 {
++		w.writeU32(d.DEUnknown)
++	}
+ 	w.writeU32(d.CreationNumber)
++	if version >= 13 {
++		if len(d.LightData)%36 != 0 {
++			return fmt.Errorf("native light data must contain complete 36-byte records")
++		}
++		w.writeF32(d.Roll)
++		w.writeF32(d.Pitch)
++		w.writeU32(uint32(len(d.LightData) / 36))
++		w.writeBytes(d.LightData)
++	}
+ 	return nil
+ }
+ 
+diff --git a/internal/formats/mpq/write_lossless.go b/internal/formats/mpq/write_lossless.go
+index d536b5f..daacd73 100644
+--- a/internal/formats/mpq/write_lossless.go
++++ b/internal/formats/mpq/write_lossless.go
+@@ -104,6 +104,7 @@ func BuildLossless(keep []RawEntry, named []FileEntry, hashCount uint32, sectorS
+ 	// --- Validate + dedupe the named set (mirrors Build's contract). -------
+ 	seen := make(map[string]struct{}, len(named))
+ 	var content []FileEntry
++	var originalListfile []byte
+ 	for _, f := range named {
+ 		norm := normalizePath(f.Name)
+ 		if norm == "" {
+@@ -111,6 +112,7 @@ func BuildLossless(keep []RawEntry, named []FileEntry, hashCount uint32, sectorS
+ 		}
+ 		key := upperASCII(norm)
+ 		if key == upperASCII(listfileName) {
++			originalListfile = append([]byte(nil), f.Data...)
+ 			continue // we synthesise our own listfile
+ 		}
+ 		if _, dup := seen[key]; dup {
+@@ -127,6 +129,12 @@ func BuildLossless(keep []RawEntry, named []FileEntry, hashCount uint32, sectorS
+ 	namedEntries = append(namedEntries, content...)
+ 	if emitListfile || len(content) > 0 {
+ 		var lf bytes.Buffer
++		// Preserve known source names, including native groups/lights/skins.
++		// Raw copy-through preserves their blocks but cannot recover filenames.
++		lf.Write(originalListfile)
++		if len(originalListfile) > 0 && originalListfile[len(originalListfile)-1] != '\n' {
++			lf.WriteString("\r\n")
++		}
+ 		for _, f := range content {
+ 			lf.WriteString(f.Name)
+ 			lf.WriteString("\r\n")
+@@ -159,16 +167,16 @@ func BuildLossless(keep []RawEntry, named []FileEntry, hashCount uint32, sectorS
+ 	//      pinned reservations, lowest free offset first.
+ 	// The block table and hash table go after the highest data end.
+ 	type payload struct {
+-		data    []byte
+-		flags   uint32
+-		uSize   uint32
+-		hA, hB  uint32
+-		locale  uint16
+-		plat    uint16
+-		probe   uint32 // hash slot to probe from (Slot&mask for keep, lookup&mask for named)
+-		pinned  bool
+-		pinAt   uint32 // valid when pinned
+-		offset  uint32 // assigned below
++		data   []byte
++		flags  uint32
++		uSize  uint32
++		hA, hB uint32
++		locale uint16
++		plat   uint16
++		probe  uint32 // hash slot to probe from (Slot&mask for keep, lookup&mask for named)
++		pinned bool
++		pinAt  uint32 // valid when pinned
++		offset uint32 // assigned below
+ 	}
+ 	payloads := make([]payload, 0, int(totalFiles))
+ 
+@@ -188,12 +196,12 @@ func BuildLossless(keep []RawEntry, named []FileEntry, hashCount uint32, sectorS
+ 	}
+ 	for _, e := range namedEntries {
+ 		payloads = append(payloads, payload{
+-			data:   e.Data,
+-			flags:  flagFile | flagSingleUnit,
+-			uSize:  uint32(len(e.Data)),
+-			hA:     hashString(e.Name, hashNameA),
+-			hB:     hashString(e.Name, hashNameB),
+-			probe:  hashString(e.Name, hashOffset) & mask,
++			data:  e.Data,
++			flags: flagFile | flagSingleUnit,
++			uSize: uint32(len(e.Data)),
++			hA:    hashString(e.Name, hashNameA),
++			hB:    hashString(e.Name, hashNameB),
++			probe: hashString(e.Name, hashOffset) & mask,
+ 		})
+ 	}
+ 
+diff --git a/internal/formats/unitsdoo/encode.go b/internal/formats/unitsdoo/encode.go
+index 435efaa..b16c536 100644
+--- a/internal/formats/unitsdoo/encode.go
++++ b/internal/formats/unitsdoo/encode.go
+@@ -54,7 +54,7 @@ func Encode(f *File) ([]byte, error) {
+ 	// to every entity below. See fileSkinIDPolicy.
+ 	emitSkin := fileSkinIDPolicy(f)
+ 	for i, e := range f.Entities {
+-		if err := writeEntity(w, &e, f.SubVersion, emitSkin); err != nil {
++		if err := writeEntity(w, &e, f.Version, f.SubVersion, emitSkin); err != nil {
+ 			return nil, fmt.Errorf("entity %d: %w", i, err)
+ 		}
+ 	}
+@@ -90,7 +90,7 @@ func fileSkinIDPolicy(f *File) bool {
+ 	return f.SubVersion >= 11
+ }
+ 
+-func writeEntity(w *writer, e *Entity, subversion uint32, emitSkinID bool) error {
++func writeEntity(w *writer, e *Entity, version, subversion uint32, emitSkinID bool) error {
+ 	// type_id: 4 bytes, exactly.
+ 	if len(e.TypeID) != 4 {
+ 		return fmt.Errorf("type_id %q must be exactly 4 bytes", e.TypeID)
+@@ -111,6 +111,9 @@ func writeEntity(w *writer, e *Entity, subversion uint32, emitSkinID bool) error
+ 	for i := 0; i < 3; i++ {
+ 		if e.scaleRaw[i] != 0 {
+ 			w.writeF32(e.scaleRaw[i])
++		} else if version >= 13 {
++			// Native DE placements use natural scales, including values >= 2.
++			w.writeF32(e.Scale[i])
+ 		} else {
+ 			w.writeF32(e.Scale[i] * 128.0)
+ 		}
+@@ -132,6 +135,9 @@ func writeEntity(w *writer, e *Entity, subversion uint32, emitSkinID bool) error
+ 		w.writeBytes([]byte(e.SkinID))
+ 	}
+ 
++	if version >= 13 {
++		w.writeU32(e.GroupID)
++	}
+ 	w.writeU8(e.Flags)
+ 	w.writeU32(e.Player)
+ 	w.writeU8(e.UnknownByte1)
+@@ -238,6 +244,15 @@ func writeEntity(w *writer, e *Entity, subversion uint32, emitSkinID bool) error
+ 	w.writeU32(uint32(e.CustomColor))
+ 	w.writeU32(uint32(e.WaygateRegion))
+ 	w.writeU32(e.CreationNumber)
++	if version >= 13 {
++		if len(e.LightData)%36 != 0 {
++			return fmt.Errorf("native light data must contain complete 36-byte records")
++		}
++		w.writeF32(e.Roll)
++		w.writeF32(e.Pitch)
++		w.writeU32(uint32(len(e.LightData) / 36))
++		w.writeBytes(e.LightData)
++	}
+ 	return nil
+ }
+ 
+diff --git a/internal/formats/unitsdoo/unitsdoo.go b/internal/formats/unitsdoo/unitsdoo.go
+index 43052d4..d4bf6f9 100644
+--- a/internal/formats/unitsdoo/unitsdoo.go
++++ b/internal/formats/unitsdoo/unitsdoo.go
+@@ -41,11 +41,14 @@ type File struct {
+ // stream with the same layout; the TypeID's presence in the unit-table vs
+ // item-table SLK is what disambiguates at the consumer level.
+ type Entity struct {
+-	TypeID    string     // FourCC, exactly 4 ASCII bytes
+-	Variation uint32     // model variation index
+-	Position  [3]float32 // game coords (x, y, z) — pass-through, no scaling
+-	Rotation  float32    // facing angle as stored in file. User-placed units appear to be degrees (270 = south); sloc entries appear to be radians (4.712389 ≈ 3π/2). Caller may need to disambiguate by TypeID.
+-	Scale     [3]float32 // natural scale (1.0 = default). On-disk values are stored multiplied by 128; Parse divides to match runtime convention.
++	GroupID     uint32     // v13+ editor group identity
++	Roll, Pitch float32    // v13+ orientation
++	LightData   []byte     // v13+ native light records, 36 bytes per record
++	TypeID      string     // FourCC, exactly 4 ASCII bytes
++	Variation   uint32     // model variation index
++	Position    [3]float32 // game coords (x, y, z) — pass-through, no scaling
++	Rotation    float32    // facing angle as stored in file. User-placed units appear to be degrees (270 = south); sloc entries appear to be radians (4.712389 ≈ 3π/2). Caller may need to disambiguate by TypeID.
++	Scale       [3]float32 // natural scale (1.0 = default). On-disk values are stored multiplied by 128; Parse divides to match runtime convention.
+ 
+ 	// SkinID is the Reforged "skin" override FourCC. It is present unconditionally
+ 	// at subversion >= 11. At subversion 9 it MAY or MAY NOT be present depending
+@@ -54,7 +57,7 @@ type Entity struct {
+ 	// "absent in file" (consumers should fall back to TypeID).
+ 	SkinID string
+ 
+-	Flags uint8  // bitfield; 2 = default visible/selectable
++	Flags  uint8  // bitfield; 2 = default visible/selectable
+ 	Player uint32 // owning player slot (0-based; 24 = neutral hostile, etc.)
+ 
+ 	// UnknownByte1/2 are two opaque bytes between Player and HitPoints. HiveWE
+@@ -210,7 +213,7 @@ func Parse(data []byte) (*File, error) {
+ 	entityStart := r.pos
+ 	for _, withSkin := range chooseSkinIDPresence(f.SubVersion) {
+ 		r.pos = entityStart
+-		entities, perr := parseEntities(r, f.SubVersion, count, withSkin)
++		entities, perr := parseEntities(r, f.Version, f.SubVersion, count, withSkin)
+ 		if perr != nil {
+ 			continue
+ 		}
+@@ -232,7 +235,7 @@ func Parse(data []byte) (*File, error) {
+ 	// files), rather than a generic "no interpretation worked".
+ 	r.pos = entityStart
+ 	def := f.SubVersion >= 11
+-	if entities, perr := parseEntities(r, f.SubVersion, count, def); perr != nil {
++	if entities, perr := parseEntities(r, f.Version, f.SubVersion, count, def); perr != nil {
+ 		return nil, perr
+ 	} else {
+ 		f.Entities = entities
+@@ -269,7 +272,7 @@ func chooseSkinIDPresence(subversion uint32) []bool {
+ // which is strictly more robust (it can't drift mid-file). parseEntities
+ // returns the parsed entities or the first error encountered; the caller
+ // decides which policy "wins" by checking that r consumed the whole buffer.
+-func parseEntities(r *reader, subversion uint32, count uint32, withSkin bool) ([]Entity, error) {
++func parseEntities(r *reader, version, subversion uint32, count uint32, withSkin bool) ([]Entity, error) {
+ 	// Bound the entity count against the bytes actually remaining before
+ 	// preallocating. Even though Parse already caps count at maxEntities (1M),
+ 	// a small truncated/fuzzed file declaring a near-cap count would still make
+@@ -280,7 +283,7 @@ func parseEntities(r *reader, subversion uint32, count uint32, withSkin bool) ([
+ 	}
+ 	entities := make([]Entity, 0, count)
+ 	for i := uint32(0); i < count; i++ {
+-		e, err := readEntity(r, subversion, withSkin)
++		e, err := readEntity(r, version, subversion, withSkin)
+ 		if err != nil {
+ 			return nil, fmt.Errorf("entity %d: %w", i, err)
+ 		}
+@@ -295,7 +298,7 @@ func parseEntities(r *reader, subversion uint32, count uint32, withSkin bool) ([
+ // scale vector, when false it does not. The decision is uniform across a file —
+ // Parse picks whichever policy makes every entity parse and consumes the record
+ // stream exactly.
+-func readEntity(r *reader, subversion uint32, readSkinID bool) (Entity, error) {
++func readEntity(r *reader, version, subversion uint32, readSkinID bool) (Entity, error) {
+ 	var e Entity
+ 	var err error
+ 	e.parsed = true
+@@ -344,7 +347,7 @@ func readEntity(r *reader, subversion uint32, readSkinID bool) (Entity, error) {
+ 			return e, fmt.Errorf("scale[%d]: %w", i, err)
+ 		}
+ 		e.scaleRaw[i] = raw
+-		if raw < 2.0 {
++		if version >= 13 || raw < 2.0 {
+ 			e.Scale[i] = raw
+ 		} else {
+ 			e.Scale[i] = raw / 128.0
+@@ -363,6 +366,11 @@ func readEntity(r *reader, subversion uint32, readSkinID bool) (Entity, error) {
+ 		e.skinIDPresent = true
+ 	}
+ 
++	if version >= 13 {
++		if e.GroupID, err = r.readU32(); err != nil {
++			return e, err
++		}
++	}
+ 	if e.Flags, err = r.readU8(); err != nil {
+ 		return e, fmt.Errorf("flags: %w", err)
+ 	}
+@@ -568,6 +576,26 @@ func readEntity(r *reader, subversion uint32, readSkinID bool) (Entity, error) {
+ 		return e, fmt.Errorf("creation_number: %w", err)
+ 	}
+ 
++	if version >= 13 {
++		if e.Roll, err = r.readF32(); err != nil {
++			return e, err
++		}
++		if e.Pitch, err = r.readF32(); err != nil {
++			return e, err
++		}
++		lightCount, lerr := r.readU32()
++		if lerr != nil {
++			return e, lerr
++		}
++		if uint64(lightCount) > uint64((len(r.buf)-r.pos)/36) {
++			return e, fmt.Errorf("invalid native light count %d", lightCount)
++		}
++		raw, lerr := r.readBytes(int(lightCount) * 36)
++		if lerr != nil {
++			return e, lerr
++		}
++		e.LightData = append([]byte(nil), raw...)
++	}
+ 	return e, nil
+ }
+ 
+@@ -717,4 +745,3 @@ func (r *reader) readFourCC() (string, error) {
+ 	}
+ 	return string(b), nil
+ }
+-
+diff --git a/internal/formats/w3i/encode.go b/internal/formats/w3i/encode.go
+index 201001b..6e9556b 100644
+--- a/internal/formats/w3i/encode.go
++++ b/internal/formats/w3i/encode.go
+@@ -98,6 +98,9 @@ func Encode(info *Info) ([]byte, error) {
+ 	switch {
+ 	case v >= FileVersionTFT:
+ 		w.writeI32(info.LoadingScreen.Number)
++		if v >= FileVersionDE39 {
++			w.writeU32(info.LoadingScreen.Source)
++		}
+ 		w.writeCStr(info.LoadingScreen.Model)
+ 		w.writeCStr(info.LoadingScreen.Text)
+ 		w.writeCStr(info.LoadingScreen.Title)
+@@ -113,6 +116,11 @@ func Encode(info *Info) ([]byte, error) {
+ 		w.writeF32(info.Fog.Density)
+ 		w.writeColor(info.Fog.Color)
+ 		w.writeI32(info.WeatherID)
++		if v >= FileVersionDE39 {
++			for _, word := range info.DEWeatherFog {
++				w.writeU32(word)
++			}
++		}
+ 		w.writeCStr(info.CustomSoundEnv)
+ 		w.writeU8(info.CustomLightTileset)
+ 		w.writeColor(info.WaterColor)
+@@ -134,6 +142,11 @@ func Encode(info *Info) ([]byte, error) {
+ 				w.writeU32(info.CamDistance.Min)
+ 			}
+ 		}
++		if v >= FileVersionDE39 {
++			for _, word := range info.DEWater {
++				w.writeU32(word)
++			}
++		}
+ 	case v == FileVersionTFTEarly: // v18
+ 		w.writeI32(info.LoadingScreen.Number)
+ 		w.writeCStr(info.LoadingScreen.Text)
+@@ -163,6 +176,9 @@ func Encode(info *Info) ([]byte, error) {
+ 		// Parse subtracts 1 from the wire value; reverse here.
+ 		w.writeI32(int32(p.Type) + 1)
+ 		w.writeI32(int32(p.Race))
++		if v >= FileVersionDE39 {
++			w.writeU32(p.HUDSkin)
++		}
+ 		w.writeI32(p.FixedStartPosition)
+ 		w.writeCStr(p.Name)
+ 		w.writeVec2(p.StartingPosition)
+diff --git a/internal/formats/w3i/w3i.go b/internal/formats/w3i/w3i.go
+index 3197a83..bc41fbb 100644
+--- a/internal/formats/w3i/w3i.go
++++ b/internal/formats/w3i/w3i.go
+@@ -44,6 +44,7 @@ const (
+ 	FileVersionRefV28   = 28 // Reforged: adds 4-part game_version + lua flag
+ 	FileVersionRefV31   = 31 // Reforged: adds enemy priorities + supported_modes / game_data_version
+ 	FileVersionRefV32   = 32 // Reforged: adds default + max cam distance
++	FileVersionDE39     = 39 // Definitive Edition native extensions
+ 	FileVersionRefV33   = 33 // Reforged: adds min cam distance
+ )
+ 
+@@ -154,6 +155,7 @@ func decodeFlags(raw uint32) Flags {
+ // only present in v25+ (TFT); v18 has just the campaign number + strings;
+ // v15 has only an unknown 1-byte index and strings.
+ type LoadingScreen struct {
++	Source   uint32 // v39+ loading screen source
+ 	Number   int32
+ 	Model    string // empty when version < 25
+ 	Text     string
+@@ -173,11 +175,11 @@ type Prologue struct {
+ 
+ // Fog parameters for the map. Present from v25 onward; zero-valued otherwise.
+ type Fog struct {
+-	Style      int32
+-	StartZ     float32
+-	EndZ       float32
+-	Density    float32
+-	Color      Color
++	Style   int32
++	StartZ  float32
++	EndZ    float32
++	Density float32
++	Color   Color
+ }
+ 
+ // CamDistance bundles default/max/min camera distance. Only Default+Max are
+@@ -190,26 +192,27 @@ type CamDistance struct {
+ 
+ // Player is one of the slots defined in the editor's Player Properties dialog.
+ type Player struct {
+-	InternalNumber       int32
+-	Type                 PlayerType
+-	Race                 PlayerRace
+-	FixedStartPosition   int32
+-	Name                 string
+-	StartingPosition     Vec2
+-	AllyLowPriorities    uint32
+-	AllyHighPriorities   uint32
+-	EnemyLowPriorities   uint32 // v31+
+-	EnemyHighPriorities  uint32 // v31+
++	InternalNumber      int32
++	Type                PlayerType
++	Race                PlayerRace
++	HUDSkin             uint32 // v39+
++	FixedStartPosition  int32
++	Name                string
++	StartingPosition    Vec2
++	AllyLowPriorities   uint32
++	AllyHighPriorities  uint32
++	EnemyLowPriorities  uint32 // v31+
++	EnemyHighPriorities uint32 // v31+
+ }
+ 
+ // ForceFlags decodes the per-force flags word.
+ type ForceFlags struct {
+-	Raw                       uint32
+-	Allied                    bool // 0b0000_0001
+-	AlliedVictory             bool // 0b0000_0010
+-	ShareVision               bool // 0b0000_1000 (yes — bit 2 is intentionally skipped per HiveWE)
+-	ShareUnitControl          bool // 0b0001_0000
+-	ShareAdvancedUnitControl  bool // 0b0010_0000
++	Raw                      uint32
++	Allied                   bool // 0b0000_0001
++	AlliedVictory            bool // 0b0000_0010
++	ShareVision              bool // 0b0000_1000 (yes — bit 2 is intentionally skipped per HiveWE)
++	ShareUnitControl         bool // 0b0001_0000
++	ShareAdvancedUnitControl bool // 0b0010_0000
+ }
+ 
+ // Force is a player team / force entry.
+@@ -273,19 +276,19 @@ type RandomItemTable struct {
+ // applicable to the file's version are zero-valued; the FileVersion field
+ // indicates which subset is meaningful.
+ type Info struct {
+-	FileVersion      int32
+-	MapVersion       int32 // v18+
+-	EditorVersion    int32 // v18+
+-	GameVersion      [4]int32 // major, minor, patch, build — v28+
++	FileVersion   int32
++	MapVersion    int32    // v18+
++	EditorVersion int32    // v18+
++	GameVersion   [4]int32 // major, minor, patch, build — v28+
+ 
+ 	Name             string
+ 	Author           string
+ 	Description      string
+ 	SuggestedPlayers string
+ 
+-	CameraLeftBottom Vec2
+-	CameraRightTop   Vec2
+-	CameraLeftTop    Vec2
++	CameraLeftBottom  Vec2
++	CameraRightTop    Vec2
++	CameraLeftTop     Vec2
+ 	CameraRightBottom Vec2
+ 	CameraComplements IVec4 // unplayable-border tile counts (left, right, bottom, top)
+ 
+@@ -300,6 +303,8 @@ type Info struct {
+ 	GameDataSet        int32 // v25+
+ 	Prologue           Prologue
+ 	Fog                Fog
++	DEWeatherFog       [6]uint32  // v39+: raw words, including float bits
++	DEWater            [10]uint32 // v39+: raw words, including float bits
+ 	WeatherID          int32
+ 	CustomSoundEnv     string
+ 	CustomLightTileset byte
+@@ -645,6 +650,11 @@ func Parse(data []byte) (*Info, error) {
+ 		if info.LoadingScreen.Number, err = r.i32(); err != nil {
+ 			return nil, err
+ 		}
++		if version >= FileVersionDE39 {
++			if info.LoadingScreen.Source, err = r.u32(); err != nil {
++				return nil, err
++			}
++		}
+ 		if info.LoadingScreen.Model, err = r.cstr(); err != nil {
+ 			return nil, err
+ 		}
+@@ -690,6 +700,13 @@ func Parse(data []byte) (*Info, error) {
+ 		if info.WeatherID, err = r.i32(); err != nil {
+ 			return nil, err
+ 		}
++		if version >= FileVersionDE39 {
++			for k := range info.DEWeatherFog {
++				if info.DEWeatherFog[k], err = r.u32(); err != nil {
++					return nil, err
++				}
++			}
++		}
+ 		if info.CustomSoundEnv, err = r.cstr(); err != nil {
+ 			return nil, err
+ 		}
+@@ -727,6 +744,13 @@ func Parse(data []byte) (*Info, error) {
+ 				}
+ 			}
+ 		}
++		if version >= FileVersionDE39 {
++			for k := range info.DEWater {
++				if info.DEWater[k], err = r.u32(); err != nil {
++					return nil, err
++				}
++			}
++		}
+ 	case version == FileVersionTFTEarly: // v18 RoC
+ 		if info.LoadingScreen.Number, err = r.i32(); err != nil {
+ 			return nil, err
+@@ -804,6 +828,11 @@ func Parse(data []byte) (*Info, error) {
+ 			return nil, err
+ 		}
+ 		p.Race = PlayerRace(race)
++		if version >= FileVersionDE39 {
++			if p.HUDSkin, err = r.u32(); err != nil {
++				return nil, err
++			}
++		}
+ 		if p.FixedStartPosition, err = r.i32(); err != nil {
+ 			return nil, err
+ 		}
