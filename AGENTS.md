@@ -4,6 +4,8 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 
 ## Read before changing anything
 
+For a transfer to another agent, first read `docs/FRIEND-AGENT-HANDOFF-2026-09-30.md` for the current snapshot, strict visual boundaries, mandatory reading order and unfinished-work register. Obtain the latest saved/closed human Terrain map separately; cloning this repository does not retrieve current ignored editor edits.
+
 1. README.md for repository status and quick commands.
 2. docs/GAME-VISION.md and docs/GAMEPLAY-SPEC.md for the approved player experience and map layout.
 3. docs/CROWNLANDS-EXPANSION.md is the current detailed expansion contract. Also read docs/HEROES-AND-ABILITIES.md, docs/HERO-THEMED-EXPANSION.md, docs/COMPANIES-AND-BUILDINGS.md, docs/ITEMS-AND-EQUIPMENT.md, docs/ITEM-CATALOG.md, and docs/WAVES-AND-BOSSES.md for the linked feature detail.

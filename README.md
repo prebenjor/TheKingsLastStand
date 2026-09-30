@@ -1,5 +1,9 @@
 # The King's Last Stand
 
+## Sharing the current plan with another agent
+
+Start with the [September 30 friend-agent handoff](docs/FRIEND-AGENT-HANDOFF-2026-09-30.md). It includes required Markdown reading, strict visual/preservation boundaries, the latest town/story decisions, gameplay contracts, hero/building IDs, AI work, reported bugs and their evidence status, source navigation and ordered acceptance checks. Send the latest **saved and closed Terrain map separately**: the current human edits in `build/` are not included in a Git checkout or the documentation bundle.
+
 ## World Editor workshop
 
 Latest authored [layout/story revision](docs/EDITOR-LAYOUT-REVISION.md): Orc village removed, gates replaced by cliffs, troll camp added. Documentation is updated; runtime integration awaits the saved/closed editor handoff. See the [wc3-forge assessment](docs/WC3-FORGE-ASSESSMENT.md) for the potential MCP authoring workflow.

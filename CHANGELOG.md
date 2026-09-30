@@ -1,5 +1,12 @@
 # Build changelog
 
+## 2026-09-30 — Friend-agent handoff (documentation; no new map package)
+
+- Added a portable copy of the current plan with mandatory Markdown reading order, strict visual boundaries, preservation of the user's additions/deletions, town/story changes, all four race identities, hero/building IDs, companies, items, AI behavior and a prioritized bug/evidence register.
+- Documented the source integration sequence, finite editor workshop, exact package provenance, pending engine checks and requirement to send the latest saved/closed Terrain map separately from Git/documentation.
+- Read-only installed-version inspection confirmed World Editor and active game build `3.0.0.24268`; recorded that the friend's “four versions behind” warning cannot be diagnosed without its exact comparison/message. Retail, PTR and archive schema versions are distinct.
+- No map capture, rebuild, installation, editor inputs or gameplay tests performed for this handoff. Current package remains KLS-D-68303d69bf; earlier successful Test Map stays credited to its original build.
+
 ## 2026-09-30 — Authored layout/story revision (documentation; integration pending)
 
 - Recorded the user's removed Orc village, gate-to-cliff replacement and added troll camp; their hand-authored composition sets the visual direction.

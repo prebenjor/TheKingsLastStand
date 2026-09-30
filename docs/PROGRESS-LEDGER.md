@@ -1,5 +1,12 @@
 # Current status — 2026-09-30
 
+## Friend-agent documentation handoff
+
+- Created [FRIEND-AGENT-HANDOFF-2026-09-30.md](FRIEND-AGENT-HANDOFF-2026-09-30.md): portable approved plan, required reading, strict visual/preservation boundaries, all four racial systems, heroes/companies/items, town/story integration, AI source gaps, reported bug evidence, source navigation and ordered work/checks.
+- Latest human Terrain revision remains unarchived/unintegrated pending a fresh saved-and-closed handoff. The receiving agent needs that map separately; ignored build/backups are not retrieved through Git. No clean Chapter 0 baseline for these already-made edits is claimed.
+- Read-only local metadata verified `World Editor.exe` product version `3.0.0.24268 (ede670caa6)` and active `.build.info` version `3.0.0.24268`. Official release notes match that build; a later PTR build exists. The friend's “four versions behind” message and comparison target are still unknown; no update/conversion was performed.
+- Documentation only: no map capture/build/install or tests requested/run. Current gameplay build remains KLS-D-68303d69bf and all current engine/multiplayer/endurance acceptance remains pending. Historical Test Map success remains a pass for KLS-D-fd638ddcf5.
+
 ## User-authored layout revision — reported, source integration pending
 
 - User reports removing the entire Orc village, replacing gates with cliffs and placing a troll camp. Their authored doodad/unit/terrain composition becomes the visual direction. Updated the game vision/spec, Crownlands story, workshop and future-agent rules; [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) records the changes and pending source dependencies.
