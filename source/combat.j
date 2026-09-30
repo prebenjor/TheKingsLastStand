@@ -11,11 +11,9 @@ globals
     integer array KLS_TalentStrengthRank
     integer array KLS_TalentAgilityRank
     integer array KLS_TalentIntelligenceRank
-    integer array KLS_LastAutomaticStatLevel
-    dialog array KLS_ProgressionDialog
-    button array KLS_TalentStrengthButton
-    button array KLS_TalentAgilityButton
-    button array KLS_TalentIntelligenceButton
+    framehandle array KLS_TalentStrengthButton
+    framehandle array KLS_TalentAgilityButton
+    framehandle array KLS_TalentIntelligenceButton
     framehandle array KLS_StatChoiceStrengthButton
     framehandle array KLS_StatChoiceAgilityButton
     framehandle array KLS_StatChoiceIntelligenceButton
@@ -27,16 +25,24 @@ function KLS_StatChoiceRefresh takes nothing returns nothing
     local integer p = GetPlayerId(GetLocalPlayer())
     local unit hero
     local boolean showChoices = false
+    local boolean showTalents = false
     if p >= 0 and p < 4 and KLS_Active[p] then
         set hero = KLS_Hero[p]
         if hero != null then
-            set showChoices = IsUnitSelected(hero,Player(p)) and GetHeroSkillPoints(hero) > 0
+            set showChoices = not KLS_Ended and IsUnitSelected(hero,Player(p)) and GetHeroSkillPoints(hero) > 0
+            set showTalents = not KLS_Ended and IsUnitSelected(hero,Player(p)) and KLS_TalentPoints[p] > 0
         endif
         if GetLocalPlayer() == Player(p) then
             if KLS_StatChoiceStrengthButton[p] != null then
                 call BlzFrameSetVisible(KLS_StatChoiceStrengthButton[p],showChoices)
                 call BlzFrameSetVisible(KLS_StatChoiceAgilityButton[p],showChoices)
                 call BlzFrameSetVisible(KLS_StatChoiceIntelligenceButton[p],showChoices)
+                call BlzFrameSetVisible(KLS_TalentStrengthButton[p],showTalents)
+                call BlzFrameSetVisible(KLS_TalentAgilityButton[p],showTalents)
+                call BlzFrameSetVisible(KLS_TalentIntelligenceButton[p],showTalents)
+                call BlzFrameSetText(KLS_TalentStrengthButton[p],"+ STR ["+I2S(KLS_TalentPoints[p])+"]")
+                call BlzFrameSetText(KLS_TalentAgilityButton[p],"+ AGI ["+I2S(KLS_TalentPoints[p])+"]")
+                call BlzFrameSetText(KLS_TalentIntelligenceButton[p],"+ INT ["+I2S(KLS_TalentPoints[p])+"]")
             endif
         endif
     endif
@@ -78,9 +84,9 @@ function KLS_StatChoiceApplySync takes nothing returns nothing
 endfunction
 
 function KLS_StatChoiceClick takes nothing returns nothing
-    local integer p = GetPlayerId(GetLocalPlayer())
+    local integer p = GetPlayerId(GetTriggerPlayer())
     local framehandle clicked = BlzGetTriggerFrame()
-    if p < 0 or p >= 4 then
+    if p < 0 or p >= 4 or GetLocalPlayer() != GetTriggerPlayer() then
         return
     endif
     if clicked == KLS_StatChoiceStrengthButton[p] then
@@ -105,18 +111,7 @@ function KLS_StatChoiceCreateButton takes string name, string label, framehandle
 endfunction
 
 function KLS_ProgressionShow takes integer p returns nothing
-    if p < 0 or p >= 4 or not KLS_Active[p] or KLS_ProgressionDialog[p] == null then
-        return
-    endif
-    if KLS_TalentPoints[p] <= 0 then
-        return
-    endif
-    call DialogClear(KLS_ProgressionDialog[p])
-    call DialogSetMessage(KLS_ProgressionDialog[p],"Talent earned! Every 5 hero levels, choose one specialty.")
-    set KLS_TalentStrengthButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Vanguard: Strength, health and regeneration",0)
-    set KLS_TalentAgilityButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Skirmisher: Agility, attack speed and evasion",0)
-    set KLS_TalentIntelligenceButton[p] = DialogAddButton(KLS_ProgressionDialog[p],"Sage: Intelligence, mana and regeneration",0)
-    call DialogDisplay(Player(p),KLS_ProgressionDialog[p],true)
+    call KLS_StatChoiceRefresh()
 endfunction
 
 function KLS_TalentApply takes integer p, integer stat returns nothing
@@ -151,39 +146,37 @@ function KLS_TalentApply takes integer p, integer stat returns nothing
     set hero = null
 endfunction
 
-function KLS_ProgressionClick takes nothing returns nothing
+function KLS_TalentChoiceApplySync takes nothing returns nothing
     local integer p = GetPlayerId(GetTriggerPlayer())
-    local button clicked = GetClickedButton()
+    local string payload = BlzGetTriggerSyncData()
+    local integer choice = S2I(payload)
     local unit hero
-    if p < 0 or p >= 4 or KLS_Hero[p] == null then
+    if p < 0 or p >= 4 or not KLS_Active[p] or KLS_Ended or choice < 0 or choice > 2 or payload != I2S(choice) then
         return
     endif
     set hero = KLS_Hero[p]
-    if clicked == KLS_TalentStrengthButton[p] and KLS_TalentPoints[p] > 0 then
+    if hero != null and GetOwningPlayer(hero) == Player(p) and KLS_TalentPoints[p] > 0 then
         set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
-        call KLS_TalentApply(p,0)
-    elseif clicked == KLS_TalentAgilityButton[p] and KLS_TalentPoints[p] > 0 then
-        set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
-        call KLS_TalentApply(p,1)
-    elseif clicked == KLS_TalentIntelligenceButton[p] and KLS_TalentPoints[p] > 0 then
-        set KLS_TalentPoints[p] = KLS_TalentPoints[p]-1
-        call KLS_TalentApply(p,2)
-    else
-        set hero = null
-        return
+        call KLS_TalentApply(p,choice)
     endif
-    call DialogDisplay(Player(p),KLS_ProgressionDialog[p],false)
-    call KLS_ProgressionShow(p)
+    call KLS_StatChoiceRefresh()
     set hero = null
 endfunction
 
-function KLS_ApplyAutomaticHeroStatGrowth takes unit hero, integer primaryStat returns nothing
-    // Native growth is zeroed for selectable hero records. Add a consistent
-    // +1 to every attribute and two extra points to the hero's primary stat.
-    call ModifyHeroStat(bj_HEROSTAT_STR,hero,bj_MODIFYMETHOD_ADD,1)
-    call ModifyHeroStat(bj_HEROSTAT_AGI,hero,bj_MODIFYMETHOD_ADD,1)
-    call ModifyHeroStat(bj_HEROSTAT_INT,hero,bj_MODIFYMETHOD_ADD,1)
-    call ModifyHeroStat(primaryStat,hero,bj_MODIFYMETHOD_ADD,2)
+function KLS_TalentChoiceClick takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local framehandle clicked = BlzGetTriggerFrame()
+    if p < 0 or p >= 4 or GetLocalPlayer() != GetTriggerPlayer() then
+        return
+    endif
+    if clicked == KLS_TalentStrengthButton[p] then
+        call BlzSendSyncData("KLSTALENT","0")
+    elseif clicked == KLS_TalentAgilityButton[p] then
+        call BlzSendSyncData("KLSTALENT","1")
+    elseif clicked == KLS_TalentIntelligenceButton[p] then
+        call BlzSendSyncData("KLSTALENT","2")
+    endif
+    set clicked = null
 endfunction
 
 function KLS_TalentLevel takes nothing returns nothing
@@ -191,17 +184,8 @@ function KLS_TalentLevel takes nothing returns nothing
     local integer p = GetPlayerId(GetOwningPlayer(u))
     local integer milestone
     local integer heroLevel
-    local integer processedLevel
     if p >= 0 and p < 4 and u == KLS_Hero[p] and KLS_HeroChoice[p] >= 0 then
         set heroLevel = GetHeroLevel(u)
-        set processedLevel = KLS_LastAutomaticStatLevel[p]
-        loop
-            exitwhen processedLevel >= heroLevel
-            call KLS_ApplyAutomaticHeroStatGrowth(u,KLS_HeroPrimaryStat[KLS_HeroChoice[p]])
-            set processedLevel = processedLevel+1
-        endloop
-        set KLS_LastAutomaticStatLevel[p] = heroLevel
-        call KLS_ApplySpellRanks(u)
         set milestone = GetHeroLevel(u) / 5
         if milestone > KLS_LastTalentMilestone[p] then
             set KLS_TalentPoints[p] = KLS_TalentPoints[p] + milestone - KLS_LastTalentMilestone[p]
@@ -217,7 +201,7 @@ endfunction
 function KLS_TalentAvoidDamage takes nothing returns nothing
     local unit victim = GetTriggerUnit()
     local integer p = GetPlayerId(GetOwningPlayer(victim))
-    if p >= 0 and p < 4 and victim == KLS_Hero[p] and KLS_TalentAgilityRank[p] > 0 then
+    if p >= 0 and p < 4 and victim == KLS_Hero[p] and KLS_TalentAgilityRank[p] > 0 and BlzGetEventIsAttack() and GetEventDamage() > 0.0 then
         if GetRandomInt(1,100) <= KLS_TalentAgilityRank[p]*2 then
             call BlzSetEventDamage(0.0)
         endif
@@ -227,7 +211,8 @@ endfunction
 
 function KLS_ProgressionInit takes nothing returns nothing
     local integer p = 0
-    local trigger clicks = CreateTrigger()
+    local trigger talentClicks = CreateTrigger()
+    local trigger talentSync = CreateTrigger()
     local trigger statClicks = CreateTrigger()
     local trigger statSync = CreateTrigger()
     local framehandle gameUI
@@ -235,10 +220,11 @@ function KLS_ProgressionInit takes nothing returns nothing
     loop
         exitwhen p == 4
         if KLS_Active[p] then
-            set KLS_ProgressionDialog[p] = DialogCreate()
-            call TriggerRegisterDialogEvent(clicks,KLS_ProgressionDialog[p])
+            call BlzTriggerRegisterPlayerSyncEvent(talentSync,Player(p),"KLSTALENT",false)
             call BlzTriggerRegisterPlayerSyncEvent(statSync,Player(p),"KLSSTAT",false)
-            if GetLocalPlayer() == Player(p) then
+            // Frame creation and registration must run on every client.
+            // KLS_StatChoiceRefresh alone controls owner-local visibility.
+            if KLS_Active[p] then
                 set gameUI = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI,0)
                 set firstCommandButton = BlzGetOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON,0)
                 set KLS_StatChoiceStrengthButton[p] = KLS_StatChoiceCreateButton("KLSStatChoiceStrength","+3 STR",gameUI,firstCommandButton,FRAMEPOINT_TOPLEFT,0.0,0.003)
@@ -247,18 +233,26 @@ function KLS_ProgressionInit takes nothing returns nothing
                 call BlzTriggerRegisterFrameEvent(statClicks,KLS_StatChoiceAgilityButton[p],FRAMEEVENT_CONTROL_CLICK)
                 set KLS_StatChoiceIntelligenceButton[p] = KLS_StatChoiceCreateButton("KLSStatChoiceIntelligence","+3 INT",gameUI,KLS_StatChoiceAgilityButton[p],FRAMEPOINT_BOTTOMRIGHT,0.002,0.0)
                 call BlzTriggerRegisterFrameEvent(statClicks,KLS_StatChoiceIntelligenceButton[p],FRAMEEVENT_CONTROL_CLICK)
+                set KLS_TalentStrengthButton[p] = KLS_StatChoiceCreateButton("KLSTalentStrength","+ STR",gameUI,KLS_StatChoiceStrengthButton[p],FRAMEPOINT_TOPLEFT,0.0,0.003)
+                call BlzTriggerRegisterFrameEvent(talentClicks,KLS_TalentStrengthButton[p],FRAMEEVENT_CONTROL_CLICK)
+                set KLS_TalentAgilityButton[p] = KLS_StatChoiceCreateButton("KLSTalentAgility","+ AGI",gameUI,KLS_TalentStrengthButton[p],FRAMEPOINT_BOTTOMRIGHT,0.002,0.0)
+                call BlzTriggerRegisterFrameEvent(talentClicks,KLS_TalentAgilityButton[p],FRAMEEVENT_CONTROL_CLICK)
+                set KLS_TalentIntelligenceButton[p] = KLS_StatChoiceCreateButton("KLSTalentIntelligence","+ INT",gameUI,KLS_TalentAgilityButton[p],FRAMEPOINT_BOTTOMRIGHT,0.002,0.0)
+                call BlzTriggerRegisterFrameEvent(talentClicks,KLS_TalentIntelligenceButton[p],FRAMEEVENT_CONTROL_CLICK)
                 set firstCommandButton = null
                 set gameUI = null
             endif
         endif
         set p = p+1
     endloop
-    call TriggerAddAction(clicks,function KLS_ProgressionClick)
+    call TriggerAddAction(talentClicks,function KLS_TalentChoiceClick)
+    call TriggerAddAction(talentSync,function KLS_TalentChoiceApplySync)
     call TriggerAddAction(statClicks,function KLS_StatChoiceClick)
     call TriggerAddAction(statSync,function KLS_StatChoiceApplySync)
     set KLS_StatChoiceRefreshTimer = CreateTimer()
     call TimerStart(KLS_StatChoiceRefreshTimer,0.25,true,function KLS_StatChoiceRefresh)
-    set clicks = null
+    set talentClicks = null
+    set talentSync = null
     set statClicks = null
     set statSync = null
 endfunction
@@ -427,7 +421,9 @@ function KLS_MarketBuy takes nothing returns nothing
     local integer p = GetPlayerId(GetOwningPlayer(buyer))
     local integer quotedTier = -1
     local timer equipTimer = null
-    if shop == KLS_Castle then
+    if KLS_CompanyServiceIndex(rawcode) >= 0 then
+        call KLS_CompanyResearchBuy(shop,buyer,gear)
+    elseif shop == KLS_Castle then
         if rawcode == 'KHE1' then
             call KLS_KingContribute(GetOwningPlayer(buyer),false,KLS_KingTier,true)
             call AddItemToStock(shop,'KHE1',1,1)
@@ -539,7 +535,7 @@ function KLS_BossSlam takes nothing returns nothing
     local group targets = CreateGroup()
     local unit victim
     local integer owner
-    local real damage = 80 + KLS_Wave * 7
+    local real damage = (80 + KLS_Wave * 7)*KLS_DifficultyDamageScale()
     call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl",KLS_BossX,KLS_BossY))
     call GroupEnumUnitsInRange(targets,KLS_BossX,KLS_BossY,550,null)
     loop
@@ -558,12 +554,17 @@ endfunction
 
 function KLS_BossSummon takes nothing returns nothing
     local integer n = 0
-    local integer count = KLS_Players * 2
+    local integer count = 0
     local integer spawned = 0
     local integer kind = 'uske'
     local unit summon
-    local real hp = 180 + KLS_Wave * 55 + KLS_Players * 35
+    local real hp
     local boolean spawnFailed = false
+    if KLS_Players <= 0 or KLS_Ended then
+        return
+    endif
+    set count = KLS_DifficultyScaledCount(KLS_Players*2)
+    set hp = (180 + KLS_Wave * 55 + KLS_Players * 35)*KLS_DifficultyHealthScale()
     loop
         exitwhen n == count or spawnFailed or KLS_Ended
         if ModuloInteger(n,2) == 1 then
@@ -575,7 +576,7 @@ function KLS_BossSummon takes nothing returns nothing
         if summon != null then
             call BlzSetUnitMaxHP(summon,R2I(hp))
             call SetWidgetLife(summon,hp)
-            call BlzSetUnitBaseDamage(summon,6+KLS_Wave*2,0)
+            call BlzSetUnitBaseDamage(summon,R2I(I2R(6+KLS_Wave*2)*KLS_DifficultyDamageScale()+0.5),0)
             call SetUnitAcquireRange(summon,900)
             call GroupAddUnit(KLS_Enemies,summon)
             set KLS_Alive = KLS_Alive+1

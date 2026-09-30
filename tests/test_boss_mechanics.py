@@ -46,7 +46,7 @@ class BossMechanics(unittest.TestCase):
         self.assertIn('call KLS_BossExecuteMechanic()', script)
         self.assertIn('call KLS_HUDRow(6, "Boss warning", KLS_BossThreatText())', script)
         self.assertIn('KLS_BossMechanicWarning(KLS_BossMechanic)', script)
-        self.assertIn('MultiboardSetRowCount(KLS_HUD, 7)', script)
+        self.assertIn('MultiboardSetRowCount(KLS_HUD, 9)', script)
         self.assertIn('call KLS_SetTowersPaused(true)', script)
         self.assertIn('call KLS_SetTowersPaused(false)', script)
 
@@ -107,7 +107,7 @@ class BossMechanics(unittest.TestCase):
             'KLS_GrovePlant': "KLS_CreateDestructableOptional('LTlt',x,y,0,1,0,\"ability grove tree\")",
             'KLS_SignatureCast': 'KLS_CreateUnitOptional(owner,\'hS01\'',
             'KLS_StorySpawnEncounter': 'KLS_CreateUnitOptional(Player(11),kind,',
-            'KLS_StoryBegin': "KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'hpea'",
+            'KLS_StoryBegin': "KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'kCar'",
         }
         for function, fragment in expected.items():
             with self.subTest(function=function):

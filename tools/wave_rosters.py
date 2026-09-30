@@ -65,6 +65,8 @@ BOUNTY_BY_UNIT = {
     'nckb': 34,   # Chaos Kodo Beast (Fel Orc)
 }
 
+SIEGE_UNIT_CODES = ('umtw', 'hbew', 'nhyc')
+
 BOSS_UNIT_CODES = ('Udea', 'Ulic', 'Udre', 'Uanb', 'Hvsh', 'Usyl', 'Hjsm', 'Ujsm')
 
 ENEMY_LOOT_TIER_BY_UNIT = {

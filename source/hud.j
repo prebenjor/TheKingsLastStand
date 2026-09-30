@@ -36,6 +36,8 @@ function KLS_HUDUpdate takes nothing returns nothing
     local integer wave = KLS_Wave
     local integer p = GetPlayerId(GetLocalPlayer())
     local string revival = "Ready"
+    local string difficulty = KLS_DifficultyName(KLS_Difficulty)
+    local string ready = "Not in preparation"
     if KLS_HUD == null then
         return
     endif
@@ -86,13 +88,25 @@ function KLS_HUDUpdate takes nothing returns nothing
     endif
     call KLS_HUDRow(5, "Your hero", revival)
     call KLS_HUDRow(6, "Boss warning", KLS_BossThreatText())
+    if KLS_DifficultyLocked then
+        set difficulty = KLS_DifficultyName(KLS_Difficulty)
+    else
+        set difficulty = KLS_DifficultyName(KLS_Difficulty)+" vote pending"
+    endif
+    if KLS_Selecting then
+        set ready = "Available after selection"
+    elseif KLS_Alive == 0 and KLS_Prep > 0 then
+        set ready = I2S(KLS_ReadyCount())+" / "+I2S(KLS_Players)
+    endif
+    call KLS_HUDRow(7, "Difficulty", difficulty)
+    call KLS_HUDRow(8, "Wave ready", ready)
 endfunction
 
 function KLS_HUDInit takes nothing returns nothing
     set KLS_HUD = CreateMultiboard()
     call MultiboardSetTitleText(KLS_HUD, "The King's Last Stand - DEVELOPMENT")
     call MultiboardSetColumnCount(KLS_HUD, 2)
-    call MultiboardSetRowCount(KLS_HUD, 7)
+    call MultiboardSetRowCount(KLS_HUD, 9)
     call MultiboardSetItemsStyle(KLS_HUD, true, false)
     call MultiboardSetItemsWidth(KLS_HUD, 0.12)
     call KLS_HUDUpdate()

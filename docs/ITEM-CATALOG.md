@@ -1,92 +1,155 @@
-# Generated item catalog — KLS-D-8b4add7c98
+# Generated item catalog
 
-Generated from tools/equipment_catalog.py for the current development build. There are 80 tiered general equipment items, 20 race-themed relics (one Legendary recipe output per race), three original crafted outputs, and nine attribute books. Common-through-Epic racial relics appear in their matching town shops; racial Legendary relics are crafted from their Foundry recipes or may appear through existing enemy-drop rules. This file records names, rawcodes, slots, prices, stats, and authored effects; update it whenever the source catalog changes. Enemy loot tiers and probabilities are documented in [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md). The generated Object Editor data and live in-game values still need engine verification.
+Generated from `tools/equipment_catalog.py` and `tools/recipes.py`. Contains 80 shared equipment items, 20 race-themed universal relics, three additional crafted Legendary items, nine tomes and seven recipe scrolls. The source catalog owns names, rawcodes, slots, prices, stats, rarity colors, effects, shop/drop stock and recipe components. Regenerate with `python -B tools/render_item_catalog.py` after catalog changes. The boss relics are defined separately in `tools/objects.py` and summarized below.
 
-| Quality | Family | Item | Rawcode | Slot | Gold | Stats | Special effect |
-|---|---|---|---|---|---:|---|---|
-| Common | Blade | Militia Blade | I100 | Main hand | 450 | +6 damage | — |
-| Common | Bow | Hunting Bow | I101 | Main hand | 450 | +6 damage | — |
-| Common | Staff | Apprentice Staff | I102 | Main hand | 450 | +3 intelligence | — |
-| Common | Shield | Iron Buckler | I103 | Off hand | 300 | +2 armor | — |
-| Common | Focus | Apprentice Focus | I104 | Off hand | 300 | +75 mana | — |
-| Common | Helmet | Watchmans Helm | I105 | Head | 300 | +60 health | — |
-| Common | Chest | Militia Cuirass | I106 | Chest | 300 | +100 health | — |
-| Common | Gloves | Scouts Gloves | I107 | Gloves | 300 | +5 attack speed | — |
-| Common | Boots | Marching Boots | I108 | Boots | 300 | +10 movement speed | — |
-| Common | Offensive Ring | Copper Warband | I109 | Ring | 300 | +3 damage | — |
-| Common | Defensive Ring | Iron Ward Ring | I10A | Ring | 300 | +1 armor | — |
-| Common | Trinket | Watchmans Charm | I10B | Trinket | 300 | +50 health, +50 mana | — |
-| Common | Cape | Travelers Cape | I11O | Chest | 300 | +50 health, +1 armor | — |
-| Common | Might Chestplate | Recruit Plate | I11T | Chest | 300 | +2 strength | — |
-| Common | Windrunner Boots | Swiftwalk Boots | I11U | Boots | 300 | +2 agility | — |
-| Common | Arcanist Focus | Apprentice Focus | I11V | Off hand | 300 | +2 intelligence | — |
-| Uncommon | Blade | Veteran Longsword | I10C | Main hand | 1,500 | +12 damage | — |
-| Uncommon | Bow | Sentinel Longbow | I10D | Main hand | 1,500 | +12 damage | — |
-| Uncommon | Staff | Runewood Staff | I10E | Main hand | 1,500 | +6 intelligence | — |
-| Uncommon | Shield | Wardens Shield | I10F | Off hand | 1,000 | +4 armor | — |
-| Uncommon | Focus | Sapphire Focus | I10G | Off hand | 1,000 | +150 mana | — |
-| Uncommon | Helmet | Veteran Greathelm | I10H | Head | 1,000 | +120 health | — |
-| Uncommon | Chest | Tempered Breastplate | I10I | Chest | 1,000 | +200 health | — |
-| Uncommon | Gloves | Duelists Grips | I10J | Gloves | 1,000 | +10 attack speed | — |
-| Uncommon | Boots | Pathfinders Boots | I10K | Boots | 1,000 | +20 movement speed | — |
-| Uncommon | Offensive Ring | Veterans Signet | I10L | Ring | 1,000 | +6 damage | — |
-| Uncommon | Defensive Ring | Guardians Band | I10M | Ring | 1,000 | +2 armor | — |
-| Uncommon | Trinket | Healers Emblem | I10N | Trinket | 1,000 | +100 health, +100 mana | — |
-| Uncommon | Cape | Wardens Mantle | I11P | Chest | 1,000 | +100 health, +2 armor | — |
-| Uncommon | Might Chestplate | Vanguard Plate | I11W | Chest | 1,000 | +4 strength | — |
-| Uncommon | Windrunner Boots | Windrunner Boots | I11X | Boots | 1,000 | +4 agility | — |
-| Uncommon | Arcanist Focus | Sage Focus | I11Y | Off hand | 1,000 | +4 intelligence | — |
-| Rare | Blade | Gravebreaker | I10O | Main hand | 4,500 | +24 damage | Cleave: attacks deal 15% damage to other enemies within 250 of the target. |
-| Rare | Bow | Bloodthorn | I10P | Main hand | 4,500 | +24 damage | Bloodthorn: attacks bleed for 30 damage over 3 seconds. Cooldown: 5 seconds. |
-| Rare | Staff | Wintercall | I10Q | Main hand | 4,500 | +12 intelligence | Wintercall: attacks burst for 40 damage within 250 and slow movement by 20% for 2 seconds. Cooldown: 8 seconds. |
-| Rare | Shield | Dawnward | I10R | Off hand | 3,000 | +8 armor | Dawnward: absorb up to 40 damage from one incoming hit. Cooldown: 8 seconds. |
-| Rare | Focus | Spellwell | I10S | Off hand | 3,000 | +300 mana | Spellwell: restore 15 mana after casting a spell. Cooldown: 8 seconds. |
-| Rare | Helmet | Crown of Vigilance | I10T | Head | 3,000 | +240 health | — |
-| Rare | Chest | Bastion Plate | I10U | Chest | 3,000 | +400 health | — |
-| Rare | Gloves | Stormgrasp | I10V | Gloves | 3,000 | +20 attack speed | — |
-| Rare | Boots | Windstriders | I10W | Boots | 3,000 | +40 movement speed | — |
-| Rare | Offensive Ring | Ring of Conquest | I10X | Ring | 3,000 | +12 damage | — |
-| Rare | Defensive Ring | Stoneheart Signet | I10Y | Ring | 3,000 | +4 armor | — |
-| Rare | Trinket | Dawnseed | I10Z | Trinket | 3,000 | +200 health, +200 mana | Dawnseed: heal you and allied heroes within 400 for 40 every 10 seconds. |
-| Rare | Cape | Mistweave Cape | I11Q | Chest | 3,000 | +200 health, +4 armor | Mistweave: reduce incoming spell damage by 5%. |
-| Rare | Might Chestplate | Lionheart Cuirass | I11Z | Chest | 3,000 | +8 strength | — |
-| Rare | Windrunner Boots | Stormpath Boots | I120 | Boots | 3,000 | +8 agility | — |
-| Rare | Arcanist Focus | Runebound Focus | I121 | Off hand | 3,000 | +8 intelligence | — |
-| Epic | Blade | Cinderfang | I110 | Main hand | 12,000 | +42 damage | Cleave: attacks deal 25% damage to other enemies within 250 of the target. |
-| Epic | Bow | Widowmaker | I111 | Main hand | 12,000 | +42 damage | Bloodthorn: attacks bleed for 60 damage over 3 seconds. Cooldown: 5 seconds. |
-| Epic | Staff | Glacierheart | I112 | Main hand | 12,000 | +21 intelligence | Wintercall: attacks burst for 80 damage within 250 and slow movement by 20% for 2 seconds. Cooldown: 8 seconds. |
-| Epic | Shield | Adamant Aegis | I113 | Off hand | 8,000 | +14 armor | Dawnward: absorb up to 80 damage from one incoming hit. Cooldown: 8 seconds. |
-| Epic | Focus | Astral Prism | I114 | Off hand | 8,000 | +525 mana | Spellwell: restore 30 mana after casting a spell. Cooldown: 8 seconds. |
-| Epic | Helmet | Dawnguard Helm | I115 | Head | 8,000 | +420 health | — |
-| Epic | Chest | Royal Bulwark | I116 | Chest | 8,000 | +700 health | — |
-| Epic | Gloves | Tempest Gauntlets | I117 | Gloves | 8,000 | +35 attack speed | — |
-| Epic | Boots | Gale Treads | I118 | Boots | 8,000 | +70 movement speed | — |
-| Epic | Offensive Ring | Crimson Covenant | I119 | Ring | 8,000 | +21 damage | — |
-| Epic | Defensive Ring | Circle of Resolve | I11A | Ring | 8,000 | +7 armor | — |
-| Epic | Trinket | Beacon of Hope | I11B | Trinket | 8,000 | +350 health, +350 mana | Dawnseed: heal you and allied heroes within 400 for 80 every 10 seconds. |
-| Epic | Cape | Royal Phoenix Mantle | I11R | Chest | 8,000 | +350 health, +7 armor | Mistweave: reduce incoming spell damage by 10%. |
-| Epic | Might Chestplate | Kingsguard Plate | I122 | Chest | 8,000 | +14 strength | — |
-| Epic | Windrunner Boots | Tempest Boots | I123 | Boots | 8,000 | +14 agility | — |
-| Epic | Arcanist Focus | Astral Focus | I124 | Off hand | 8,000 | +14 intelligence | — |
-| Legendary | Blade | Kingswrath | I11C | Main hand | 30,000 | +66 damage | Cleave: attacks deal 35% damage to other enemies within 250 of the target. |
-| Legendary | Bow | Endless Hunt | I11D | Main hand | 30,000 | +66 damage | Bloodthorn: attacks bleed for 100 damage over 3 seconds. Cooldown: 5 seconds. |
-| Legendary | Staff | Staff of the Last Winter | I11E | Main hand | 30,000 | +33 intelligence | Wintercall: attacks burst for 140 damage within 250 and slow movement by 20% for 2 seconds. Cooldown: 8 seconds. |
-| Legendary | Shield | Unbroken Oath | I11F | Off hand | 20,000 | +22 armor | Dawnward: absorb up to 140 damage from one incoming hit. Cooldown: 8 seconds. |
-| Legendary | Focus | Heart of the Leyline | I11G | Off hand | 20,000 | +825 mana | Spellwell: restore 50 mana after casting a spell. Cooldown: 8 seconds. |
-| Legendary | Helmet | Crown of the Unbowed | I11H | Head | 20,000 | +660 health | — |
-| Legendary | Chest | Armor of the Last Stand | I11I | Chest | 20,000 | +1100 health | — |
-| Legendary | Gloves | Hands of the Thunderlord | I11J | Gloves | 20,000 | +55 attack speed | — |
-| Legendary | Boots | Steps of the First Dawn | I11K | Boots | 20,000 | +110 movement speed | — |
-| Legendary | Offensive Ring | Sovereigns Fury | I11L | Ring | 20,000 | +33 damage | — |
-| Legendary | Defensive Ring | Eternal Bastion | I11M | Ring | 20,000 | +11 armor | — |
-| Legendary | Trinket | Heart of the Kingdom | I11N | Trinket | 20,000 | +550 health, +550 mana | Dawnseed: heal you and allied heroes within 400 for 140 every 10 seconds. |
-| Legendary | Cape | Shroud of the Eternal Watch | I11S | Chest | 20,000 | +550 health, +11 armor | Mistweave: reduce incoming spell damage by 15%. |
-| Legendary | Might Chestplate | Aldrics Mightplate | I125 | Chest | 20,000 | +22 strength | — |
-| Legendary | Windrunner Boots | Boots of the Unbound Gale | I126 | Boots | 20,000 | +22 agility | — |
-| Legendary | Arcanist Focus | The Crownless Star | I127 | Off hand | 20,000 | +22 intelligence | — |
-| Crafted legendary | Blade | Oathforged Kingswrath | I128 | Main hand | 30,000 | +88 damage, +10 strength | Cleave attacks deal 35% damage to nearby secondary enemies. |
-| Crafted legendary | Focus | Stormheart Prism | I129 | Off hand | 28,000 | +22 intelligence, +550 mana | Restores 50 mana after a spell cast; 8-second cooldown. |
-| Crafted legendary | Cape | Sovereign's Mantle | I12A | Chest | 36,000 | +10 strength, +10 agility, +10 intelligence, +800 health, +10 armor | Reduces incoming spell damage by 15%. |
+| Rarity | Race/theme | Family | Item | Rawcode | Slot | Gold | Numeric stats | Effect |
+|---|---|---|---|---|---|---:|---|---|
+| Common (#FFFFFF) | General | Blade | Militia Blade | I100 | Primary | 450 | +6 damage | — |
+| Common (#FFFFFF) | General | Bow | Hunting Bow | I101 | Primary | 450 | +6 damage | — |
+| Common (#FFFFFF) | General | Staff | Apprentice Staff | I102 | Primary | 450 | +3 intelligence | — |
+| Common (#FFFFFF) | General | Shield | Iron Buckler | I103 | Offhand | 300 | +2 armor | — |
+| Common (#FFFFFF) | General | Focus | Apprentice Focus | I104 | Offhand | 300 | +75 mana | — |
+| Common (#FFFFFF) | General | Helmet | Watchmans Helm | I105 | Head | 300 | +60 health | — |
+| Common (#FFFFFF) | General | Chest | Militia Cuirass | I106 | Chest | 300 | +90 health | — |
+| Common (#FFFFFF) | General | Gloves | Scouts Gloves | I107 | Gloves | 300 | +5 attack speed | — |
+| Common (#FFFFFF) | General | Boots | Marching Boots | I108 | Boots | 300 | +10 movement speed | — |
+| Common (#FFFFFF) | General | Offensive Ring | Copper Warband | I109 | Ring | 300 | +3 damage | — |
+| Common (#FFFFFF) | General | Defensive Ring | Iron Ward Ring | I10A | Ring | 300 | +1 armor | — |
+| Common (#FFFFFF) | General | Trinket | Watchmans Charm | I10B | Trinket | 300 | +70 health, +50 mana | — |
+| Common (#FFFFFF) | General | Cape | Travelers Cape | I11O | Chest | 300 | +75 health, +1 armor | — |
+| Common (#FFFFFF) | General | Might Chestplate | Recruit Plate | I11T | Chest | 300 | +1 strength | — |
+| Common (#FFFFFF) | General | Windrunner Boots | Swiftwalk Boots | I11U | Boots | 300 | +2 agility | — |
+| Common (#FFFFFF) | General | Arcanist Focus | Apprentice Focus | I11V | Offhand | 300 | +2 intelligence | — |
+| Uncommon (#1EFF00) | General | Blade | Veteran Longsword | I10C | Primary | 1,500 | +12 damage | — |
+| Uncommon (#1EFF00) | General | Bow | Sentinel Longbow | I10D | Primary | 1,500 | +12 damage | — |
+| Uncommon (#1EFF00) | General | Staff | Runewood Staff | I10E | Primary | 1,500 | +6 intelligence | — |
+| Uncommon (#1EFF00) | General | Shield | Wardens Shield | I10F | Offhand | 1,000 | +4 armor | — |
+| Uncommon (#1EFF00) | General | Focus | Sapphire Focus | I10G | Offhand | 1,000 | +150 mana | — |
+| Uncommon (#1EFF00) | General | Helmet | Veteran Greathelm | I10H | Head | 1,000 | +120 health | — |
+| Uncommon (#1EFF00) | General | Chest | Tempered Breastplate | I10I | Chest | 1,000 | +180 health | — |
+| Uncommon (#1EFF00) | General | Gloves | Duelists Grips | I10J | Gloves | 1,000 | +10 attack speed | — |
+| Uncommon (#1EFF00) | General | Boots | Pathfinders Boots | I10K | Boots | 1,000 | +20 movement speed | — |
+| Uncommon (#1EFF00) | General | Offensive Ring | Veterans Signet | I10L | Ring | 1,000 | +6 damage | — |
+| Uncommon (#1EFF00) | General | Defensive Ring | Guardians Band | I10M | Ring | 1,000 | +2 armor | — |
+| Uncommon (#1EFF00) | General | Trinket | Healers Emblem | I10N | Trinket | 1,000 | +140 health, +100 mana | — |
+| Uncommon (#1EFF00) | General | Cape | Wardens Mantle | I11P | Chest | 1,000 | +150 health, +2 armor | — |
+| Uncommon (#1EFF00) | General | Might Chestplate | Vanguard Plate | I11W | Chest | 1,000 | +2 strength | — |
+| Uncommon (#1EFF00) | General | Windrunner Boots | Windrunner Boots | I11X | Boots | 1,000 | +4 agility | — |
+| Uncommon (#1EFF00) | General | Arcanist Focus | Sage Focus | I11Y | Offhand | 1,000 | +4 intelligence | — |
+| Rare (#0070DD) | General | Blade | Gravebreaker | I10O | Primary | 4,500 | +24 damage | Cleave: 15 % attack damage on attack hit against a secondary target, duration instant, cooldown none, radius 250 |
+| Rare (#0070DD) | General | Bow | Bloodthorn | I10P | Primary | 4,500 | +24 damage | Bloodthorn: 30 bleed damage on attack hit, duration 3 seconds, cooldown 5 seconds |
+| Rare (#0070DD) | General | Staff | Wintercall | I10Q | Primary | 4,500 | +12 intelligence | Wintercall: 40 burst damage on attack hit, duration 2 seconds, cooldown 8 seconds, radius 250 |
+| Rare (#0070DD) | General | Shield | Dawnward | I10R | Offhand | 3,000 | +8 armor | Dawnward: 40 absorbed damage on incoming hit, duration instant, cooldown 8 seconds |
+| Rare (#0070DD) | General | Focus | Spellwell | I10S | Offhand | 3,000 | +300 mana | Spellwell: 15 mana on spell cast, duration instant, cooldown 8 seconds |
+| Rare (#0070DD) | General | Helmet | Crown of Vigilance | I10T | Head | 3,000 | +240 health | — |
+| Rare (#0070DD) | General | Chest | Bastion Plate | I10U | Chest | 3,000 | +360 health | — |
+| Rare (#0070DD) | General | Gloves | Stormgrasp | I10V | Gloves | 3,000 | +20 attack speed | — |
+| Rare (#0070DD) | General | Boots | Windstriders | I10W | Boots | 3,000 | +40 movement speed | — |
+| Rare (#0070DD) | General | Offensive Ring | Ring of Conquest | I10X | Ring | 3,000 | +12 damage | — |
+| Rare (#0070DD) | General | Defensive Ring | Stoneheart Signet | I10Y | Ring | 3,000 | +4 armor | — |
+| Rare (#0070DD) | General | Trinket | Dawnseed | I10Z | Trinket | 3,000 | +280 health, +200 mana | Dawnseed: 40 healing on periodic pulse, duration instant, cooldown 10 seconds, radius 400 |
+| Rare (#0070DD) | General | Cape | Mistweave Cape | I11Q | Chest | 3,000 | +300 health, +4 armor | Mistweave: 5 % spell damage reduction on while equipped, duration passive, cooldown none |
+| Rare (#0070DD) | General | Might Chestplate | Lionheart Cuirass | I11Z | Chest | 3,000 | +4 strength | — |
+| Rare (#0070DD) | General | Windrunner Boots | Stormpath Boots | I120 | Boots | 3,000 | +8 agility | — |
+| Rare (#0070DD) | General | Arcanist Focus | Runebound Focus | I121 | Offhand | 3,000 | +8 intelligence | — |
+| Epic (#A335EE) | General | Blade | Cinderfang | I110 | Primary | 12,000 | +42 damage | Cleave: 25 % attack damage on attack hit against a secondary target, duration instant, cooldown none, radius 250 |
+| Epic (#A335EE) | General | Bow | Widowmaker | I111 | Primary | 12,000 | +42 damage | Bloodthorn: 60 bleed damage on attack hit, duration 3 seconds, cooldown 5 seconds |
+| Epic (#A335EE) | General | Staff | Glacierheart | I112 | Primary | 12,000 | +21 intelligence | Wintercall: 80 burst damage on attack hit, duration 2 seconds, cooldown 8 seconds, radius 250 |
+| Epic (#A335EE) | General | Shield | Adamant Aegis | I113 | Offhand | 8,000 | +14 armor | Dawnward: 80 absorbed damage on incoming hit, duration instant, cooldown 8 seconds |
+| Epic (#A335EE) | General | Focus | Astral Prism | I114 | Offhand | 8,000 | +525 mana | Spellwell: 30 mana on spell cast, duration instant, cooldown 8 seconds |
+| Epic (#A335EE) | General | Helmet | Dawnguard Helm | I115 | Head | 8,000 | +420 health | — |
+| Epic (#A335EE) | General | Chest | Royal Bulwark | I116 | Chest | 8,000 | +630 health | — |
+| Epic (#A335EE) | General | Gloves | Tempest Gauntlets | I117 | Gloves | 8,000 | +35 attack speed | — |
+| Epic (#A335EE) | General | Boots | Gale Treads | I118 | Boots | 8,000 | +70 movement speed | — |
+| Epic (#A335EE) | General | Offensive Ring | Crimson Covenant | I119 | Ring | 8,000 | +21 damage | — |
+| Epic (#A335EE) | General | Defensive Ring | Circle of Resolve | I11A | Ring | 8,000 | +7 armor | — |
+| Epic (#A335EE) | General | Trinket | Beacon of Hope | I11B | Trinket | 8,000 | +490 health, +350 mana | Dawnseed: 80 healing on periodic pulse, duration instant, cooldown 10 seconds, radius 400 |
+| Epic (#A335EE) | General | Cape | Royal Phoenix Mantle | I11R | Chest | 8,000 | +525 health, +7 armor | Mistweave: 10 % spell damage reduction on while equipped, duration passive, cooldown none |
+| Epic (#A335EE) | General | Might Chestplate | Kingsguard Plate | I122 | Chest | 8,000 | +7 strength | — |
+| Epic (#A335EE) | General | Windrunner Boots | Tempest Boots | I123 | Boots | 8,000 | +14 agility | — |
+| Epic (#A335EE) | General | Arcanist Focus | Astral Focus | I124 | Offhand | 8,000 | +14 intelligence | — |
+| Legendary (#FF8000) | General | Blade | Kingswrath | I11C | Primary | 30,000 | +66 damage | Cleave: 35 % attack damage on attack hit against a secondary target, duration instant, cooldown none, radius 250 |
+| Legendary (#FF8000) | General | Bow | Endless Hunt | I11D | Primary | 30,000 | +66 damage | Bloodthorn: 100 bleed damage on attack hit, duration 3 seconds, cooldown 5 seconds |
+| Legendary (#FF8000) | General | Staff | Staff of the Last Winter | I11E | Primary | 30,000 | +33 intelligence | Wintercall: 140 burst damage on attack hit, duration 2 seconds, cooldown 8 seconds, radius 250 |
+| Legendary (#FF8000) | General | Shield | Unbroken Oath | I11F | Offhand | 20,000 | +22 armor | Dawnward: 140 absorbed damage on incoming hit, duration instant, cooldown 8 seconds |
+| Legendary (#FF8000) | General | Focus | Heart of the Leyline | I11G | Offhand | 20,000 | +825 mana | Spellwell: 50 mana on spell cast, duration instant, cooldown 8 seconds |
+| Legendary (#FF8000) | General | Helmet | Crown of the Unbowed | I11H | Head | 20,000 | +660 health | — |
+| Legendary (#FF8000) | General | Chest | Armor of the Last Stand | I11I | Chest | 20,000 | +990 health | — |
+| Legendary (#FF8000) | General | Gloves | Hands of the Thunderlord | I11J | Gloves | 20,000 | +55 attack speed | — |
+| Legendary (#FF8000) | General | Boots | Steps of the First Dawn | I11K | Boots | 20,000 | +110 movement speed | — |
+| Legendary (#FF8000) | General | Offensive Ring | Sovereigns Fury | I11L | Ring | 20,000 | +33 damage | — |
+| Legendary (#FF8000) | General | Defensive Ring | Eternal Bastion | I11M | Ring | 20,000 | +11 armor | — |
+| Legendary (#FF8000) | General | Trinket | Heart of the Kingdom | I11N | Trinket | 20,000 | +770 health, +550 mana | Dawnseed: 140 healing on periodic pulse, duration instant, cooldown 10 seconds, radius 400 |
+| Legendary (#FF8000) | General | Cape | Shroud of the Eternal Watch | I11S | Chest | 20,000 | +825 health, +11 armor | Mistweave: 15 % spell damage reduction on while equipped, duration passive, cooldown none |
+| Legendary (#FF8000) | General | Might Chestplate | Aldrics Mightplate | I125 | Chest | 20,000 | +11 strength | — |
+| Legendary (#FF8000) | General | Windrunner Boots | Boots of the Unbound Gale | I126 | Boots | 20,000 | +22 agility | — |
+| Legendary (#FF8000) | General | Arcanist Focus | The Crownless Star | I127 | Offhand | 20,000 | +22 intelligence | — |
+| Legendary (#FF8000) | General crafted | Blade | Oathforged Kingswrath | I128 | Primary | 30,000 | +72 damage, +8 strength | Cleave: 35 % attack damage on attack hit against a secondary target, duration instant, cooldown none, radius 250 |
+| Legendary (#FF8000) | General crafted | Focus | Stormheart Prism | I129 | Offhand | 28,000 | +18 intelligence, +750 mana | Spellwell: 50 mana on spell cast, duration instant, cooldown 8 seconds |
+| Legendary (#FF8000) | General crafted | Cape | Sovereign's Mantle | I12A | Chest | 36,000 | +8 strength, +8 agility, +6 intelligence, +700 health, +8 armor | Mistweave: 10 % spell damage reduction on while equipped, duration passive, cooldown none |
+| Common (#FFFFFF) | Human | Crown Relics | Watchman’s Token | I23C | Trinket | 300 | +80 health, +2 strength | — |
+| Uncommon (#1EFF00) | Human | Crown Relics | Lionroad Mantle | I23G | Chest | 1,000 | +2 strength, +200 health | — |
+| Rare (#0070DD) | Human | Crown Relics | Aldric’s Aegis | I23K | Offhand | 3,000 | +12 armor, +4 strength | — |
+| Epic (#A335EE) | Human | Crown Relics | Crownward Pennant | I23O | Trinket | 8,000 | +7 strength, +350 health | — |
+| Legendary (#FF8000) | Human | Crown Relics | Last King’s Oath | I23S | Ring | 20,000 | +11 strength, +33 damage, +550 health | — |
+| Common (#FFFFFF) | Orc | Redtusk Relics | Redtusk Fetish | I23D | Trinket | 300 | +3 strength, +3 damage | — |
+| Uncommon (#1EFF00) | Orc | Redtusk Relics | Ashen War Drum | I23H | Trinket | 1,000 | +6 strength, +10 attack speed | — |
+| Rare (#0070DD) | Orc | Redtusk Relics | Stormscar Bracers | I23L | Gloves | 3,000 | +8 strength, +28 attack speed | — |
+| Epic (#A335EE) | Orc | Redtusk Relics | Grudgebreaker | I23P | Primary | 12,000 | +42 damage, +7 strength | — |
+| Legendary (#FF8000) | Orc | Redtusk Relics | Worldrend Standard | I23T | Offhand | 20,000 | +22 damage, +11 strength | — |
+| Common (#FFFFFF) | Night Elf | Moonbark Relics | Moonbark Charm | I23E | Trinket | 300 | +2 agility, +100 health | — |
+| Uncommon (#1EFF00) | Night Elf | Moonbark Relics | Starleaf Quiver | I23I | Primary | 1,500 | +6 agility, +10 attack speed | — |
+| Rare (#0070DD) | Night Elf | Moonbark Relics | Duskwatch Longbow | I23M | Primary | 4,500 | +24 damage, +8 agility | — |
+| Epic (#A335EE) | Night Elf | Moonbark Relics | Briarheart Mantle | I23Q | Chest | 8,000 | +7 agility, +700 health | — |
+| Legendary (#FF8000) | Night Elf | Moonbark Relics | Silvermoon Vigil | I23U | Ring | 20,000 | +11 agility, +11 attack speed | — |
+| Common (#FFFFFF) | Undead | Wraith Relics | Crypt-Iron Band | I23F | Ring | 300 | +2 intelligence, +1 armor | — |
+| Uncommon (#1EFF00) | Undead | Wraith Relics | Wraithsilk Cape | I23J | Chest | 1,000 | +6 intelligence, +200 mana | — |
+| Rare (#0070DD) | Undead | Wraith Relics | Soulreaper’s Fang | I23N | Primary | 4,500 | +24 damage, +8 intelligence | — |
+| Epic (#A335EE) | Undead | Wraith Relics | Mourning Reliquary | I23R | Trinket | 8,000 | +7 intelligence, +350 mana | — |
+| Legendary (#FF8000) | Undead | Wraith Relics | Night’s Covenant | I23V | Offhand | 20,000 | +22 intelligence, +297 health, +572 mana | — |
+
+## Recipe catalog
+
+| Recipe | Rawcode | Components (rawcode) | Output | Cost |
+|---|---|---|---|---:|
+| Oathforged Kingswrath | RCP1 | Gravebreaker (I10O) + Ring of Conquest (I10X) | Oathforged Kingswrath (I128) | 5,000 |
+| Stormheart Prism | RCP2 | Wintercall (I10Q) + Spellwell (I10S) | Stormheart Prism (I129) | 7,000 |
+| Sovereign’s Mantle | RCP3 | Dawnguard Helm (I115) + Royal Bulwark (I116) | Sovereign's Mantle (I12A) | 12,000 |
+| Crownward Foundry Pattern | RCP4 | Aldric’s Aegis (I23K) + Lionroad Mantle (I23G) | Last King’s Oath (I23S) | 9,000 |
+| Redtusk Foundry Pattern | RCP5 | Stormscar Bracers (I23L) + Ashen War Drum (I23H) | Worldrend Standard (I23T) | 9,000 |
+| Moonbark Foundry Pattern | RCP6 | Duskwatch Longbow (I23M) + Starleaf Quiver (I23I) | Silvermoon Vigil (I23U) | 9,000 |
+| Wraith Foundry Pattern | RCP7 | Soulreaper’s Fang (I23N) + Wraithsilk Cape (I23J) | Night’s Covenant (I23V) | 9,000 |
+
+## Rarity palette and drop eligibility
+
+| Quality | Color | Base shop price |
+|---|---|---:|
+| Common | `#FFFFFF` | 300 |
+| Uncommon | `#1EFF00` | 1,000 |
+| Rare | `#0070DD` | 3,000 |
+| Epic | `#A335EE` | 8,000 |
+| Legendary | `#FF8000` | 20,000 |
+
+The general Blade, Bow and Staff families cost 1.5× their rarity base price. Other catalog equipment uses its rarity base; authored recipe and tome prices are listed above and below.
+
+| Enemy class | Common | Uncommon | Rare | Epic | Legendary | Total gear chance | Potion chance |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Normal | 0% | 0% | 0% | 0% | 0% | 0% | 4% |
+| Elite | 0.5% | 0.5% | 0% | 0% | 0% | 1% | 8% |
+| Boss | 0% | 0% | 0% | 0% | 0% | 0% | 18% |
+
+Normal and boss deaths never produce random catalog equipment. Elites have a 1% total equipment chance, split evenly between Common and Uncommon. Bosses instead grant one owner-bound milestone item per active player: Uncommon at wave 10, Rare at wave 20, Epic at wave 30, and Legendary at wave 40 and every later boss milestone. The separate potion chance remains 4% / 8% / 18% for Normal / Elite / Boss.
+
+## Separate milestone boss relics
+
+| Boss wave | Rarity | Item | Rawcode | Slot | Authored numeric value/effect |
+|---:|---|---|---|---|---|
+| 10 | Uncommon | Gravetide Cleaver | I010 | Primary | +15 damage |
+| 20 | Rare | Heart of the Watch | I011 | Chest | Maximum-health bonus; numeric value is inherited from its native item parent |
+| 30 | Epic | Crown of Dawn | I012 | Trinket | Healing aura; numeric value is inherited from its native item parent |
+| 40 | Legendary | Oath of the Last King | I013 | Ring | +5 Strength, +5 Agility, +5 Intelligence |
+
+The I011 and I012 bonuses are not numeric in the custom object description; do not infer their magnitude from rarity. Resolve the inherited ability values against installed item/ability data before including them in a numeric budget. Their current object definitions are in `tools/objects.py`.
 
 ## Attribute tomes
 
@@ -102,15 +165,6 @@ Generated from tools/equipment_catalog.py for the current development build. The
 | Tome of Intelligence +10 | KI10 | +10 intelligence | 3,000 |
 | Tome of Intelligence +20 | KI20 | +20 intelligence | 8,000 |
 
-## Catalog rules
+## Current Development package
 
-- Quality order: Common, Uncommon, Rare, Epic, Legendary. Base prices are 300, 1,000, 3,000, 8,000, and 20,000 gold.
-- Blade, Bow, and Staff prices are 1.5 times their tier base; all other ordinary families use the tier base.
-- Stat multipliers are 1, 2, 4, 7, and 11.
-- Effects activate only while equipped; equal-name duplicate effects use the strongest equipped version, and swapping items does not reset cooldowns.
-- Normal equipment sells for 50%. The four personal boss relics (I010–I013) are not represented by the tier generator and still need a full names/stats/sellability audit.
-# Crownlands race relic additions
-
-Current generated package: `KLS-D-8b4add7c98`, output path `dist/KLS-D-8b4add7c98-Development.w3m`, SHA-256 `d531a1e13a2908443acd5cc3a0edd56ffb816b2b9664803a82557f8ee59e53c3`.
-
-The approved twenty universally equippable items, rarity colors, effects, shop/drop integration and racial recipes are cataloged in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). Their rawcodes are I23C–I23V and their effects/stock/drop records are generated from tools/equipment_catalog.py. Recipes RCP4–RCP7 use a Rare plus an Uncommon item to produce their race's Legendary relic. The canonical table is generated from the same catalog; do not maintain a second competing list in code.
+Build: `KLS-D-8048eea39b`; package: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`. Engine checks remain pending.

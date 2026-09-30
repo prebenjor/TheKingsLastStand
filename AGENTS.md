@@ -23,10 +23,13 @@ This file is the first read for anyone continuing The King's Last Stand. Preserv
 - Keep gear personal, preserve ownership, and make buying, equipping, crafting, and rewards safe when inventory is full.
 - The king is a shared defense objective. Healing and upgrades are purchased at his castle with the acting player's personal gold and lumber.
 - Player-owned kill bounties go only to that killer's player. A King Aldric kill pays 25% of its bounty to each active player. Each active hero within 1,200 range gets the full kill XP value; do not split it. Native XP is disabled because Warcraft's alliance sharing divides awards.
-- Ordinary between-wave breaks are 50 seconds; pre-boss breaks remain 180 seconds. The Restoring Spring quietly restores 1% max HP and mana each second within range without effects or text.
+- Ordinary between-wave breaks are 50 seconds; pre-boss breaks remain 180 seconds. Every active player may vote Ready to start early; the vote is unanimous and never pauses the game. Easy/Normal/Hard/Very Hard are chosen during hero selection; highest vote wins and ties/defaults are Normal. The Restoring Spring quietly restores 1% max HP and mana each second within range without effects or text.
 - Keep Definitive Edition rendering and use native installed game objects, portraits, icons, abilities, and models where possible.
+- `tools/equipment_catalog.py` owns generated item values; regenerate `docs/ITEM-CATALOG.md` with `python -B tools/render_item_catalog.py` and `docs/STAT-POWER-CURVE.md` with `python -B tools/power_curve.py` after catalog changes.
 - Build stays labelled DEVELOPMENT until the editor save/reopen/Test Map, Custom Game startup, live gameplay, multiplayer, and endurance acceptance gates have actually passed.
-- Heroes start at level 1 and currently cap at 50. Each gained hero level automatically grants +3 to that hero's primary damage attribute and +1 to each other attribute. The normal skill point remains a separate choice between the four native spells and one of three repeatable unranked +3 STR/AGI/INT buttons. Native attribute growth is zeroed for selectable hero records so it is not added twice. Every fifth level grants a separate secondary-stat talent. Do not restore the superseded level-3 start or race-independent Human worker rule.
+- Heroes start at level 1 and currently cap at 50. Level 1 starts with one normal skill point and every gained level grants one more. The player chooses either one native spell rank or one repeatable, unranked +3 STR/AGI/INT button with that point; there is no automatic attribute growth. Spell ranks never advance automatically. Keep the independent fifth-level talent choice. Do not restore the superseded level-3 start, automatic +3/+1 growth, or race-independent Human worker rule.
+- All four starting gold mines hold 1,000,000 gold. Human and Orc use neutral Gold Mines; Night Elf and Undead use their race-specific Entangled and Haunted mines. Keep the five starting workers, mine ownership, and personal income rules unchanged.
+- Enemy equipment drops are scarce: Normal and Boss death handlers never roll world gear; Elite enemies have a 1% chance, Common/Uncommon only. Bosses award personal milestone gear at waves 10/20/30/40+. Healing/mana consumable odds remain separate. Keep general, racial, and crafted items within the shared rarity/slot component budget documented in `docs/STAT-POWER-CURVE.md`.
 - The expanded battlefield is 192 × 192 terrain cells. Keep the four connected race-themed Crownlands settlements, the defense lane and open gate intact. The optional four-stage town-recovery story runs during waves and never changes wave counts or pauses spawning.
 - Build four racial city identities and eight new heroes from the shared verified catalogs. Keep the 20 race-themed items, standard rarity colors and four Legendary Foundry recipes synchronized across item objects, shops, drops, crafting and docs.
 
@@ -67,3 +70,13 @@ If design and source differ, record the gap in docs/DECISIONS-AND-OPEN-ISSUES.md
 - Update catalog tables from tools/equipment_catalog.py when catalog data changes.
 - Keep known issues visible until current-build evidence resolves them.
 - Do not call any artifact a verified release while any release gate is pending.
+
+## September 30 audit completion rules
+
+- Use [COMPANY-RESEARCH-AND-POWERS.md](docs/COMPANY-RESEARCH-AND-POWERS.md) for all 50 authored recruit powers and 11 personal research services. Regenerate using `python -X utf8 -B tools/render_company_catalog.py` when company data changes.
+- Keeper/Faelor learn tree-free `AKfn` (two Treants) beside three other native skills; signatures are additional powers, never replacements that leave only three learnable skills.
+- Normal point budget includes the initial level-1 point. Talents remain independent nonmodal owner-local synchronized choices; evasion applies only to positive attack damage.
+- Ready sync messages carry a preparation epoch and desired state. Never return to toggling unscoped votes.
+- Town restoration has actual shared once-per-match unlocks. The caravan uses normal pathing, requires a nearby living hero, is vulnerable, and can be retried after loss. Keep story enemies out of wave accounting.
+- Fresh company purchases and construction starts clear recycled handle bookkeeping. Preserve ordinary death totals for resurrection; apply only upgrade deltas to existing troops.
+- Read [AUDIT-COMPLETION.md](docs/AUDIT-COMPLETION.md) before re-opening old audit findings. Automated evidence is distinct from pending current-build engine/multiplayer/endurance acceptance.

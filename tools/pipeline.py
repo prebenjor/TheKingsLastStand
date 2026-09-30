@@ -15,7 +15,6 @@ from objects import units, items
 from equipment_catalog import abilities, catalog_script
 from wave_rosters import wave_script, boss_script, bounty_script
 from signature_spells import spell_script as signature_spell_script
-from hero_progression import spell_script as hero_spell_script
 from hero_catalog import hero_selection_script
 from company_catalog import company_script
 from recipes import recipe_script
@@ -25,7 +24,7 @@ from town_catalog import town_script
 from authored_map import read_authored_layer
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
+MODULES = ('match_rules.j', 'diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
 BASELINE_SHA = '3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9'
 INFO_SHA = 'a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc'
 GAME = Path(r'C:\Program Files (x86)\Warcraft III')
@@ -38,10 +37,11 @@ def digest(data):
 def misc_data():
     # Native XP is disabled because Warcraft divides shared XP between nearby
     # heroes. The runtime awards each active hero in its own 1200 range check.
+    from stat_rules import misc_attribute_data
     return (b'[Misc]\nMaxHeroLevel=50\nHeroExpRange=0\n'
             b'GrantNormalXP=0\nGrantNormalXPFormulaA=1\n'
             b'GrantNormalXPFormulaB=0\nGrantNormalXPFormulaC=0\n'
-            b'GrantHeroXP=0,0,0,0,0,0,0,0,0,0\n')
+            b'GrantHeroXP=0,0,0,0,0,0,0,0,0,0\n' + misc_attribute_data())
 
 
 def baseline():
@@ -62,7 +62,7 @@ def check_api():
     path = folder / 'provenance.json'
     if not path.exists():
         raise ValueError('Extract installed APIs first: python kings-last-stand/tools/extract_game_api.py')
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding='utf-8'))
     if digest((GAME / '.build.info').read_bytes()) != data['build_info_sha256']:
         raise ValueError('Warcraft III installation changed. Re-extract its API declarations before building.')
     for name, entry in data['files'].items():
@@ -75,12 +75,11 @@ def runtime_script(build_id):
     declarations = []
     functions = []
     for name in MODULES:
-        text = (ROOT / 'source' / name).read_text()
+        text = (ROOT / 'source' / name).read_text(encoding='utf-8')
         if name == 'shops.j':
             text = text.replace('// GENERATED_CATALOG', catalog_script())
             text = text.replace('// GENERATED_RECIPES', recipe_script())
         if name == 'heroes.j':
-            text = text.replace('// GENERATED_HERO_PROGRESSION', hero_spell_script())
             text = text.replace('// GENERATED_HERO_CATALOG', hero_selection_script())
         if name == 'companies.j':
             text = text.replace('// GENERATED_COMPANIES', company_script())
@@ -111,7 +110,7 @@ def runtime_script(build_id):
     initial = '\n'.join(['    if KLS_Initialized then', '        return', '    endif', '    set KLS_Initialized = true'] + scalar_initializers)
     body = body.replace(marker, initial + '\n' + marker)
     body = body.replace('The King\'s Last Stand: defend King Aldric!', 'DEVELOPMENT ' + build_id + ': defend King Aldric!')
-    template = (ROOT / 'source/template/war3map.j').read_text()
+    template = (ROOT / 'source/template/war3map.j').read_text(encoding='utf-8')
     main = re.search(r'function main takes nothing returns nothing.*?endfunction', template, re.S).group()
     main = main.replace('    call InitGlobals(  )\n    call InitCustomTriggers(  )\n    call RunInitializationTriggers(  )', '    call KLS_Init()')
     if 'InitCustomTriggers' in main:

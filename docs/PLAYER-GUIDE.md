@@ -1,5 +1,19 @@
 # Player and human-test guide
 
+Current DEVELOPMENT build **KLS-D-8048eea39b**: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`. Installed bytes match the package. Full audit details: [AUDIT-COMPLETION.md](AUDIT-COMPLETION.md). Engine/multiplayer/endurance checks remain pending.
+
+
+## Historical backpack repair candidate — 2026-09-30
+
+Historical DEVELOPMENT package: **KLS-D-2aac020fb1**.
+- Artifact: `dist/KLS-D-2aac020fb1-Development.w3m`.
+- SHA-256: `0b71c26a3353d088cedb376d0d27d597039b9662687d475c60569c732fcb3a9d`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/`; prior package archived.
+- Ready, difficulty and stat-choice frames/events now initialize on every client in identical player order. Only visibility is local; only the triggering player sends a synchronized click.
+- New static UI safety regressions passed 3/3 after failing on both original initialization paths. Installed-API syntax and archive readback passed. Full suite: 113 tests, 7 failures and 4 errors; see `docs/MULTIPLAYER-UI-REPAIR.md`. No multiplayer fix is claimed verified.
+- Next check: in a two-player game, have Player 2 vote first, undo, then let both players vote to start one wave. Repeat with Player 2 casting the final vote. Check stat choices and difficulty on both clients.
+- Backpack panel visibility now follows an owner-only local open preference; native item use and the 30-slot bag/nine equipment slots remain active. Eight script-boundary regressions pass. Native frame binding, selection refresh, panel contents and simultaneous multiplayer interaction remain unverified. See docs/BACKPACK-PANEL-REPAIR.md.
+
 ## Install and test the current development build
 
 1. Build the current map and install it to the dedicated test folder with:
@@ -10,13 +24,13 @@
 3. Test that installed map from the already-open World Editor when it points at the current map, or select the same build in Warcraft III → Single Player → Custom Game. Do not make another test copy.
 4. Confirm the startup text includes the filename's build ID. Stop if a different or no build ID appears.
 5. Select one of 25 hero previews, read role/abilities, and confirm. The chosen race determines your worker, Altar and build menu; duplicate heroes are allowed. If no choice is made within 45 seconds, the fallback is Paladin.
-6. After all players confirm, the initial preparation timer is 45 seconds.
+6. During hero selection, vote for Easy, Normal, Hard or Very Hard. Highest vote wins; ties and missing votes use Normal. After all players confirm, the initial preparation timer is 45 seconds.
 
-The current package is development build `KLS-D-921cb74251` at `dist/KLS-D-921cb74251-Development.w3m` (SHA-256 `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568`). It is installed in the dedicated test folder. Editor save/reopen, Test Map, Custom Game, purchase/crafting behavior, backpack multiplayer behavior and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
+The current package is development build `KLS-D-4e6ae863df` at `dist/KLS-D-4e6ae863df-Development.w3m` (SHA-256 `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`). It is installed in the dedicated test folder. Editor save/reopen, current-build Test Map, Custom Game, gameplay, purchase/crafting behavior, backpack multiplayer behavior and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
 
-All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its four Common-through-Epic universal items and healing/mana potions. Build your race's Foundry to buy one copy of its Legendary recipe, which combines that race's Rare and Uncommon items. The recipe pattern returns to your Foundry after success or failure. The Master Forge in the southern market stocks the three general recipes. Talk to settlement characters to start the optional four-chapter recovery story; it continues during active waves. When hero selection ends, Undead and Night Elf players already have their Haunted or Entangled Gold Mine at the base; Human and Orc players use a regular Gold Mine. Starting mines hold 1,000,000 gold.
+All four Crownlands settlements are reachable by connected roads: Crownshire (Human, south), Redtusk Hold (Orc, west), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). Each has a race-themed shop that stocks its four Common-through-Epic universal items and healing/mana potions. Build your race's Foundry to buy one copy of its Legendary recipe, which combines that race's Rare and Uncommon items. The recipe pattern returns to your Foundry after success or failure. The Master Forge in the southern market stocks the three general recipes. Talk to settlement characters to start the optional four-chapter recovery story; it continues during active waves. Each starting mine holds 1,000,000 gold; Undead and Night Elf bases use owned Haunted or Entangled mines while Human and Orc bases use neutral Gold Mines.
 
-Each gained hero level automatically gives +3 to your hero's primary damage stat and +1 to each other stat. You also receive a normal skill point: spend it on a standard spell `+` upgrade or one of the `+3 STR`, `+3 AGI`, or `+3 INT` buttons above the ability grid. These buttons are repeatable and unranked, add exactly three points to the named stat, and do not pause the match. Every fifth level also grants a separate Vanguard, Skirmisher or Sage talent. Four Crownlands objectives can be started from their settlement characters at any time; they do not pause active waves.
+Each gained hero level grants one skill point. Choose either a standard spell `+` upgrade or one of the `+3 STR`, `+3 AGI`, or `+3 INT` buttons above the ability grid. There is no automatic stat growth; each button spends that level's point, is repeatable and unranked, and adds exactly three points to its named stat. Every fifth level also offers a separate Vanguard, Skirmisher or Sage talent. Four Crownlands objectives can be started from their settlement characters at any time; they do not pause active waves.
 
 ## Match
 
@@ -33,6 +47,8 @@ Each gained hero level automatically gives +3 to your hero's primary damage stat
 - Use King Aldric's Castle for heal/upgrade buttons. Contributions cost personal resources.
 - Keeper of the Grove and Faelor Briarward have tree-targeting `AEfn` suppressed; use their Grove Awakening or Briarward Stand signature on open ground to summon Treants without a nearby tree.
 - Normal breaks: 50 seconds. Before every boss wave: 180 seconds.
+- During a preparation timer, vote Ready to start the next wave early. Everyone must vote; your vote can be toggled off while waiting. The existing timer starts the wave if the group is not unanimous.
+- Normal enemies drop no equipment. Elites have a 1% chance of a Common or Uncommon item. Bosses grant personal milestone items; potion drops remain independent.
 - The Restoring Spring is below/south-west of the castle. Active living heroes within 450 range quietly recover 1% of maximum HP and 1% of maximum mana every second while missing either resource. It no longer produces a healing burst effect or per-tick text.
 
 ## Diagnostic-only shortcuts
@@ -43,7 +59,7 @@ These are for development/testing and must not be treated as release controls:
 |---|---|
 | -help | Show diagnostic help |
 | -gear | Report the hero’s six normal inventory slots, occupied backpack positions and nine equipment slots, showing each item’s catalog family/slot and owner marker. Failed market equip transactions additionally log buyer state, inventory capacity, item location and retry attempt; use `-diag` to capture those transaction lines |
-| -diag | Show build ID, the latest 12 runtime events, the latest 8 ERROR/FATAL/WARN entries from a separate rolling buffer, and each active player's expected/actual starting mine, owner, gold reserve and coordinates |
+| -diag | Show build ID, the latest 12 runtime events, the latest 8 ERROR/FATAL/WARN entries from a separate rolling buffer, each active player's expected/actual starting mine, owner, gold reserve and coordinates, plus difficulty/readiness state |
 | -wave N | Start a diagnostic-selected wave 1-1000 |
 | -gold | Add diagnostic gold/lumber |
 | -repair | Exercise castle-heal transaction |
@@ -59,3 +75,13 @@ Include the exact on-screen build ID. For gear that will not transfer or equip, 
     python -B tools/collect_test_logs.py
 
 Then provide the new snapshot folder name and note whether the game was launched through Custom Game or World Editor. `collection.json` lists build IDs and structured diagnostic severity/kind counts; `findings.txt` includes warning-only lines and explicit spawn/load failures with the nearest preceding build ID labeled as correlation only. If the current build ID is absent, copied errors cannot be attributed to it. Even a current map-open reference does not prove that the map was played; confirm the visible in-game identifier. Older logs may belong to earlier builds and must be kept separate.
+
+## Town recovery and company research
+
+Select the currently marked town contact to show its Begin/contribute button. Bring your living hero within 1,000 range. Northwatch clears four enemies; Crownshire sends a vulnerable supply caravan; Moonbark accepts 250 gold/100 lumber; Wraithfall offers the ritual encounter. The caravan moves only with a living escort within 900 range and can be restarted if lost. Objectives remain available while waves run. Attacking story threats, escorting, starting or funding records personal reward participation.
+
+Town completions add watchposts, Greater Healing/Mana stock, four restoring refuges, then Restoration potions and racial garrisons. These shared unlocks last for the match. Refuges quietly regenerate 1% maximum HP/mana each second within 650 range.
+
+Build your race’s Hall, Foundry, Siege Yard and arcane structure. Your hero buys personal research from their native item cards: three Company Chapters (unlocked through story or waves 10/20/30), three weapon ranks, three armor ranks, Counter-Siege and Spiritcraft Accord. Bring your living hero within 700 range; wrong-owner or obsolete purchases refund gold/lumber. Company recruits and supports have manual point-target powers costing 40 mana, with a 20-second cooldown. Full numbers: [company catalog](COMPANY-RESEARCH-AND-POWERS.md).
+
+A level-1 hero has one normal skill point. Spell ranks and the three +3 stat buttons spend the same points. Every five levels, a separate talent row offers +5 STR/+200 HP/+2 HP regeneration, +5 AGI/+2% attack evasion, or +5 INT/+100 mana/+2 mana regeneration. These choices never pause the game.

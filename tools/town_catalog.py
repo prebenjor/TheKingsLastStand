@@ -76,6 +76,7 @@ def town_script():
             if role == 'hall':
                 lines += [f'    if building != null then',
                           f'        call BlzSetUnitName(building,"{label}")',
+                          f'        set KLS_TownHall[{race_index}] = building',
                           '    endif']
         _, _, sx, sy = next(entry for entry in town_placements()
                             if entry[0] == town['race'] and entry[1] == 'shop')

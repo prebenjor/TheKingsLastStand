@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tests'))
 from equipment_catalog import CUSTOM_RACE_ITEMS, item_catalog
 from hero_catalog import HERO_COUNT, HERO_RACES, NEW_HEROES
 from faction_catalog import FACTIONS
-from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
+from hero_progression import HERO_ABILITIES
 from recipes import recipe_catalog
 from signature_spells import SIGNATURES
 from pipeline import runtime_script
@@ -100,14 +100,14 @@ class CrownlandsExpansion(unittest.TestCase):
         self.assertIn('IsUnitInGroup(dead,KLS_StoryEnemies)', death)
         self.assertNotIn('set KLS_Alive = KLS_Alive - 1', death[:death.index('elseif IsUnitInGroup(dead, KLS_Enemies)')])
         self.assertIn('KLS_TownShop[', runtime)
-        story_begin = runtime[runtime.index('function KLS_StoryBegin takes'):runtime.index('function KLS_StoryDialogClick takes')]
+        story_begin = runtime[runtime.index('function KLS_StoryBegin takes'):runtime.index('function KLS_StoryStartSync takes')]
         self.assertNotIn('KLS_Alive', story_begin)
         self.assertNotIn('KLS_Prep', story_begin)
         self.assertNotIn('PauseTimer', story_begin)
 
     def test_second_defender_can_join_an_active_supply_escort(self):
         runtime = runtime_script('ESCORT-TEST')
-        story_begin = runtime[runtime.index('function KLS_StoryBegin takes'):runtime.index('function KLS_StoryDialogClick takes')]
+        story_begin = runtime[runtime.index('function KLS_StoryBegin takes'):runtime.index('function KLS_StoryStartSync takes')]
         active_caravan = story_begin[story_begin.index('if KLS_StoryStage == 1 then'):story_begin.index('elseif KLS_StoryStage == 2 then')]
         self.assertIn('if KLS_StoryCart != null then', active_caravan)
         self.assertIn('set KLS_StoryContributor[KLS_StoryStage*4+p] = true', active_caravan)
@@ -118,7 +118,7 @@ class CrownlandsExpansion(unittest.TestCase):
         hero_records = decode(units())
         for hero_id in HERO_ABILITIES:
             learned_choices = hero_records[hero_id][1][('uhab', 0)][0].split(',')
-            self.assertTrue(set(STAT_ABILITY_IDS) <= set(learned_choices), hero_id)
+            self.assertEqual(learned_choices, list(HERO_ABILITIES[hero_id]), hero_id)
         for choice in ('KLS_TalentStrengthButton','KLS_TalentAgilityButton',
                        'KLS_TalentIntelligenceButton'):
             self.assertIn(choice,runtime)

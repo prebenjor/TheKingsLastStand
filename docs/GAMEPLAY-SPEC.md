@@ -32,9 +32,9 @@ Authoritative match states:
 
 - Start player heroes at level 1. Cap them at level 50.
 - Each hero retains four recognizable native Warcraft skills. Preserve every installed native rank. Extend only abilities whose installed power fields are explicitly registered in `tools/hero_progression.py`; see HEROES-AND-ABILITIES.md for the mapping.
-- Preserve the original skill unlock levels. Runtime rank advancement occurs on ten-level milestones and stops at rank 5. For supported spells, each rank beyond the installed maximum adds 10% of the last authored power value. Other data, including cost, cooldown, duration, range and targeting, copies unchanged from the last native rank. Unsupported effects stay capped at their installed maximum.
+- Preserve the original skill unlock levels. Players learn spell ranks manually with normal hero skill points; ranks do not advance automatically on level milestones. Supported rank 4–5 data adds 10% of the final authored power field per added rank, while cost, cooldown, duration, range, targeting and untagged fields copy from the final native rank. Unsupported effects stay capped at their installed maximum.
 - Each of the 25 heroes has one custom signature ability and a hero-specific company/support pair.
-- Each gained hero level automatically grants +3 to that hero's primary damage attribute and +1 to each other attribute. Separately, the normal hero skill point can upgrade a native spell or be spent on one of three repeatable unranked +3 STR/AGI/INT buttons. Grant automatic attribute growth once for every level crossed, including multi-level jumps. A second dialog awards a talent every five levels: Strength adds health/health regeneration; Agility adds attack speed/evasion; Intelligence adds mana/mana regeneration.
+- Every gained hero level grants one normal skill point. Spend it on one native spell rank or choose one of three repeatable, unranked +3 STR/AGI/INT buttons. There is no automatic attribute growth. Every fifth level grants a separate talent choice: Strength adds health/health regeneration; Agility adds attack speed/evasion; Intelligence adds mana/mana regeneration.
 - Optional Crownlands recovery objectives are shared within the match and remain available during waves; they never pause wave timing or change the wave enemy count. See CROWNLANDS-EXPANSION.md for all four steps and personal rewards.
 - Revive a dead hero after 20 seconds at their own Altar of Kings, preserving equipment and backpack contents.
 - Support abilities and ally targeting must work across all allied hero races. Keeper's custom Grove Awakening summons Treants on open ground; it must not require harvestable trees. Death Knight effects must not assume every target is living/undead incorrectly.
@@ -77,6 +77,16 @@ King Aldric is the shared survival objective at the central castle. His castle i
 
 ## Waves, enemies, and difficulty
 
+- At hero selection, every active player votes Easy, Normal, Hard, or Very Hard; votes start on Normal and remain changeable until selection closes. Highest vote wins; no votes or a tie resolves to Normal. The final difficulty is synchronized, shown in the HUD and `-diag`, and scales enemies after wave/player scaling:
+
+| Difficulty | Enemy health | Enemy base damage | Regular wave count |
+|---|---:|---:|---:|
+| Easy | 0.75× | 0.80× | 0.90× |
+| Normal | 1.00× | 1.00× | 1.00× |
+| Hard | 1.30× | 1.20× | 1.10× |
+| Very Hard | 1.60× | 1.40× | 1.20× |
+
+- During every wave-free preparation interval, each player may toggle a Ready vote. The next wave starts immediately only after every active player votes Ready; otherwise the 50-second normal / 180-second pre-boss countdown remains. The control is owner-local and never pauses the match.
 - Preserve waves 1-40 as the four-chapter Crownlands story. Waves 41 onward reuse the generated ten-row campaign crossover roster with a bounded source index while count, health, damage, bounty, XP, and boss scaling continue to use the live wave number. See WAVES-AND-BOSSES.md.
 - Every spawn and summon joins the tracked enemy set exactly once. Death, removal, debug cleanup, and boss summons must decrement the live count once.
 - Enemy movement targets the king. Issue pathing recovery only when an enemy has no valid order or is demonstrably stuck; do not override ordinary combat repeatedly.

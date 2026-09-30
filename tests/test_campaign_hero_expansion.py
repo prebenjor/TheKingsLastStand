@@ -51,8 +51,11 @@ class CampaignHeroExpansion(unittest.TestCase):
         self.assertIn(spell_id(16), object_records)
 
         runtime = runtime_script('KLS-HERO17-TEST')
-        self.assertIn("heroType == 'Hjsm'", runtime)
-        self.assertIn("heroType == 'Npal'", runtime)
+        from objects import units
+        heroes = decode(units())
+        for hero in ('Hjsm','Npal'):
+            self.assertEqual(heroes[hero][1][('uhab',0)][0], ','.join(HERO_ABILITIES[hero]))
+        self.assertNotIn('KLS_ApplySpellRanks',runtime)
         self.assertIn("KLS_HeroType[15] = 'Hjsm'", runtime)
         self.assertIn("KLS_HeroType[16] = 'Npal'", runtime)
         self.assertIn('exitwhen n == KLS_HeroCount', runtime)

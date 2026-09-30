@@ -30,7 +30,7 @@ The custom Human Priest is based on the map's custom hero type and has the four-
 
 Each hero keeps its four native skills in the standard learn list. When the selected hero has an unspent skill point, three owner-only buttons appear directly above the command-card ability grid: `+3 STR`, `+3 AGI`, and `+3 INT`. Selecting one consumes one normal hero skill point and permanently adds exactly three points to that stat. These are repeatable choices, not ranked abilities: show no ability level, rank counter, or per-rank ladder. Keep the ordinary spell `+` upgrades available at the same time; a stat pick and a spell rank spend the same pool of skill points. The buttons are non-modal and must not pause the match or interrupt other players. Only the owning player's selected hero exposes the buttons on that player's screen.
 
-Separately, every gained hero level automatically adds +3 to the hero's primary damage attribute and +1 to each of the other two attributes. This automatic growth is independent of the skill-point choice. The engine's built-in growth fields (`ustp`, `uagp`, `uinp`) are set to zero on all selectable hero records so values do not stack twice. Track the last processed level per player hero and apply the automatic growth once for every crossed level, even when one award jumps several levels. Primary stats come from the installed UnitBalance data and are inherited by the eight custom heroes from their base hero:
+There is no automatic attribute growth. Level 1 supplies one initial normal skill point; each gained level supplies one more; the owner spends it either on a native spell rank or one of the three +3 attribute choices. Primary attributes still determine which stat adds hero attack damage, and custom heroes inherit their primary attribute from their installed base hero:
 
 | Primary attribute | Heroes |
 |---|---|
@@ -53,7 +53,7 @@ These are the IDs currently present in tools/hero_progression.py and the selecto
 | Tauren Chieftain | Otch | AOsh, AOws, AOae, AOre |
 | Shadow Hunter | Oshd | AOhw, AOhx, AOsw, AOvd |
 | Demon Hunter | Edem | AEmb, AEim, AEev, AEme |
-| Keeper of the Grove | Ekee | AEer, AEfn, AEah, AEtq |
+| Keeper of the Grove | Ekee | AEer, AKfn, AEah, AEtq |
 | Priestess of the Moon | Emoo | AEst, AHfa, AEar, AEsf |
 | Warden | Ewar | AEfk, AEbl, AEsh, AEsv |
 | Death Knight | Udea | AUdc, AUdp, AUau, AUan |
@@ -96,13 +96,13 @@ These effects are the current authored object/runtime values; visual assets, nat
 - Four regular hero skills use installed Warcraft ability records. Preserve ranks 1 through each record's declared `levels` count exactly, and preserve the installed unlock level.
 - Safely extend only abilities with a registered, installed, nonzero power field in `tools/hero_progression.py`. Each rank beyond the installed maximum adds 10% of the final authored power value; the increase is relative to the authored value, not compounded (for a three-rank ability, ranks 4 and 5 are 110% and 120%). Every other field copies from the final authored rank, including mana cost, cooldown, duration, range, targeting and mechanics.
 - The extension table is explicit and keyed by ability rawcode and AbilityData field ID: `AHhb/Hhb1`, `AHad/Had1`, `AHtb/Htb1`, `AHtc/Htc1`, `AHbh/Hbh1+Hbh3`, `AHav/Hav1+Hav2+Hav3`, `AHfs/Hfs1+Hfs3+Hfs6`, `AHbn/Hbn1`, `AHpa/hsa1+hsa2`, `AHas/hsa1+hsa2`, `AHfa/Hfa1`, `AOwk/Owk3`, `AOcr/Ocr2`, `AOww/Oww1`, `AOcl/Ocl1`, `AOsh/Osh1`, `AOws/Wrs1`, `AOae/Oae1+Oae2`, `AOhw/Ocl1`, `AEmb/Emb1`, `AEim/Eim1`, `AEev/Eev1`, `AEer/Eer1`, `AEah/Eah1`, `AEar/Ear1`, `AEfk/Efk1+Efk2`, `AEsh/Esh1+Esh5`, `AEtq/Etq1`, `AEme/Eme5`, `AEsf/Esf1`, `AUdc/Udc1`, `AUau/Uau1+Uau2`, `AUdr/Udp1`, `AUfn/Ufn1`, and `AUdd/Udd1`. These labels were checked against the installed editor's localized AbilityMetaData strings.
-- Unregistered abilities remain at their installed rank cap rather than receiving guessed scaling. The runtime advances ranks at ten-level milestones, to rank 5 at most. The custom signature ability system keeps its separate per-hero-level effects.
-- Each gained hero level automatically adds +3 to primary attribute and +1 to the other two. The ordinary skill point remains a separate spell-or-stat-button choice. Every fifth level grants a separate talent choice; Strength adds health and health regeneration, Agility adds attack speed and evasion, and Intelligence adds mana and mana regeneration. The exact effects are listed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
+- Unregistered abilities remain at their installed rank cap rather than receiving guessed scaling. Players learn safe generated ranks manually with normal skill points, up to rank 5; spell levels never advance automatically. The custom signature ability system keeps its separate per-hero-level effects.
+- Level 1 supplies one initial normal skill point; each gained level supplies one more for a native spell rank or one repeatable, unranked +3 STR/AGI/INT choice. Each fifth hero level grants a separate talent choice; Strength adds health and health regeneration, Agility adds attack speed and evasion, and Intelligence adds mana and mana regeneration. The exact effects are listed in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md).
 - Keep hero inventory/equipment through death and revive after 20 seconds at that player's Altar of Kings.
 
 ## Race-sensitive spell behavior
 
 - Healing and ally detection must include all allied human, orc, night elf, and undead defenders and their friendly troops.
-- Keeper of the Grove and Faelor Briarward have the native tree-targeting `AEfn` ability removed when hero ranks are applied. Their tree-free Grove Awakening/Briarward Stand signature spells provide the Treant summon on open ground, so this roster no longer leaves a dead tree-dependent Force of Nature button on either hero.
+- Keeper of the Grove and Faelor Briarward learn Briar Host (`AKfn`) in place of tree-targeting `AEfn`. Its installed Feral Spirit parent summons two Treants instantly for 60 seconds, 100 mana, 30-second cooldown. Rank HP: 300/450/600/660/720; base damage: 15/22/30/33/36. Five learnable ranks keep all four spell choices available; Grove Awakening/Briarward Stand signatures remain separate.
 - Death Knight abilities must respect their ordinary living/undead target semantics, while the custom Soul Covenant must support the mixed allied party explicitly.
 - Summoned signature units need ownership, target orders, cleanup/lifetime, and wave-accounting rules tested in live play.

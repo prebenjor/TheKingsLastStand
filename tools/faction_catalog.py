@@ -18,6 +18,9 @@ _ARCANE_TOOLTIPS = {
     'Night Elf': 'Night Elf Ancient Lore Grove. Trains Druids of the Claw, Dryads and Mountain Giants, and researches their nature arts.',
     'Undead': 'Undead Temple of the Damned. Trains Necromancers and Banshees and researches their native dark rituals.',
 }
+for _race in _ARCANE_TOOLTIPS:
+    _ARCANE_TOOLTIPS[_race] += ' Offers Spiritcraft Accord research: +25% potency to your company support powers.'
+
 _ALTAR_TOOLTIPS = {
     'Human': 'The Human Altar of Kings calls your chosen champion. Fallen heroes return here after 20 seconds.',
     'Orc': 'The Orc Altar of Storms calls your chosen hero. Fallen heroes return here after 20 seconds.',
@@ -103,6 +106,9 @@ for race_index, faction in enumerate(FACTIONS):
     for key, building in faction['company_buildings'].items():
         gold,lumber,build_time,hit_points = _COMPANY_COSTS[key]
         building.update(gold=gold,lumber=lumber,build_time=build_time,hit_points=hit_points)
+    faction['company_buildings']['hall']['tooltip'] += ' Research three Company Chapters: each adds 5% base health/damage and 15% power potency. Chapters unlock through town recovery or waves 10/20/30.'
+    faction['company_buildings']['foundry']['tooltip'] += ' Research three weapon ranks (+10% base damage each) and armor ranks (+10% base health and +2 armor each).'
+    faction['company_buildings']['siege_yard']['tooltip'] += ' Research Counter-Siege Drill for +50% support attack damage against invading siege units and enemy structures.'
     faction['build_menu'] = [faction['town_hall'], faction['altar'], faction['food'],
         faction['barracks'], faction['blacksmith'], faction['arcane'], *faction['towers'],
         *[faction['company_buildings'][key]['rawcode'] for key in ('hall','foundry','siege_yard')]]

@@ -186,7 +186,7 @@ class ArchiveRegression(unittest.TestCase):
     def test_backpack_uses_native_extended_inventory_abilities(self):
         from objects import items
         blob=items()
-        self.assertIn(b'ebua\x00\x00\x00\x00', blob)
+        self.assertIn(b'ebac\x00\x00\x00\x00', blob)
         self.assertNotIn(b'Ibpk', blob)
         self.assertIn(b'AIni,AEqu,ASde', blob)
         self.assertNotIn(b'ATua', items())

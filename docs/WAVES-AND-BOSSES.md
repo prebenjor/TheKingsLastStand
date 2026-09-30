@@ -11,7 +11,16 @@ The Crownlands story lasts forty waves, divided into four ten-wave chapters. Aft
 | 21–30 | The Siege Tide | Siege pressure and mixed escorts | Earlier waves, elites, necromancers, ranged and demonic support |
 | 31–40 | The Last Host | Endgame combinations and Infernals | Full prior roster with siege, elites, casters, demons, and escorts |
 
-The generator stores the original 40 rows and one ten-row endless roster (waves 41-50). Endless waves resolve to source row `41 + ((wave - 41) % 10)`, so roster indexing stays bounded while the live wave number continues to scale difficulty. Spawn count grows as 7 + 2 × wave + 3 × active players. Ordinary wave enemies start from health 180 + 55 × wave + 35 × active players, and damage 6 + 2 × wave. Boss health scales from wave × 550 × (1 + 0.3 × active players), with boss base damage wave × 5. These are initial tuning formulas, not proven balanced values.
+The generator stores the original 40 rows and one ten-row endless roster (waves 41-50). Endless waves resolve to source row `41 + ((wave - 41) % 10)`, so roster indexing stays bounded while the live wave number continues to scale difficulty. Spawn count grows as 7 + 2 × wave + 3 × active players. Ordinary wave enemies start from health 180 + 55 × wave + 35 × active players, and damage 6 + 2 × wave. Boss health scales from wave × 550 × (1 + 0.3 × active players), with boss base damage wave × 5. The group-selected difficulty applies after those values:
+
+| Difficulty | Enemy health | Enemy base damage | Regular wave count |
+|---|---:|---:|---:|
+| Easy | 0.75× | 0.80× | 0.90× |
+| Normal | 1.00× | 1.00× | 1.00× |
+| Hard | 1.30× | 1.20× | 1.10× |
+| Very Hard | 1.60× | 1.40× | 1.20× |
+
+Boss count remains one. Boss reinforcement count, health, and damage also use the chosen difficulty. These are initial tuning formulas, not proven balanced values.
 
 The crossover introduces installed campaign Naga (`nmyr`, `nnsw`, `nnmg`, `nnrg`, `nhyc`, `nwgs`), Blood Elf (`nbel`, `nbee`, `hbew`), Fel Orc / Chaos Orc (`nchg`, `nchr`, `nchw`, `nckb`), Burning Legion (`nfel`, `nfgu`, `nbal`, `ninf`), and Scourge (`uske`, `ugho`, `ucry`, `nska`, `unec`, `uabo`, `umtw`) forces. Wave 49 gathers all five factions. Wave 50's ordinary roster is followed by a separate Lady Vashj boss spawn. These unit IDs resolve to the locally installed Definitive Edition tables; their native campaign models, animations, and armor fields are inherited without custom unit replacements.
 
@@ -56,11 +65,11 @@ The wave roster explicitly classifies every ordinary role as Normal or Elite. Lo
 
 | Enemy tier | Common | Uncommon | Rare | Epic | Legendary | Total gear chance | Potion chance |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Normal | 1.6% | 0.9% | 0.4% | 0.08% | 0.02% | 3% | 4% |
-| Elite | 3.5% | 3% | 2% | 1% | 0.5% | 10% | 8% |
-| Boss | 15% | 13% | 13% | 7% | 2% | 50% | 18% |
+| Normal | 0% | 0% | 0% | 0% | 0% | 0% | 4% |
+| Elite | 0.5% | 0.5% | 0% | 0% | 0% | 1% | 8% |
+| Boss world roll | 0% | 0% | 0% | 0% | 0% | 0% | 18% |
 
-Gear and potion rolls are independent; a death can produce both items. Consumables are chosen uniformly from Potion of Healing (phea), Potion of Mana (pman), Scroll of Town Portal (stwp), and Scroll of Healing (shea). Both ground items are personalized to the active killing defender, including the item owner marker used by equipment effects; an otherwise unbound catalog item receives its marker on first pickup. Boss/story completion rewards remain separate personal rewards.
+Normal and Boss enemy deaths never produce random catalog equipment. Elites have a 1% total gear chance, split evenly between Common and Uncommon. Bosses receive a guaranteed owner-bound personal item instead: Uncommon at wave 10, Rare at 20, Epic at 30, and Legendary at 40 and every later ten-wave boss. Waves 10–40 use their named personal relics; wave 50+ uses a random item from the milestone tier. Potion rolls are independent, so a potion may still accompany a boss reward. Consumables are chosen uniformly from Potion of Healing (phea), Potion of Mana (pman), Scroll of Town Portal (stwp), and Scroll of Healing (shea). Elite drops are personalized to the active killing defender. Boss/story completion rewards remain separate personal rewards.
 
 ## Four named bosses
 

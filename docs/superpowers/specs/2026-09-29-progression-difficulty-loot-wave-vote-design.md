@@ -1,7 +1,7 @@
 # Progression, Difficulty, Loot, and Wave Readiness
 
 **Date:** 2026-09-29  
-**Status:** Conversational design approved; written-spec review pending  
+**Status:** User-approved; implemented in Development build `KLS-D-4e6ae863df`; live acceptance pending
 **Project:** The King's Last Stand
 
 ## Purpose
@@ -77,7 +77,7 @@ Round wave counts to the nearest integer and keep at least one regular enemy. Bo
 
 ## Architecture and data flow
 
-- Keep synchronized match state in `source/game.j`: selected difficulty, per-player difficulty votes, per-player current-wave ready votes, tally helpers, vote reset, and spawn-time scaling.
+- Keep synchronized match state in `source/game.j`: selected difficulty, per-player difficulty votes, per-player current-wave ready votes, and wave transitions. Put reusable difficulty/tally/scaling helpers in `source/match_rules.j` before the modules that consume them; put the Ready callback after `KLS_Spawn` to satisfy JASS declaration order.
 - Keep hero-level handling in `source/combat.j` and `source/heroes.j`. Remove automatic-stat state and use the existing local stat controls and Warcraft skill points.
 - Keep item eligibility, rarity limits, rarity reward selection, item stats/effects/recipes, and effect-power components in `tools/equipment_catalog.py` and `tools/wave_rosters.py`, generated into the existing runtime. Keep mine reserve setup in `source/heroes.j`.
 - Add `tools/power_curve.py` as a read-only report generator and `docs/STAT-POWER-CURVE.md` as its generated, checked-in output.

@@ -31,37 +31,35 @@ The Night Elf build menu uses Ancient of War (`eaom`) as its Barracks and Hunter
 
 ## Hero company catalog
 
-Each row is one selector choice in the same order as `tools/hero_progression.py`. `Company` recruits are stocked by the owner's Barracks only after their Hall is complete. `Support` recruits are stocked at that player's Siege Yard. Costs are gold/lumber; the Foundry upgrade is 20% HP and damage.
+| Hero | Company / installed parent | Gold / lumber; HP; base damage | Support / installed parent | Gold / lumber; HP; base damage | Doctrine |
+|---|---|---:|---|---:|---|
+| Paladin | Oathguard (`kC00` / `hfoo`) | 260/70; 900; 34 | Dawn Chaplain (`kS00` / `hmpr`) | 320/100; 650; 22 | `AHad` |
+| Mountain King | Rune-Breakers (`kC01` / `hfoo`) | 280/85; 1000; 40 | Siege Sappers (`kS01` / `hmtm`) | 360/120; 680; 28 | `AOae` |
+| Priest | Dawnweavers (`kC02` / `hmpr`) | 240/75; 720; 23 | Beacon Acolyte (`kS02` / `hmpr`) | 300/100; 620; 18 | `AHab` |
+| Blood Mage | Emberguard (`kC03` / `hsor`) | 270/80; 760; 30 | Phoenix Sentry (`kS03` / `hgry`) | 400/140; 620; 34 | `AHab` |
+| Blademaster | Windcutters (`kC04` / `ogru`) | 270/80; 850; 38 | Shadow Scout (`kS04` / `orai`) | 340/110; 650; 30 | `AOae` |
+| Far Seer | Stormcallers (`kC05` / `oshm`) | 260/85; 750; 25 | Spirit Wolf (`kS05` / `orai`) | 350/120; 700; 33 | `AHab` |
+| Tauren Chieftain | Ancestral Guard (`kC06` / `otau`) | 320/110; 1250; 44 | War Drummer (`kS06` / `okod`) | 360/130; 850; 25 | `AOae` |
+| Shadow Hunter | Serpent Wardens (`kC07` / `ohun`) | 250/80; 780; 31 | Field Witch Doctor (`kS07` / `oshm`) | 360/120; 700; 24 | `AHad` |
+| Demon Hunter | Felbreakers (`kC08` / `esen`) | 280/90; 850; 38 | Warden Seeker (`kS08` / `edry`) | 360/120; 720; 30 | `AOae` |
+| Keeper of the Grove | Thornwatch (`kC09` / `edry`) | 250/90; 760; 25 | Grove Warden (`kS09` / `edry`) | 380/130; 800; 28 | `AHad` |
+| Priestess of the Moon | Moonstriders (`kC10` / `esen`) | 270/85; 780; 35 | Starfall Ballista (`kS10` / `ebal`) | 420/150; 700; 38 | `AEar` |
+| Warden | Gloomblades (`kC11` / `esen`) | 270/85; 800; 40 | Shadow Trapwright (`kS11` / `efdr`) | 400/140; 700; 30 | `AOae` |
+| Death Knight | Graveguard (`kC12` / `ugho`) | 280/90; 900; 36 | Bone Cavalier (`kS12` / `uabo`) | 430/150; 1050; 42 | `AHad` |
+| Lich | Frostbound (`kC13` / `ucry`) | 300/100; 850; 34 | Rime Mortar (`kS13` / `uban`) | 430/160; 740; 36 | `AHab` |
+| Dark Ranger | Black Arrow Company (`kC14` / `nska`) | 270/90; 760; 35 | Forsaken Marksman (`kS14` / `nska`) | 390/135; 760; 38 | `AEar` |
+| Ilastar, Human | Light’s Vanguard (`kC15` / `hfoo`) | 300/90; 920; 36 | Mercy Bearer (`kS15` / `hmpr`) | 380/120; 720; 26 | `AHad` |
+| Forsaken Paladin | Argent Revenants (`kC16` / `ugho`) | 310/100; 1000; 39 | Cleansing Pyre (`kS16` / `uban`) | 400/135; 740; 30 | `AHad` |
+| Aveline Ashford | Lionguard (`kC17` / `hfoo`) | 290/80; 980; 36 | Banner Chaplain (`kS17` / `hmpr`) | 340/110; 700; 24 | `AHad` |
+| Toren Flintlock | Powderwrights (`kC18` / `hmtm`) | 300/100; 900; 42 | Field Engineer (`kS18` / `hmpr`) | 380/140; 680; 32 | `AHad` |
+| Korgal Redtusk | Redtusk Breakers (`kC19` / `otau`) | 340/120; 1320; 48 | Bloodfire Drummer (`kS19` / `oshm`) | 390/140; 900; 30 | `AOae` |
+| Morgra Ashcaller | Ashcallers (`kC20` / `oshm`) | 290/95; 820; 34 | Spirit Guide (`kS20` / `orai`) | 390/140; 760; 28 | `AOae` |
+| Selyra Moonlance | Moonlance Sentinels (`kC21` / `esen`) | 300/100; 900; 40 | Moonwell Keeper (`kS21` / `edry`) | 430/150; 780; 34 | `AEar` |
+| Faelor Briarward | Briarward Guard (`kC22` / `edry`) | 280/100; 850; 31 | Thornmender (`kS22` / `edry`) | 410/145; 840; 29 | `AEar` |
+| Veyra Wraithveil | Veilbound Wraiths (`kC23` / `uban`) | 300/100; 820; 38 | Grave Cantor (`kS23` / `ucry`) | 420/160; 780; 40 | `AUau` |
+| Tharos Bonecrown | Bonecrown Wardens (`kC24` / `ugho`) | 330/110; 1150; 46 | Crypt Acolyte (`kS24` / `ucry`) | 430/160; 1050; 39 | `AUau` |
 
-| Hero | Barracks company (ID / native model) | Cost; HP; damage | Siege Yard support (ID / native model) | Cost; HP; damage | Hall doctrine |
-|---|---|---|---|---|---|
-| Paladin | Oathguard (`kC00` / Footman `hfoo`) | 260/70; 900; 34 | Dawn Chaplain (`kS00` / Priest `hmpr`) | 320/100; 650; 22 | Devotion Aura (`AHad`) |
-| Mountain King | Rune-Breakers (`kC01` / Footman `hfoo`) | 280/85; 1,000; 40 | Siege Sappers (`kS01` / Mortar Team `hmtm`) | 360/120; 680; 28 | Endurance Aura (`AOae`) |
-| Priest | Dawnweavers (`kC02` / Priest `hmpr`) | 240/75; 720; 23 | Beacon Acolyte (`kS02` / Priest `hmpr`) | 300/100; 620; 18 | Brilliance Aura (`AHab`) |
-| Blood Mage | Emberguard (`kC03` / Sorceress `hsor`) | 270/80; 760; 30 | Phoenix Sentry (`kS03` / Gryphon Rider `hgry`) | 400/140; 620; 34 | Brilliance Aura (`AHab`) |
-| Blademaster | Windcutters (`kC04` / Grunt `ogru`) | 270/80; 850; 38 | Shadow Scout (`kS04` / Wolf Rider `orai`) | 340/110; 650; 30 | Endurance Aura (`AOae`) |
-| Far Seer | Stormcallers (`kC05` / Shaman `oshm`) | 260/85; 750; 25 | Spirit Wolf (`kS05` / Wolf Rider `orai`) | 350/120; 700; 33 | Brilliance Aura (`AHab`) |
-| Tauren Chieftain | Ancestral Guard (`kC06` / Tauren `otau`) | 320/110; 1,250; 44 | War Drummer (`kS06` / Kodo Beast `okod`) | 360/130; 850; 25 | Endurance Aura (`AOae`) |
-| Shadow Hunter | Serpent Wardens (`kC07` / Headhunter `ohun`) | 250/80; 780; 31 | Field Witch Doctor (`kS07` / Shaman `oshm`) | 360/120; 700; 24 | Devotion Aura (`AHad`) |
-| Demon Hunter | Felbreakers (`kC08` / Huntress `esen`) | 280/90; 850; 38 | Warden Seeker (`kS08` / Dryad `edry`) | 360/120; 720; 30 | Endurance Aura (`AOae`) |
-| Keeper of the Grove | Thornwatch (`kC09` / Dryad `edry`) | 250/90; 760; 25 | Grove Warden (`kS09` / Ancient Protector `etrp`) | 380/130; 800; 28 | Devotion Aura (`AHad`) |
-| Priestess of the Moon | Moonstriders (`kC10` / Huntress `esen`) | 270/85; 780; 35 | Starfall Ballista (`kS10` / Glaive Thrower `ebal`) | 420/150; 700; 38 | Trueshot Aura (`AEar`) |
-| Warden | Gloomblades (`kC11` / Huntress `esen`) | 270/85; 800; 40 | Shadow Trapwright (`kS11` / Faerie Dragon `efdr`) | 400/140; 700; 30 | Endurance Aura (`AOae`) |
-| Death Knight | Graveguard (`kC12` / Ghoul `ugho`) | 280/90; 900; 36 | Bone Cavalier (`kS12` / Abomination `uabo`) | 430/150; 1,050; 42 | Devotion Aura (`AHad`) |
-| Lich | Frostbound (`kC13` / Crypt Fiend `ucry`) | 300/100; 850; 34 | Rime Mortar (`kS13` / Banshee `uban`) | 430/160; 740; 36 | Brilliance Aura (`AHab`) |
-| Dark Ranger | Black Arrow Company (`kC14` / Skeletal Archer `nska`) | 270/90; 760; 35 | Forsaken Marksman (`kS14` / Fel Stalker `nfel`) | 390/135; 760; 38 | Trueshot Aura (`AEar`) |
-| Ilastar, Human | Light’s Vanguard (`kC15` / Footman `hfoo`) | 300/90; 920; 36 | Mercy Bearer (`kS15` / Priest `hmpr`) | 380/120; 720; 26 | Devotion Aura (`AHad`) |
-| Forsaken Paladin | Argent Revenants (`kC16` / Ghoul `ugho`) | 310/100; 1,000; 39 | Cleansing Pyre (`kS16` / Priest `hmpr`) | 400/135; 740; 30 | Devotion Aura (`AHad`) |
-| Aveline Ashford | Lionguard (`kC17` / Footman `hfoo`) | 290/80; 980; 36 | Banner Chaplain (`kS17` / Priest `hmpr`) | 340/110; 700; 24 | Devotion Aura (`AHad`) |
-| Toren Flintlock | Powderwrights (`kC18` / Mortar Team `hmtm`) | 300/100; 900; 42 | Field Engineer (`kS18` / Priest `hmpr`) | 380/140; 680; 32 | Devotion Aura (`AHad`) |
-| Korgal Redtusk | Redtusk Breakers (`kC19` / Tauren `otau`) | 340/120; 1,320; 48 | Bloodfire Drummer (`kS19` / Shaman `oshm`) | 390/140; 900; 30 | Endurance Aura (`AOae`) |
-| Morgra Ashcaller | Ashcallers (`kC20` / Shaman `oshm`) | 290/95; 820; 34 | Spirit Guide (`kS20` / Wolf Rider `orai`) | 390/140; 760; 28 | Endurance Aura (`AOae`) |
-| Selyra Moonlance | Moonlance Sentinels (`kC21` / Archer `esen`) | 300/100; 900; 40 | Moonwell Keeper (`kS21` / Dryad `edry`) | 430/150; 780; 34 | Trueshot Aura (`AEar`) |
-| Faelor Briarward | Briarward Guard (`kC22` / Dryad `edry`) | 280/100; 850; 31 | Thornmender (`kS22` / Ancient Protector `etrp`) | 410/145; 840; 29 | Trueshot Aura (`AEar`) |
-| Veyra Wraithveil | Veilbound Wraiths (`kC23` / Banshee `uban`) | 300/100; 820; 38 | Grave Cantor (`kS23` / Crypt Fiend `ucry`) | 420/160; 780; 40 | Unholy Aura (`AUau`) |
-| Tharos Bonecrown | Bonecrown Wardens (`kC24` / Ghoul `ugho`) | 330/110; 1,150; 46 | Crypt Acolyte (`kS24` / Crypt Fiend `ucry`) | 430/160; 1,050; 39 | Unholy Aura (`AUau`) |
-
-These custom unit records inherit their native parent model, portrait/icon, and ability set, then override the name, tooltip, cost, health, and base damage. They belong to their buyer's player and never join `KLS_Enemies`, so they cannot hold a wave open or generate enemy bounties. A mismatched-player Barracks/Siege Yard purchase is removed and refunded. The four banner doctrines use installed Warcraft abilities, not project-invented rawcodes.
+These custom unit records inherit their native parent model, portrait/icon, then replace the ability set with its authored power and override the name, tooltip, cost, health, and base damage. They belong to their buyer's player and never join `KLS_Enemies`, so they cannot hold a wave open or generate enemy bounties. A mismatched-player Barracks/Siege Yard purchase is removed and refunded. The four banner doctrines use installed Warcraft abilities, not project-invented rawcodes.
 
 ## Engineering source of truth
 
@@ -79,3 +77,9 @@ Build one Barracks, Hall, Royal Foundry, and Siege Yard for each race. Confirm t
 The earlier Human-only company design is superseded by the user-approved mixed-race rule. Hero selection gives each player the corresponding Peasant, Peon, Wisp or Acolyte. Their Town Hall, altar, worker menu, three tower roles, Arcane/support building, Hall, Foundry and Siege Yard are race-themed while shared role costs and behavior stay aligned. The complete rawcode/catalog table is in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md) and tools/faction_catalog.py.
 
 Company and support recruit pairs remain specific to all 25 heroes. The eight new hero pairs and signature descriptions are listed in the Crownlands document and generated from tools/hero_catalog.py and tools/company_catalog.py.
+
+## September 30 audit completion
+
+All four racial Halls sell three Company Chapters. Foundries sell three weapon and armor ranks beside their Legendary recipe; Siege Yards sell Counter-Siege Drill; arcane structures retain native training/research and add Spiritcraft Accord. All services are owner-specific, charge personal gold/lumber, require the matching living hero nearby, and refund invalid/obsolete purchases. Chapter gates are town recovery stages or waves 10/20/30. Effects apply once to current and future troops; revived troops retain their bonuses.
+
+All 50 company/support recruits now have authored point-target powers and mobile native parents. The generated [company power and research catalog](COMPANY-RESEARCH-AND-POWERS.md) owns the complete IDs, numbers, costs and conditions. Verify native command-card stock, queue coexistence, casts, refunds and research stat deltas in a mixed-race match.

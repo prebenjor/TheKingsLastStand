@@ -237,6 +237,7 @@ function KLS_ShowDiagnostics takes player p returns nothing
     local integer mineOwner
     local string raceName
     local string expectedMine
+    local string difficultyLock
     local unit mine
     local unit selectedUnit
     local group selectedUnits
@@ -263,6 +264,12 @@ function KLS_ShowDiagnostics takes player p returns nothing
     set selectedUnits = null
     set selectedUnit = null
     call DisplayTimedTextToPlayer(p, 0, 0, 30, "KLS_BUILD_ID | units attempted=" + I2S(KLS_DiagUnits) + " scenery attempted=" + I2S(KLS_DiagDestructables) + " errors=" + I2S(KLS_DiagFailureEvents))
+    if KLS_DifficultyLocked then
+        set difficultyLock = "yes"
+    else
+        set difficultyLock = "no"
+    endif
+    call DisplayTimedTextToPlayer(p, 0, 0, 30, "Match rules difficulty="+KLS_DifficultyName(KLS_Difficulty)+" locked="+difficultyLock+" ready="+I2S(KLS_ReadyCount())+"/"+I2S(KLS_Players)+" prep="+I2S(KLS_Prep)+"s")
     loop
         exitwhen i == 4
         if KLS_Active[i] then

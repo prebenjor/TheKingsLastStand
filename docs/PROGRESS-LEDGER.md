@@ -1,6 +1,68 @@
+# Current status — 2026-09-30
+
+## Audit completion Development build — 2026-09-30
+
+Current DEVELOPMENT package: **KLS-D-8048eea39b**.
+
+- Artifact: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/` with a matching hash; previous builds archived outside the test folder.
+- Completed the seven source audit gaps: tree-free ranked summons, nonmodal talents, preparation-scoped Ready votes, participating/retryable escort, persistent town perks, personal company research and 50 recruit powers, plus corrected power projections.
+- 181 automated tests passed. Installed-API JASS syntax and MPQ readback passed. Independent review findings were fixed and rechecked.
+- Current-build engine, multiplayer and endurance checks remain pending. Earlier successful Test Map `KLS-D-fd638ddcf5` remains credited.
+- Details and next exact-build check: [audit completion](AUDIT-COMPLETION.md); full generated [company powers/research](COMPANY-RESEARCH-AND-POWERS.md).
+
+## Historical package status
+
+# Current status — 2026-09-30
+
+## Current package-proven build — KLS-D-2aac020fb1
+
+- Artifact: `dist/KLS-D-2aac020fb1-Development.w3m`.
+- SHA-256: `0b71c26a3353d088cedb376d0d27d597039b9662687d475c60569c732fcb3a9d`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/`; workspace/installed hashes are checked below.
+- Backpack visibility follows an owner-only local open preference and restores the native bag/equipment panels after another player's native item use. Escape or selecting away closes that client's panel. Storage, equipment, item orders and shop transfer logic remain native/synchronized.
+- Backpack script-boundary tests: 8/8 passed. Installed-API syntax and archive readback passed. Full suite before packaging: 120 tests, 6 failures and 4 errors; details in `docs/BACKPACK-PANEL-REPAIR.md`.
+- Native engine panel binding/content refresh and multiplayer behavior remain pending; no verified backpack-fix claim is made.
+- Next human check: on this exact build, P1 opens their bag, then P2 opens theirs; both panels should remain visible with each player's own items. Close P2's bag and confirm P1 stays open. Check equipping, selling, selecting away and reopening, then repeat with four players.
+
+## Previous package-proven build and history
 # Current status — 2026-09-29
 
-## Current package-proven build — KLS-D-921cb74251
+## Multiplayer UI repair candidate — 2026-09-29
+
+Current DEVELOPMENT package: **KLS-D-c98ba28f73**.
+- Artifact: `dist/KLS-D-c98ba28f73-Development.w3m`.
+- SHA-256: `41c1a2c4eee98833435cf22f57998e2eea75ae7128f7f8278c840a1c69158973`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/`; prior package archived.
+- Ready, difficulty and stat-choice frames/events now initialize on every client in identical player order. Only visibility is local; only the triggering player sends a synchronized click.
+- New static UI safety regressions passed 3/3 after failing on both original initialization paths. Installed-API syntax and archive readback passed. Full suite: 113 tests, 7 failures and 4 errors; see `docs/MULTIPLAYER-UI-REPAIR.md`. No multiplayer fix is claimed verified.
+- Next check: in a two-player game, have Player 2 vote first, undo, then let both players vote to start one wave. Repeat with Player 2 casting the final vote. Check stat choices and difficulty on both clients.
+- Backpack cross-player panel closing remains unresolved. No native storage, equipment or shop-transfer behavior was changed in this repair.
+## Previous package-proven build and history
+
+# Current status — 2026-09-29
+
+## Current package-proven build — KLS-D-4e6ae863df
+
+- Artifact: `dist/KLS-D-4e6ae863df-Development.w3m`.
+- SHA-256: `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-4e6ae863df-Development.w3m`; its SHA-256 matches the package.
+- Removed automatic +3 primary / +1 secondary stat growth and automatic spell ranks. Heroes are set to level 1 / 0 XP; each gained level's normal skill point is spent on a spell or one repeatable, unranked +3 attribute button. Fifth-level talents remain separate.
+- Added synchronized difficulty voting and enemy scaling, a unanimous Ready option for early wave starts, scarce elite-only common/uncommon random equipment, milestone personal boss gear, and equal one-million starting mine reserves.
+- Rebalanced the remaining item outliers: Rare Duskwatch Longbow damage is +24, Legendary Night's Covenant grants +22 Intelligence and +572 mana, and Sovereign's Mantle gives +8 agility so the Legendary Chest stat exceeds the Epic Briarheart Mantle. The generated rarity/slot report has no outliers or tier-order warnings.
+- Generated `docs/ITEM-CATALOG.md` and the deterministic `docs/STAT-POWER-CURVE.md` report for all 25 heroes and levels 1–50, including stat allocations, talents, tomes, equipped gear and named item effects.
+- First compile attempt caught JASS module-order and local type-name errors before producing a map. After the fix, `python -B tools/build_map.py --install-test-map` passed installed-API JASS syntax and archive readback, then installed this artifact.
+- Ruling: reusable difficulty/scaling/vote helpers live in `source/match_rules.j`, while synchronized state remains in `source/game.j` — the compiler confirmed JASS requires helper definitions before diagnostic, hero, HUD, and combat consumers; cost if wrong: the helper module is separate from the state owner named in the original plan.
+- Automated tests were not run under the approved verification boundary. Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier successful Test Map remains a pass for `KLS-D-fd638ddcf5` only.
+
+## Previous package-proven build — KLS-D-cc269a3de4
+
+- Artifact: archived as `backups/development-builds/20260929T153913601015Z-KLS-D-4e6ae863df/KLS-D-cc269a3de4-Development.w3m`.
+- SHA-256: `c53fa2170c96996706d166da46f58979e2582f5b5cf717ebfaf8687764922e10`.
+- A later review found its item audit claim was premature: Rare Duskwatch Longbow was +36 damage, Legendary Night's Covenant was +11 Intelligence / +396 mana, and Legendary chest agility did not exceed the Epic tier. Replacement `KLS-D-4e6ae863df` fixes the remaining mismatches.
+- Package/archive readback and installed-API JASS syntax passed; live acceptance remained pending.
+
+## Previous package-proven build — KLS-D-921cb74251
 
 - Artifact: `dist/KLS-D-921cb74251-Development.w3m`.
 - SHA-256: `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568`.

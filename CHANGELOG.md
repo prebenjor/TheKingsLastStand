@@ -1,6 +1,53 @@
 # Build changelog
 
+## KLS-D-8048eea39b - 2026-09-30
+
+- Final audit-completion package carries all gameplay fixes described in `KLS-D-d9fb2e560a`: tree-free ranked summons, nonmodal talents, preparation-specific Ready votes, participating/retryable escort, permanent town perks, 11 personal company research services, 50 recruit powers and corrected power projections.
+- Corrected all current-build reference checks and made regenerated item documentation include the current manifest ID/path/hash. Updated player guide, technical architecture, progress and acceptance records.
+- Verification: full suite 181 tests passed; installed-editor JASS syntax, MPQ readback and matching installed/package hashes passed. Independent review findings were fixed and rechecked. Current engine/multiplayer/endurance gates remain pending.
+- Package: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`. Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-8048eea39b-Development.w3m`. One current map remains; older packages are archived outside the test folder.
+- DEVELOPMENT label retained. Earlier successful Test Map remains credited to `KLS-D-fd638ddcf5`.
+
+
+## KLS-D-d9fb2e560a - 2026-09-30
+
+- Replaced learnable tree-consuming summons with five-rank instant Briar Host for Keeper/Faelor; retained four learnable spell choices and separate signatures.
+- Made fifth-level talents nonmodal synchronized owner controls, restricted evasion to attacks, and made Ready votes idempotent and specific to each preparation.
+- Added a vulnerable caravan requiring a nearby living escort, two ambushes and loss/retry; town chapters permanently unlock watchposts, potion stock, silent refuges and racial garrisons for the match.
+- Added three Company Chapters, three weapon/armor ranks and support research across all four racial building roles, plus 50 authored recruit powers. Personal ownership/refunds, existing/future upgrade deltas, siege targets and recycled unit handles are checked.
+- Corrected power-report slot collisions, attribute secondary stats, initial normal point budget and individual cross-tier warnings. Updated catalogs, guides, decisions and agent handoff documents.
+- Carries forward the generic multiplayer Backpack visibility repair, rarity/loot balance, difficulty, mine parity and manual spell-or-stat progression.
+- Full automated suite: 181 passed. Installed-editor JASS syntax and MPQ archive readback passed. Two independent review findings were fixed with failing/passing regressions and rechecked.
+- Package: `dist/KLS-D-d9fb2e560a-Development.w3m`; SHA-256: `8074019b120ab03d7ccdffb81bcc983084b29a639cab0b5f8d5f44e3f82a54bf`. Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-d9fb2e560a-Development.w3m` with a matching hash. Previous packages archived outside the test folder.
+- Current-build editor, Custom Game, gameplay, multiplayer and endurance remain pending. Earlier successful Test Map stays credited to `KLS-D-fd638ddcf5`. This is a DEVELOPMENT build.
+
+
 Keep one entry for every packaged build. The entry names the exact immutable build ID, summarizes the user-visible changes, lists verification evidence, and leaves engine-only checks pending until a person tests that exact map. Add the entry in the same source change as the build; do not reuse an old build ID for changed map contents.
+
+- Final document-manifest cross-check caught five missing/current-reference formatting failures after packaging. The successor build records corrected references and preserves package provenance when regenerating the item catalog. These were documentation regressions, not Test Map failures.
+
+## KLS-D-4e6ae863df - 2026-09-29
+
+- Current Development package carries the approved progression, difficulty, unanimous Ready-vote, rare elite-drop, boss milestone-reward, race mine-parity and matched general/racial/crafted item-budget changes from `KLS-D-cc269a3de4`.
+- Final generated audit corrected all remaining item-budget issues: Rare Duskwatch Longbow damage is +24, Legendary Night's Covenant grants +22 INT and +572 mana, and Sovereign's Mantle gives +8 agility so Legendary Chest agility exceeds Epic Briarheart Mantle's +7. The item/slot report now has no rarity outliers or tier-order warnings.
+- Added `tools/power_curve.py` and its generated `docs/STAT-POWER-CURVE.md` for deterministic level 1–50 projections across all 25 heroes, allocations, talents, tomes, equipment, and effect components.
+- `python -B tools/build_map.py --install-test-map` passed installed-API JASS syntax, package/archive readback and installation. Automated regression tests were not run under the approved verification boundary.
+- Package: `dist/KLS-D-4e6ae863df-Development.w3m`; SHA-256: `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-4e6ae863df-Development.w3m`; package and installed SHA-256 values match.
+- Editor save/reopen, current-build Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending. The earlier successful Test Map remains credited to `KLS-D-fd638ddcf5` only.
+
+## KLS-D-cc269a3de4 - 2026-09-29
+
+- Replaced automatic hero stat growth with a level 1 / 0 XP start and one manual skill-point choice per gained level: native spell rank or one unranked +3 STR/AGI/INT button. Spell ranks no longer advance automatically; fifth-level talents remain separate.
+- Added synchronized Easy / Normal / Hard / Very Hard voting with documented HP/damage/count scaling and unanimous, non-pausing Ready voting. Normal and pre-boss countdowns remain 50 and 180 seconds.
+- Limited random world gear to a 1% elite chance for Common/Uncommon, removed normal/boss random equipment rolls, and retained potion odds. Boss milestones grant one owner-bound personal reward at Uncommon/Rare/Epic/Legendary tiers on waves 10/20/30/40+.
+- Rebalanced general, racial, and recipe equipment; its later audit still found four residual issues: Rare Duskwatch Longbow damage, Legendary Night's Covenant mana/Intelligence, and Legendary chest agility tier order. These were corrected in replacement build `KLS-D-4e6ae863df`.
+- Normalized every starting mine to a 1,000,000 gold reserve while retaining neutral Human/Orc mines and owned Undead/Night Elf race-specific mines. Updated the design docs and future-agent plans.
+- The first JASS compile attempt caught declaration-order and native type-name conflicts before packaging. The final source moves shared match-rule helpers ahead of their consumers and compiles successfully.
+- `python -B tools/build_map.py --install-test-map` passed installed-API JASS syntax and MPQ archive readback. Automated regression tests were not run under the approved verification boundary.
+- Package: `dist/KLS-D-cc269a3de4-Development.w3m`; SHA-256: `c53fa2170c96996706d166da46f58979e2582f5b5cf717ebfaf8687764922e10`.
+- Installed at `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-cc269a3de4-Development.w3m`; package and installed SHA-256 values match.
+- Current-build editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance checks remain pending. The earlier successful Test Map remains attributed to `KLS-D-fd638ddcf5` only.
 
 ## KLS-D-921cb74251 - 2026-09-29
 
@@ -414,3 +461,32 @@ Keep one entry for every packaged build. The entry names the exact immutable bui
 - Installing this build was blocked because Warcraft III PID 46920 held the older `KLS-D-f89f212a3a-Development.w3m` open. The original was preserved and a byte-identical archive copy was verified; the new build remains available in `dist/`.
 - Editor save/reopen, Test Map, Custom Game startup, native item transfer/equipment/sale, visible combat rewards, spring behavior, multiplayer and endurance checks remain pending for this build. Keep it labelled development.
 
+
+## KLS-D-c98ba28f73 - 2026-09-29
+
+DEVELOPMENT multiplayer UI repair candidate. SHA-256: `41c1a2c4eee98833435cf22f57998e2eea75ae7128f7f8278c840a1c69158973`.
+
+- Create and register Ready/difficulty/stat-choice controls identically on all clients; restrict sync sends to the triggering client and keep visibility owner-local.
+- Preserve native backpack storage, equipment and existing shop transfers. The reported cross-player backpack closing is unresolved.
+- Verification: focused static safety regressions 3/3; installed-API syntax and package readback passed; installed package produced. Full suite ran 113 tests with 7 failures and 4 errors, listed in `docs/MULTIPLAYER-UI-REPAIR.md`.
+- Pending: exact-build two/four-player Ready, difficulty and stat-button checks; native backpack/shop reproduction; Editor round-trip, Custom Game, gameplay and endurance.
+
+## KLS-D-d213c3b353 - 2026-09-30
+
+DEVELOPMENT backpack panel repair candidate. SHA-256: `89adeeb75cdb8bd1bc883175eb5d42c2c7292336a05a783717436cc6a0f60113`.
+
+- Preserve each client's backpack-open preference when another defender uses their native backpack; restore the native bag, equipment and backdrop visibility locally. Selecting away closes the local panel.
+- Keep native 30-slot storage/nine equipment slots, item activation and synchronized shop transfers. Carry forward the Ready/difficulty/stat UI allocation repair.
+- Verification: backpack script-boundary regressions 7/7; installed-API JASS syntax, archive readback and installation passed. Full suite: 120 tests, 6 failures and 4 errors, listed in `docs/BACKPACK-PANEL-REPAIR.md`.
+- Pending: native frame lookup/context and item/name binding, simultaneous two/four-player backpack open/close, equip/sell/selection behavior, Editor round-trip, Custom Game, gameplay and endurance.
+
+## KLS-D-2aac020fb1 - 2026-09-30
+
+DEVELOPMENT backpack panel repair candidate, adding owner-only Escape closing to the preceding visibility guard.
+SHA-256: `0b71c26a3353d088cedb376d0d27d597039b9662687d475c60569c732fcb3a9d`.
+
+- Each client's native backpack visibility follows its own item-use preference; another player's item use does not change that preference. Escape and selecting away close the local panel.
+- Preserve native storage/equipment and synchronized shop transfers; no item orders or selection forcing are issued by the guard.
+- Verification: eight focused backpack tests passed, including four-client isolation and Escape. Installed-API syntax, MPQ archive/readback and installation passed. Installed/workspace hashes match.
+- Full suite before documentation synchronization: 121 tests, 13 assertion failures (including seven build-record failures/subtests) and four errors. Build-record checks rerun after updating docs; six other failures and four errors remain recorded in `docs/BACKPACK-PANEL-REPAIR.md`. No clean full-suite claim.
+- Pending: native frame lookup/context and item/name binding, simultaneous two/four-player open/close, Escape and shop/selection checks, Editor round-trip, Custom Game, gameplay and endurance.

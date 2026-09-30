@@ -38,7 +38,7 @@ All qualities are available immediately; gold gates affordability rather than sh
 
 Display item rarity with Warcraft color codes in item names, shop stock names, and tooltip headers: Common white (`#FFFFFF`), Uncommon green (`#1EFF00`), Rare blue (`#0070DD`), Epic purple (`#A335EE`), and Legendary gold (`#FF8000`). Boss relics use Rare for Gravetide Cleaver, Epic for Heart of the Watch and Crown of Dawn, and Legendary for Oath of the Last King. Keep the raw quality label and full stats in the tooltip so color is supplementary.
 
-The five quality levels are implemented as two neutral units per level: Arms & Armor and Apparel & Relics. Generic vendors contain only the sixteen general equipment families, keeping each quality shop at seven Arms & Armor items and nine Apparel & Relics items. Matching Crownlands town shops sell their race's four Common-through-Epic relics plus health and mana potions. The racial Legendary relic is not directly stocked; its Foundry pattern crafts it from two racial components, and it remains eligible for the existing enemy-drop rules. The Master Forge in the southern market stocks three general recipe patterns. Each constructed race Foundry sells one copy of its own racial Legendary pattern to its owner. Recipe stock returns to the original vendor after successful or failed crafting; if the vendor was destroyed during crafting, stock returns to the Master Forge. The Field Apothecary has four consumables, and Sage's Archive has nine tomes. Keep every vendor at twelve or fewer stock entries so all items fit the native command card. Present the market vendors as recognizable buildings around the southern plaza, with the Archive beside the Apothecary. Shop windows must display icon buttons and stat-rich item tooltips, not a text-only list or an empty inventory.
+The five quality levels are implemented as two neutral units per level: Arms & Armor and Apparel & Relics. Generic vendors contain only the sixteen general equipment families, keeping each quality shop at seven Arms & Armor items and nine Apparel & Relics items. Matching Crownlands town shops sell their race's four Common-through-Epic relics plus health and mana potions. The racial Legendary relic is not directly stocked; its Foundry pattern crafts it from two racial components, and it remains eligible for Legendary personal boss rewards from wave 50 onward. The Master Forge in the southern market stocks three general recipe patterns. Each constructed race Foundry sells one copy of its own racial Legendary pattern to its owner. Recipe stock returns to the original vendor after successful or failed crafting; if the vendor was destroyed during crafting, stock returns to the Master Forge. The Field Apothecary has four consumables, and Sage's Archive has nine tomes. Keep every vendor at twelve or fewer stock entries so all items fit the native command card. Present the market vendors as recognizable buildings around the southern plaza, with the Archive beside the Apothecary. Shop windows must display icon buttons and stat-rich item tooltips, not a text-only list or an empty inventory.
 
 ## Equipment families, stats, and scaling
 
@@ -52,14 +52,14 @@ The current generated catalog has sixteen families × five qualities = eighty or
 | Shield | +2 armor | Off hand | Rare+: single-hit absorption |
 | Focus | +75 mana | Off hand | Rare+: mana return on cast |
 | Helmet | +60 health | Head | Attributes/defense from item stats |
-| Chest | +100 health | Chest | Attributes/defense from item stats |
+| Chest | +90 health | Chest | Attributes/defense from item stats |
 | Gloves | +5% attack speed | Gloves | Attributes/defense from item stats |
 | Boots | +10 movement speed | Boots | Attributes/defense from item stats |
 | Offensive Ring | +3 damage | Ring | Two ring slots can coexist |
 | Defensive Ring | +1 armor | Ring | Two ring slots can coexist |
-| Trinket | +50 health, +50 mana | Trinket | Rare+: nearby allied hero healing |
-| Cape | +50 health, +1 armor | Chest | Rare+: spell damage reduction |
-| Might Chestplate | +2 Strength | Chest | Attribute specialization |
+| Trinket | +70 health, +50 mana | Trinket | Rare+: nearby allied hero healing |
+| Cape | +75 health, +1 armor | Chest | Rare+: spell damage reduction |
+| Might Chestplate | +1 Strength | Chest | Attribute specialization |
 | Windrunner Boots | +2 Agility | Boots | Attribute specialization |
 | Arcanist Focus | +2 Intelligence | Off hand | Attribute specialization |
 
@@ -99,26 +99,26 @@ The recipe scroll and fee are personal. Ingredients may be equipped or stored an
 
 | Result | Ingredients | Fee | Result details |
 |---|---|---:|---|
-| Oathforged Kingswrath | Rare Gravebreaker + Rare Ring of Conquest | 5,000 | Legendary blade, +88 damage, +10 Strength, 35% cleave |
-| Stormheart Prism | Rare Wintercall + Rare Spellwell | 7,000 | Legendary focus, +22 Intelligence, +550 mana, restores 50 mana per spell proc |
-| Sovereign's Mantle | Epic Dawnguard Helm + Epic Royal Bulwark | 12,000 | Legendary chest/cape, +10 of each primary attribute, +800 HP, +10 armor, 15% spell damage reduction |
+| Oathforged Kingswrath | Rare Gravebreaker + Rare Ring of Conquest | 5,000 | Legendary blade, +72 damage, +8 Strength, 35% cleave |
+| Stormheart Prism | Rare Wintercall + Rare Spellwell | 7,000 | Legendary focus, +18 Intelligence, +750 mana, restores 50 mana per spell proc |
+| Sovereign's Mantle | Epic Dawnguard Helm + Epic Royal Bulwark | 12,000 | Legendary chest/cape, +8 Strength, +6 Agility, +6 Intelligence, +700 HP, +8 armor, 10% spell damage reduction |
 
 ## Boss relics and completion rewards
 
 Design intent: four distinct personal, unsellable relics are awarded by the four chapter bosses. Current object data defines:
 
-| Wave | Name | Rawcode | Slot | Current tooltip |
-|---|---|---|---|---|
-| 10 | Gravetide Cleaver | I010 | Main hand | +15 damage |
-| 20 | Heart of the Watch | I011 | Chest | Increases maximum health |
-| 30 | Crown of Dawn | I012 | Trinket | Grants a healing aura |
-| 40 | Oath of the Last King | I013 | Ring | +5 to all attributes |
+| Wave | Name | Rawcode | Rarity | Slot | Current tooltip |
+|---|---|---|---|---|---|
+| 10 | Gravetide Cleaver | I010 | Uncommon | Main hand | +15 damage |
+| 20 | Heart of the Watch | I011 | Rare | Chest | Increases maximum health; custom description does not expose its inherited numeric value |
+| 30 | Crown of Dawn | I012 | Epic | Trinket | Grants a healing aura; custom description does not expose its inherited numeric value |
+| 40 | Oath of the Last King | I013 | Legendary | Ring | +5 Strength, +5 Agility, +5 Intelligence |
 
 These are personal, unsellable boss relics. Boss relics and Crownlands story items use the shared delivery service in `source/rewards.j`. It checks `CreateItem` before using the returned handle. If creation fails, the item rawcode stays in that owner's pending queue and is retried every five seconds while the match clock runs. If the hero cannot accept a successfully created item, it remains visible and owner-bound at that player's base. Both native item owner and the project owner marker are set so other players cannot claim the personal reward. Regression coverage checks boss/story routing, null-handle guards, full-inventory fallback and retry queue behavior; verify pickup, ownership and injected creation failures in Warcraft. Do not rename, replace, or rebalance the relics without updating this catalog and testing their actual native effects.
 
 ## Ordinary enemy drops
 
-Enemy gear uses the shared general/racial catalog and explicit Normal, Elite, and Boss tiers from the wave roster. Normal enemies have a 3% gear chance, Elite roles 10%, and bosses 50%; Elite and Boss profiles give higher rarities greater weight. Potion chances are independent at 4% / 8% / 18% for Normal / Elite / Boss. Both rolls can succeed on one death, placing the gear and potion beside each other. Drops from an active defender's kill are owned by that killer; first pickup assigns the owner marker to any otherwise unbound catalog gear so its stats work when equipped. Boss and story completion rewards remain owner-bound through the reward queue.
+Enemy gear uses the shared general/racial catalog and explicit Normal, Elite, and Boss tiers from the wave roster. Normal enemies and Boss world-drop rolls have 0% equipment chance. Elites have 1% total equipment chance, split evenly between Common and Uncommon; higher rarities cannot drop from them. Bosses instead award a guaranteed personal milestone item to each active player: Uncommon at wave 10, Rare at 20, Epic at 30, and Legendary at 40 and later ten-wave boss milestones. Potion chances are independent at 4% / 8% / 18% for Normal / Elite / Boss. Drops from an active defender's kill are owned by that killer; first pickup assigns the owner marker to any otherwise unbound catalog gear so its stats work when equipped. Boss and story completion rewards remain owner-bound through the reward queue. The current component audit is [STAT-POWER-CURVE.md](STAT-POWER-CURVE.md); regenerate it after catalog changes.
 
 See [WAVES-AND-BOSSES.md](WAVES-AND-BOSSES.md) for the per-rarity probability table and tiered roster.
 

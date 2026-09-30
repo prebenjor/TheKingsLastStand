@@ -1,21 +1,44 @@
 # The King's Last Stand
 
+## Audit completion Development build — 2026-09-30
+
+Current DEVELOPMENT package: **KLS-D-8048eea39b**.
+
+- Artifact: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/` with a matching hash; previous builds archived outside the test folder.
+- Completed the seven source audit gaps: tree-free ranked summons, nonmodal talents, preparation-scoped Ready votes, participating/retryable escort, persistent town perks, personal company research and 50 recruit powers, plus corrected power projections.
+- 181 automated tests passed. Installed-API JASS syntax and MPQ readback passed. Independent review findings were fixed and rechecked.
+- Current-build engine, multiplayer and endurance checks remain pending. Earlier successful Test Map `KLS-D-fd638ddcf5` remains credited.
+- Details and next exact-build check: [audit completion](docs/AUDIT-COMPLETION.md); full generated [company powers/research](docs/COMPANY-RESEARCH-AND-POWERS.md).
+
+
+## Previous backpack repair candidate — 2026-09-30
+
+Historical DEVELOPMENT package: **KLS-D-2aac020fb1**.
+- Artifact: `dist/KLS-D-2aac020fb1-Development.w3m`.
+- SHA-256: `0b71c26a3353d088cedb376d0d27d597039b9662687d475c60569c732fcb3a9d`.
+- Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/`; prior package archived.
+- Ready, difficulty and stat-choice frames/events now initialize on every client in identical player order. Only visibility is local; only the triggering player sends a synchronized click.
+- New static UI safety regressions passed 3/3 after failing on both original initialization paths. Installed-API syntax and archive readback passed. Full suite: 113 tests, 7 failures and 4 errors; see `docs/MULTIPLAYER-UI-REPAIR.md`. No multiplayer fix is claimed verified.
+- Next check: in a two-player game, have Player 2 vote first, undo, then let both players vote to start one wave. Repeat with Player 2 casting the final vote. Check stat choices and difficulty on both clients.
+- Backpack panel visibility now follows an owner-only local open preference; native item use and the 30-slot bag/nine equipment slots remain active. Eight script-boundary regressions pass. Native frame binding, selection refresh, panel contents and simultaneous multiplayer interaction remain unverified. See docs/BACKPACK-PANEL-REPAIR.md.
+
 **A cooperative Warcraft III Definitive Edition defense RPG with a 40-wave campaign and endless crossover assaults.**
 
 Players command distinct heroes and their own race-matched workers, buildings, and armies, build and upgrade four personal bases, and hold the King's Road against a changing undead and demonic invasion. King Aldric and his castle are the shared objective. The game combines hero progression and equipment with worker economy, construction, towers, boss fights, and personal boss rewards.
 
-## Project status
+## Previous package status — superseded by the candidate above
 
-Current development build: **KLS-D-921cb74251**.
+Previous development build: **KLS-D-4e6ae863df**.
 
-- Map: `dist/KLS-D-921cb74251-Development.w3m`
-- SHA-256: `2f22ad15e2f82e2a68cc5c389dc3572d9eae495447883c014643920071f87568`
+- Map: `dist/KLS-D-4e6ae863df-Development.w3m`
+- SHA-256: `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`
 - Installed as the sole project map in `Documents/Warcraft III/Maps/TheKingsLastStand/`; installed hash matches the package. Editor Test Map, Custom Game, purchase/crafting behavior, gameplay, multiplayer and endurance checks remain pending.
 - Build manifest: dist/build-manifest.json
 
 World Editor terrain and map dressing are preserved in `source/authored-map/editor-layer.zip`. After editing and saving the current build in World Editor, capture its six supported visual layers with `python -B tools/capture_authored_map.py --map "<saved-map.w3m>"`; the capture rejects a map with a different build ID. See `BUILDING.md` for the workflow and limitations.
 
-This package carries the Crownlands settlements, four-race companies, hero progression and custom content forward. Each gained hero level now adds +3 to that hero's installed primary damage stat and +1 to each other stat; the normal skill point still funds a spell upgrade or one of the three separate +3 stat buttons. Native hero growth is disabled for selectable heroes so the requested automatic values are not doubled. The Night Elf build menu now uses Ancient of War and Hunter's Hall as its Tier One Barracks and upgrade building, removing a circular prerequisite that blocked Tree of Ages. The four Halls use distinct race buildings, and each constructed Foundry exposes its own owner-only Legendary recipe while retaining the company upgrade. Crafted patterns return to their selling building. It also routes boss relics and story items through a guarded personal delivery service: failed item creation is queued per owner and retried, while full inventories receive a visible owner-bound item at their base. `-gear` audits six normal inventory slots, occupied backpack positions and nine equipment slots, showing item type, catalog slot and owner marker. If a market equip attempt fails, its diagnostic also records buyer type/owner/life state, free normal slots, backpack occupancy, where the item is, item owner/type, catalog family/slot, and retry attempt; use `-gear` and `-diag` together to capture the transaction. `-diag` retains ERROR/FATAL/WARN messages in a separate rolling buffer, displays the latest eight after routine logs roll over, and counts each logged ERROR once across unit, scenery, item, recipe, and retry failures. Optional scenery, effects, reinforcements, story spawns, and Undead mine conversion use contextual checked-spawn diagnostics; optional failures do not end the match. Core setup and wave spawns remain fatal. The Undead Temple explicitly uses Warcraft's Temple of the Damned icon, Undead and Night Elf players begin with their own Haunted or Entangled Gold Mine holding 1,000,000 gold, and per-base lumber stands are placed in closer rows south of each hall. Keeper of the Grove and Faelor use tree-free Treant signatures. Gear prices, rarity tiers, recipes, endless wave rosters, kill gold, XP, Sacred Aura rank values, and drop probabilities remain as previously documented. The last full regression run passed 147/147 for an earlier build; automated tests were not run for this change. The current package build/readback and installed-editor API syntax passed. The log collector includes severity-tagged engine warnings and spawn/load failures in both `findings.txt` and the structured JSON report.
+This package carries the Crownlands settlements, four-race companies, hero progression and custom content forward. Heroes start at level 1 with one skill point per gained level; they choose a spell rank or one unranked +3 STR/AGI/INT option, with no automatic attribute growth or spell-rank advancement. A match-wide Easy/Normal/Hard/Very Hard vote resolves before wave 1, and each next wave can start early only after every active player votes Ready. The 50-second normal and 180-second boss countdowns remain the fallback. All four starting mines hold 1,000,000 gold while Undead and Night Elf keep their Haunted/Entangled mine identity. Enemy equipment drops are intentionally scarce: Normal waves have no gear roll; elites have a 1% Common/Uncommon chance; bosses grant personal rarity-milestone equipment. The generated item/slot power report currently has no rarity outliers or tier-order warnings. See the latest build section in CHANGELOG.md for package hash, checks and pending engine verification.
 
 The installed Warcraft III version is `3.0.0.24268`; the 13 pinned extracted API/object/icon data tables remain unchanged. The generic `ebac` Backpack now replaces Anya-specific `ebua`, keeping native storage and equipment abilities; the multiplayer panel interaction needs a two-player check. Editor save/reopen, Test Map, Custom Game, gameplay, multiplayer and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5`. Use docs/ROADMAP-AND-ACCEPTANCE.md for current-build acceptance and docs/CROWNLANDS-EXPANSION.md for implementation details.
 

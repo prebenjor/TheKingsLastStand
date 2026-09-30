@@ -123,7 +123,7 @@ class EndlessCampaignWaves(unittest.TestCase):
     def test_wave_scaling_tracking_and_debug_reach_are_kept_for_endless_spawns(self):
         script = runtime_script('KLS-D-TEST')
         spawn = re.search(r'^function KLS_Spawn takes[\s\S]*?^endfunction$', script, re.M).group()
-        self.assertIn('set count = 7 + KLS_Wave * 2 + KLS_Players * 3', spawn)
+        self.assertIn('set count = KLS_DifficultyScaledCount(7 + KLS_Wave * 2 + KLS_Players * 3)', spawn)
         self.assertIn('180 + KLS_Wave * 55 + KLS_Players * 35', spawn)
         self.assertIn('6 + KLS_Wave * 2', spawn)
         self.assertIn('KLS_RosterSourceWave(KLS_Wave)', spawn)
@@ -140,7 +140,7 @@ class EndlessCampaignWaves(unittest.TestCase):
         reward = re.search(r'^function KLS_BossReward takes[\s\S]*?^endfunction$', script, re.M).group()
         for relic in ("'I010'", "'I011'", "'I012'", "'I013'"):
             self.assertIn(relic, reward)
-        self.assertIn('KLS_Wave >= 50', reward)
+        self.assertIn('KLS_Wave >= 40', reward)
         self.assertIn('KLS_RandomCatalogDrop(4)', reward)
         self.assertIn('call KLS_PersonalRewardEnqueue(i,gear,"Boss")', reward)
         self.assertNotIn('CreateItem(', reward)

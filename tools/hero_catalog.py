@@ -7,6 +7,9 @@ HERO_TYPES = (
     'Hpal', 'Hmkg', 'H000', 'Hblm', 'Obla', 'Ofar', 'Otch', 'Oshd',
     'Edem', 'Ekee', 'Emoo', 'Ewar', 'Udea', 'Ulic', 'Nbrn', 'Hjsm', 'Npal',
 )
+HERO_PARENT_TYPES = {hero_type: hero_type for hero_type in HERO_TYPES}
+HERO_PARENT_TYPES['H000'] = 'Hamg'
+HERO_BASE_HP_OVERRIDES = {'H000': 600}
 # Verified against the installed Definitive Edition UnitBalance.slk Primary
 # column. Added heroes inherit the primary attribute of their installed parent.
 HERO_PRIMARY_STATS = {
@@ -56,9 +59,9 @@ NEW_HEROES = [
      'company':('Moonlance Sentinels','esen','Moonwell Keeper','edry',300,100,900,40,430,150,780,34,'AEar')},
     {'unit_id':'Efal','name':'Faelor Briarward','race':'Night Elf','base':'Ekee','primary_stat':'intelligence',
      'description':'Thorn-control sentinel: roots threats and summons treants without needing nearby trees.',
-     'abilities':('AEer','AEfn','AEah','AEtq'),
+     'abilities':('AEer','AKfn','AEah','AEtq'),
      'signature':('Briarward Stand','ForceOfNature',180,100,40,'efon',3,0,'Faelor calls three treants from the land itself; no nearby trees are needed.'),
-     'company':('Briarward Guard','edry','Thornmender','etrp',280,100,850,31,410,145,840,29,'AEar')},
+     'company':('Briarward Guard','edry','Thornmender','edry',280,100,850,31,410,145,840,29,'AEar')},
     {'unit_id':'Uvyr','name':'Veyra Wraithveil','race':'Undead','base':'Nbrn','primary_stat':'agility',
      'description':'Curse banshee: silences a cluster of invaders and siphons their strength.',
      'abilities':('ANsi','ANba','ANdr','ANch'),
@@ -73,6 +76,7 @@ NEW_HEROES = [
 for _signature_offset, _hero in enumerate(NEW_HEROES, start=HERO_COUNT-len(NEW_HEROES)):
     _hero['signature_index'] = _signature_offset
     HERO_PRIMARY_STATS[_hero['unit_id']] = _hero['primary_stat']
+    HERO_PARENT_TYPES[_hero['unit_id']] = _hero['base']
 
 HERO_RACES = [_BASE_HERO_RACES[kind] for kind in (
     'Hpal','Hmkg','H000','Hblm','Obla','Ofar','Otch','Oshd','Edem','Ekee',
@@ -90,13 +94,6 @@ def hero_selection_script():
             f"    set KLS_HeroName[{offset}] = \"{hero['name']}\"",
             f"    set KLS_HeroDescription[{offset}] = \"{hero['description']}\"",
         ]
-    stat_id = {
-        'strength':'bj_HEROSTAT_STR',
-        'agility':'bj_HEROSTAT_AGI',
-        'intelligence':'bj_HEROSTAT_INT',
-    }
-    for index, hero_type in enumerate(HERO_TYPES + tuple(hero['unit_id'] for hero in NEW_HEROES)):
-        lines.append(f'    set KLS_HeroPrimaryStat[{index}] = {stat_id[HERO_PRIMARY_STATS[hero_type]]}')
     return '\n'.join(lines)
 
 def faction_index(race):

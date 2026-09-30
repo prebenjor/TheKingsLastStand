@@ -13,7 +13,7 @@ from equipment_catalog import (
 )
 from hero_progression import (
     HERO_ABILITIES, MAX_HERO_LEVEL, MAX_SPELL_RANK, SCALABLE_EFFECT_FIELDS,
-    _ability_tables, _modification_fields, spell_script,
+    _ability_tables, _modification_fields,
 )
 from objects import items, units
 from pipeline import misc_data, runtime_script
@@ -58,8 +58,8 @@ class AttributeEquipment(unittest.TestCase):
                 self.assertEqual(fields[('utip', 0)][0], entry['colored_name'])
                 self.assertIn(color + entry['quality'] + '|r', fields[('utub', 0)][0])
         relics = (
-            ('I010', 'Rare', 'Gravetide Cleaver'),
-            ('I011', 'Epic', 'Heart of the Watch'),
+            ('I010', 'Uncommon', 'Gravetide Cleaver'),
+            ('I011', 'Rare', 'Heart of the Watch'),
             ('I012', 'Epic', 'Crown of Dawn'),
             ('I013', 'Legendary', 'Oath of the Last King'),
         )
@@ -84,7 +84,8 @@ class AttributeEquipment(unittest.TestCase):
                              ('Windrunner Boots', 'agility'),
                              ('Arcanist Focus', 'intelligence')):
             rows = sorted((e for e in attributes if e['family'] == family), key=lambda e:e['tier'])
-            self.assertEqual([e['stats'][stat] for e in rows], [2, 4, 8, 14, 22])
+            expected = [1, 2, 4, 7, 11] if stat == 'strength' else [2, 4, 8, 14, 22]
+            self.assertEqual([e['stats'][stat] for e in rows], expected)
             self.assertTrue(all(stat in e['stats'] for e in rows))
         object_data = decode(items())
         ability_data = decode(abilities(), extended=True)
@@ -318,12 +319,15 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         installed = slk('AbilityData.slk')
         installed_ids = {row[1] for row in installed.values() if 1 in row}
         self.assertTrue(all(len(spells) == 4 for spells in HERO_ABILITIES.values()))
-        self.assertTrue({spell for spells in HERO_ABILITIES.values() for spell in spells} <= installed_ids)
+        self.assertTrue({spell for spells in HERO_ABILITIES.values() for spell in spells} - {'AKfn'} <= installed_ids)
         records = decode(abilities(), extended=True)
         headers, rows, _ = _ability_tables()
         levels_column = next(index for index, name in headers.items() if name == 'levels')
         for spell in {spell for spells in HERO_ABILITIES.values() for spell in spells}:
             fields = records[spell][1]
+            if spell == 'AKfn':
+                self.assertEqual(fields[('alev',0)][0], 5)
+                continue
             native_cap = int(float(rows[spell].get(levels_column, '1') or '1'))
             emitted_cap = MAX_SPELL_RANK if spell in SCALABLE_EFFECT_FIELDS else native_cap
             self.assertEqual(fields[('alev',0)][0], emitted_cap, spell)
@@ -334,26 +338,15 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertEqual(blink[('amcs',3)][0], 10)
         self.assertNotIn(('amcs',4), blink)
         runtime = runtime_script('SPELL-RANKS')
-        self.assertIn('KLS_ApplySpellRanks', runtime)
-        self.assertGreaterEqual(runtime.count('call KLS_ApplySpellRanks('), 2)
-        generated = spell_script()
-        self.assertIn("if heroType == 'Hpal' then", generated)
-        self.assertNotIn('if false then', generated)
-        self.assertIn('GetHeroLevel(hero)', generated)
-        self.assertIn('set rank = IMinBJ(maxRank, IMinBJ(5, 1 + (heroLevel - unlockLevel) / 10))', generated)
-        calls = re.findall(r"call KLS_RankHeroSpell\(hero, '(.{4})', heroLevel, \d+, (\d+)\)", generated)
-        self.assertEqual({spell for spell, _ in calls},
-                         {spell for spells in HERO_ABILITIES.values() for spell in spells})
-        self.assertEqual({spell: int(cap) for spell, cap in calls}['AEbl'], 3)
-        self.assertEqual({spell: int(cap) for spell, cap in calls}['AHhb'], 5)
+        self.assertNotIn('KLS_ApplySpellRanks', runtime)
+        self.assertIn('UnitModifySkillPoints(hero,-1)', runtime)
         self.assertIn(b'MaxHeroLevel=50', misc_data())
 
     def test_tree_dependent_force_of_nature_is_removed_for_keeper_and_faelor(self):
-        generated = spell_script()
-        self.assertIn("if heroType == 'Ekee' or heroType == 'Efal' then", generated)
-        self.assertIn("call UnitRemoveAbility(hero, 'AEfn')", generated)
-        self.assertGreater(generated.index("call UnitRemoveAbility(hero, 'AEfn')"),
-                           generated.index("call KLS_RankHeroSpell(hero, 'AEtq'"))
+        for hero_id in ('Ekee','Efal'):
+            learned = decode(units())[hero_id][1][('uhab',0)][0]
+            self.assertNotIn('AEfn', learned)
+            self.assertIn('AKfn', learned)
         runtime = runtime_script('TREELESS-FORCE-OF-NATURE')
         self.assertIn('Grove Awakening', runtime)
         self.assertIn('No trees required.', runtime)

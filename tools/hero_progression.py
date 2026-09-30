@@ -62,7 +62,7 @@ HERO_ABILITIES = {
     'Otch': ('AOsh', 'AOws', 'AOae', 'AOre'),
     'Oshd': ('AOhw', 'AOhx', 'AOsw', 'AOvd'),
     'Edem': ('AEmb', 'AEim', 'AEev', 'AEme'),
-    'Ekee': ('AEer', 'AEfn', 'AEah', 'AEtq'),
+    'Ekee': ('AEer', 'AKfn', 'AEah', 'AEtq'),
     'Emoo': ('AEst', 'AHfa', 'AEar', 'AEsf'),
     'Ewar': ('AEfk', 'AEbl', 'AEsh', 'AEsv'),
     'Udea': ('AUdc', 'AUdp', 'AUau', 'AUan'),
@@ -292,10 +292,24 @@ def hero_ability_records(ability_builder):
     headers, data, metadata = _ability_tables()
     records = []
     ability_ids = sorted({spell for spells in HERO_ABILITIES.values() for spell in spells})
-    missing = [spell for spell in ability_ids if spell not in data]
+    missing = [spell for spell in ability_ids if spell not in data and spell != 'AKfn']
     if missing:
         raise ValueError('Hero spell IDs absent from installed AbilityData.slk: ' + ', '.join(missing))
     for spell in ability_ids:
+        if spell == 'AKfn':
+            fields = [('alev',0,0,0,5),('anam',3,0,0,'Briar Host'),('aher',0,0,0,1),
+                      ('aart',3,0,0,r'ReplaceableTextures\CommandButtons\BTNEnt.dds'),
+                      ('arhk',3,0,0,'F'),('ahky',3,0,0,'F'),('abpx',0,0,0,1),('abpy',0,0,0,2)]
+            for rank in range(1,6):
+                fields.extend([('Osf1',3,rank,0,'kT0'+str(rank)),('Osf2',0,rank,2,2),
+                               ('acdn',2,rank,0,30.0),('amcs',0,rank,0,100),
+                               ('adur',2,rank,0,60.0),('ahdu',2,rank,0,60.0),
+                               ('atp1',3,rank,0,f'Briar Host - Rank {rank}'),
+                               ('aub1',3,rank,0,f'Calls two treants from the land for 60 seconds. No trees required. Rank {rank}.'),
+                               ('aut1',3,rank,0,f'Learn Briar Host - Rank {rank}'),
+                               ('auu1',3,rank,0,f'Calls two treants without trees. Rank {rank}. Ranks 4 and 5 improve rank 3 health and damage by 10% and 20%.')])
+            records.append(ability_builder('AOsf','AKfn',fields))
+            continue
         row = data[spell]
         fields = _modification_fields(spell, row, headers, metadata)
         if spell in ('AHas', 'AHpa'):
@@ -304,42 +318,3 @@ def hero_ability_records(ability_builder):
             raise ValueError('No installed per-rank ability data found for ' + spell)
         records.append(ability_builder(spell, '\0' * 4, fields))
     return records
-
-
-def spell_script():
-    headers, data, metadata = _ability_tables()
-    lines = [
-        'function KLS_RankHeroSpell takes unit hero, integer spellId, integer heroLevel, integer unlockLevel, integer maxRank returns nothing',
-        '    local integer rank',
-        '    if heroLevel < unlockLevel then',
-        '        return',
-        '    endif',
-        '    set rank = IMinBJ(maxRank, IMinBJ(5, 1 + (heroLevel - unlockLevel) / 10))',
-        '    if GetUnitAbilityLevel(hero, spellId) == 0 then',
-        '        call UnitAddAbility(hero, spellId)',
-        '        call UnitMakeAbilityPermanent(hero, true, spellId)',
-        '    endif',
-        '    if GetUnitAbilityLevel(hero, spellId) < rank then',
-        '        call SetUnitAbilityLevel(hero, spellId, rank)',
-        '    endif',
-        'endfunction',
-        'function KLS_ApplySpellRanks takes unit hero returns nothing',
-        '    local integer heroType = GetUnitTypeId(hero)',
-        '    local integer heroLevel = GetHeroLevel(hero)',
-    ]
-    for index, (hero_type, abilities) in enumerate(HERO_ABILITIES.items()):
-        branch = 'if' if index == 0 else 'elseif'
-        lines.append("    " + branch + " heroType == '" + hero_type + "' then")
-        for spell in abilities:
-            row = data[spell]
-            unlock = max(1, int(float(row.get(12, '1') or 1)))
-            max_rank = _effective_level_cap(spell, row, headers, metadata)
-            lines.append("        call KLS_RankHeroSpell(hero, '" + spell + "', heroLevel, " + str(unlock) + ', ' + str(max_rank) + ')')
-    lines += [
-        '    endif',
-        "    if heroType == 'Ekee' or heroType == 'Efal' then",
-        "        call UnitRemoveAbility(hero, 'AEfn')",
-        '    endif',
-        'endfunction',
-    ]
-    return '\n'.join(lines)

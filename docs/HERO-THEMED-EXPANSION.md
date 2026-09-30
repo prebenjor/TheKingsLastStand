@@ -48,7 +48,7 @@ The implemented first slice is documented in `COMPANIES-AND-BUILDINGS.md` and ge
 - The Altar is preplaced at each base. It does not consume a redundant worker build-card button. The Peasant construction menu has twelve or fewer choices.
 - Purchases from a mismatched player's company shop are removed and refunded. Company recruits stay out of the wave enemy group, accounting, and bounty system.
 
-The initial code does not yet include the architecture's planned three chapter researches, multiple weapon/armor branches, or a newly authored active ability for each recruit. Keep those items in the future scope; do not claim they are implemented. The unit catalog, class-to-stock pairing, doctrine aura, foundry upgrade, ownership, and stock purchase all require exact-build Warcraft verification.
+The September 30 audit completion adds three Company Chapter researches, three weapon and three armor ranks, support Counter-Siege and Arcane research, and an authored active for all 50 company/support recruits. Exact values and rawcodes are generated in [COMPANY-RESEARCH-AND-POWERS.md](COMPANY-RESEARCH-AND-POWERS.md). These are implemented in source; engine acceptance remains pending. The unit catalog, class-to-stock pairing, doctrine aura, foundry upgrade, ownership, and stock purchase all require exact-build Warcraft verification.
 
 ## Hero company concepts
 
@@ -89,7 +89,7 @@ Company units use current selectable-hero ownership, can be controlled only by t
 2. Human Ilastar and the Forsaken Paladin are selectable. Undead Ilastar and Aurrrius remain gated on verified hero/skill records; do not fabricate either identity.
 3. The initial company/support objects and three structures are generated from one catalog with collision/object-record regressions.
 4. Complete the in-engine proof for worker build cards, structure placement, Hall unlock, matching Barracks/Siege Yard purchases, ability behavior, one-time Foundry upgrades, and ownership/refunds.
-5. Implement the remaining chapter upgrades, company gear/armor branches, and further unique unit abilities from the approved design after the current recruitment gate passes.
+5. Verify the implemented chapter, weapon/armor and support research branches and all 50 unit powers against the current build.
 6. Test actual two-player synchronization first, then three- and four-player setup and full-match progression. Tune only from recorded playtests.
 # Current implementation supersedes the original proposal
 

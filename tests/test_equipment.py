@@ -49,17 +49,17 @@ def slk(name):
 
 class EquipmentRecords(unittest.TestCase):
     def test_backpack_preserves_native_identity_and_usable_flags(self):
-        base,fields=decode(items())['ebua']
-        self.assertEqual(base,'ebua')
+        base,fields=decode(items())['ebac']
+        self.assertEqual(base,'ebac')
         self.assertEqual(fields[('iusa',0)][0],1)
         self.assertEqual(fields[('iabi',0)][0],'AIni,AEqu,ASde')
         for field in ('idro','ipaw','isel','iper','iuse'):
             self.assertEqual(fields[(field,0)][0],0)
-        installed_pack=slk('ItemData.slk')['ebua']
-        self.assertEqual(installed_pack[3],'EquipmentBackpackAnya')
+        installed_pack=slk('ItemData.slk')['ebac']
+        self.assertEqual(installed_pack[3],'EquipmentBackpack')
         self.assertEqual(installed_pack[13],'1')
         heroes=(ROOT/'source/heroes.j').read_text()
-        self.assertIn("UnitAddItemById(KLS_Hero[p], 'ebua')",heroes)
+        self.assertIn("UnitAddItemById(KLS_Hero[p], 'ebac')",heroes)
         self.assertNotIn("UnitAddItemById(KLS_Hero[p], 'Ibpk')",heroes)
 
     def test_every_emitted_ability_has_an_installed_parent_and_valid_fields(self):

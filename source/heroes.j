@@ -6,7 +6,6 @@ globals
     string array KLS_HeroName
     string array KLS_HeroDescription
     integer array KLS_HeroRace
-    integer array KLS_HeroPrimaryStat
     texttag array KLS_PreviewLabel
     unit array KLS_Preview
     integer array KLS_Candidate
@@ -14,15 +13,13 @@ globals
     button array KLS_Back
 endglobals
 
-// GENERATED_HERO_PROGRESSION
-
 function KLS_ReleaseStartingUnit takes nothing returns nothing
     call PauseUnit(GetEnumUnit(), false)
 endfunction
 
 function KLS_ConfigureStartingMine takes integer p, integer raceId returns nothing
     local integer mineType = 0
-    local integer amount
+    local integer amount = 1000000
     local real x
     local real y
     local real facing
@@ -34,10 +31,12 @@ function KLS_ConfigureStartingMine takes integer p, integer raceId returns nothi
         set mineType = 'egol'
     elseif raceId == 3 then
         set mineType = 'ugol'
-    else
+    endif
+    if mineType == 0 then
+        call SetResourceAmount(KLS_BaseMine[p],amount)
+        call KLS_Log("Starting mine reserve normalized race="+KLS_RaceName(raceId)+" type="+GetObjectName(GetUnitTypeId(KLS_BaseMine[p]))+" player="+I2S(p+1)+" gold="+I2S(amount))
         return
     endif
-    set amount = GetResourceAmount(KLS_BaseMine[p])
     set x = GetUnitX(KLS_BaseMine[p])
     set y = GetUnitY(KLS_BaseMine[p])
     set facing = GetUnitFacing(KLS_BaseMine[p])
@@ -134,6 +133,9 @@ function KLS_FinishSelection takes nothing returns nothing
         endif
         set p = p + 1
     endloop
+    call KLS_LockDifficulty()
+    call KLS_Log("Difficulty locked: "+KLS_DifficultyName(KLS_Difficulty)+"; votes="+KLS_DifficultyTallyText())
+    call KLS_ResetReadyVotes()
     call KLS_Log("Selection complete; preparation starts at 45 seconds")
     set KLS_Selecting = false
     set KLS_Prep = 45
@@ -178,8 +180,9 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     call DialogDisplay(Player(p), KLS_ClassDialog[p], false)
     call BlzSetUnitName(KLS_Hero[p], KLS_HeroName[n])
     call SetHeroLevel(KLS_Hero[p], 1, false)
-    set KLS_LastAutomaticStatLevel[p] = GetHeroLevel(KLS_Hero[p])
-    call KLS_ApplySpellRanks(KLS_Hero[p])
+    call UnitModifySkillPoints(KLS_Hero[p],1-GetHeroSkillPoints(KLS_Hero[p]))
+    call SetHeroXP(KLS_Hero[p], 0, false)
+    call KLS_Log("Hero progression initialized player="+I2S(p+1)+" level="+I2S(GetHeroLevel(KLS_Hero[p]))+" xp="+I2S(GetHeroXP(KLS_Hero[p])))
     set KLS_LastTalentMilestone[p] = GetHeroLevel(KLS_Hero[p]) / 5
     call UnitAddAbility(KLS_Hero[p], KLS_SignatureId[n])
     call UnitMakeAbilityPermanent(KLS_Hero[p], true, KLS_SignatureId[n])
@@ -292,7 +295,7 @@ function KLS_SelectionInit takes nothing returns nothing
     set KLS_HeroDescription[8] = "Melee damage: Mana Burn, Immolation, Evasion and Metamorphosis."
     set KLS_HeroType[9] = 'Ekee'
     set KLS_HeroName[9] = "Keeper of the Grove"
-    set KLS_HeroDescription[9] = "Control and healing: Entangling Roots, Grove Awakening, Thorns Aura and Tranquility."
+    set KLS_HeroDescription[9] = "Control and healing: Entangling Roots, tree-free Briar Host, Thorns Aura and Tranquility, plus Grove Awakening."
     set KLS_HeroType[10] = 'Emoo'
     set KLS_HeroName[10] = "Priestess of the Moon"
     set KLS_HeroDescription[10] = "Ranged support: Scout, Searing Arrows, Trueshot Aura and Starfall."

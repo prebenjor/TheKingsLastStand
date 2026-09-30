@@ -18,9 +18,9 @@ FAMILIES = [
 ]
 TIERS = [('Common',300),('Uncommon',1000),('Rare',3000),('Epic',8000),('Legendary',20000)]
 ENEMY_DROP_THRESHOLDS = {
-    'normal': (160, 250, 290, 298, 300),
-    'elite': (350, 650, 850, 950, 1000),
-    'boss': (1500, 2800, 4100, 4800, 5000),
+    'normal': (0, 0, 0, 0, 0),
+    'elite': (50, 100, 100, 100, 100),
+    'boss': (0, 0, 0, 0, 0),
 }
 ENEMY_POTION_THRESHOLDS_PER_1000 = {'normal': 40, 'elite': 80, 'boss': 180}
 RARITY_COLORS = {
@@ -46,9 +46,9 @@ STATS = {
  'movement speed':('AIms','Imvb',1,0),
 }
 FAMILY_STATS=[{'damage':6},{'damage':6},{'intelligence':3},{'armor':2},{'mana':75},
- {'health':60},{'health':100},{'attack speed':5},{'movement speed':10},
- {'damage':3},{'armor':1},{'health':50,'mana':50},{'health':50,'armor':1},
- {'strength':2},{'agility':2},{'intelligence':2}]
+ {'health':60},{'health':90},{'attack speed':5},{'movement speed':10},
+ {'damage':3},{'armor':1},{'health':70,'mana':50},{'health':75,'armor':1},
+ {'strength':1},{'agility':2},{'intelligence':2}]
 NAMES = [
  ('Militia Blade','Veteran Longsword','Gravebreaker','Cinderfang','Kingswrath'),
  ('Hunting Bow','Sentinel Longbow','Bloodthorn','Widowmaker','Endless Hunt'),
@@ -87,32 +87,32 @@ _ATTRIBUTE_FAMILIES = [
 # native icon parent, slot, stat abilities, tooltip color, and shop/drop data.
 _RACE_ITEM_ROWS = (
     ('Human', 'Crown Relics', (
-        ('Watchman’s Token','Trinket','health',120,'elmt',{'strength':2}),
-        ('Lionroad Mantle','Chest','strength',4,'emoh',{'health':180}),
-        ('Aldric’s Aegis','Offhand','armor',5,'eosc',{'strength':5}),
-        ('Crownward Pennant','Trinket','strength',6,'ebdf',{'health':300}),
-        ('Last King’s Oath','Ring','strength',8,'erdr',{'damage':20,'health':500}),
+        ('Watchman’s Token','Trinket','health',80,'elmt',{'strength':2}),
+        ('Lionroad Mantle','Chest','strength',1,'emoh',{'health':100}),
+        ('Aldric’s Aegis','Offhand','armor',3,'eosc',{'strength':1}),
+        ('Crownward Pennant','Trinket','strength',1,'ebdf',{'health':50}),
+        ('Last King’s Oath','Ring','strength',1,'erdr',{'damage':3,'health':50}),
     )),
     ('Orc', 'Redtusk Relics', (
         ('Redtusk Fetish','Trinket','strength',3,'elmt',{'damage':3}),
         ('Ashen War Drum','Trinket','strength',3,'etkj',{'attack speed':5}),
-        ('Stormscar Bracers','Gloves','strength',4,'eggn',{'attack speed':7}),
-        ('Grudgebreaker','Primary','damage',24,'efpb',{'strength':4}),
-        ('Worldrend Standard','Offhand','damage',20,'ehls',{'strength':9}),
+        ('Stormscar Bracers','Gloves','strength',2,'eggn',{'attack speed':7}),
+        ('Grudgebreaker','Primary','damage',6,'efpb',{'strength':1}),
+        ('Worldrend Standard','Offhand','damage',2,'ehls',{'strength':1}),
     )),
     ('Night Elf', 'Moonbark Relics', (
         ('Moonbark Charm','Trinket','agility',2,'ebdf',{'health':100}),
         ('Starleaf Quiver','Primary','agility',3,'epsb',{'attack speed':5}),
-        ('Duskwatch Longbow','Primary','damage',15,'epsb',{'agility':4}),
-        ('Briarheart Mantle','Chest','agility',6,'emoh',{'health':250}),
-        ('Silvermoon Vigil','Ring','agility',8,'ejjr',{'attack speed':8}),
+        ('Duskwatch Longbow','Primary','damage',6,'epsb',{'agility':2}),
+        ('Briarheart Mantle','Chest','agility',1,'emoh',{'health':100}),
+        ('Silvermoon Vigil','Ring','agility',1,'ejjr',{'attack speed':1}),
     )),
     ('Undead', 'Wraith Relics', (
         ('Crypt-Iron Band','Ring','intelligence',2,'ecav',{'armor':1}),
         ('Wraithsilk Cape','Chest','intelligence',3,'edsm',{'mana':100}),
-        ('Soulreaper’s Fang','Primary','damage',9,'epbs',{'intelligence':5}),
-        ('Mourning Reliquary','Trinket','intelligence',6,'eege',{'mana':300}),
-        ('Night’s Covenant','Offhand','intelligence',8,'ehls',{'health':250,'mana':400}),
+        ('Soulreaper’s Fang','Primary','damage',6,'epbs',{'intelligence':2}),
+        ('Mourning Reliquary','Trinket','intelligence',1,'eege',{'mana':50}),
+        ('Night’s Covenant','Offhand','intelligence',2,'ehls',{'health':27,'mana':52}),
     )),
 )
 _TIER_MULTIPLIER = (1,2,4,7,11)
@@ -142,17 +142,20 @@ for race_index, (race, family, rows) in enumerate(_RACE_ITEM_ROWS):
 _CRAFTED = [
     {'rawcode':'I128','name':"Oathforged Kingswrath",'parent':'ebr2','tier':4,
      'family':'Blade','family_index':0,'slot':6,'price':30000,
-     'native_name':"Blademaster's Greatsword",'stats':{'damage':88,'strength':10},
-     'effect':'Cleave attacks deal 35% damage to nearby secondary enemies.'},
+     'native_name':"Blademaster's Greatsword",'stats':{'damage':72,'strength':8},
+     'effect':'Cleave attacks deal 35% damage to nearby secondary enemies.',
+     'effects':[{'name':'Cleave','magnitude':35,'unit':'% attack damage','trigger':'attack hit against a secondary target','duration':'instant','cooldown':'none','radius':250}]},
     {'rawcode':'I129','name':'Stormheart Prism','parent':'ehls','tier':4,
      'family':'Focus','family_index':4,'slot':7,'price':28000,
-     'native_name':'Horn of the Lost Spirits','stats':{'intelligence':22,'mana':550},
-     'effect':'Restores 50 mana after a spell cast; 8-second cooldown.'},
+     'native_name':'Horn of the Lost Spirits','stats':{'intelligence':18,'mana':750},
+     'effect':'Restores 50 mana after a spell cast; 8-second cooldown.',
+     'effects':[{'name':'Spellwell','magnitude':50,'unit':'mana','trigger':'spell cast','duration':'instant','cooldown':'8 seconds'}]},
     {'rawcode':'I12A','name':"Sovereign's Mantle",'parent':'erbm','tier':4,
      'family':'Cape','family_index':12,'slot':2,'price':36000,
      'native_name':'Robes of the Battlemage',
-     'stats':{'strength':10,'agility':10,'intelligence':10,'health':800,'armor':10},
-     'effect':'Reduces incoming spell damage by 15%.'},
+     'stats':{'strength':8,'agility':8,'intelligence':6,'health':700,'armor':8},
+     'effect':'Reduces incoming spell damage by 10%.',
+     'effects':[{'name':'Mistweave','magnitude':10,'unit':'% spell damage reduction','trigger':'while equipped','duration':'passive','cooldown':'none'}]},
 ]
 
 _BOOKS = []
@@ -182,6 +185,7 @@ def item_catalog():
             stats={key:value*(1,2,4,7,11)[tier] for key,value in FAMILY_STATS[index].items()}
             ability_ids=['A'+str(n)+code for n in range(len(stats))]
             effect=''
+            effects=[]
             power=0
             if tier>=2:
                 power=(40,80,140)[tier-2]
@@ -192,6 +196,20 @@ def item_catalog():
                  4:f'Spellwell: restore {(15,30,50)[tier-2]} mana after casting a spell. Cooldown: 8 seconds.',
                  11:f'Dawnseed: heal you and allied heroes within 400 for {power} every 10 seconds.',
                  12:f'Mistweave: reduce incoming spell damage by {(5,10,15)[tier-2]}%.'}.get(index,'')
+                effect_values={
+                    0:('Cleave',(15,25,35)[tier-2],'% attack damage','attack hit against a secondary target','instant','none',250),
+                    1:('Bloodthorn',(30,60,100)[tier-2],'bleed damage','attack hit','3 seconds','5 seconds',0),
+                    2:('Wintercall',power,'burst damage','attack hit','2 seconds','8 seconds',250),
+                    3:('Dawnward',power,'absorbed damage','incoming hit','instant','8 seconds',0),
+                    4:('Spellwell',(15,30,50)[tier-2],'mana','spell cast','instant','8 seconds',0),
+                    11:('Dawnseed',power,'healing','periodic pulse','instant','10 seconds',400),
+            12:('Mistweave',(5,10,15)[tier-2],'% spell damage reduction','while equipped','passive','none',0),
+                }
+                if index in effect_values:
+                    effect_name,magnitude,unit,trigger,duration,cooldown,radius=effect_values[index]
+                    effects=[{'name':effect_name,'magnitude':magnitude,'unit':unit,
+                              'trigger':trigger,'duration':duration,'cooldown':cooldown,
+                              **({'radius':radius} if radius else {})}]
             price=int(base_price*(1.5 if index<3 else 1))
             desc='; '.join('+'+str(v)+('%' if k=='attack speed' else '')+' '+k for k,v in stats.items())+'.'
             desc=color_rarity_text(quality, quality)+f' {family} | {slot} slot.|n'+desc+'|n'+effect+'|nBonuses apply while equipped. All heroes. Sells for 50%.'
@@ -200,7 +218,8 @@ def item_catalog():
             result.append(dict(rawcode='I1'+code,tier=tier,quality=quality,family=family,parent=parents[tier][0],
               slot=SLOTS[slot],bonus=stat*(1,2,4,7,11)[tier],price=price,name=NAMES[index][tier],native_name=parents[tier][1],
               colored_name=color_rarity_text(quality,NAMES[index][tier]),
-              stats=stats,abilities=','.join(ability_ids),description=desc,effect=effect,family_index=index))
+              stats=stats,abilities=','.join(ability_ids),description=desc,effect=effect,
+              effects=effects,family_index=index))
     for item in _CRAFTED:
         entry=dict(item)
         suffix=entry['rawcode'][2:]
@@ -242,10 +261,16 @@ def abilities():
     records.append(ability('Aslo','ASl0',[('alev',0,0,0,1),('areq',3,0,0,''),('amcs',0,1,0,0),('aran',2,1,0,9999.0),('adur',2,1,0,2.0),('ahdu',2,1,0,2.0),('Slo1',2,1,1,0.2),('Slo2',2,1,2,0.0)]))
     from signature_spells import spell_records
     records.extend(spell_records(ability))
+    from company_catalog import company_spell_records
+    records.extend(company_spell_records(ability))
     # AEqu's campaign level requirement is unnecessary in this co-op map.
     original=[ability('AEqu','\0'*4,[('equ1',0,level,6,0) for level in (1,2,3)])]
     from hero_progression import hero_ability_records
-    original.extend(hero_ability_records(ability))
+    for entry in hero_ability_records(ability):
+        if entry[4:8] == b'\0' * 4:
+            original.append(entry)
+        else:
+            records.append(entry)
     # Entangle Gold Mine is a native Night Elf town-hall action. The mine is
     # 1,200 units from the starting Tree of Life, beyond the installed 500 range.
     original.append(ability('Aent','\0' * 4,[('aran',2,1,0,1450.0)]))

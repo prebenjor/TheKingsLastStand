@@ -13,7 +13,7 @@ from equipment_catalog import abilities
 from objects import units
 from pipeline import runtime_script
 from test_equipment import decode, slk
-from hero_progression import HERO_ABILITIES, STAT_ABILITY_IDS
+from hero_progression import HERO_ABILITIES
 from hero_catalog import NEW_HEROES
 
 
@@ -101,7 +101,8 @@ class RaceMiningAndBuildings(unittest.TestCase):
         configure = function_body(runtime, 'KLS_ConfigureStartingMine')
         self.assertIn("set mineType = 'egol'", configure)
         self.assertIn("set mineType = 'ugol'", configure)
-        self.assertIn('GetResourceAmount(KLS_BaseMine[p])', configure)
+        self.assertIn('local integer amount = 1000000', configure)
+        self.assertIn('SetResourceAmount(KLS_BaseMine[p],amount)', configure)
         self.assertIn('KLS_CreateUnitChecked(Player(p),mineType', configure)
         self.assertIn('SetResourceAmount(ownedMine,amount)', configure)
         self.assertIn('RemoveUnit(KLS_BaseMine[p])', configure)
@@ -112,7 +113,7 @@ class RaceMiningAndBuildings(unittest.TestCase):
         expected = {
             'hcas': ('hbar', 'hbla', 'h000'),
             'ostr': ('obar', 'ofor', 'kA01'),
-            'etoa': ('eaow', 'eaoe', 'kA02'),
+            'etoa': ('eaom', 'edob', 'kA02'),
             'unp1': ('usep', 'uslh', 'kA03'),
         }
         installed_units = slk('UnitData.slk')
@@ -164,7 +165,7 @@ class RaceMiningAndBuildings(unittest.TestCase):
                          'KLS_CompanyApplyFoundry'):
             self.assertIn(fragment, runtime)
 
-    def test_each_hero_has_three_native_plus_button_stat_skills_and_no_stat_dialog(self):
+    def test_each_hero_keeps_native_skills_and_has_unranked_stat_choices(self):
         unit_records = decode(units())
         custom_heroes = {entry['unit_id'] for entry in NEW_HEROES} | {'H000'}
         for hero_id, _skills in HERO_ABILITIES.items():
@@ -173,13 +174,10 @@ class RaceMiningAndBuildings(unittest.TestCase):
             else:
                 fields = unit_records[hero_id][1]
             choices = fields[('uhab', 0)][0].split(',')
-            self.assertTrue(set(STAT_ABILITY_IDS) <= set(choices), hero_id)
-        ability_records = decode(abilities(), extended=True)
-        for code in STAT_ABILITY_IDS:
-            base, fields = ability_records[code]
-            self.assertEqual(base, 'Aamk')
-            self.assertEqual(fields[('alev', 0)][0], 50)
+            self.assertEqual(choices, list(HERO_ABILITIES[hero_id]), hero_id)
         runtime = runtime_script('SKILL-TEST')
+        self.assertIn('UnitModifySkillPoints(hero,-1)', runtime)
+        self.assertIn('KLS_StatChoiceApplySync', runtime)
         self.assertNotIn('KLS_StatPending', runtime)
         self.assertNotIn('DialogAddButton(KLS_ProgressionDialog[p],"+3 Strength"', runtime)
 

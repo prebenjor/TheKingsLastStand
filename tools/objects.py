@@ -27,7 +27,7 @@ def units():
     # and consume the same hero skill point without becoming ranked abilities.
     def learned_hero_skills(hero_id):
         return ','.join(dict.fromkeys(HERO_ABILITIES[hero_id]))
-    from hero_catalog import NEW_HEROES
+    from hero_catalog import NEW_HEROES, HERO_BASE_HP_OVERRIDES
     zero_hero_growth = {'ustp':0.0,'uinp':0.0,'uagp':0.0}
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
@@ -52,7 +52,7 @@ def units():
             original.append(record(hero_id, '\0\0\0\0', {
                 'uhab': learned_hero_skills(hero_id), **zero_hero_growth}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':600,**zero_hero_growth}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':HERO_BASE_HP_OVERRIDES['H000'],**zero_hero_growth}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
         record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
         record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
@@ -60,6 +60,9 @@ def units():
         record('hctw', 'h002', {'unam':_TOWER_NAMES['Human'][1],'utip':_TOWER_NAMES['Human'][1],'utub':_TOWER_TOOLTIPS['Human'][1],'ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
         record('hatw', 'h003', {'unam':_TOWER_NAMES['Human'][2],'utip':_TOWER_NAMES['Human'][2],'utub':_TOWER_TOOLTIPS['Human'][2],'ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
+    for rank, (health, damage) in enumerate(((300,15),(450,22),(600,30),(660,33),(720,36)), start=1):
+        custom.append(record('efon','kT0'+str(rank),{'unam':'Briar Host Treant','uhpm':health,'ua1b':damage,'ua1d':0,'ua1s':0,'ureq':''}))
+    custom.append(record('hbew','kCar',{'unam':'Northwatch Supply Caravan','uabi':'','uhpm':1800,'umvt':'foot','umvs':140,'uaen':0,'upat':'','ucol':32.0,'ufoo':0}))
     from town_catalog import TOWNS, QUEST_RAWCODES
     for town in TOWNS:
         custom.append(record(town['worker'],QUEST_RAWCODES[town['quest_id']],{
@@ -102,7 +105,7 @@ def units():
                 'uhpm':entry['hit_points'], 'ureq':faction['barracks'], 'ures':'', 'urev':0,
                 'uabi':'', 'utra':'', 'uupt':'',
             }
-            if role in ('foundry','siege_yard'):
+            if role in ('hall','foundry','siege_yard'):
                 fields['uabi'] = 'Aneu,Apit,Asid,Asud'
             custom.append(record(entry['parent'],entry['rawcode'],fields))
         if faction['race'] != 'Human':
@@ -117,12 +120,14 @@ def units():
             'utub':entry['hero_name']+' company recruit. Trained only from your Barracks after you raise this hero banner.',
             'ugol':entry['company_gold'], 'ulum':entry['company_lumber'],
             'uhpm':entry['company_hp'], 'ua1b':entry['company_damage'], 'ureq':'',
+            'uabi':entry['company_ability'], 'upgr':'', 'umpm':180,'umpi':180,'umpr':1.0,
         }
         support_fields = {
             'unam':entry['support_name'], 'utip':entry['support_name'],
             'utub':entry['hero_name']+' tactical support. Trained only at your personal Siege Yard.',
             'ugol':entry['support_gold'], 'ulum':entry['support_lumber'],
             'uhpm':entry['support_hp'], 'ua1b':entry['support_damage'], 'ureq':'',
+            'uabi':entry['support_ability'], 'upgr':'', 'umpm':180,'umpi':180,'umpr':1.0,
         }
         custom.append(record(entry['company_parent'],entry['company_id'],company_fields))
         custom.append(record(entry['support_parent'],entry['support_id'],support_fields))
@@ -164,14 +169,21 @@ def items():
                 'igol':recipe['price'],'iabi':'','iequ':0,'iusa':0,'iper':0,
                 'iuse':0,'idro':0,'ipaw':0,'isel':1}
         custom.append(record('arsc',recipe['rawcode'],fields))
+    from company_catalog import company_research_catalog
+    for research in company_research_catalog():
+        custom.append(record('ckng',research['rawcode'],{
+            'icla':'Miscellaneous','unam':research['name'],'utip':research['name'],
+            'utub':research['description'],'igol':research['gold'],'ilum':research['lumber'],
+            'iabi':'','iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,
+        }))
     controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0})]
     for tier in range(5):
         raw='KUP'+str(tier+1)
         cost=400+200*tier
         controls.append(record('ckng',raw,{'icla':'Miscellaneous','unam':'Royal Defense Upgrade - Tier '+str(tier+1),'utip':'Royal Defense Upgrade - Tier '+str(tier+1),'utub':'Upgrade King Aldric: +4,000 maximum/current health and +30 damage. Tier '+str(tier+1)+' costs '+str(cost)+' gold and 150 lumber.','igol':cost,'ilum':150,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0}))
     custom.extend(controls+[
-        record('ratf','I010',{'icla':'Equipment','unam':color_rarity_text('Rare','Gravetide Cleaver'),'utip':color_rarity_text('Rare','Gravetide Cleaver'),'utub':color_rarity_text('Rare','Rare')+' boss relic. Chapter I: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':1}),
-        record('rhth','I011',{'icla':'Equipment','unam':color_rarity_text('Epic','Heart of the Watch'),'utip':color_rarity_text('Epic','Heart of the Watch'),'utub':color_rarity_text('Epic','Epic')+' boss relic. Chapter II: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('ratf','I010',{'icla':'Equipment','unam':color_rarity_text('Uncommon','Gravetide Cleaver'),'utip':color_rarity_text('Uncommon','Gravetide Cleaver'),'utub':color_rarity_text('Uncommon','Uncommon')+' boss relic. Chapter I: +15 damage.','iequ':6,'igol':0,'ipaw':0,'isel':0,'idro':1}),
+        record('rhth','I011',{'icla':'Equipment','unam':color_rarity_text('Rare','Heart of the Watch'),'utip':color_rarity_text('Rare','Heart of the Watch'),'utub':color_rarity_text('Rare','Rare')+' boss relic. Chapter II: increases maximum health.','iequ':2,'igol':0,'ipaw':0,'isel':0,'idro':1}),
         record('lgdh','I012',{'icla':'Equipment','unam':color_rarity_text('Epic','Crown of Dawn'),'utip':color_rarity_text('Epic','Crown of Dawn'),'utub':color_rarity_text('Epic','Epic')+' boss relic. Chapter III: grants a healing aura.','iequ':8,'igol':0,'ipaw':0,'isel':0,'idro':1}),
         record('ckng','I013',{'icla':'Equipment','unam':color_rarity_text('Legendary','Oath of the Last King'),'utip':color_rarity_text('Legendary','Oath of the Last King'),'utub':color_rarity_text('Legendary','Legendary')+' boss relic. Chapter IV: +5 to all attributes.','iequ':5,'igol':0,'ipaw':0,'isel':0,'idro':1}),
     ])

@@ -16,6 +16,15 @@ globals
     integer KLS_BossPrep = 180
     integer KLS_XPShareRange = 1200
     boolean KLS_Ended = false
+    integer KLS_Difficulty = 1
+    boolean KLS_DifficultyLocked = false
+    integer array KLS_DifficultyVote
+    integer KLS_ReadyEpoch = 0
+    boolean array KLS_ReadyVote
+    framehandle array KLS_DifficultyButton
+    framehandle array KLS_ReadyButton
+    framehandle array KLS_DifficultyTitle
+    timer KLS_VoteUITimer = null
     timer KLS_Clock = null
     group KLS_Enemies = null
     integer array KLS_Respawn
@@ -25,6 +34,90 @@ endglobals
 
 function KLS_Message takes string s returns nothing
     call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS, 8.0, s)
+endfunction
+
+function KLS_DifficultyVoteSync takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local integer choice = S2I(BlzGetTriggerSyncData())
+    if p < 0 or p >= 4 or not KLS_Active[p] or not KLS_Selecting or KLS_DifficultyLocked then
+        return
+    endif
+    if choice < 0 or choice > 3 then
+        return
+    endif
+    set KLS_DifficultyVote[p] = choice
+    call KLS_Log("Difficulty vote player="+I2S(p+1)+" choice="+KLS_DifficultyName(choice))
+    call KLS_HUDUpdate()
+endfunction
+
+function KLS_DifficultyClick takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local integer choice = 0
+    local framehandle clicked = BlzGetTriggerFrame()
+    if p >= 0 and p < 4 and GetLocalPlayer() == GetTriggerPlayer() then
+        loop
+            exitwhen choice == 4
+            if clicked == KLS_DifficultyButton[p*4+choice] then
+                call BlzSendSyncData("KLSDIFF",I2S(choice))
+                exitwhen true
+            endif
+            set choice = choice+1
+        endloop
+    endif
+    set clicked = null
+endfunction
+
+function KLS_ReadyClick takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local framehandle clicked = BlzGetTriggerFrame()
+    if p >= 0 and p < 4 and GetLocalPlayer() == GetTriggerPlayer() and clicked == KLS_ReadyButton[p] then
+        if KLS_ReadyVote[p] then
+            call BlzSendSyncData("KLSREADY",I2S(KLS_ReadyEpoch)+":0")
+        else
+            call BlzSendSyncData("KLSREADY",I2S(KLS_ReadyEpoch)+":1")
+        endif
+    endif
+    set clicked = null
+endfunction
+
+function KLS_VoteUIRefresh takes nothing returns nothing
+    local integer p = GetPlayerId(GetLocalPlayer())
+    local integer choice = 0
+    local boolean showReady
+    if p < 0 or p >= 4 or not KLS_Active[p] then
+        return
+    endif
+    if GetLocalPlayer() == Player(p) and KLS_DifficultyTitle[p] != null then
+        call BlzFrameSetVisible(KLS_DifficultyTitle[p],KLS_Selecting and not KLS_DifficultyLocked)
+        call BlzFrameSetText(KLS_DifficultyTitle[p],"Choose difficulty: "+KLS_DifficultyTallyText())
+        loop
+            exitwhen choice == 4
+            call BlzFrameSetVisible(KLS_DifficultyButton[p*4+choice],KLS_Selecting and not KLS_DifficultyLocked)
+            if KLS_DifficultyVote[p] == choice then
+                call BlzFrameSetText(KLS_DifficultyButton[p*4+choice],"> "+KLS_DifficultyName(choice)+" <")
+            else
+                call BlzFrameSetText(KLS_DifficultyButton[p*4+choice],KLS_DifficultyName(choice))
+            endif
+            set choice = choice+1
+        endloop
+        set showReady = not KLS_Selecting and not KLS_Ended and KLS_Alive == 0 and KLS_Prep > 0
+        call BlzFrameSetVisible(KLS_ReadyButton[p],showReady)
+        if KLS_ReadyVote[p] then
+            call BlzFrameSetText(KLS_ReadyButton[p],"Ready! "+I2S(KLS_ReadyCount())+"/"+I2S(KLS_Players)+" (click to undo)")
+        else
+            call BlzFrameSetText(KLS_ReadyButton[p],"Start next wave "+I2S(KLS_ReadyCount())+"/"+I2S(KLS_Players))
+        endif
+    endif
+endfunction
+
+function KLS_VoteUICreateButton takes string name, string label, framehandle parent, framepointtype point, real x, real y, real width returns framehandle
+    local framehandle choiceFrame = BlzCreateFrameByType("GLUETEXTBUTTON",name,parent,"ScriptDialogButton",0)
+    call BlzFrameSetSize(choiceFrame,width,0.032)
+    call BlzFrameSetText(choiceFrame,label)
+    call BlzFrameSetPoint(choiceFrame,point,parent,point,x,y)
+    call BlzFrameSetVisible(choiceFrame,false)
+    set parent = null
+    return choiceFrame
 endfunction
 
 function KLS_GoldToast takes integer p, integer amount returns nothing
@@ -77,15 +170,23 @@ endfunction
 
 function KLS_BossReward takes nothing returns nothing
     local integer i = 0
-    local integer gear = 'I010'
-    if KLS_Wave >= 50 then
-        set gear = KLS_RandomCatalogDrop(4)
+    local integer gear
+    if KLS_Wave == 10 then
+        set gear = 'I010'
     elseif KLS_Wave == 20 then
         set gear = 'I011'
     elseif KLS_Wave == 30 then
         set gear = 'I012'
     elseif KLS_Wave == 40 then
         set gear = 'I013'
+    elseif KLS_Wave >= 40 then
+        set gear = KLS_RandomCatalogDrop(4)
+    elseif KLS_Wave >= 30 then
+        set gear = KLS_RandomCatalogDrop(3)
+    elseif KLS_Wave >= 20 then
+        set gear = KLS_RandomCatalogDrop(2)
+    else
+        set gear = KLS_RandomCatalogDrop(1)
     endif
     loop
         exitwhen i == 4
@@ -200,6 +301,8 @@ function KLS_Death takes nothing returns nothing
     endif
     if dead == KLS_King then
         call KLS_End(false)
+    elseif dead == KLS_StoryCart then
+        call KLS_StoryEscortFailed()
     elseif IsUnitInGroup(dead,KLS_StoryEnemies) then
         call KLS_StoryEnemyKilled(dead)
     elseif IsUnitInGroup(dead, KLS_Enemies) then
@@ -218,6 +321,7 @@ function KLS_Death takes nothing returns nothing
             endif
         endif
         if not KLS_Ended and KLS_Alive == 0 then
+            call KLS_ResetReadyVotes()
             if ModuloInteger(KLS_Wave + 1, 10) == 0 then
                 set KLS_Prep = KLS_BossPrep
             else
@@ -245,22 +349,28 @@ function KLS_Spawn takes nothing returns nothing
     local unit u
     local real hp
     local boolean spawnFailed = false
+    if KLS_Ended or KLS_Selecting or KLS_Alive > 0 then
+        return
+    endif
+    set KLS_Prep = 0
+    call KLS_ResetReadyVotes()
     set KLS_Wave = KLS_Wave + 1
+    call KLS_CompanyResearchRefresh()
     set KLS_Boss = null
     set KLS_BossCast = 0
     set KLS_BossMechanic = 0
-    call KLS_Log("Wave spawn started: " + I2S(KLS_Wave))
-    set count = 7 + KLS_Wave * 2 + KLS_Players * 3
+    call KLS_Log("Wave spawn started: " + I2S(KLS_Wave)+" difficulty="+KLS_DifficultyName(KLS_Difficulty))
+    set count = KLS_DifficultyScaledCount(7 + KLS_Wave * 2 + KLS_Players * 3)
     set rosterWave = KLS_RosterSourceWave(KLS_Wave)
     loop
         exitwhen n == count or spawnFailed or KLS_Ended
         set kind = KLS_Roster[rosterWave*20+ModuloInteger(n,KLS_RosterSize[rosterWave])]
         set u = KLS_CreateUnit(Player(11), kind, I2R(ModuloInteger(n, 5) - 2) * 140, 6200 + I2R(n / 5) * 40, 270)
         if u != null then
-            set hp = 180 + KLS_Wave * 55 + KLS_Players * 35
+            set hp = (180 + KLS_Wave * 55 + KLS_Players * 35)*KLS_DifficultyHealthScale()
             call BlzSetUnitMaxHP(u, R2I(hp))
             call SetWidgetLife(u, hp)
-            call BlzSetUnitBaseDamage(u, 6 + KLS_Wave * 2, 0)
+            call BlzSetUnitBaseDamage(u, R2I(I2R(6 + KLS_Wave * 2)*KLS_DifficultyDamageScale()+0.5), 0)
             if kind == 'unec' then
                 call IssueImmediateOrder(u, "raisedeadon")
             elseif kind == 'oshm' then
@@ -284,10 +394,10 @@ function KLS_Spawn takes nothing returns nothing
             set KLS_BossMechanic = KLS_BossMechanicForWave(KLS_Wave)
             set KLS_BossCast = 0
             call SetHeroLevel(u, KLS_Wave / 2, false)
-            set hp = KLS_Wave * 550 * (1 + KLS_Players * 0.3)
+            set hp = KLS_Wave * 550 * (1 + KLS_Players * 0.3)*KLS_DifficultyHealthScale()
             call BlzSetUnitMaxHP(u, R2I(hp))
             call SetWidgetLife(u, hp)
-            call BlzSetUnitBaseDamage(u, KLS_Wave * 5, 0)
+            call BlzSetUnitBaseDamage(u, R2I(I2R(KLS_Wave * 5)*KLS_DifficultyDamageScale()+0.5), 0)
             call SetUnitScale(u, 1.6, 1.6, 1.6)
             call GroupAddUnit(KLS_Enemies, u)
             set KLS_Alive = KLS_Alive + 1
@@ -302,6 +412,82 @@ function KLS_Spawn takes nothing returns nothing
         call KLS_Message("Mixed invasion wave " + I2S(KLS_Wave) + " is approaching.")
     endif
     set u = null
+endfunction
+
+function KLS_ReadyCheck takes nothing returns nothing
+    if KLS_Ended or KLS_Selecting or KLS_Alive != 0 or KLS_Prep <= 0 or KLS_Players <= 0 then
+        return
+    endif
+    if KLS_ReadyCount() >= KLS_Players then
+        set KLS_Prep = 0
+        call KLS_Log("Unanimous ready vote; starting wave "+I2S(KLS_Wave+1))
+        call KLS_Spawn()
+    endif
+endfunction
+
+function KLS_ReadyVoteSync takes nothing returns nothing
+    local integer p = GetPlayerId(GetTriggerPlayer())
+    local string payload = BlzGetTriggerSyncData()
+    if p < 0 or p >= 4 or not KLS_Active[p] or KLS_Ended or KLS_Selecting or KLS_Alive != 0 or KLS_Prep <= 0 then
+        return
+    endif
+    if payload == I2S(KLS_ReadyEpoch)+":1" then
+        set KLS_ReadyVote[p] = true
+    elseif payload == I2S(KLS_ReadyEpoch)+":0" then
+        set KLS_ReadyVote[p] = false
+    else
+        return
+    endif
+    call KLS_Log("Wave ready vote player="+I2S(p+1)+" ready="+I2S(KLS_ReadyCount())+"/"+I2S(KLS_Players))
+    call KLS_ReadyCheck()
+    call KLS_HUDUpdate()
+endfunction
+
+function KLS_VoteUIInit takes nothing returns nothing
+    local integer p = 0
+    local integer choice = 0
+    local trigger difficultyClicks = CreateTrigger()
+    local trigger difficultySync = CreateTrigger()
+    local trigger readyClicks = CreateTrigger()
+    local trigger readySync = CreateTrigger()
+    local framehandle gameUI
+    local real x
+    loop
+        exitwhen p == 4
+        call BlzTriggerRegisterPlayerSyncEvent(difficultySync,Player(p),"KLSDIFF",false)
+        call BlzTriggerRegisterPlayerSyncEvent(readySync,Player(p),"KLSREADY",false)
+        // Allocate frames and event handles in the same order on every client.
+        // Only KLS_VoteUIRefresh changes their visibility for the local owner.
+        if KLS_Active[p] then
+            set gameUI = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI,0)
+            set KLS_DifficultyTitle[p] = BlzCreateFrameByType("TEXT","KLSDifficultyTitle",gameUI,"",0)
+            call BlzFrameSetSize(KLS_DifficultyTitle[p],0.55,0.024)
+            call BlzFrameSetPoint(KLS_DifficultyTitle[p],FRAMEPOINT_TOP,gameUI,FRAMEPOINT_TOP,0.0,-0.008)
+            call BlzFrameSetVisible(KLS_DifficultyTitle[p],false)
+            set choice = 0
+            loop
+                exitwhen choice == 4
+                set x = -0.15+I2R(choice)*0.10
+                set KLS_DifficultyButton[p*4+choice] = KLS_VoteUICreateButton("KLSDifficulty"+I2S(choice),KLS_DifficultyName(choice),gameUI,FRAMEPOINT_TOP,x,-0.036,0.09)
+                call BlzTriggerRegisterFrameEvent(difficultyClicks,KLS_DifficultyButton[p*4+choice],FRAMEEVENT_CONTROL_CLICK)
+                set choice = choice+1
+            endloop
+            set KLS_ReadyButton[p] = KLS_VoteUICreateButton("KLSReadyWave","Start next wave",gameUI,FRAMEPOINT_TOP,0.0,-0.014,0.20)
+            call BlzTriggerRegisterFrameEvent(readyClicks,KLS_ReadyButton[p],FRAMEEVENT_CONTROL_CLICK)
+            set gameUI = null
+        endif
+        set p = p+1
+    endloop
+    call TriggerAddAction(difficultyClicks,function KLS_DifficultyClick)
+    call TriggerAddAction(difficultySync,function KLS_DifficultyVoteSync)
+    call TriggerAddAction(readyClicks,function KLS_ReadyClick)
+    call TriggerAddAction(readySync,function KLS_ReadyVoteSync)
+    set KLS_VoteUITimer = CreateTimer()
+    call TimerStart(KLS_VoteUITimer,0.25,true,function KLS_VoteUIRefresh)
+    set difficultyClicks = null
+    set difficultySync = null
+    set readyClicks = null
+    set readySync = null
 endfunction
 
 function KLS_Reorder takes nothing returns nothing
@@ -337,9 +523,12 @@ function KLS_Tick takes nothing returns nothing
         set i = i + 1
     endloop
     if KLS_Alive == 0 then
-        set KLS_Prep = KLS_Prep - 1
-        if KLS_Prep <= 0 then
-            call KLS_Spawn()
+        if KLS_Prep > 0 then
+            set KLS_Prep = KLS_Prep - 1
+            if KLS_Prep <= 0 then
+                call KLS_ResetReadyVotes()
+                call KLS_Spawn()
+            endif
         endif
     elseif ModuloInteger(KLS_Seconds, 8) == 0 then
         call ForGroup(KLS_Enemies, function KLS_Reorder)
@@ -552,6 +741,9 @@ function KLS_PlayerLeft takes nothing returns nothing
         if KLS_Players == 0 then
             call KLS_End(false)
         else
+            if not KLS_Selecting then
+                call KLS_ReadyCheck()
+            endif
             call KLS_HUDUpdate()
         endif
     endif
@@ -630,6 +822,8 @@ function KLS_Init takes nothing returns nothing
         set y = KLS_Y[i]
         set KLS_Plot[i] = Rect(x - 1024, y - 1024, x + 1024, y + 1024)
         set KLS_Active[i] = GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and GetPlayerController(Player(i)) == MAP_CONTROL_USER
+        set KLS_DifficultyVote[i] = 1
+        set KLS_ReadyVote[i] = false
         if KLS_Active[i] then
             set KLS_Players = KLS_Players + 1
             call SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, 700)
@@ -696,6 +890,7 @@ function KLS_Init takes nothing returns nothing
     call KLS_MiningInit()
     call KLS_CrownlandsInit()
     call KLS_ProgressionInit()
+    call KLS_VoteUIInit()
     call TriggerAddAction(leaves,function KLS_PlayerLeft)
     call TriggerRegisterAnyUnitEventBJ(deaths, EVENT_PLAYER_UNIT_DEATH)
     call TriggerAddAction(deaths, function KLS_Death)

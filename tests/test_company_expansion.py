@@ -73,7 +73,7 @@ class HeroCompanyExpansion(unittest.TestCase):
                 self.assertIn(expected_halls[index], installed_units)
                 self.assertEqual(records[hall['rawcode']][0], expected_halls[index])
                 hall_fields = records[hall['rawcode']][1]
-                self.assertEqual(hall_fields[('uabi', 0)][0], '')
+                self.assertEqual(hall_fields[('uabi', 0)][0], 'Aneu,Apit,Asid,Asud')
                 self.assertEqual(hall_fields[('utra', 0)][0], '')
                 self.assertEqual(hall_fields[('uupt', 0)][0], '')
                 foundry_fields = records[foundry['rawcode']][1]
