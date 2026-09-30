@@ -2,13 +2,13 @@
 
 ## Status of repository snapshot
 
-Build: **KLS-D-8048eea39b**
+Build: **KLS-D-68303d69bf**
 
-Artifact: `dist/KLS-D-8048eea39b-Development.w3m`
-SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`
-Installed: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-8048eea39b-Development.w3m` (matching SHA-256).
+Artifact: `dist/KLS-D-68303d69bf-Development.w3m`
+SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`
+Installed: `C:\Users\asphy\Documents\Warcraft III\Maps\TheKingsLastStand\KLS-D-68303d69bf-Development.w3m` (matching SHA-256).
 
-Map SHA-256: **6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247**
+Map SHA-256: **baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3**
 Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 
 | Stage | Evidence in this snapshot | Status |
@@ -16,11 +16,11 @@ Label: **DEVELOPMENT BUILD — NOT A VERIFIED RELEASE**
 | Source package / generated objects / archive inventory and readback | Current package inventory, component hashes and archive readback checked | Passed |
 | JASS compile against installed editor API | Installed-version declarations and provenance validated by the current package command | Passed |
 | Full automated regressions | 181 tests passed, including actual handler decisions through native-boundary stubs; see AUDIT-COMPLETION.md | Passed |
-| Test-folder installation | Build `KLS-D-8048eea39b` is installed as the sole project map; package and installed hashes match | Passed |
+| Test-folder installation | Build `KLS-D-68303d69bf` is installed as the sole project map; package and installed hashes match | Passed |
 | Runtime diagnostic retention | Source retains the latest 32 ERROR/FATAL/WARN entries separately from routine events and displays the most recent eight | Current-build `-diag` capture pending |
 | World Editor Test Map | User reports success for the earlier build KLS-D-fd638ddcf5; retain as a pass for that build | Passed (user-reported, earlier build) |
 | Editor save/reopen | Current package is installed; save/reopen in World Editor has not been checked | Pending |
-| Current-build Test Map / Custom Game startup | Open the installed map and confirm visible ID `KLS-D-8048eea39b`. The earlier Test Map pass remains recorded separately | Pending (not failed) |
+| Current-build Test Map / Custom Game startup | Open the installed map and confirm visible ID `KLS-D-68303d69bf`. The earlier Test Map pass remains recorded separately | Pending (not failed) |
 | 192×192 map, towns, bounds, pathing and navigation | Terrain, pathing, W3I bounds, camera bounds and minimap were generated together; compact base lumber stands now sit 500/700 units south of each hall; visual routes, tree clearance and playability need live inspection | Pending in game |
 | Four-race selection and construction | Per-player race, matching workers/menus, Temple of the Damned parent and explicit Temple icon, race-specific role descriptions, and expected/actual mine status in `-diag` are source checked. All four starting reserves are normalized to 1,000,000; Undead/Elf use owned Haunted/Entangled mines and Human/Orc use neutral Gold Mines. Night Elf Barracks and upgrade structure use Ancient of War (`eaom`) and Hunter's Hall (`edob`) | Pending in mixed-race game |
 | Eight new heroes, signatures, companies and support units | Source/catalog links and installed parent IDs are present; Keeper/Faelor retain signatures and learn tree-free Briar Host. Company chapter/weapon/armor/support research and all 50 authored powers are in the package. Visuals, recruits and ownership need live checks | Pending in game |
@@ -49,7 +49,7 @@ Passing syntax or simulated tests never clears an in-game gate.
 ### Gate 1 — package and startup
 
 1. Verify current manifest, component inventory, object record structure, valid archive name lookups, source hashes, and installed API provenance.
-2. Current package `dist/KLS-D-8048eea39b-Development.w3m` has SHA-256 `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247` and is installed with a matching hash. Open this build and verify its visible ID before save/reopen or startup checks.
+2. Current package `dist/KLS-D-68303d69bf-Development.w3m` has SHA-256 `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3` and is installed with a matching hash. Open this build and verify its visible ID before save/reopen or startup checks.
 3. Run Test Map on the current build-ID-named map in the existing test workflow. The previous Test Map already succeeded per the user; do not record it as failed or repeat it solely to satisfy stale wording.
 4. Confirm build ID, 25-hero selection court, correct active-player plots/resources and race-matched workers, King Aldric and castle, selection/preparation countdown, and no automatic victory. Record which build ID was tested.
 5. Launch the same build via Warcraft III → Single Player → Custom Game. Confirm the same visible ID and objects. Capture screenshot and full -diag output if anything is missing.
@@ -71,6 +71,6 @@ Passing syntax or simulated tests never clears an in-game gate.
 
 ## Current exact human-run check
 
-Current DEVELOPMENT build **KLS-D-8048eea39b**: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`. Installed bytes match the package. Full audit details: [AUDIT-COMPLETION.md](AUDIT-COMPLETION.md). Engine/multiplayer/endurance checks remain pending.
+Current DEVELOPMENT build **KLS-D-68303d69bf**: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed bytes match the package. Saved user terrain is captured; the editor-layout work copy is prepared. Editor/game/multiplayer/endurance checks remain pending. See [EDITOR-LAYOUT.md](EDITOR-LAYOUT.md).
 
-Next human-run check: launch the installed **KLS-D-8048eea39b** in a two-player Custom Game, confirm both displayed build IDs, choose different-race heroes, and open both backpacks simultaneously. Confirm each retains its own contents and Player 2 can vote Ready and spend a stat/talent point without affecting or pausing Player 1. Record screenshots/full `-diag` output on this exact build, then use the broader [acceptance register](ROADMAP-AND-ACCEPTANCE.md).
+Open `build/KLS-D-68303d69bf-Development-Terrain.w3m` in World Editor. Confirm the market shops, all four villages, quest sites, castle/spring, starting plot footprints and 25-hero hub are visible. Save/reopen, then Test Map and confirm references disappear before gameplay objects spawn exactly once. Check ground/pathing and mine/gate clearance after the save. The earlier successful Test Map remains credited to `KLS-D-fd638ddcf5`; it was not a failed step. Continue the two-player backpack/Ready/stat/talent check afterward; the broader engine, mixed-race and endurance gates remain pending.

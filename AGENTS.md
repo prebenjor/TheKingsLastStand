@@ -80,3 +80,7 @@ If design and source differ, record the gap in docs/DECISIONS-AND-OPEN-ISSUES.md
 - Town restoration has actual shared once-per-match unlocks. The caravan uses normal pathing, requires a nearby living hero, is vulnerable, and can be retried after loss. Keep story enemies out of wave accounting.
 - Fresh company purchases and construction starts clear recycled handle bookkeeping. Preserve ordinary death totals for resurrection; apply only upgrade deltas to existing troops.
 - Read [AUDIT-COMPLETION.md](docs/AUDIT-COMPLETION.md) before re-opening old audit findings. Automated evidence is distinct from pending current-build engine/multiplayer/endurance acceptance.
+
+## Terrain authoring references
+
+Use `tools/build_map.py --prepare-editor` after capturing the user's saved current art. Read docs/EDITOR-LAYOUT.md. Reserve Neutral Extra for disposable layout units, which KLS_Init removes before gameplay spawning. Shared coordinates live in tools/layout_catalog.py, town_catalog.py and map_info.py. Art capture excludes war3mapUnits.doo; moving a reference in the editor never changes its runtime coordinates. Do not restore startup texture painting over authored terrain. Do not claim the preview is visually verified without a current editor open/reopen check.

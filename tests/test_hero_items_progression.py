@@ -119,12 +119,12 @@ class AttributeEquipment(unittest.TestCase):
         self.assertIn('Aneu', unit_data['hS02'][1][('uabi',0)][0])
         runtime = runtime_script('BOOKSHOP')
         self.assertIn("KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS02'", runtime)
-        apothecary = re.search(r"set KLS_Shops\[10\] = .*?,(-?\d+),(-?\d+),270", runtime)
-        archive = re.search(r"set KLS_Shops\[11\] = .*?,(-?\d+),(-?\d+),270", runtime)
-        self.assertIsNotNone(apothecary)
-        self.assertIsNotNone(archive)
-        self.assertLessEqual(abs(int(apothecary[1]) - int(archive[1])), 750)
-        self.assertLessEqual(abs(int(apothecary[2]) - int(archive[2])), 200)
+        from layout_catalog import market_placements
+        apothecary, archive = market_placements()[10:12]
+        self.assertIn('KLS_MarketX(10),KLS_MarketY(10)', runtime)
+        self.assertIn('KLS_MarketX(11),KLS_MarketY(11)', runtime)
+        self.assertLessEqual(abs(apothecary[1] - archive[1]), 750)
+        self.assertLessEqual(abs(apothecary[2] - archive[2]), 200)
 
 
 class RecipeTransactions(unittest.TestCase):
@@ -360,7 +360,9 @@ class HeroProgressionAndRecovery(unittest.TestCase):
     def test_restore_pool_is_south_of_castle_and_off_the_central_route(self):
         runtime = runtime_script('RESTORE-POOL')
         self.assertIn("'nfoh'", runtime)
-        self.assertIn('-900,-1600', runtime.replace(' ',''))
+        self.assertIn('real KLS_SpringX = -900.0', runtime)
+        self.assertIn('real KLS_SpringY = -1600.0', runtime)
+        self.assertIn('IsUnitInRangeXY(hero,KLS_SpringX,KLS_SpringY,450.0)', runtime)
         self.assertIn('GetUnitState(hero,UNIT_STATE_MAX_MANA)', runtime)
         self.assertIn('SetWidgetLife(hero', runtime)
         self.assertIn('450.0', runtime)

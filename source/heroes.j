@@ -91,7 +91,7 @@ function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns n
         endif
         call PauseUnit(created,true)
         set KLS_BaseTownHall[p] = created
-        set KLS_Altar[p] = KLS_CreateUnit(Player(p),KLS_FactionAltarId[raceId],x-650,y-500,270)
+        set KLS_Altar[p] = KLS_CreateUnit(Player(p),KLS_FactionAltarId[raceId],x+KLS_AltarOffsetX,y+KLS_AltarOffsetY,270)
         if KLS_Altar[p] == null then
             call DestroyGroup(owned)
             return
@@ -100,7 +100,7 @@ function KLS_ReplaceStartingFaction takes integer p, integer heroIndex returns n
         set workerIndex = 0
         loop
             exitwhen workerIndex == 5
-            set created = KLS_CreateUnit(Player(p),KLS_FactionWorkerId[raceId],x-250+workerIndex*90,y-300,270)
+            set created = KLS_CreateUnit(Player(p),KLS_FactionWorkerId[raceId],x+KLS_WorkerOffsetX+workerIndex*90,y+KLS_WorkerOffsetY,270)
             if created == null then
                 call DestroyGroup(owned)
                 return
@@ -320,9 +320,8 @@ function KLS_SelectionInit takes nothing returns nothing
     // GENERATED_HERO_CATALOG
     loop
         exitwhen n == KLS_HeroCount
-        set x = -10800 + ModuloInteger(n, 5) * 450
-        set y = -10800 + (n / 5) * 450
-        call SetTerrainType(x, y, 'Lrok', -1, 2, 0)
+        set x = KLS_HeroHubX + ModuloInteger(n, KLS_HubColumns) * KLS_HubSpacing
+        set y = KLS_HeroHubY + (n / KLS_HubColumns) * KLS_HubSpacing
         set KLS_Preview[n] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), KLS_HeroType[n], x, y, 270)
         if KLS_Preview[n] == null then
             return

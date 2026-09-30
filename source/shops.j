@@ -6,6 +6,7 @@ endglobals
 
 // GENERATED_CATALOG
 // GENERATED_RECIPES
+// GENERATED_MARKET_COORDINATES
 
 function KLS_CreateShops takes nothing returns nothing
     local integer tier = 0
@@ -32,7 +33,7 @@ function KLS_CreateShops takes nothing returns nothing
         set i = 0
         loop
             exitwhen i == 2
-            set KLS_Shops[tier*2+i] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',-2300+tier*1150,-3900-i*560,270)
+            set KLS_Shops[tier*2+i] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',KLS_MarketX(tier*2+i),KLS_MarketY(tier*2+i),270)
             if KLS_Shops[tier*2+i] == null then
                 return
             endif
@@ -42,20 +43,20 @@ function KLS_CreateShops takes nothing returns nothing
         endloop
         set tier = tier+1
     endloop
-    set KLS_Shops[10] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',3450,-3900,270)
+    set KLS_Shops[10] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',KLS_MarketX(10),KLS_MarketY(10),270)
     if KLS_Shops[10] == null then
         return
     endif
     call BlzSetUnitName(KLS_Shops[10],"Field Apothecary")
     call SetUnitInvulnerable(KLS_Shops[10],true)
-    set KLS_Shops[11] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS02',4100,-3900,270)
+    set KLS_Shops[11] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS02',KLS_MarketX(11),KLS_MarketY(11),270)
     if KLS_Shops[11] == null then
         return
     endif
     call BlzSetUnitName(KLS_Shops[11],"Sage's Archive")
     call SetUnitInvulnerable(KLS_Shops[11],true)
     call SetUnitAcquireRange(KLS_Shops[11],0)
-    set KLS_Shops[12] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',4850,-3900,270)
+    set KLS_Shops[12] = KLS_CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'hS00',KLS_MarketX(12),KLS_MarketY(12),270)
     if KLS_Shops[12] == null then
         return
     endif

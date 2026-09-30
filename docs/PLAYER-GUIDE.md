@@ -1,6 +1,6 @@
 # Player and human-test guide
 
-Current DEVELOPMENT build **KLS-D-8048eea39b**: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`. Installed bytes match the package. Full audit details: [AUDIT-COMPLETION.md](AUDIT-COMPLETION.md). Engine/multiplayer/endurance checks remain pending.
+Current DEVELOPMENT build **KLS-D-68303d69bf**: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed bytes match the package. Saved user terrain is captured; the editor-layout work copy is prepared. Editor/game/multiplayer/endurance checks remain pending. See [EDITOR-LAYOUT.md](EDITOR-LAYOUT.md).
 
 
 ## Historical backpack repair candidate — 2026-09-30

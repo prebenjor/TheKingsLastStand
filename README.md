@@ -1,8 +1,18 @@
 # The King's Last Stand
 
-## Audit completion Development build — 2026-09-30
+## Saved terrain and editor layout — 2026-09-30
 
-Current DEVELOPMENT package: **KLS-D-8048eea39b**.
+Current DEVELOPMENT package: **KLS-D-68303d69bf**.
+
+- Artifact: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed copy matches in the established Warcraft III test folder.
+- The user's saved terrain is captured in `source/authored-map/editor-layer.zip`, with the original archived locally. No runtime grass, road, plot or hero-hub texture painting overwrites it.
+- Open `build/KLS-D-68303d69bf-Development-Terrain.w3m` for terrain editing: it includes 85 visible layout references for shops, towns, quest sites, hero hub, castle/spring and provisional bases. References use Neutral Extra and are removed before runtime gameplay spawns. Moving a reference does not change source-controlled gameplay coordinates.
+- 188 automated tests passed; installed-API JASS syntax, archive readback and installed/package hashes passed.
+- See [editor layout workflow](docs/EDITOR-LAYOUT.md). All six captured art layers are identical in both packages. Current editor visual/round-trip and game/multiplayer/endurance checks remain pending; retain the earlier successful Test Map record.
+
+## Historical audit completion Development build — 2026-09-30
+
+Historical DEVELOPMENT package: **KLS-D-8048eea39b**.
 
 - Artifact: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`.
 - Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/` with a matching hash; previous builds archived outside the test folder.

@@ -1,8 +1,22 @@
 # Current status — 2026-09-30
 
+## Saved terrain and editor-visible layout — KLS-D-68303d69bf
+
+- Current DEVELOPMENT package: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed in the established `Documents/Warcraft III/Maps/TheKingsLastStand/` folder with matching bytes; previous installed/dist versions archived.
+- User saved and closed `KLS-D-8048eea39b-Development-Terrain.w3m`. Source map SHA-256: `ebb2f449b5363b16daf4a23a5e193754df438cc3252cbb3ddaaf9d04c1db3a82`. Archived under `backups/editor-preserved/`; six-layer capture completed through `tools/capture_authored_map.py`. This resolves the earlier unsaved editor checkpoint and save-prompt blocker.
+- Removed startup road/plot and hero-preview terrain stamping so manual grass and paths persist. Resource trees and open gate remain. Shared market/castle/spring/hub/base coordinate generation preserves the existing positions.
+- Editor work copy: `build/KLS-D-68303d69bf-Development-Terrain.w3m`; SHA-256: `89e91629ddaa0c1534114f0a2d033cdb00da02924d644129bd5b02d5ed0b48c1`. Contains 85 Neutral Extra unit references plus four source-matched start markers. Normal installed package has four start markers only. Both copies preserve the six captured art members byte-for-byte. Cleanup is included in compiled JASS and WCT export before normal spawning.
+- Verification: six new layout checks passed; native serializer matches a unit saved by the installed editor. Installed-API JASS compilation, archive readback and installed/package hashes passed. The first broader suite found 12 failures in old literal-coordinate assertions and stale build docs; those assertions now use the shared coordinates and docs point to this package. Final full suite: **188 tests passed, 0 failures, 0 errors** (`test-results/editor-layout-suite-final.txt`).
+- Next human-run check: open the current Terrain work copy in World Editor, confirm shops/four villages/quest sites/25-hero hub/castle are visible, save/reopen, then Test Map and confirm no duplicate objects. Verify post-save pathing, resource access and gate clearance. UI access is unavailable (`failed to write kernel assets`), so no visual/editor or engine check is claimed. Current gameplay/multiplayer/endurance gates remain pending. Earlier successful Test Map `KLS-D-fd638ddcf5` remains a pass.
+- Terrain composition still needs the user's continuing grass/path work and remaining village/castle dressing. Reference-unit moves must be transferred into the placement catalogs; art capture does not import native units. See [EDITOR-LAYOUT.md](EDITOR-LAYOUT.md).
+
+## Historical terrain checkpoint — superseded by saved capture above
+
+The earlier five authored-map tests passed; editor save was waiting on the missing-player-start dialog. The user subsequently saved and closed the map, and its art is now captured. Earlier UI failure and incomplete path work remain recorded in TERRAIN-DRESSING-GUIDE.md; they are not a current capture blocker.
+
 ## Audit completion Development build — 2026-09-30
 
-Current DEVELOPMENT package: **KLS-D-8048eea39b**.
+Historical DEVELOPMENT package: **KLS-D-8048eea39b**.
 
 - Artifact: `dist/KLS-D-8048eea39b-Development.w3m`; SHA-256: `6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247`.
 - Installed in `Documents/Warcraft III/Maps/TheKingsLastStand/` with a matching hash; previous builds archived outside the test folder.

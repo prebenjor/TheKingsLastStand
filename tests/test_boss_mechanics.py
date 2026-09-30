@@ -168,7 +168,7 @@ class BossMechanics(unittest.TestCase):
                 r'set KLS_Shops\[11\] = KLS_CreateUnit[\s\S]*?if KLS_Shops\[11\] == null then\s+return\s+endif[\s\S]*?BlzSetUnitName',
             ),
             'KLS_GrovePlant': (r'KLS_GroveTree\[KLS_GroveCount\] = KLS_CreateDestructable[\s\S]*?if KLS_GroveTree\[KLS_GroveCount\] == null then\s+return\s+endif[\s\S]*?set KLS_GroveCount',),
-            'KLS_WaveEnvironmentInit': (r'set KLS_RestorePool = KLS_CreateUnitOptional\(Player\(PLAYER_NEUTRAL_PASSIVE\),\x27nfoh\x27,-900,-1600,270,"restoring spring visual"\)[\s\S]*?if KLS_RestorePool != null then[\s\S]*?BlzSetUnitName[\s\S]*?set KLS_PoolClock = CreateTimer\(\)[\s\S]*?TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)',),
+            'KLS_WaveEnvironmentInit': (r'set KLS_RestorePool = KLS_CreateUnitOptional\(Player\(PLAYER_NEUTRAL_PASSIVE\),\x27nfoh\x27,KLS_SpringX,KLS_SpringY,270,"restoring spring visual"\)[\s\S]*?if KLS_RestorePool != null then[\s\S]*?BlzSetUnitName[\s\S]*?set KLS_PoolClock = CreateTimer\(\)[\s\S]*?TimerStart\(KLS_PoolClock,1\.0,true,function KLS_PoolTick\)',),
             'KLS_ChooseHero': (r'set KLS_Hero\[p\] = KLS_CreateUnit[\s\S]*?if KLS_Hero\[p\] == null then\s+return\s+endif[\s\S]*?set KLS_ClassChosen\[p\] = true',),
             'KLS_SelectionInit': (r'set KLS_Preview\[n\] = KLS_CreateUnit[\s\S]*?if KLS_Preview\[n\] == null then\s+return\s+endif[\s\S]*?SetUnitInvulnerable',),
             'KLS_SignatureCast': (r'set u = KLS_CreateUnitOptional\(owner,KLS_SignatureSummon\[n\][\s\S]*?if u == null then\s+exitwhen true\s+endif[\s\S]*?SetUnitUseFood\(u,false\)',),
@@ -195,7 +195,7 @@ class BossMechanics(unittest.TestCase):
     def test_optional_spring_visual_uses_contextual_spawn_diagnostics_without_aborting(self):
         script = runtime_script('KLS-D-TEST')
         init = function_body(script, 'KLS_WaveEnvironmentInit')
-        self.assertIn("KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',-900,-1600,270,\"restoring spring visual\")", init)
+        self.assertIn("KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',KLS_SpringX,KLS_SpringY,270,\"restoring spring visual\")", init)
         self.assertNotIn('CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),\'nfoh\'', init)
         checked = function_body(script, 'KLS_CreateUnitChecked')
         self.assertIn('ERROR optional unit spawn failed context='+ '"+context+"', checked)

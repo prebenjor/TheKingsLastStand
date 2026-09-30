@@ -22,6 +22,8 @@ from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
 from town_catalog import town_script
 from authored_map import read_authored_layer
+from layout_catalog import layout_globals, plot_script, market_script
+from editor_layout import placement_data
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = ('match_rules.j', 'diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
@@ -77,6 +79,7 @@ def runtime_script(build_id):
     for name in MODULES:
         text = (ROOT / 'source' / name).read_text(encoding='utf-8')
         if name == 'shops.j':
+            text = text.replace('// GENERATED_MARKET_COORDINATES', market_script())
             text = text.replace('// GENERATED_CATALOG', catalog_script())
             text = text.replace('// GENERATED_RECIPES', recipe_script())
         if name == 'heroes.j':
@@ -91,6 +94,9 @@ def runtime_script(build_id):
             text = text.replace('// GENERATED_SIGNATURES', signature_spell_script())
         if name == 'crownlands.j':
             text = text.replace('// GENERATED_TOWN_PLACEMENTS', town_script())
+        if name == 'game.j':
+            text = text.replace('// GENERATED_LAYOUT_GLOBALS', layout_globals())
+            text = text.replace('// GENERATED_PLOT_COORDINATES', plot_script())
         blocks = re.findall(r'^globals\s*\n(.*?)^endglobals\s*$', text, re.M | re.S)
         if len(blocks) != 1:
             raise ValueError('Expected one globals section in ' + name)
@@ -104,7 +110,7 @@ def runtime_script(build_id):
                 scalar_initializers.append('    set ' + match[1] + ' = ' + match[2])
     declarations.append('    boolean KLS_Initialized = false')
     body = '\n'.join(functions).replace('KLS_BUILD_ID', build_id)
-    marker = '    set KLS_Enemies = CreateGroup()'
+    marker = '    call KLS_ClearEditorPreviews()\n    set KLS_Enemies = CreateGroup()'
     if body.count(marker) != 1:
         raise ValueError('Initializer structure changed; explicitly update the initialization insertion point.')
     initial = '\n'.join(['    if KLS_Initialized then', '        return', '    endif', '    set KLS_Initialized = true'] + scalar_initializers)
@@ -225,6 +231,9 @@ def build():
     # Reuse only the explicitly captured art layers. Runtime code, object data,
     # scenario identity and generated metadata always come from source modules.
     components.update(authored_members)
+    # Native start markers match generated scenario starts. Preview units live
+    # only in the optional editing copy, never in the installed package.
+    components['war3mapUnits.doo'] = placement_data(components['war3map.w3e'])
     if 'call Melee' in script or b'Melee Initialization' in wtg or b'call Melee' in wct:
         raise ValueError('Default melee initialization found in output')
     for name in ('war3map.w3u','war3map.w3t'):

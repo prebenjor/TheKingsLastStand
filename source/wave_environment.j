@@ -62,7 +62,7 @@ function KLS_PoolTick takes nothing returns nothing
     loop
         exitwhen p == 4
         set hero = KLS_Hero[p]
-        if KLS_Active[p] and hero != null and GetWidgetLife(hero) > 0.405 and IsUnitInRangeXY(hero,-900,-1600,450.0) then
+        if KLS_Active[p] and hero != null and GetWidgetLife(hero) > 0.405 and IsUnitInRangeXY(hero,KLS_SpringX,KLS_SpringY,450.0) then
             set maxHP = BlzGetUnitMaxHP(hero)
             set maxMana = GetUnitState(hero,UNIT_STATE_MAX_MANA)
             if GetWidgetLife(hero) < maxHP or GetUnitState(hero,UNIT_STATE_MANA) < maxMana then
@@ -98,7 +98,7 @@ function KLS_WaveEnvironmentInit takes nothing returns nothing
     endif
     // This visual prop is optional: its failure must not abort the match or
     // disable the coordinate-based restoration trigger.
-    set KLS_RestorePool = KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',-900,-1600,270,"restoring spring visual")
+    set KLS_RestorePool = KLS_CreateUnitOptional(Player(PLAYER_NEUTRAL_PASSIVE),'nfoh',KLS_SpringX,KLS_SpringY,270,"restoring spring visual")
     if KLS_RestorePool != null then
         call BlzSetUnitName(KLS_RestorePool,"King's Restoring Spring")
         call SetUnitInvulnerable(KLS_RestorePool,true)

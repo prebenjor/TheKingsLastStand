@@ -40,3 +40,21 @@ These two additional generated images compare a more formal kingdom-road arrange
 - [Asymmetric road and terrain layout](visuals/Crownlands-Layout-Asymmetric-Road.png): a gentle road bend, contrasting woodland and meadow sides, and low rocky rises set back from the route.
 
 In both, keep the actual gate, King's Road, settlement entrances, boss-fight space, build plots, mines, and worker routes clear when translating the idea into the World Editor.
+
+## Active World Editor pass — 2026-09-30
+
+The current editor working copy is `build/KLS-D-8048eea39b-Development-Terrain.w3m`. Crownshire's southern outskirts now have an editor-placed barn, inn and well, with connecting dirt footpaths and low grassy rises outside the buildings. These edits are still unsaved and uncaptured while the editor's missing-player-start save prompt awaits approval. They are not present in the installed Development package.
+
+Startup no longer stamps stone plot borders or repaints the central road in `source/game.j`. The W3E layer owns those textures; the procedural fallback already supplies roads and plot markers. Runtime resource trees and northern gate structures remain. This prevents subsequent editor art from being overwritten when a match starts.
+
+Remaining work: soften the repeated square grass patches, finish the castle-town composition, dress all four settlements, add low hills and mixed boulder groups, review scripted building positions against the authored clearings, then save/capture the art and package one new Development build. Navigation, mines, gate and boss clearance require exact-build engine checks. Do not describe this pass as finished from the source regression alone.
+
+### Editor continuation checkpoint
+
+Camera zoom recovered after focusing the terrain canvas and issuing repeated wheel inputs. Broad grass strokes softened several square patches west and east of Crownshire and beside the castle approach. Four `VSvb` residence doodads were placed south of the courtyard at approximately (-1584, -2547), (1748, -2415), (-1174, -2389), and (1305, -2335). A narrow dirt connector was started at approximately (-1106, -2090); the residence paths are not yet complete. These remain unsaved editor changes, not captured art or an installed build.
+
+Computer Use then failed with `failed to write kernel assets: The system cannot find the path specified. (os error 3)`. A lightweight window-list retry and a kernel reset/reinitialization returned the same error. Stop UI input until the connection is restored, preserve the open editor working copy, and resume with the incomplete courtyard-to-residence and residence-to-market paths. The missing-player-start save approval remains pending.
+
+### Saved capture and visible layout — 2026-09-30
+
+The user saved and closed the working map; the earlier unsaved checkpoint/save prompt is resolved. The grass, branch paths, cliffs, tree ring and saved doodads are preserved in the authored six-layer bundle, with the saved original archived. The next work copy now includes visible shops, four village clusters, quest sites, hero hub, castle/spring and provisional bases. See [EDITOR-LAYOUT.md](EDITOR-LAYOUT.md). These references guide terrain work; moving them does not update gameplay coordinates. Place purely decorative scenery with the Doodad Palette, because art capture excludes native units. Continue natural grass/path dressing in the current build's Terrain work copy. Visual/editor and post-save pathing checks remain pending because Computer Use is unavailable.

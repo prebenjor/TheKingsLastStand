@@ -62,6 +62,16 @@ class AuthoredMapRoundTrip(unittest.TestCase):
         pack(self.baseline, path, replacements)
         return replacements
 
+    def test_runtime_preserves_authored_ground_textures(self):
+        game = (ROOT / 'source/game.j').read_text(encoding='utf-8')
+        self.assertFalse('call SetTerrainType(' in game,
+                         'Match startup must not repaint authored roads or plot edges.')
+        self.assertNotIn('call KLS_StampPlot(', game)
+        self.assertIn("KLS_CreateDestructable('LTg1'", game)
+        self.assertIn('call KLS_AddTree(', game)
+        heroes = (ROOT / 'source/heroes.j').read_text(encoding='utf-8')
+        self.assertNotIn('call SetTerrainType(', heroes)
+
     def test_capture_round_trips_every_world_editor_art_layer_with_provenance(self):
         with tempfile.TemporaryDirectory() as folder:
             map_path = Path(folder) / (BUILD_ID + '-Development.w3m')

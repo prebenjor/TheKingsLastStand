@@ -1,5 +1,13 @@
 # Build changelog
 
+## KLS-D-68303d69bf - 2026-09-30
+
+- Captured the user's saved grass/path/terrain work from `KLS-D-8048eea39b`, preserving the six supported art layers and an archived original. Removed startup road/plot/hero-hub texture painting that would overwrite manual art.
+- Added shared runtime/editor placement coordinates and `--prepare-editor`: one terrain work copy with 85 visible reference units for shops, four settlements, quest sites, castle/spring, provisional bases and the 25-hero hub. Neutral Extra references are removed before gameplay spawning; normal package contains only four matching native start markers. Reference moves remain source-controlled; native unit data is excluded from art capture.
+- Package: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed copy matches in `Documents/Warcraft III/Maps/TheKingsLastStand/`. Terrain work copy: `build/KLS-D-68303d69bf-Development-Terrain.w3m`; SHA-256: `89e91629ddaa0c1534114f0a2d033cdb00da02924d644129bd5b02d5ed0b48c1`. Both carry identical captured art.
+- Verification: six layout checks passed, native record fixture matched, installed-API JASS syntax and MPQ readback passed. Full suite: **188 tests passed** after updating old coordinate assertions and current-build records; the initial 12 assertion/documentation failures are recorded in the progress ledger.
+- DEVELOPMENT retained. Editor visual/open/save/reopen/Test Map, Custom Game, navigation, live gameplay, multiplayer and endurance remain pending. The prior successful Test Map `KLS-D-fd638ddcf5` remains credited.
+
 ## KLS-D-8048eea39b - 2026-09-30
 
 - Final audit-completion package carries all gameplay fixes described in `KLS-D-d9fb2e560a`: tree-free ranked summons, nonmodal talents, preparation-specific Ready votes, participating/retryable escort, permanent town perks, 11 personal company research services, 50 recruit powers and corrected power projections.

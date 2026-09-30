@@ -1,32 +1,33 @@
 {
-  "build_id": "KLS-D-8048eea39b",
+  "build_id": "KLS-D-68303d69bf",
   "status": "development: engine and multiplayer checks pending",
-  "output_path": "dist/KLS-D-8048eea39b-Development.w3m",
-  "sha256": "6759047254a8fd3bef830e32af7af4f8804fe732237a25b87957004138664247",
+  "output_path": "dist/KLS-D-68303d69bf-Development.w3m",
+  "sha256": "baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3",
   "baseline_sha256": "3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9",
   "source_hashes": {
     "source/match_rules.j": "b06a32e6516db9b3b7da6369de3be528d2b772a1648b850f1314c3756b024275",
     "source/diagnostics.j": "473476e5780ad8c62aca04126184c20c47d6082a3a984f3868b083b9f5fddd37",
-    "source/heroes.j": "36f6662eab1cad6d683a690b5b0d426023b4f3da3b6314cde341dbbc9213bdcc",
+    "source/heroes.j": "c4e4f1ed8c25205641aee94fd851f6b1a2d91aaa640c43a4ba5ab12f58e02742",
     "source/companies.j": "8d75985b25366282fd36379b5dc1972d106ccc4d04553768025629ac6317929b",
     "source/mining.j": "0f18ca18d5eea02e9fd2381b7211f4694247fbbf5baab8dd47a5a904a9e15e18",
     "source/backpack.j": "beef45672ded585f4967ecb140cee463da6a287a3917918132c44111ffc28f15",
-    "source/shops.j": "b61e821f991b9f8d801b7f41cc98d48789ec781de48c628bd51dc13d00569a11",
+    "source/shops.j": "c9634ae579425af73de3a3352b6f55798e405137f3b2d56fc23fc59488748254",
     "source/equipment.j": "50db8157e4d1a04e2db01e11bcdbe24edece6b5e86aea896c34a9f099c0f8a95",
     "source/hud.j": "1594e3ce958bb95c27e00c8d0f442f430e4154a55f2b15c32fdcd484d73dd3d5",
     "source/castle.j": "14639874a76fe03a6a1373c19ea8cb2ea294410505727cdc5f8946052325757e",
     "source/combat.j": "21dc39715601e23157a195a85044987a9d2113a887b0b5277f6687538be63a69",
-    "source/wave_environment.j": "38b66494cb7dcc3eede17c5f62d390acbcf1deb014c815477751c72705e930f6",
+    "source/wave_environment.j": "8ac9a3921265206c333bcec37393f25d59cc6bf4ded218d25e0a8f3c2354e23c",
     "source/signatures.j": "5d9aca202780663f4421584b6d42f09b0dfb16ca46e3d2af105867aaae61e3c6",
     "source/rewards.j": "aa5fb18e10da68f398687a6e12a4ff033b2b16233bfedb131b45d8c927d465c7",
     "source/crownlands.j": "55bb4abd0d93241d44ee5daec3ecddce242bf4dad46a3867a73d8bb4d7a10e06",
-    "source/game.j": "60ce5f1a8160efb52efcc228d98f59be576ed830552ce1243a84ccdb2a789e9b",
+    "source/game.j": "a442f85cdac9b36075ca7fdbf3e845edc081d90b22cf6a7f23e49115e282af2b",
     "tools/archive_pack.py": "3774ac9d0fab23472f343dedecbc8bf696a99bae1382b6cb764166d0da88e3b2",
     "tools/authored_map.py": "87207f3f32ebf6fe95d26b5638c78cf47907e67df119227f8076fb835ee101e9",
-    "tools/build_map.py": "5bfbad9d34c5e47a030480bb7139c9ed5f0137f37cf079a8875a1152a26751f0",
+    "tools/build_map.py": "4a0ebfce773be8eb265f5a5c1a55a730872bef36043055d1fa25658d6109d06e",
     "tools/capture_authored_map.py": "d579673c877bf75ed234aa64898a8d64fcb8e0a8ca9f7511283020f3a89cbc7f",
     "tools/collect_test_logs.py": "54dcfbd1ac8930ab08319c0296ae4ea0eca22ae60a4bd08c4d2e8011cdaa3250",
     "tools/company_catalog.py": "54c30e9e7ce0bbb863496dd3398c9c939b5a541261deae2ed9c19516840ac099",
+    "tools/editor_layout.py": "7b90bb15892311251937de52e7cdc2f484097319f1e9183facd16c134c6bb8d1",
     "tools/equipment_catalog.py": "3173a8a4b51a376a4d219da4e2fb6620bedc26dbb734f91e1b3c00060a96eb7b",
     "tools/extract_game_api.py": "28ce2fa572fede5f593e7cdb64c536321924612269635ed752e2b479411e9a90",
     "tools/faction_catalog.py": "83bacb8670d54a4d43b92caecc8687d97f0e54ca1ba17de8320c3f7b108a3f7f",
@@ -34,11 +35,12 @@
     "tools/hero_catalog.py": "8768da93d42d2c206db49f6734167c0152e5e3bb606facc78c9c94704d440b16",
     "tools/hero_progression.py": "f54abb2ea12e36a71b1deaae4cf0eefc4922dc069a559ea5af98c78e8b65ccc2",
     "tools/install_diagnostic.py": "eb7e504c3867bc860be1091ba6b513c6dfe286b1c9594c4871db053b07348fd4",
+    "tools/layout_catalog.py": "83f693e583605d6d6e4e3f71615cb93491e9ddf4af42555a0e744fd2e9de85de",
     "tools/map_archive.py": "669ae74d19df0ee217f6f3f202a3eedc281403f1f487255f4363c4777084ff43",
     "tools/map_info.py": "b12be26c46ab4a0621cb0bc2ad8ff80e1d04276c2ee90252ac72312fe3ebd77f",
     "tools/objects.py": "907701f433301dedfb772abe2860049f264d147106a1565c831fa643769e6a5b",
     "tools/pack.py": "955d763127dabbb52e98ef3d1716d1dee4350a18f3abcba3fd106ef2608661b4",
-    "tools/pipeline.py": "78ce8f829f9a85a53da1359c9c804d28fb165a13e9fc2c56ca29a1491f10c462",
+    "tools/pipeline.py": "83c61d679c61b83c0aa71c0e56ca25841ae8b5e67cc6938418ac44424554fc6d",
     "tools/power_curve.py": "164af869304b93c4ac81e9a6cb4ad01061c7b896cf37b6d21793b79f9d3434c5",
     "tools/recipes.py": "8f473301901c1a3ff98602b0edd94f3dac5fb95be7c0909d555150c08a5aea79",
     "tools/render_company_catalog.py": "fcbbcb94ef749b78bca207a3c38e61be1cf3cddeaa40a567b29a7e7f9fea8f7d",
@@ -60,7 +62,7 @@
     "tools/reference/installed/UnitWeapons.slk": "54d6c5a0dfb108804c10a2876738f883c0be330a6b11c75b96b51d298afbdda9",
     "tools/reference/installed/ItemAbilityFunc.txt": "1316f482bbb23e27aebfad2aa86c2bdb120a544fef7d883726f0bdfce5600b6d",
     "tools/reference/installed/commandbuttons.txt": "0d6a7b0a5f4c4495b22ad5e7a5fcf23f531d14e1e6f175f81a65a2f125b348ae",
-    "source/authored-map/editor-layer.zip": "02423ff4f3b5fcd56dd096100507811648ba10bbfe9d82b1fc7e12527ff4fc89"
+    "source/authored-map/editor-layer.zip": "fddf6ab4b2ce31c5b3eaf723ce41d5816ede3ea09821a5091d188c1b6a4dd5f0"
   },
   "installed_api": {
     "game_root": "C:\\Program Files (x86)\\Warcraft III",
@@ -136,32 +138,32 @@
   },
   "authored_map": {
     "format_version": 1,
-    "source_build_id": "KLS-D-b0fccf974c",
-    "source_map_sha256": "5228220725849985bb49d112665a1898a61acdc40b7e431fed2a16ae0dd69110",
+    "source_build_id": "KLS-D-8048eea39b",
+    "source_map_sha256": "ebb2f449b5363b16daf4a23a5e193754df438cc3252cbb3ddaaf9d04c1db3a82",
     "members": {
       "war3map.doo": {
-        "sha256": "390abf3266720381e4d472a83ff09b0c394be471b990917b560f70b651b114a0",
-        "size": 24
+        "sha256": "f7e66ef9ca5f5bc74a12b7f93b642f4405ab66382506a179a9c625b1d1c5e1b5",
+        "size": 10696
       },
       "war3map.mmp": {
-        "sha256": "e64a2cdb7efad44401b4c843244011810b3a06f7a16bdee9c0f7384fda6ad879",
-        "size": 24
+        "sha256": "6135877f9af359c3ecc42506d04796181e23b33beb50f1e2be5e373048b31013",
+        "size": 72
       },
       "war3map.shd": {
         "sha256": "250480ecefa3655c774b6a4e5d4eb16675ee4f181c2285c25020fac6e3aaf3b5",
         "size": 589824
       },
       "war3map.w3e": {
-        "sha256": "5adbd9a68db31ef64993d44462135a94cac93f9b43344df9483e2cf6c68706e0",
+        "sha256": "ecf81ec5ad4a5fce352b5be132cbd3ee48a0f053c39aaa937e36a2e97bacc265",
         "size": 298061
       },
       "war3map.wpm": {
-        "sha256": "e9400dc852382633ca86c9708d634fbd2c2ee2f78172fe72d39805653c644ddf",
+        "sha256": "5d060ed65810d7823182ac526bae3e642b1bb14687d785ba0275cb351fe2392d",
         "size": 589840
       },
       "war3mapMap.blp": {
-        "sha256": "19c4ad054532652043bee9f943e44053ea253f812230f2af802b3bc9f7471fb5",
-        "size": 8793
+        "sha256": "172deb3b414589fbabace058d4da2fbe5ef8d9ab0bc2e35e18fd917e38095f20",
+        "size": 10040
       }
     }
   },
@@ -169,7 +171,7 @@
     {
       "name": "(attributes)",
       "size": 100,
-      "sha256": "e6608e6d9f7ca7f92645ed5700103ee3868169294595e6a9156bcedc673c7069"
+      "sha256": "0b3b35877c49fea33c2c37cad6e6b7fe9e2eee9631b203399cb350e248ba3b81"
     },
     {
       "name": "(listfile)",
@@ -183,18 +185,18 @@
     },
     {
       "name": "war3map.doo",
-      "size": 24,
-      "sha256": "390abf3266720381e4d472a83ff09b0c394be471b990917b560f70b651b114a0"
+      "size": 10696,
+      "sha256": "f7e66ef9ca5f5bc74a12b7f93b642f4405ab66382506a179a9c625b1d1c5e1b5"
     },
     {
       "name": "war3map.j",
-      "size": 330732,
-      "sha256": "447aa850522be05993b3f26d7e1cbe410322e41ab3c1c374f72fc0b84ebe5808"
+      "size": 333715,
+      "sha256": "361a5787ba94e751f60b1c30aa0790253f2230de1c860e4cea88bd41c031cc65"
     },
     {
       "name": "war3map.mmp",
-      "size": 24,
-      "sha256": "e64a2cdb7efad44401b4c843244011810b3a06f7a16bdee9c0f7384fda6ad879"
+      "size": 72,
+      "sha256": "6135877f9af359c3ecc42506d04796181e23b33beb50f1e2be5e373048b31013"
     },
     {
       "name": "war3map.shd",
@@ -214,7 +216,7 @@
     {
       "name": "war3map.w3e",
       "size": 298061,
-      "sha256": "5adbd9a68db31ef64993d44462135a94cac93f9b43344df9483e2cf6c68706e0"
+      "sha256": "ecf81ec5ad4a5fce352b5be132cbd3ee48a0f053c39aaa937e36a2e97bacc265"
     },
     {
       "name": "war3map.w3grp",
@@ -224,7 +226,7 @@
     {
       "name": "war3map.w3i",
       "size": 592,
-      "sha256": "98eba18b36b54cffcebfae6b71a13ac4b3d976813e7799908a16500333f8a456"
+      "sha256": "82653f7f26123682e96897f73f580ed565262aa015ee7d061284d47abb1b82aa"
     },
     {
       "name": "war3map.w3l",
@@ -248,18 +250,18 @@
     },
     {
       "name": "war3map.wct",
-      "size": 321215,
-      "sha256": "0bcd7f08cadbf7e49487a5b3f270956516b6369c465083b18b32aa7ad98e8a36"
+      "size": 323624,
+      "sha256": "794a73b058ff6fd9b9ac9834c5f5c9c545137426d638a30b7cf4b3a691ce4972"
     },
     {
       "name": "war3map.wpm",
       "size": 589840,
-      "sha256": "e9400dc852382633ca86c9708d634fbd2c2ee2f78172fe72d39805653c644ddf"
+      "sha256": "5d060ed65810d7823182ac526bae3e642b1bb14687d785ba0275cb351fe2392d"
     },
     {
       "name": "war3map.wtg",
-      "size": 7571,
-      "sha256": "52b9bafb15e2e136f62ab98e79c2f90e89aa6ff9cd847a4211ac6852b65b4a8d"
+      "size": 8237,
+      "sha256": "e628c8b03ccbab2fe9ff71c6b5774db980eb7b4cd35493cd6895ba3c88487566"
     },
     {
       "name": "war3map.wts",
@@ -268,8 +270,8 @@
     },
     {
       "name": "war3mapMap.blp",
-      "size": 8793,
-      "sha256": "19c4ad054532652043bee9f943e44053ea253f812230f2af802b3bc9f7471fb5"
+      "size": 10040,
+      "sha256": "172deb3b414589fbabace058d4da2fbe5ef8d9ab0bc2e35e18fd917e38095f20"
     },
     {
       "name": "war3mapMisc.txt",
@@ -278,8 +280,8 @@
     },
     {
       "name": "war3mapUnits.doo",
-      "size": 131,
-      "sha256": "f18435120b61f6ae74fbaafddd8991d561a338834b8740020067a8328494ee6a"
+      "size": 540,
+      "sha256": "530a6cf875bfbb39cddd8ce69018fd7708e7f0f026f66a9698cedb33b7752bd4"
     }
   ],
   "checks": {

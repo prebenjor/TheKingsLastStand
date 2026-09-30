@@ -21,3 +21,7 @@ After dressing the current build in World Editor, save a copy and close the map.
 The capture checks that the map carries the build ID in the current `dist/build-manifest.json`, validates the 192 × 192 terrain/pathing extent, stores source-map and per-layer checksums, and rejects unexpected archive members. If `--map` is omitted, the exact checksum-verified current package seeds or refreshes the authored layer. The next build hashes and includes this bundle; without a bundle, the existing procedural terrain generation remains the fallback. Inspect the result in World Editor after building because edited terrain, pathing and placed doodads must still agree for navigation.
 
 Do not capture an older build under the current ID. If the chosen saved map no longer identifies the current build, rebuild/install the current package first, then reopen that exact map and reapply or carry forward the desired art before capturing.
+
+## Visible buildings while editing
+
+After capturing the saved, closed current map, run `python -X utf8 -B tools/build_map.py --prepare-editor` to create the current `build/<build-id>-Development-Terrain.w3m`. This copy includes disposable references for shops, towns, quest sites, castle, spring, bases and the hero hub. The installed Development package remains the normal gameplay map. See [EDITOR-LAYOUT.md](docs/EDITOR-LAYOUT.md) for shared placement sources, Neutral Extra cleanup and the limits of moving reference units. Preserve/close old work copies before replacing or archiving them.
