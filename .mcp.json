@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "wc3-forge": {
+      "command": "C:\\Program Files\\wc3-forge\\wc3-forge.exe",
+      "args": ["--mcp"]
+    }
+  }
+}

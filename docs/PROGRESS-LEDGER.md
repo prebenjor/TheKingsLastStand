@@ -1,5 +1,11 @@
 # Current status — 2026-09-30
 
+## wc3-forge branch set up — no map mutation
+
+- Created branch `wc3-forge` with [workshop/wc3-forge/README.md](../workshop/wc3-forge/README.md), a root `.mcp.json` registering `wc3-forge.exe --mcp`, and work copy `workshop/wc3-forge/KLS-D-68303d69bf-Forge.w3m` (byte-identical to the current package, SHA-256 `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`).
+- wc3-forge is not yet installed or connected. No map was opened, edited, built or installed; no tests were run. The user's World Editor revision (village removal, cliffs, troll camp) is not in the repository, so it is not in this copy.
+- Next human action: install wc3-forge, open the work copy (or the authored revision), and connect its MCP server per the README; then run the no-change round-trip check from the assessment.
+
 ## User-authored layout revision — reported, source integration pending
 
 - User reports removing the entire Orc village, replacing gates with cliffs and placing a troll camp. Their authored doodad/unit/terrain composition becomes the visual direction. Updated the game vision/spec, Crownlands story, workshop and future-agent rules; [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) records the changes and pending source dependencies.
