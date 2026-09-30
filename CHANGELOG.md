@@ -1,5 +1,10 @@
 # Build changelog
 
+## 2026-10-01 — Forge draw-loop crash correction
+
+- User screenshot showed that successful model loading had not restored visible rendering. Diagnostics confirmed a crashed draw loop dereferencing a missing neutral-player texture.
+- Allocate the modern 28-color palette and initialize it for HD batches. Reopened the untouched map in wc3-forge-draw-fixed.exe; frame pump continues across zoom levels without the prior exception. Visual fidelity is awaiting viewport confirmation, since screenshot capture is unavailable.
+
 ## 2026-10-01 — Forge missing unit/scenery rendering repair
 
 - Added DE asset fallback, modern model skin/light parsing, mode-specific stock model keys and the stock decal casing correction. The visible corrected editor loads 98 units, four start markers and all 1,100 doodads with no skipped or empty models.

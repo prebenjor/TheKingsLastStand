@@ -58,13 +58,32 @@ index 0000000..6117360
 +	}
 +}
 diff --git a/frontend/src/mdx-parser-patch.ts b/frontend/src/mdx-parser-patch.ts
-index ab93c62..258cf28 100644
+index ab93c62..6ad5582 100644
 --- a/frontend/src/mdx-parser-patch.ts
 +++ b/frontend/src/mdx-parser-patch.ts
-@@ -113,6 +113,103 @@ export function patchMdxParser(): void {
+@@ -92,6 +92,7 @@ import animationMapModule from 'mdx-m3-viewer/dist/cjs/parsers/mdlx/animationmap
+ // lib's HD batch render hardcodes blend-off + depth-write-on, which turns
+ // additive/blended HD layers (e.g. the Circle of Power's glow rings) into
+ // opaque dark quads. See patchHdBlending below.
++import handlerModule from 'mdx-m3-viewer/dist/cjs/viewer/handlers/mdx/handler.js'
+ import batchGroupModule from 'mdx-m3-viewer/dist/cjs/viewer/handlers/mdx/batchgroup.js'
+ import geosetModule from 'mdx-m3-viewer/dist/cjs/viewer/handlers/mdx/geoset.js'
+ 
+@@ -113,6 +114,114 @@ export function patchMdxParser(): void {
      throw new Error('mdx-parser-patch: cannot find Layer/Material classes')
    }
  
++  // Modern maps use player slots 0..27 even with Classic model assets.
++  // The legacy handler allocates only 16 colors in Classic mode; HD batches
++  // dereference the missing neutral owner color and abort the entire draw loop.
++  const Handler: any = (handlerModule as any).default ?? handlerModule
++  const originalTeamLoad = Handler.loadTeamTextures
++  Handler.loadTeamTextures = function(viewer: any): void {
++    const cache = viewer.sharedCache.get('mdx')
++    const previous = cache.reforged
++    cache.reforged = true // Allocate all 28 colors; asset resolver supports DDS/BLP siblings.
++    try { originalTeamLoad.call(this, viewer) } finally { cache.reforged = previous }
++  }
 +  // Schema: HiveWE mdx_reader.cpp read_GEOS/read_LITE, confirmed with installed VERS=1800 assets.
 +  // DE widens SKIN elements to uint16 from VERS 1400. Keep renderer data byte based.
 +  const ParserGeoset = MV.parsers.mdlx.Geoset
@@ -165,6 +184,14 @@ index ab93c62..258cf28 100644
    // Save the lib's original Layer.readMdx so files with VERS < 1100 still
    // go through the lib's well-tested path.
    const origLayerReadMdx = Layer.prototype.readMdx
+@@ -453,6 +562,7 @@ export function patchMdxParser(): void {
+     BatchGroup.prototype.render = function patchedRender(this: any, instance: any): void {
+       // Only HD batch groups need the fix; SD already blends via layer.bind().
+       if (this.isHd) {
++        Handler.loadTeamTextures(this.model.viewer)
+         const batches = this.model?.batches || []
+         for (const idx of this.objects) {
+           const batch = batches[idx]
 diff --git a/frontend/src/scene-instances.ts b/frontend/src/scene-instances.ts
 index f847c83..1cfee9e 100644
 --- a/frontend/src/scene-instances.ts

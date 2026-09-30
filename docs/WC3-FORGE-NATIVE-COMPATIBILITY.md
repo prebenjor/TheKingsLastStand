@@ -111,3 +111,12 @@ The visible final session loaded all **98 non-start units + four start markers**
 These are live renderer diagnostics, not a screenshot comparison: computer-use initialization remains unavailable on this host. One cliff cell still has an unresolved mesh and the viewer reports 29 cliff/texture lookup warnings (including optional variant attempts). Do not call the entire renderer warning-free or claim complete visual fidelity. Human terrain/runtime integration and gameplay acceptance are separate.
 
 The combined reproducible `native-compat.patch` includes these repairs. Build as above, using the current executable name, and keep both runtime DLLs beside it. No game assets or executables are checked into this repository.
+
+
+## Draw-loop correction after user screenshot — 2026-10-01
+
+The prior zero-skip result proved model loading, not visible rendering. The user's screenshot of PID 55792 disproved the earlier completion claim. Live diagnostics then showed `crashed=true`, frame 3758, `TypeError: Cannot read properties of undefined (reading 'texture')`; the frame pump had stopped.
+
+The Classic-mode viewer allocated only 16 team textures. Modern neutral ownership requires slots through 27, and the HD batch reader dereferences those textures without checking. Allocate the full modern 28-slot palette and ensure HD batches initialize it even when the material carries literal team texture paths. Model mode and map ownership remain unchanged.
+
+Current executable / MCP registration: `wc3-forge-draw-fixed.exe`. The reopened visible editor remains running after camera distances 9,000, 3,500 and 21,000; observed frames increased from 5,436 to 9,317, with `crashed=false`, a live frame pump, empty crash reason and GL error zero. No user map edits or saves occurred. Screenshot capture through Computer Use still fails to initialize, so visible model fidelity requires the user's viewport confirmation. Do not equate load counts with a completed visual check.
