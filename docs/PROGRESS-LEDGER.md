@@ -1,5 +1,15 @@
 # Current status — 2026-09-30
 
+## Editor Workshop setup — current map remains KLS-D-68303d69bf
+
+- Approved editor-first eight-chapter walkthrough is implemented in [EDITOR-WORKSHOP.md](EDITOR-WORKSHOP.md), with a finite end at Chapter 7 and [handoff/integration protocol](EDITOR-WORKSHOP-HANDOFF.md). Human chapters remain pending, beginning with Chapter 0's clean native save/close.
+- `tools/editor_workshop.py` preserves immutable native baselines and edited archives, reports moves/facing by creation identity, normalizes v2/v3 object/rank fields, and reports art, trigger/custom script and unrecognized member changes. No gameplay data is imported automatically. Trigger translation and actual runtime placement updates happen after each human handoff.
+- Verification: 11 new workshop regressions passed; full suite **199 tests passed, 0 failures, 0 errors**, recorded in `test-results/editor-workshop-suite.txt`. Decoder also read the user's archived native KLS-D-8048eea39b map: nine unit records and 935 unit / 797 item / 1,838 ability semantic entries. That older map is a format check only, not the new baseline.
+- Final independent read-only review identified incomplete listfile coverage. Added a regression (failed before implementation, passed after) and active MPQ hash-entry coverage warnings. Final suite: **200 tests passed, 0 failures, 0 errors** in `test-results/editor-workshop-suite-final.txt`. Both the native archive and current editing copy have zero unlisted active entries and zero self-comparison changes; current copy decodes all 89 unit records. No deferred review findings remain.
+- Current Terrain SHA-256 remains `89e91629ddaa0c1534114f0a2d033cdb00da02924d644129bd5b02d5ed0b48c1`; gameplay package SHA-256 remains `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. No new gameplay package/install or current editor/game acceptance is claimed.
+- Ruling: retain the current map while adding workshop documentation/review tooling — the human's Chapter 0 baseline must correspond to the announced copy; rebuilding now would unnecessarily change that handoff. Future source builds include the new tools in their source provenance hash.
+- Next human action: open `build/KLS-D-68303d69bf-Development-Terrain.w3m`, confirm references, save without further edits, close, then report “Chapter 0 baseline saved and closed.” Only then archive the chapter-1 native baseline. Later regenerated chapter copies need a native save baseline before deliberate edits.
+
 ## Saved terrain and editor-visible layout — KLS-D-68303d69bf
 
 - Current DEVELOPMENT package: `dist/KLS-D-68303d69bf-Development.w3m`; SHA-256: `baa024fd2b23ec03ef0ccbb6de5a2345a292fe82a4a03f9345b73c95b4d0b1c3`. Installed in the established `Documents/Warcraft III/Maps/TheKingsLastStand/` folder with matching bytes; previous installed/dist versions archived.

@@ -1,5 +1,9 @@
 # Build the diagnostic map
 
+## Workshop handoffs
+
+Use [EDITOR-WORKSHOP.md](docs/EDITOR-WORKSHOP.md) and [EDITOR-WORKSHOP-HANDOFF.md](docs/EDITOR-WORKSHOP-HANDOFF.md) for the approved editor-first workflow. `tools/editor_workshop.py baseline` archives a clean native editor save; `review` archives a later chapter save and reports semantic placement/object changes plus trigger/script differences. Both require the human's saved/closed confirmation. Review reports import nothing automatically: port deliberate gameplay changes to generators/modules, and keep six-layer art capture separate. Archive originals under `backups/editor-workshop/` outside the installed test folder. Establish a fresh native baseline after each regenerated work copy before intentional edits.
+
 Read docs/TECHNICAL-ARCHITECTURE.md for the build contract. From the repository root, run:
 
     python -B tools/extract_game_api.py

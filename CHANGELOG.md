@@ -1,5 +1,12 @@
 # Build changelog
 
+## 2026-09-30 — Editor Workshop tooling (no new map package)
+
+- Added the approved finite eight-chapter editor guide, source navigation, checklists and human handoff form.
+- Added native baseline preservation and review reports for terrain, unit creation identities/moves/facing, v2/v3 object fields/ranks, and trigger/custom script changes. Complete original archives are preserved; gameplay integration remains an explicit source review step.
+- Current gameplay/terrain copies remain KLS-D-68303d69bf. Chapter 0 awaits the human's native save/close. No workshop edits or current engine passes are claimed by this tooling entry.
+- Verification: 12 workshop regressions and the final full 200-test suite passed. Final review's missing-listfile coverage finding was corrected. Native/generated unit/object decoding and archive inventory coverage were checked; both current map hashes remain unchanged.
+
 ## KLS-D-68303d69bf - 2026-09-30
 
 - Captured the user's saved grass/path/terrain work from `KLS-D-8048eea39b`, preserving the six supported art layers and an archived original. Removed startup road/plot/hero-hub texture painting that would overwrite manual art.
