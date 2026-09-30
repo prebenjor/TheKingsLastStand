@@ -74,7 +74,7 @@ at `cmd/nativecheck/main.go`.
 4. Build the locked frontend with `npm ci`, then `npm run build` in `frontend`.
 5. Build from the checkout root with Go:
    `go build -tags desktop,production -ldflags "-H windowsgui" -o build/bin/wc3-forge-compatible.exe .`
-6. Place the installed forge's `CascLib.dll` beside the executable.
+6. Place both installed Forge runtime DLLs, CascLib.dll and zlib1.dll, beside the executable.
 7. Run `go run ./cmd/nativecheck <extracted-fixture-folder>` against an isolated
    full map extraction, then repeat the MCP save and archive comparison.
 
@@ -89,3 +89,7 @@ Preserve the removed Orc village, cliff defenses, troll camp and all authored
 terrain/doodads/units. Forge compatibility does not integrate those placements
 into the runtime catalogs. Continue the workshop handoff separately; keep the
 immutable human save and compare every intentional change before integration.
+
+## Asset-loading correction
+
+The first visible open had black terrain and no models because zlib1.dll was missing beside CascLib.dll. Runtime diagnostics explicitly reported failure to load CascLib.dll. Copied the installed Forge zlib1.dll into the patched bin folder; direct DLL loading then succeeded. Restarted the unchanged visible editor and reopened the same Forge copy. Live diagnostics now show CASC hits, healthy terrain/cliff/water tables with no poisoned caches, 89 rendered units and 1,084 rendered doodads (four start markers separately). Nine unit records and sixteen doodads still skip rendering; this remains an asset-resolution limitation, not a claimed complete visual pass. No map edits or saves occurred.

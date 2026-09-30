@@ -1,5 +1,10 @@
 # Build changelog
 
+## 2026-10-01 — Forge runtime asset dependency correction
+
+- Restored the missing zlib1.dll dependency beside the patched CascLib.dll. Restarted the visible Forge window and reopened the unchanged working map.
+- Live diagnostics show CASC and terrain tables loading, 89 unit models and 1,084 doodads rendered; remaining skipped models are unresolved. Both Terrain and Forge map hashes remain unchanged.
+
 ## 2026-10-01 — Native wc3-forge compatibility (no new gameplay package)
 
 - Built a separate patched forge supporting native W3I39 and unit/doodad13 read/write, preserving groups, tilt, lights and native scale values. Updated MCP registration to the patched executable.
