@@ -1,5 +1,12 @@
 # Build changelog
 
+## 2026-09-30 — wc3-forge MCP setup (no new map package)
+
+- Registered and exercised the owner's installed wc3-forge MCP connection: initialization, 153-tool discovery and selection of the live editor succeeded.
+- Archived the latest saved Terrain map completely, including all 102 placed-unit records and native editor members. Original, archive and separate trial retain SHA-256 `e8313363d7bcb07a3eb80cb8fd63626f115a07d7184445f89022057c708bfaff`.
+- Trial `map_open` failed on native W3I-39 metadata due to forge's older parser layout. Documented exact error, format evidence and lossless compatibility prerequisites; no map save, downgrade, edits, rebuild or installation occurred.
+- Current gameplay package remains KLS-D-68303d69bf; current engine/multiplayer acceptance remains pending. The prior successful Test Map remains credited.
+
 ## 2026-09-30 — Friend-agent handoff (documentation; no new map package)
 
 - Added a portable copy of the current plan with mandatory Markdown reading order, strict visual boundaries, preservation of the user's additions/deletions, town/story changes, all four race identities, hero/building IDs, companies, items, AI behavior and a prioritized bug/evidence register.

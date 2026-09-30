@@ -2,6 +2,10 @@
 
 User reference: [StephenSHorton/wc3-forge](https://github.com/StephenSHorton/wc3-forge).
 
+## Subsequent authorized connection attempt
+
+The owner subsequently installed/launched forge and explicitly requested connection and map work. See [WC3-FORGE-CONNECTION.md](WC3-FORGE-CONNECTION.md): Codex MCP is registered, initialization and 153-tool discovery succeed, and the latest saved map is completely archived. Loading a separate trial copy fails in forge's W3I parser on native metadata version 39. No map save/edit/conversion occurred. The sections below preserve the earlier assessment; their "not installed/connected" state is historical.
+
 ## Could we use it?
 
 **Yes, as a candidate authoring tool. Exact map compatibility is unverified.** It is a separate map editor, not a control interface for the already-open Blizzard World Editor.

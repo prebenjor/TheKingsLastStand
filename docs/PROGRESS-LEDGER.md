@@ -1,5 +1,12 @@
 # Current status — 2026-09-30
 
+## Authorized wc3-forge MCP connection — map-load compatibility blocker
+
+- Registered the installed forge `--mcp` executable in Codex after backing up the existing global config. Actual MCP initialization/tool discovery succeeded (153 tools); selected live editor PID 62292 and confirmed it had no map loaded. Existing configured servers remain.
+- Preserved latest saved Terrain disk bytes (306,165 bytes; SHA-256 `e8313363d7bcb07a3eb80cb8fd63626f115a07d7184445f89022057c708bfaff`) under `backups/wc3-forge/20260930-e8313363d7bc/`. Native read-only inspection found 26 members, no unlisted MPQ entries and 102 placed units. No clean pre-edit baseline or complete human save confirmation is inferred.
+- Opening a separate trial copy through MCP failed in `war3map.w3i`: `tech count 12800 exceeds 289 bytes remaining ... offset 301 ... unexpected EOF`. Input W3I is native version 39; published forge parser handles older layouts through 33 and misreads this newer layout. Further native formats remain unverified. See [WC3-FORGE-CONNECTION.md](WC3-FORGE-CONNECTION.md).
+- Original/archive/trial bytes remain unchanged. No save, conversion, map edits, art capture, gameplay build/install or regression suite occurred. Current gameplay package remains KLS-D-68303d69bf. Next: explicit lossless forge format compatibility before authoring, preserving all human additions and deletions. Reload Codex to expose the configured MCP server directly; this turn used the actual endpoint through a temporary stdio client.
+
 ## Friend-agent documentation handoff
 
 - Created [FRIEND-AGENT-HANDOFF-2026-09-30.md](FRIEND-AGENT-HANDOFF-2026-09-30.md): portable approved plan, required reading, strict visual/preservation boundaries, all four racial systems, heroes/companies/items, town/story integration, AI source gaps, reported bug evidence, source navigation and ordered work/checks.
