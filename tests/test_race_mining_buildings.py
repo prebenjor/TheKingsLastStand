@@ -43,7 +43,9 @@ class RaceMiningAndBuildings(unittest.TestCase):
         for faction in FACTIONS:
             menu = records[faction['worker']][1][('ubui', 0)][0].split(',')
             self.assertEqual(menu, faction['build_menu'], faction['race'])
-            self.assertEqual(len(menu), 12)
+            self.assertLessEqual(len(menu), 11)
+            expansion=records[faction['expansion_worker']][1][('ubui',0)][0].split(',')
+            self.assertEqual(expansion,faction['expansion_menu'])
             for role, entry in faction['company_buildings'].items():
                 base, fields = records[entry['rawcode']]
                 self.assertEqual(base, entry['parent'], (faction['race'], role))
@@ -114,7 +116,7 @@ class RaceMiningAndBuildings(unittest.TestCase):
             'hcas': ('hbar', 'hbla', 'h000'),
             'ostr': ('obar', 'ofor', 'kA01'),
             'etoa': ('eaom', 'edob', 'kA02'),
-            'unp1': ('usep', 'uslh', 'kA03'),
+            'unp1': ('usep', 'ugrv', 'kA03'),
         }
         installed_units = slk('UnitData.slk')
         for hall, requirements in expected.items():

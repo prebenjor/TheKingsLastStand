@@ -88,7 +88,7 @@ class ResearchBehavior(unittest.TestCase):
                  GetUnitTypeId=lambda u:u['kind'],GetHandleId=lambda u:17,
                  KLS_Active=[True]*4,KLS_HeroChoice=[0,0,0,0],
                  KLS_CompanyUnitId=['kC00'],KLS_CompanySupportId=['kS00'],
-                 KLS_CompanyUnitHP=[900],KLS_CompanySupportHP=[650],
+                 KLS_CompanyUnitHP=[900],KLS_CompanySupportHP=[650],KLS_SpecialistIndex=lambda rawcode:-1,
                  KLS_CompanyUnitDamage=[34],KLS_CompanySupportDamage=[22],
                  KLS_CompanyFoundry=[True,False,False,False],
                  KLS_CompanyResearchRank=ranks,KLS_CompanyUpgradeData=table,

@@ -14,6 +14,9 @@ if __name__ == '__main__':
     parser.add_argument('--forest-camps', action='store_true', help='Include the approved one-time forest camps in the editor handoff')
     parser.add_argument('--dress-forest', help='Apply catalog dressing to the currently open dedicated Forge folder')
     parser.add_argument('--forge-lock', help='Selected Forge MCP lockfile for live dressing')
+    parser.add_argument('--racial-action', choices=('prepare','refresh','apply','package','audit'), help='Preservation-first racial construction/recruitment handoff')
+    parser.add_argument('--racial-folder', help='New or prepared racial MCP work folder')
+    parser.add_argument('--worker-page-prototype', action='store_true', help='Grant worker page buttons ONLY in the separate native-acceptance prototype')
     parser.add_argument('--import-market-layout', help='Import saved native shop moves by creation identity into the source catalog')
     parser.add_argument('--dress-countryside', help='Apply fitted countryside catalog to the dedicated open Forge folder')
     parser.add_argument('--countryside-editor-map', help='Saved countryside folder for targeted market/group/pathing handoff')
@@ -27,6 +30,23 @@ if __name__ == '__main__':
     parser.add_argument('--refresh-hero-market', action='store_true', help='Refresh typed main/skin payloads after verified source refinements')
     parser.add_argument('--audit-hero-market', action='store_true', help='Read every hero skill and signature through MCP and capture display metadata')
     args = parser.parse_args()
+    if args.racial_action:
+        if not args.racial_folder:parser.error('--racial-folder is required')
+        from racial_handoff import prepare,refresh,apply,package,audit
+        if args.racial_action=='prepare':
+            if not args.editor_baseline or not args.forge_lock:parser.error('Prepare requires --editor-baseline and --forge-lock')
+            print(prepare(args.editor_baseline,args.racial_folder,args.forge_lock))
+        elif args.racial_action=='refresh':print(refresh(args.racial_folder))
+        elif args.racial_action=='apply':
+            if not args.forge_lock:parser.error('Apply requires --forge-lock')
+            print(apply(args.racial_folder,args.forge_lock))
+        elif args.racial_action=='audit':
+            if not args.forge_lock:parser.error('Audit requires --forge-lock')
+            print(audit(args.racial_folder,args.forge_lock))
+        else:
+            if not args.editor_output:parser.error('Package requires --editor-output')
+            print(package(args.racial_folder,args.editor_output,args.worker_page_prototype))
+        raise SystemExit(0)
     if args.prepare_hero_market or args.apply_hero_market or args.package_hero_market or args.refresh_hero_market or args.audit_hero_market:
         if not args.hero_market_folder or sum(bool(x) for x in (args.prepare_hero_market,args.apply_hero_market,args.package_hero_market,args.refresh_hero_market,args.audit_hero_market)) != 1:
             parser.error('Choose one hero/market action with --hero-market-folder')

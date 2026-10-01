@@ -1,8 +1,10 @@
 # The King's Last Stand
 
-Latest downloadable DEVELOPMENT handoff: [Hero and Market Repairs R2](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261001-hero-market-r2). [Download map](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261001-hero-market-r2/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m).
+Latest DEVELOPMENT handoff: [Racial construction and recruitment repairs](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261002-racial-repairs), build **KLS-D-1f003ecdb7**. [Download regular handoff](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261002-racial-repairs/KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m). [Download worker-switching test prototype R5](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261002-racial-repairs/KLS-Racial-Worker-Prototype-R5-20261002.w3m).
 
-Latest changes: 25-hero object audit, safe ten-rank skills, king healing, original-handle purchase retries, 99-stock tomes, one-second paid healing and reduced consumable drops. Countryside is preserved. Native gameplay acceptance and the sale-popup discrepancy remain open; see [verification report](docs/HERO-MARKET-REPAIRS-20261001.md).
+Latest changes: restored native racial construction rosters, recruitment reconciliation for 50 company units, eight timed-training specialists and a fresh 25-hero audit. Countryside and R2 inventory/healing/market/loot repairs are preserved. **Expansion-page switching remains gated pending native acceptance**, so the regular handoff cannot yet construct expansion facilities. Earlier Prototype R2 failed the Undead switching test; R5 corrects its native Chaos parent and requires retesting. Compilation/preservation passed; 241 of 243 tests passed with two known baseline failures. Native queue/power/multiplayer checks and the sale-popup discrepancy remain open. See [verification and remaining checks](docs/RACIAL-CONSTRUCTION-20261002.md) and [building matrix](docs/BUILDING-ACCESS-20261002.md).
+
+Previous immutable [Hero and Market Repairs R2 prerelease](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261001-hero-market-r2) remains downloadable. The historical sections below describe their own builds.
 
 ## Current hero and market handoff — 2026-10-01
 

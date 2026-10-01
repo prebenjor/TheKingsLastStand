@@ -1,5 +1,11 @@
 # Instructions for future agents
 
+## Current racial handoff — 2026-10-02
+
+Continue from `build/KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m`, build KLS-D-1f003ecdb7, SHA256 `2793d5d6f815709d46953568743864ccbf09b8ea55f3915206322158ca7b5c14`. Read `docs/RACIAL-CONSTRUCTION-20261002.md` and the building matrix. Expansion construction is deliberately gated; Prototype R5 is the separate native test artifact. User tested Undead in obsolete Prototype R2 and switching failed. R5 corrects the Chaos parent; do not enable the production gate without all four races' native evidence. Preserve the targeted R2 signature behavior, countryside, placements, inventory/economy and known sale-popup discrepancy.
+
+Every new DEVELOPMENT handoff must be published as an immutable GitHub prerelease to `prebenjor/TheKingsLastStand`, with map assets, hashes/preservation manifests, verification report and current source. Update README with latest build/download/changelog/open checks and add dated immutable CHANGELOG entries. Keep map binaries, credentials, caches and installed Blizzard data outside source history. Follow BUILDING.md. Automatic review rejected direct main publication; use the repair branch and a concrete PR pending explicit merge approval.
+
 ## Current hero and market handoff — 2026-10-01
 
 Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.

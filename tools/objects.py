@@ -43,6 +43,14 @@ def units():
     zero_hero_growth = {'ustp':0.0,'uinp':0.0,'uagp':0.0}
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
+    # Preserve racial construction and standard production, with unique native
+    # build-card positions. Expansion definitions are packaged separately until
+    # the same-handle worker-switching engine acceptance gate is satisfied.
+    for faction in FACTIONS:
+        for index,building in enumerate(faction['standard_menu']):
+            if building == faction['altar']:
+                continue
+            original.append(record(building,'\0'*4,{'ubpx':index%4,'ubpy':index//4}))
     # Each race builds a custom altar child rather than Warcraft's stock altar.
     # Native tier-two town halls still require the stock altar rawcode, which
     # makes the displayed Altar of Kings requirement impossible to satisfy.
@@ -53,7 +61,7 @@ def units():
         # Night Elf Tier Two core upgrades must use Tier One buildings. The
         # former Ancient of Wind/Lore requirements both require Tree of Ages.
         ('etoa', 'eaom', 'edob', 'kA02'),
-        ('unp1', 'usep', 'uslh', 'kA03'),
+        ('unp1', 'usep', 'ugrv', 'kA03'),
     )
     original.extend(record(town_hall, '\0\0\0\0', {
         'ureq': ','.join((barracks, blacksmith, altar))})
@@ -133,6 +141,7 @@ def units():
                 'ulum':entry['lumber'], 'ubld':entry['build_time'],
                 'uhpm':entry['hit_points'], 'ureq':faction['barracks'], 'ures':'', 'urev':0,
                 'uabi':'', 'utra':'', 'uupt':'',
+                'ubpx':('hall','foundry','siege_yard').index(role),'ubpy':0,
             }
             if role in ('hall','foundry','siege_yard'):
                 fields['uabi'] = 'Aneu,Apit,Asid,Asud'
@@ -160,11 +169,42 @@ def units():
         }
         custom.append(record(entry['company_parent'],entry['company_id'],company_fields))
         custom.append(record(entry['support_parent'],entry['support_id'],support_fields))
+    from racial_catalog import racial_unit_records,SPECIALISTS
+    # Add native queues to completed banner halls and support yards. Sell-unit
+    # stock remains personal and occupies other command-card cells.
+    for faction_index,faction in enumerate(FACTIONS):
+        for role,offset in (('hall',0),('siege_yard',1)):
+            identity=faction['company_buildings'][role]['rawcode']
+            for index,row in enumerate(custom):
+                if row[4:8].decode()==identity:
+                    # Reconstruct this known generator row with its existing fields.
+                    entry=faction['company_buildings'][role]
+                    fields=dict(unam=entry['name'],utip='Build '+entry['name'],utub=entry['tooltip'],ugol=entry['gold'],ulum=entry['lumber'],ubld=entry['build_time'],uhpm=entry['hit_points'],ureq=faction['barracks'],ures='',urev=0,uabi='Aneu,Apit,Asid,Asud,Aral',uabs='Aneu,Apit,Asid,Asud,Aral',utra=SPECIALISTS[faction_index*2+offset]['id'],uupt='',ubpx=0,ubpy=0)
+                    custom[index]=record(entry['parent'],identity,fields)
+    custom.extend(racial_unit_records(record))
+    # Apply positions without discarding authored custom object fields.
+    from hero_market_handoff import object_rows
+    for index,row in enumerate(custom):
+        rawcode=row[4:8].decode()
+        placement=None
+        for faction in FACTIONS:
+            if rawcode==faction['altar']:placement=(3,0)
+            elif rawcode in faction['expansion_menu']:
+                n=faction['expansion_menu'].index(rawcode);placement=(n%4,n//4)
+        if rawcode in {e['company_id'] for e in HERO_COMPANIES}|{e['support_id'] for e in HERO_COMPANIES}:placement=(3,0)
+        if placement is not None:
+            _,tables=object_rows(table([], [row]))
+            fields={f[0]:f[4] for f in tables[1][0]['fields']}
+            fields.update(ubpx=placement[0],ubpy=placement[1])
+            custom[index]=record(row[:4].decode(),rawcode,fields)
     custom.append(record('ngme','hS00',{'unam':'Kingdom Merchant','usei':'','umki':'','uabi':'Avul,Aneu,Apit,Asid,Asud','utub':'Select to browse equipment. Bring your hero within 700 range to buy.'}))
     custom.append(record('hars','hS02',{'unam':"Sage's Archive",'utip':"Sage's Archive",'utub':'A quiet shop for permanent Strength, Agility and Intelligence tomes. Select your hero before buying.','uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
     custom.append(record('hcas','hC01',{"unam":"King Aldric's Castle",'uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
     custom.append(record('hpea','hS01',{'unam':'Frost effect','uabi':'Aloc,ASl0','umdl':'','umvs':0,'ucol':0.0,'umpm':100,'umpi':100,'ufoo':0}))
     return table(original, custom)
+
+def racial_buffs():
+    return table([], [record(parent,identity,{'fnam':'Binding Thorns','ftip':'Binding Thorns','fube':'Movement bound by Thorn Sentinel roots.'}) for parent,identity in (('Beng','rBr0'),('Bena','rBa0'))])
 
 
 from equipment_catalog import color_rarity_text, item_catalog

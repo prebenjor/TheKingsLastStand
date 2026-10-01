@@ -1,5 +1,13 @@
 # Build changelog
 
+## 2026-10-02 — Racial repairs, native gate pending
+
+- Regular handoff **KLS-D-1f003ecdb7**: `KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m`, SHA256 `2793d5d6f815709d46953568743864ccbf09b8ea55f3915206322158ca7b5c14`.
+- Separate worker prototype **KLS-D-5ec0710adf**: `KLS-Racial-Worker-Prototype-R5-20261002.w3m`, SHA256 `a1aeeb10bb9352a940adc9369b954c58caafd36625e89ebbafb83db2d2ad2856`.
+- Restore native racial standard construction, prerequisite links and positions; repair company stock/completion/ownership/rebuilding; add eight timed-training racial specialists with nonstacking powers and company research participation. Preserve all R2 hero, inventory, market, healing, loot and authored content.
+- JASS compilation, preservation, reopened MCP audit and native-format round trips pass. 243 tests: 241 pass, two baseline failures remain. Undead switching failed in obsolete Prototype R2; native Chaos parent corrected in R5, retest pending. Expansion construction stays disabled in the regular map until native acceptance. Queue/power/multiplayer gameplay and sale-popup discrepancy remain open.
+- [Immutable prerelease and downloads](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261002-racial-repairs); [verification report](docs/RACIAL-CONSTRUCTION-20261002.md).
+
 ## Current hero and market handoff — 2026-10-01
 
 Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.

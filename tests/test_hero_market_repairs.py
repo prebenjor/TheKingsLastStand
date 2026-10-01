@@ -56,32 +56,35 @@ class HeroMarketRepairs(unittest.TestCase):
 
     def test_signature_healing_target_matrix(self):
         script=(ROOT/'source/signatures.j').read_text()
-        for level in (1,50):
-            for king_life in (0,500,1000):
-                hero=SimpleNamespace(owner=0,life=1000,maximum=1000,structure=False)
-                king=SimpleNamespace(owner=15,life=king_life,maximum=1000,structure=False)
-                ally=SimpleNamespace(owner=1,life=100,maximum=1000,structure=False)
-                neutral=SimpleNamespace(owner=15,life=100,maximum=1000,structure=False)
-                building=SimpleNamespace(owner=0,life=100,maximum=1000,structure=True)
-                enemy=SimpleNamespace(owner=11,life=1000,maximum=1000,structure=False)
-                targets=[king,ally,neutral,building,enemy];hits=[]
-                env=dict(KLS_Hero={0:hero},KLS_Active={0:True},KLS_Ended=False,KLS_King=king,KLS_HeroCount=25,
-                    KLS_SignatureId={i:f'AK{i:02d}' for i in range(25)},KLS_SignatureName={15:'Last Light'},
-                    KLS_SignatureHeal={15:200},KLS_SignatureMana={15:0},KLS_SignatureDamage={15:240},KLS_SignatureExtra={15:0},KLS_SignatureCount={15:0},
-                    GetTriggerUnit=lambda:hero,GetOwningPlayer=lambda u:u.owner,GetPlayerId=lambda p:p,GetHeroLevel=lambda u:level,
-                    GetSpellTargetX=lambda:0,GetSpellTargetY=lambda:0,GetSpellAbilityId=lambda:'AK15',
-                    KLS_Log=lambda *a:None,I2S=str,DestroyEffect=lambda *a:None,AddSpecialEffect=lambda *a:None,AddSpecialEffectTarget=lambda *a:None,
-                    CreateGroup=lambda:targets,GroupEnumUnitsInRange=lambda *a:None,FirstOfGroup=lambda g:g[0] if g else None,
-                    GroupRemoveUnit=lambda g,u:g.remove(u),DestroyGroup=lambda *a:None,GetWidgetLife=lambda u:u.life,
-                    IsUnitType=lambda u,t:u.structure,UNIT_TYPE_STRUCTURE=0,IsUnitEnemy=lambda u,p:u.owner==11,
-                    IsUnitAlly=lambda u,p:u.owner!=11,BlzGetUnitMaxHP=lambda u:u.maximum,RMinBJ=min,
-                    SetWidgetLife=lambda u,v:setattr(u,'life',v),UnitDamageTarget=lambda *a:hits.append(a),
-                    ATTACK_TYPE_MAGIC=0,DAMAGE_TYPE_MAGIC=0)
-                compile_handler(script,'KLS_SignatureCast',env);env['KLS_SignatureCast']()
-                self.assertEqual(king.life,min(1000,king_life+200+15*level) if king_life>.405 else king_life)
-                self.assertEqual(ally.life,min(1000,100+200+15*level))
-                self.assertEqual(neutral.life,100);self.assertEqual(building.life,100)
-                self.assertEqual(len(hits),1)
+        from signature_spells import SIGNATURES
+        for index,signature in enumerate(SIGNATURES):
+            if signature[3] <= 0:continue
+            for level in (1,50):
+                for king_life in (0,500,1000):
+                    hero=SimpleNamespace(owner=0,life=1000,maximum=1000,structure=False)
+                    king=SimpleNamespace(owner=15,life=king_life,maximum=1000,structure=False)
+                    ally=SimpleNamespace(owner=1,life=100,maximum=1000,structure=False)
+                    neutral=SimpleNamespace(owner=15,life=100,maximum=1000,structure=False)
+                    building=SimpleNamespace(owner=0,life=100,maximum=1000,structure=True)
+                    enemy=SimpleNamespace(owner=11,life=1000,maximum=1000,structure=False)
+                    targets=[king,ally,neutral,building,enemy];hits=[]
+                    env=dict(KLS_Hero={0:hero},KLS_Active={0:True},KLS_Ended=False,KLS_King=king,KLS_HeroCount=25,
+                        KLS_SignatureId={i:f'AK{i:02d}' for i in range(25)},KLS_SignatureName={index:signature[0]},
+                        KLS_SignatureHeal={index:signature[3]},KLS_SignatureMana={index:0},KLS_SignatureDamage={index:signature[2]},KLS_SignatureExtra={index:0},KLS_SignatureCount={index:0},
+                        GetTriggerUnit=lambda:hero,GetOwningPlayer=lambda u:u.owner,GetPlayerId=lambda p:p,GetHeroLevel=lambda u:level,
+                        GetSpellTargetX=lambda:0,GetSpellTargetY=lambda:0,GetSpellAbilityId=lambda:f'AK{index:02d}',
+                        KLS_Log=lambda *a:None,I2S=str,DestroyEffect=lambda *a:None,AddSpecialEffect=lambda *a:None,AddSpecialEffectTarget=lambda *a:None,
+                        CreateGroup=lambda:targets,GroupEnumUnitsInRange=lambda *a:None,FirstOfGroup=lambda g:g[0] if g else None,
+                        GroupRemoveUnit=lambda g,u:g.remove(u),DestroyGroup=lambda *a:None,GetWidgetLife=lambda u:u.life,
+                        IsUnitType=lambda u,t:u.structure,UNIT_TYPE_STRUCTURE=0,IsUnitEnemy=lambda u,p:u.owner==11,
+                        IsUnitAlly=lambda u,p:u.owner!=11,BlzGetUnitMaxHP=lambda u:u.maximum,RMinBJ=min,
+                        SetWidgetLife=lambda u,v:setattr(u,'life',v),UnitDamageTarget=lambda *a:hits.append(a),
+                        ATTACK_TYPE_MAGIC=0,DAMAGE_TYPE_MAGIC=0)
+                    compile_handler(script,'KLS_SignatureCast',env);env['KLS_SignatureCast']()
+                    self.assertEqual(king.life,min(1000,king_life+signature[3]+15*level) if king_life>.405 else king_life)
+                    self.assertEqual(ally.life,min(1000,100+signature[3]+15*level))
+                    self.assertEqual(neutral.life,100);self.assertEqual(building.life,100)
+                    self.assertEqual(len(hits),int(signature[2]>0))
 
     def test_purchase_retries_keep_one_handle_for_inventory_states(self):
         script=(ROOT/'source/combat.j').read_text()

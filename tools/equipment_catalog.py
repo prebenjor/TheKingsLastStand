@@ -263,6 +263,8 @@ def abilities():
     records.extend(spell_records(ability))
     from company_catalog import company_spell_records
     records.extend(company_spell_records(ability))
+    from racial_catalog import racial_spell_records
+    records.extend(racial_spell_records(ability))
     # AEqu's campaign level requirement is unnecessary in this co-op map.
     original=[ability('AEqu','\0'*4,[('equ1',0,level,6,0) for level in (1,2,3)])]
     from hero_progression import hero_ability_records
