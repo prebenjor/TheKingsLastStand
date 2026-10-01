@@ -81,11 +81,11 @@ class HeroLearnData(unittest.TestCase):
             self.assertIn('AKfn', HERO_ABILITIES[hero])
         parent, fields = spells['AKfn']
         self.assertEqual(parent, 'AOsf')
-        self.assertEqual(fields[('alev',0)][0], 5)
-        for rank in range(1,6):
-            self.assertEqual(fields[('Osf1',rank)][0], 'kT0'+str(rank))
+        self.assertEqual(fields[('alev',0)][0], 10)
+        for rank in range(1,11):
+            self.assertEqual(fields[('Osf1',rank)][0], f'kT{rank:02d}' if rank <= 5 else f'bT{rank:02d}')
             self.assertIn('trees', fields[('aub1',rank)][0])
-        health = [records['kT0'+str(rank)][1][('uhpm',0)][0] for rank in range(1,6)]
+        health = [records[f'kT{rank:02d}'][1][('uhpm',0)][0] for rank in range(1,6)]
         self.assertEqual(health, [300,450,600,660,720])
 
 

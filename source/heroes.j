@@ -13,6 +13,20 @@ globals
     button array KLS_Back
 endglobals
 
+function KLS_NativeSignatureRefresh takes unit hero returns nothing
+    local ability power = BlzGetUnitAbility(hero,'AK21')
+    local integer key = GetHandleId(hero)
+    local real baseDamage
+    if power != null then
+        if not HaveSavedReal(KLS_GearData,key,64) then
+            call SaveReal(KLS_GearData,key,64,BlzGetAbilityRealLevelField(power,ABILITY_RLF_DAMAGE_HBZ2,0))
+        endif
+        set baseDamage = LoadReal(KLS_GearData,key,64)
+        call BlzSetAbilityRealLevelField(power,ABILITY_RLF_DAMAGE_HBZ2,0,baseDamage+20.0*GetHeroLevel(hero))
+    endif
+    set power = null
+endfunction
+
 function KLS_ReleaseStartingUnit takes nothing returns nothing
     call PauseUnit(GetEnumUnit(), false)
 endfunction
@@ -184,8 +198,9 @@ function KLS_ChooseHero takes integer p, integer n returns nothing
     call SetHeroXP(KLS_Hero[p], 0, false)
     call KLS_Log("Hero progression initialized player="+I2S(p+1)+" level="+I2S(GetHeroLevel(KLS_Hero[p]))+" xp="+I2S(GetHeroXP(KLS_Hero[p])))
     set KLS_LastTalentMilestone[p] = GetHeroLevel(KLS_Hero[p]) / 5
-    call UnitAddAbility(KLS_Hero[p], KLS_SignatureId[n])
+    // All 25 choices carry their signature in Object Editor normal abilities.
     call UnitMakeAbilityPermanent(KLS_Hero[p], true, KLS_SignatureId[n])
+    call KLS_NativeSignatureRefresh(KLS_Hero[p])
     call UnitAddItemById(KLS_Hero[p], 'stwp')
     call UnitAddItemById(KLS_Hero[p], 'ebac')
     if UnitExtendedInventorySize(KLS_Hero[p]) != 30 then

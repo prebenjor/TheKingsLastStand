@@ -15,6 +15,8 @@ globals
     integer KLS_StoryCartSteps = 0
 endglobals
 
+// GENERATED_FOREST_CAMPS
+
 // GENERATED_TOWN_PLACEMENTS
 
 function KLS_StoryExpectedSite takes nothing returns integer
@@ -59,7 +61,7 @@ function KLS_StoryApplyUnlock takes integer stage returns nothing
         if stage == 1 and KLS_TownShop[i] != null then
             call AddItemToStock(KLS_TownShop[i],'pghe',1,99)
             call AddItemToStock(KLS_TownShop[i],'pgma',1,99)
-        elseif stage == 2 then
+        elseif stage == 2 and KLS_TownHall[i] != null then
             set KLS_TownRestored[i] = true
             if KLS_TownHall[i] != null then
                 call BlzSetUnitName(KLS_TownHall[i],GetUnitName(KLS_TownHall[i])+" - Restored Quarter")
@@ -67,7 +69,7 @@ function KLS_StoryApplyUnlock takes integer stage returns nothing
             if KLS_TownSite[i] != null then
                 call BlzSetUnitName(KLS_TownSite[i],GetUnitName(KLS_TownSite[i])+" - Restoring Refuge")
             endif
-        elseif stage == 3 then
+        elseif stage == 3 and KLS_TownHall[i] != null then
             if KLS_TownShop[i] != null then
                 call AddItemToStock(KLS_TownShop[i],'pres',1,99)
             endif
@@ -111,13 +113,13 @@ function KLS_StoryComplete takes nothing returns nothing
     set KLS_StoryStage = KLS_StoryStage+1
     call KLS_CompanyResearchRefresh()
     if KLS_StoryStage >= 4 then
-        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700The four Crownlands towns are restored. Their story rewards were personal to each contributor.|r")
+        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700The surviving settlements are restored and the northern ritual is broken. Story rewards were personal to each contributor.|r")
     elseif KLS_StoryStage == 1 then
         call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700Northwatch is reclaimed. Escort its supply train from Crownshire when ready.|r")
     elseif KLS_StoryStage == 2 then
         call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700The supply train arrived. Restore Moonbark's quarter with 250 gold and 100 lumber.|r")
     else
-        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700Moonbark is restored. Break the Wraithfall invasion ritual when ready.|r")
+        call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10,"|cffFFD700Moonbark is restored. Speak to the Crown Ritual Warden to disrupt the northern invasion ritual when ready.|r")
     endif
     call KLS_Log("Crownlands story stage completed; shared unlock="+I2S(KLS_StoryStage))
 endfunction
@@ -220,6 +222,10 @@ function KLS_StorySpawnEncounter takes integer siteIndex, boolean ritual returns
     local boolean spawnFailed = false
     local real x = GetUnitX(KLS_TownSite[siteIndex])
     local real y = GetUnitY(KLS_TownSite[siteIndex])
+    if ritual then
+        set x = GetUnitX(KLS_FindInvasionGate()) + 1600.0
+        set y = GetUnitY(KLS_FindInvasionGate()) - 1200.0
+    endif
     set KLS_StoryRemaining = 0
     loop
         exitwhen n == 4 or KLS_Ended

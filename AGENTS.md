@@ -1,5 +1,31 @@
 # Instructions for future agents
 
+## Current racial handoff — 2026-10-02
+
+Continue from `build/KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m`, build KLS-D-1f003ecdb7, SHA256 `2793d5d6f815709d46953568743864ccbf09b8ea55f3915206322158ca7b5c14`. Read `docs/RACIAL-CONSTRUCTION-20261002.md` and the building matrix. Expansion construction is deliberately gated; Prototype R5 is the separate native test artifact. User tested Undead in obsolete Prototype R2 and switching failed. R5 corrects the Chaos parent; do not enable the production gate without all four races' native evidence. Preserve the targeted R2 signature behavior, countryside, placements, inventory/economy and known sale-popup discrepancy.
+
+Every new DEVELOPMENT handoff must be published as an immutable GitHub prerelease to `prebenjor/TheKingsLastStand`, with map assets, hashes/preservation manifests, verification report and current source. Update README with latest build/download/changelog/open checks and add dated immutable CHANGELOG entries. Keep map binaries, credentials, caches and installed Blizzard data outside source history. Follow BUILDING.md. Automatic review rejected direct main publication; use the repair branch and a concrete PR pending explicit merge approval.
+
+## Current hero and market handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.
+
+## Current countryside handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Castle-Countryside-Final-R4-20261001.w3m` (SHA256 `8d04cabf92ef4ddf68559a66636f80d6603645d08804c13528cc60d7bfe822d6`). This supersedes earlier countryside and forest editing handoffs. West/east countryside scenery, shop placement synchronization and portal/monster group corrections are implemented. Compilation, preservation and static route checks passed; standard World Editor selection and gameplay checks remain pending. This is a DEVELOPMENT editor copy, not an installed release. See `docs/CASTLE-COUNTRYSIDE-20261001.md` for preservation evidence and the required saved-shop import workflow. The original forest baseline is archived and untouched.
+
+## Forest editing handoff — 2026-10-01
+
+The user approved forests and loot coves north, east and west of the summoning gate. Continue editing `build/KLS-D-68303d69bf-Forest-Coves-Final-20261001.w3m` (SHA c7d91e762808683fae708105b1d0fdda5cf21291cd4bcdc61e93b3a2db892929), now open in Forge. It preserves the previous terrain/placements and adds woodland paths, cliff outcrops and four one-time neutral monster camps. The 12 Neutral Extra camp units are disposable editor markers; runtime camps use the forest catalog coordinates. Leaders grant personal Common/Uncommon gear and supplies, outside wave accounting. See docs/FOREST-COVES-20261001.md. This is a DEVELOPMENT editor handoff; canonical authored-layer and installed gameplay integration remain separate.
+
+
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 This file is the first read for anyone continuing The King's Last Stand. Preserve the full co-op defense RPG in the linked design documents. Do not narrow it to a wave demo, a single-player toy, or a generic tower-defense map.
 
 ## Read before changing anything
@@ -32,7 +58,7 @@ For a transfer to another agent, first read `docs/FRIEND-AGENT-HANDOFF-2026-09-3
 - Heroes start at level 1 and currently cap at 50. Level 1 starts with one normal skill point and every gained level grants one more. The player chooses either one native spell rank or one repeatable, unranked +3 STR/AGI/INT button with that point; there is no automatic attribute growth. Spell ranks never advance automatically. Keep the independent fifth-level talent choice. Do not restore the superseded level-3 start, automatic +3/+1 growth, or race-independent Human worker rule.
 - All four starting gold mines hold 1,000,000 gold. Human and Orc use neutral Gold Mines; Night Elf and Undead use their race-specific Entangled and Haunted mines. Keep the five starting workers, mine ownership, and personal income rules unchanged.
 - Enemy equipment drops are scarce: Normal and Boss death handlers never roll world gear; Elite enemies have a 1% chance, Common/Uncommon only. Bosses award personal milestone gear at waves 10/20/30/40+. Healing/mana consumable odds remain separate. Keep general, racial, and crafted items within the shared rarity/slot component budget documented in `docs/STAT-POWER-CURVE.md`.
-- The expanded battlefield is 192 × 192 terrain cells. Keep Crownshire, Moonbark Glade and Wraithfall connected to the defense route. The user removed the Orc village Redtusk Hold entirely and added a troll camp; preserve those edits after the saved-map handoff. The optional four-stage recovery story must stop depending on Redtusk Hold and still run during waves without changing wave counts or pausing spawning.
+- The expanded battlefield is 192 × 192 terrain cells. Keep Crownshire and Moonbark Glade connected to the defense route. The user removed the Orc village Redtusk Hold entirely and added a troll camp; preserve those edits after the saved-map handoff. The optional four-stage recovery story must stop depending on Redtusk Hold and still run during waves without changing wave counts or pausing spawning.
 - Retain all four playable racial identities and eight new heroes from the shared verified catalogs. Keep the 20 race-themed items, standard rarity colors and four Legendary Foundry recipes synchronized. Removing the Orc village does not remove Orc heroes, workers, companies, player buildings or gear. Relocate displaced quest/vendor services without recreating the village; see docs/EDITOR-LAYOUT-REVISION.md for the pending integration.
 
 ## Source-of-truth order

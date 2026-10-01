@@ -28,7 +28,7 @@ Historical DEVELOPMENT package: **KLS-D-2aac020fb1**.
 
 The current package is development build `KLS-D-4e6ae863df` at `dist/KLS-D-4e6ae863df-Development.w3m` (SHA-256 `aa6276d4f1c2b4ca1b8f97562fee8c1a7bf52169300e7cca3f406036829de6d6`). It is installed in the dedicated test folder. Editor save/reopen, current-build Test Map, Custom Game, gameplay, purchase/crafting behavior, backpack multiplayer behavior and endurance remain pending. The earlier Test Map pass remains attributed to `KLS-D-fd638ddcf5` only. Check ROADMAP-AND-ACCEPTANCE.md for current status.
 
-The revised authored layout keeps Crownshire (Human, south), Moonbark Glade (Night Elf, east) and Wraithfall (Undead, north). The user removed Redtusk Hold, replaced gates with cliffs and added a troll camp. All four player races remain. The revised story relocates Northwatch's contact and restores the three surviving quarters; Orc Common-through-Epic relics must remain available through the kingdom market. These changes await saved-map source integration; the currently installed build still uses the earlier four-town runtime. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md).
+The revised authored layout keeps Crownshire (Human, south), Moonbark Glade (Night Elf, east) and Crown Ritual Service (Undead, north). The user removed Redtusk Hold, replaced gates with cliffs and added a troll camp. All four player races remain. The revised story relocates Northwatch's contact and restores the three surviving quarters; Orc Common-through-Epic relics must remain available through the kingdom market. These changes await saved-map source integration; the currently installed build still uses the earlier four-town runtime. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md).
 
 Build your race's Foundry for its Legendary pattern, which combines Rare and Uncommon components. The pattern returns after success or failure. The Master Forge sells three general recipes. Recovery objectives continue during active waves. All starting mines hold 1,000,000 gold; Undead/Night Elf use owned Haunted/Entangled mines, Human/Orc regular mines.
 
@@ -80,7 +80,7 @@ Then provide the new snapshot folder name and note whether the game was launched
 
 ## Town recovery and company research
 
-Select the currently marked town contact to show its Begin/contribute button. Bring your living hero within 1,000 range. Northwatch clears four enemies; Crownshire sends a vulnerable supply caravan; Moonbark accepts 250 gold/100 lumber; Wraithfall offers the ritual encounter. The caravan moves only with a living escort within 900 range and can be restarted if lost. Objectives remain available while waves run. Attacking story threats, escorting, starting or funding records personal reward participation.
+Select the currently marked town contact to show its Begin/contribute button. Bring your living hero within 1,000 range. Northwatch clears four enemies; Crownshire sends a vulnerable supply caravan; Moonbark accepts 250 gold/100 lumber; Crown Ritual Service offers the ritual encounter. The caravan moves only with a living escort within 900 range and can be restarted if lost. Objectives remain available while waves run. Attacking story threats, escorting, starting or funding records personal reward participation.
 
 Town completions add watchposts, Greater Healing/Mana stock, four restoring refuges, then Restoration potions and racial garrisons. These shared unlocks last for the match. Refuges quietly regenerate 1% maximum HP/mana each second within 650 range.
 

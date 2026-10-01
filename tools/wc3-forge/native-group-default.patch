@@ -1,0 +1,63 @@
+diff --git a/internal/forge/entities_mutate.go b/internal/forge/entities_mutate.go
+--- a/internal/forge/entities_mutate.go
++++ b/internal/forge/entities_mutate.go
+@@ -66,6 +66,7 @@
+ 		// the file on save. At subversion 9 (skinIDPresent stays false) Encode
+ 		// omits the chunk and this value is harmlessly ignored.
+ 		SkinID:            typeID,
++		GroupID:           ^uint32(0), // Native DE ungrouped; zero groups all new placements together.
+ 		Flags:             2, // 2 = default visible/selectable (matches WC3 editor placement)
+ 		Player:            player,
+ 		HitPointsPct:      -1, // -1 = use unit default
+@@ -463,6 +464,7 @@
+ 		scale = 1.0
+ 	}
+ 	d := doodadsdoo.Doodad{
++		GroupID:        ^uint32(0),
+ 		TypeID:         typeID,
+ 		Variation:      variation,
+ 		Position:       pos,
+diff --git a/internal/forge/startloc_mutate.go b/internal/forge/startloc_mutate.go
+--- a/internal/forge/startloc_mutate.go
++++ b/internal/forge/startloc_mutate.go
+@@ -81,6 +81,7 @@
+ 		// subversion >= 11 (which always emits a 4-byte skin_id chunk; an empty
+ 		// SkinID would fail Encode). Harmlessly ignored at subversion 9.
+ 		SkinID:            slocTypeID,
++		GroupID:           ^uint32(0),
+ 		Flags:             2, // 2 = default visible/selectable
+ 		Player:            index,
+ 		HitPointsPct:      -1,
+diff --git a/internal/forge/native_group_default_test.go b/internal/forge/native_group_default_test.go
+new file mode 100644
+--- /dev/null
++++ b/internal/forge/native_group_default_test.go
+@@ -0,0 +1,28 @@
++package forge
++
++import (
++	"github.com/StephenSHorton/wc3-forge/internal/formats/doodadsdoo"
++	"github.com/StephenSHorton/wc3-forge/internal/formats/unitsdoo"
++	"testing"
++)
++
++func TestNativeNewPlacementsAreUngrouped(t *testing.T) {
++	s := &Session{loaded: true, units: &unitsdoo.File{Version: 13, SubVersion: 11}, doodads: &doodadsdoo.File{Version: 13, SubVersion: 11}}
++	if _, err := s.CreateUnit("hfoo", 26, [3]float32{}, 0, 1); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := s.CreateStartLocation(0, [3]float32{}, 0); err != nil {
++		t.Fatal(err)
++	}
++	for _, e := range s.units.Entities {
++		if e.GroupID != 0xffffffff {
++			t.Errorf("%s group=%d; want native ungrouped sentinel", e.TypeID, e.GroupID)
++		}
++	}
++	if _, err := s.CreateDoodad("LOlp", [3]float32{}, 0, 1, 0); err != nil {
++		t.Fatal(err)
++	}
++	if s.doodads.Doodads[0].GroupID != 0xffffffff {
++		t.Errorf("doodad group=%d; want ungrouped", s.doodads.Doodads[0].GroupID)
++	}
++}

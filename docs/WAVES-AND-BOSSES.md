@@ -94,3 +94,8 @@ Normal and Boss enemy deaths never produce random catalog equipment. Elites have
 - Dreadlord/Necromancer/Satyr and other non-undead or living targets matter mechanically: do not make every attack target undead.
 - Use the combat groves for native tree-target hero skills. Keep eight nearby lumber trees at each player plot as well, but leave worker access and the enemy lane clear.
 - Preserve varied models and roles in every chapter. The user's original live feedback was that attacks looked like the same repeated mob; avoid a composition that visually collapses into one unit type.
+
+
+## Invasion orders and authored layout
+
+All wave troops, bosses and boss reinforcements attack-move toward the living King Aldric's actual position through `KLS_OrderInvader`. The eight-second idle-order pass redirects only idle invaders; it never overwrites an active attack or spell order. Ended matches and null/dead units receive no new orders. Ordinary pathing remains active; no teleport or second AI controller is introduced. This source correction is pending the next preserved-layout package and engine route check.

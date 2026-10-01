@@ -9,6 +9,40 @@ globals
     timer KLS_PoolClock = null
 endglobals
 
+// The map owns the gate placement. Reopening and moving kInv in World Editor
+// automatically moves the wave origin; the fallback supports generated maps.
+function KLS_FindInvasionGate takes nothing returns unit
+    local group buildings = CreateGroup()
+    local unit candidate
+    local unit gate = null
+    call GroupEnumUnitsOfPlayer(buildings,Player(11),null)
+    loop
+        set candidate = FirstOfGroup(buildings)
+        exitwhen candidate == null
+        call GroupRemoveUnit(buildings,candidate)
+        if GetUnitTypeId(candidate) == 'kInv' then
+            set gate = candidate
+            exitwhen true
+        endif
+    endloop
+    call DestroyGroup(buildings)
+    set buildings = null
+    set candidate = null
+    return gate
+endfunction
+
+function KLS_InvasionGateInit takes nothing returns nothing
+    local unit gate = KLS_FindInvasionGate()
+    if gate == null then
+        set gate = KLS_CreateUnit(Player(11),'kInv',0.0,7680.0,270.0)
+    endif
+    if gate != null then
+        call SetUnitInvulnerable(gate,true)
+        call SetUnitAcquireRange(gate,0.0)
+    endif
+    set gate = null
+endfunction
+
 // GENERATED_WAVES
 
 function KLS_GroveTick takes nothing returns nothing

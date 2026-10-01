@@ -1,10 +1,17 @@
 # Gameplay specification
 
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 This document preserves the approved gameplay target. Code presence is tracked separately from live verification in ROADMAP-AND-ACCEPTANCE.md.
 
 ## September 30 authored layout decision
 
-The user removed Redtusk Hold entirely, replaced gates with cliffs and placed a troll camp. Preserve that authored terrain/doodad/unit composition after the saved-map handoff. The three surviving settlements are Crownshire, Moonbark Glade and Wraithfall; all four playable races and personal bases remain. The optional four-stage story relocates Northwatch's contact and restores three extant refuges, with no prerequisite on a deleted Orc town. Troll-camp behavior is undecided. Exact positions, camp ownership and cliff-route validation remain pending; see [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). Current runtime still creates four towns and old gates and must be reconciled before the next integrated build.
+The user removed Redtusk Hold entirely, replaced gates with cliffs and placed a troll camp. Preserve that authored terrain/doodad/unit composition after the saved-map handoff. The two surviving settlements are Crownshire and Moonbark Glade; all four playable races and personal bases remain. The optional four-stage story relocates Northwatch's contact and restores two extant refuges, with no prerequisite on a deleted Orc town. Troll-camp behavior is undecided. Exact positions, camp ownership and cliff-route validation remain pending; see [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md). Current runtime still creates four towns and old gates and must be reconciled before the next integrated build.
 
 ## Match state and opening
 

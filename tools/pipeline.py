@@ -11,7 +11,7 @@ from pathlib import Path
 from archive_pack import pack, member, lookup
 from map_archive import MPQArchive
 from map_info import four_player_info, PLOTS, MAP_EDGE, MAP_CELLS
-from objects import units, items
+from objects import units, items, racial_buffs
 from equipment_catalog import abilities, catalog_script
 from wave_rosters import wave_script, boss_script, bounty_script
 from signature_spells import spell_script as signature_spell_script
@@ -21,12 +21,13 @@ from recipes import recipe_script
 from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
 from town_catalog import town_script
+from forest_catalog import camp_script
 from authored_map import read_authored_layer
 from layout_catalog import layout_globals, plot_script, market_script
 from editor_layout import placement_data
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ('match_rules.j', 'diagnostics.j', 'heroes.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
+MODULES = ('match_rules.j', 'diagnostics.j', 'heroes.j', 'racial.j', 'worker_pages.j', 'companies.j', 'mining.j', 'backpack.j', 'shops.j', 'equipment.j', 'hud.j', 'castle.j', 'combat.j', 'wave_environment.j', 'signatures.j', 'rewards.j', 'crownlands.j', 'game.j')
 BASELINE_SHA = '3b68da520c3d14084c7eec4fffae5cfc76315c58990a1415a4f897c0b781e8d9'
 INFO_SHA = 'a6275d4b92e8c8f1267536d0e175eb1ece7dbb031f1447a2a0295c0b86a461cc'
 GAME = Path(r'C:\Program Files (x86)\Warcraft III')
@@ -86,6 +87,12 @@ def runtime_script(build_id):
             text = text.replace('// GENERATED_HERO_CATALOG', hero_selection_script())
         if name == 'companies.j':
             text = text.replace('// GENERATED_COMPANIES', company_script())
+        if name == 'racial.j':
+            from racial_catalog import racial_script
+            text = text.replace('// GENERATED_RACIAL_CATALOG', racial_script())
+        if name == 'worker_pages.j':
+            from racial_catalog import worker_pages_script
+            text = text.replace('// GENERATED_WORKER_PAGES', worker_pages_script())
         if name == 'hud.j':
             text = text.replace('// GENERATED_BOSSES', boss_script())
         if name == 'wave_environment.j':
@@ -93,6 +100,7 @@ def runtime_script(build_id):
         if name == 'signatures.j':
             text = text.replace('// GENERATED_SIGNATURES', signature_spell_script())
         if name == 'crownlands.j':
+            text = text.replace('// GENERATED_FOREST_CAMPS', camp_script())
             text = text.replace('// GENERATED_TOWN_PLACEMENTS', town_script())
         if name == 'game.j':
             text = text.replace('// GENERATED_LAYOUT_GLOBALS', layout_globals())
@@ -239,6 +247,7 @@ def build():
     for name in ('war3map.w3u','war3map.w3t'):
         check_objects(components[name])
     check_objects(components['war3map.w3a'], extended=True)
+    components['war3map.w3h'] = racial_buffs()
     output = diagnostic_output_path(build_id)
     output.parent.mkdir(parents=True, exist_ok=True)
     script_path = ROOT/'build/diagnostic-war3map.j'

@@ -1,5 +1,12 @@
 # Crownlands expansion: design and implementation contract
 
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 This document is the current detailed design for the kingdom expansion. It incorporates the approved race identity, settlement, hero, equipment, story and progression decisions. Read it with [GAME-VISION.md](GAME-VISION.md), [HEROES-AND-ABILITIES.md](HEROES-AND-ABILITIES.md), [COMPANIES-AND-BUILDINGS.md](COMPANIES-AND-BUILDINGS.md), [ITEMS-AND-EQUIPMENT.md](ITEMS-AND-EQUIPMENT.md), and [TECHNICAL-ARCHITECTURE.md](TECHNICAL-ARCHITECTURE.md). Source catalogs live in `tools/town_catalog.py`, `tools/faction_catalog.py`, `tools/hero_catalog.py`, `tools/company_catalog.py`, `tools/equipment_catalog.py`, and `tools/recipes.py`.
 
 ## Player promise
@@ -12,7 +19,7 @@ The product remains a 2-4 player co-op defense RPG. Preserve the original 40-wav
 
 - Battlefield: 192 × 192 terrain cells (24,576 Warcraft world units square), map bounds ±12,288, playable/camera bounds ±11,520. Terrain, pathing, W3I bounds, camera and minimap must describe the same battlefield.
 - Player plots stay at `(-6000,-500)`, `(-3300,-500)`, `(3300,-500)`, `(6000,-500)` unless the saved editor handoff moves them. Preserve the King's Road, defensive row, castle and market. The user replaced gates with cliffs; preserve reachable passages and do not restore the removed gate structures.
-- Remaining town centers were Human Crownshire `(0,-9000)`, Night Elf Moonbark Glade `(9000,0)`, and Undead Wraithfall `(0,9000)` before the latest hand-authored edits; extract their actual saved positions. Orc Redtusk Hold is removed entirely. Preserve the user's added troll camp and connect extant settlements to the road.
+- Remaining town centers were Human Crownshire `(0,-9000)`, Night Elf Moonbark Glade `(9000,0)`, and Undead Crown Ritual Service `(0,9000)` before the latest hand-authored edits; extract their actual saved positions. Orc Redtusk Hold is removed entirely. Preserve the user's added troll camp and connect extant settlements to the road.
 - Each remaining town has its racial buildings, shop and story contact. The troll camp's exact role and ownership await inspection. The user's authored terrain/doodad/unit composition is the current visual direction; see [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) for evidence and pending integration.
 - Remaining town shops sell their race's four Common-through-Epic universally equippable relics plus healing and mana potions. Relocate the removed Orc shop's four relics into existing matching-rarity kingdom vendors, checking stock capacity; other themed relics retain their town sources. The Legendary relic is not sold directly; its Foundry pattern combines the listed racial components into the Legendary output. From wave 50 onward, these Legendary relics may also be rolled as a personal boss milestone reward. Item definitions, stats, rarity colors, stock IDs and drop eligibility come from the shared item catalog. Revised stock integration is pending the saved-map handoff.
 - The separate Master Forge in the southern market stocks the three general recipe patterns. Each player's race-themed Royal Foundry stocks one copy of its matching racial Legendary pattern after construction. Racial patterns can only be bought from an owned matching Foundry; scrolls return to the seller after success or failure, with the Master Forge as a fallback if the seller is destroyed during crafting. Generic rarity shops hold at most nine items, the Archive nine tomes, the Apothecary four consumables, each town relic shop six entries, the Master Forge three recipes, and each Foundry one recipe, within Warcraft's twelve-slot shop command card.
@@ -25,7 +32,7 @@ For hand-authored terrain dressing, see [TERRAIN-DRESSING-GUIDE.md](TERRAIN-DRES
 |---|---|---|---|---|---|
 | Crownshire | Human | Peasant `hpea` | `htow` / `hbar` / `h000` | Crownshire Provisioner | Crownshire Supplymaster |
 | Moonbark Glade | Night Elf | Wisp `ewsp` | `etol` / `eaow` / `kA02` | Moonbark Curator | Moonbark Warden |
-| Wraithfall | Undead | Acolyte `uaco` | `unpl` / `usep` / `kA03` | Wraithfall Broker | Wraithfall Keeper |
+| Crown Ritual Service | Undead | Acolyte `uaco` | `unpl` / `usep` / `kA03` | Crown Ritual Service Broker | Crown Ritual Service Keeper |
 
 Redtusk Hold is no longer a settlement. Relocate its Northwatch contact to reachable allied ground; exact placement awaits the saved layout. Orc player-base roles and item catalog remain intact.
 
@@ -101,8 +108,8 @@ The story is shared, optional and persistent through one match. Site interaction
 
 1. **Reclaim Northwatch:** accept from the relocated Northwatch Vanguard at surviving allied ground; defeat its four attackers. No objective depends on the removed Redtusk Hold. Its attackers are tracked in a separate story group; contact, encounter and watchpost positions must match the new cliffs.
 2. **Escort the supplies:** start at the Crownshire Supplymaster. A visible supply caravan follows the King's Road south-to-center while waves continue. A second defender may join an escort already underway. The 1,800-HP caravan moves at 140 speed only with a living hero within 900 range, using normal pathing. Two-Ghoul ambushes appear at escort ticks 8 and 16. Its death leaves the chapter available for retry.
-3. **Restore the surviving quarters:** contribute 250 personal gold and 100 personal lumber at the Moonbark Warden. The payment is charged only on acceptance; Crownshire, Moonbark Glade and Wraithfall become shared restoring refuges. Nearby friendly troops regenerate 1% maximum HP/mana each second within 650 range, without effects. There is no refuge at the removed Orc village.
-4. **Break the Wraithfall ritual:** accept from the Wraithfall Keeper and defeat four undead/demon ritual guards.
+3. **Restore the surviving quarters:** contribute 250 personal gold and 100 personal lumber at the Moonbark Warden. The payment is charged only on acceptance; Crownshire and Moonbark Glade become shared restoring refuges. Nearby friendly troops regenerate 1% maximum HP/mana each second within 650 range, without effects. There is no refuge at the removed Orc village.
+4. **Break the Crown Ritual Service ritual:** accept from the Crown Ritual Service Keeper and defeat four undead/demon ritual guards.
 
 Each completion gives every recorded contributor personal gold and one ownership-bound item from the common/uncommon/rare progression. Story enemy kills also pay the credited killer a personal 25 gold; they do not share kill gold. Stage progress is match-scoped only and has no between-match save. Northwatch completion adds two allied watchtowers at reachable authored positions; supplies unlock Greater Healing/Mana potions at existing town shops; restoration activates the three surviving refuges; the ritual unlocks Restoration potions and the four racial garrison recruits placed at extant allied sites. All perks apply once and remain active through the match. Three owner-specific Company Chapter researches unlock at story stages 1/2/3 or waves 10/20/30; see [COMPANY-RESEARCH-AND-POWERS.md](COMPANY-RESEARCH-AND-POWERS.md). Source relocation/missing-site handling is pending; the current runtime still assumes four towns. The troll camp has no mandated story role yet.
 

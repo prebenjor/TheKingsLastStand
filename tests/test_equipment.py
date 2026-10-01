@@ -139,7 +139,7 @@ class EquipmentRecords(unittest.TestCase):
         self.assertIn('KLS_RecipeRestockVendor(vendor, itemCode)', recipes)
         self.assertIn('GetWidgetLife(vendor) > 0.405', recipes)
         self.assertIn('KLS_Shops[12] = KLS_CreateUnit',Path(ROOT/'source/shops.j').read_text())
-        self.assertIn('AddItemToStock(shop, rawcode, 1, 1)',
+        self.assertIn('AddItemToStock(shop, rawcode, 99, 99)',
                       Path(ROOT/'source/combat.j').read_text())
         self.assertIn('KLS_RecipeBegin(buyer, gear, shop)',Path(ROOT/'source/combat.j').read_text())
 

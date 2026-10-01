@@ -14,15 +14,35 @@ MINE_OFFSET = (0.0, 1200.0)
 ALTAR_OFFSET = (-650.0, -500.0)
 WORKER_OFFSET = (-250.0, -300.0)
 
+# Existing market references 7–19, arranged in Forge on 2026-10-01.
+# Facing is in Warcraft degrees: entrances point into the square.
+MARKET_SQUARE = (
+    (3328, -2560, 270),
+    (3328, -3008, 270),
+    (4416, -3840, 270),
+    (4800, -3968, 270),
+    (3648, -3456, 270),
+    (4032, -3648, 270),
+    (4032, -2688, 270),
+    (2880, -3264, 270),
+    (4416, -4544, 270),
+    (5312, -4096, 270),
+    (5248, -3328, 270),
+    (1536, -1792, 270),
+    (4672, -2944, 270),
+)
+
 
 def market_placements():
     quality = ('Common', 'Uncommon', 'Rare', 'Epic', 'Legendary')
     result = [('hS00', -2300.0 + tier * 1150, -3900.0 - category * 560,
                quality[tier] + ' ' + ('Arms & Armor', 'Apparel & Relics')[category])
               for tier in range(5) for category in range(2)]
-    return result + [('hS00', 3450.0, -3900.0, 'Field Apothecary'),
+    result += [('hS00', 3450.0, -3900.0, 'Field Apothecary'),
                      ('hS02', 4100.0, -3900.0, "Sage's Archive"),
                      ('hS00', 4850.0, -3900.0, 'Master Forge')]
+    return [(raw, float(x), float(y), label)
+            for (raw, _, _, label), (x, y, _) in zip(result, MARKET_SQUARE)]
 
 
 def layout_globals():
@@ -48,6 +68,10 @@ def market_script():
         for i, placement in enumerate(market_placements()):
             lines += [f'    if index == {i} then', f'        return {placement[coordinate]:.1f}', '    endif']
         lines += ['    return 0.0', 'endfunction']
+    lines += ['function KLS_MarketFacing takes integer index returns real']
+    for i, (_, _, facing) in enumerate(MARKET_SQUARE):
+        lines += [f'    if index == {i} then', f'        return {facing:.1f}', '    endif']
+    lines += ['    return 270.0', 'endfunction']
     return '\n'.join(lines)
 
 

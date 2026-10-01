@@ -81,7 +81,7 @@ For decision history, read `docs/superpowers/specs/2026-09-29-progression-diffic
 - Keep four personal player bases across one horizontal defense row. Preserve plot ownership and expansion room; decoration must not prevent building, mine access, lumber gathering or exits.
 - Keep castle, King Aldric, spring and market as one understandable connected town. Leave enough accessible space for several heroes at the spring and around shops.
 - Building entrances and quest contacts must face reachable ground. Connect settlement entrances to the road with usable paths. Preserve room for caravan travel without disabling pathing to force it through scenery.
-- The three surviving settlements are Crownshire, Moonbark Glade and Wraithfall. Wraithfall decoration must leave the northern invasion approach open.
+- The two surviving settlements are Crownshire and Moonbark Glade. Crown Ritual Service decoration must leave the northern invasion approach open.
 - The hero-selection hub must remain usable and distinct from the battlefield; preview moves must also update selection/camera logic and labels.
 - Maintain the 192×192 terrain, pathing, camera bounds, playable area and minimap together. Current world extents are approximately ±12,288 and playable/camera extents ±11,520. Do not resize the map casually.
 
@@ -96,7 +96,7 @@ These are **pre-handoff source coordinates**, not orders to undo human moves. Ex
 | Main market | Around `Y=-3900`; Apothecary and Sage's Archive are adjacent services |
 | Four plot centers | `(-6000,-500)`, `(-3300,-500)`, `(3300,-500)`, `(6000,-500)` |
 | Hero hub | Starts near `(-10800,-10800)`, five columns |
-| Crownshire / Moonbark / Wraithfall | Approximately `(0,-9000)` / `(9000,0)` / `(0,9000)` |
+| Crownshire / Moonbark | Approximately `(0,-9000)` / `(9000,0)` / `(0,9000)` |
 | Former gate line / invasion spawns | Approximately `Y=5200` / `Y=6200`; reconcile with authored cliffs |
 
 Natural dressing should use irregular transitions, coherent roads, clustered scenery, modest hills and readable open space. The castle should feel like a castle town; smaller settlements should feel like villages. Do not impose a new visual layout without showing how it preserves the owner's additions.
@@ -194,7 +194,7 @@ Confirmed hero choice determines **that player's** race. Retain all four races e
 |---|---|---|
 | Crownshire | South | Homes, farms, supply trade, public square, worn connected roads |
 | Moonbark Glade | East | Curving paths, groves, moonwell clearings, reachable services |
-| Wraithfall | North | Crypts, worn stone, sparse vegetation, ritual site, open invasion approach |
+| Crown Ritual Service | North | Crypts, worn stone, sparse vegetation, ritual site, open invasion approach |
 | Troll camp | Owner's authored location | Preserve composition and units; exact gameplay role awaits clarification |
 
 **Redtusk Hold no longer exists.** Keep playable Orc identity and gear, relocating necessary services rather than reconstructing the town. Separate town presence from stable four-race indices. Guard missing town/site handles in every consumer.
@@ -206,7 +206,7 @@ Objectives remain available during active waves, never pause/block spawning or c
 1. **Reclaim Northwatch:** relocate the former Orc contact to reachable surviving allied/frontier ground. Keep four threats and restored watchpost unlocks; port encounter/watchpost positions to the cliff layout.
 2. **Escort Crownshire supplies:** reconcile the caravan route/destination with authored roads. Current caravan has 1,800 HP, speed 140, normal pathing, a nearby living escort within 900 range, two ghoul ambushes and retry after destruction. Completion unlocks Greater potion stock at extant vendors.
 3. **Restore surviving quarters:** retain the Moonbark contribution, currently 250 gold/100 lumber. Activate refuges at **three** surviving settlements; quiet 1% HP/mana regeneration per second in 650 range. No deleted Orc refuge.
-4. **Break Wraithfall's invasion ritual:** preserve four ritual guards and existing restoration-potion/garrison completion perks. Move contacts/guards as required; place racial garrisons at surviving sites without assuming a fourth town exists.
+4. **Break Crown Ritual Service's invasion ritual:** preserve four ritual guards and existing restoration-potion/garrison completion perks. Move contacts/guards as required; place racial garrisons at surviving sites without assuming a fourth town exists.
 
 Quest-site rawcodes remain `kQ00`–`kQ03`. The former Northwatch site identity can be retained while moving its host; stable IDs do not require the removed village. Troll camp allegiance, respawns, loot and story participation must be recorded once agreed. Keep independent camp/story enemies outside wave accounting unless deliberately integrated.
 

@@ -1,14 +1,40 @@
 # The King's Last Stand
 
+Latest DEVELOPMENT handoff: [Racial construction and recruitment repairs](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261002-racial-repairs), build **KLS-D-1f003ecdb7**. [Download regular handoff](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261002-racial-repairs/KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m). [Download worker-switching test prototype R5](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261002-racial-repairs/KLS-Racial-Worker-Prototype-R5-20261002.w3m).
+
+Latest changes: restored native racial construction rosters, recruitment reconciliation for 50 company units, eight timed-training specialists and a fresh 25-hero audit. Countryside and R2 inventory/healing/market/loot repairs are preserved. **Expansion-page switching remains gated pending native acceptance**, so the regular handoff cannot yet construct expansion facilities. Earlier Prototype R2 failed the Undead switching test; R5 corrects its native Chaos parent and requires retesting. Compilation/preservation passed; 241 of 243 tests passed with two known baseline failures. Native queue/power/multiplayer checks and the sale-popup discrepancy remain open. See [verification and remaining checks](docs/RACIAL-CONSTRUCTION-20261002.md) and [building matrix](docs/BUILDING-ACCESS-20261002.md).
+
+Previous immutable [Hero and Market Repairs R2 prerelease](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261001-hero-market-r2) remains downloadable. The historical sections below describe their own builds.
+
+## Current hero and market handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.
+
+## Current countryside handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Castle-Countryside-Final-R4-20261001.w3m` (SHA256 `8d04cabf92ef4ddf68559a66636f80d6603645d08804c13528cc60d7bfe822d6`). This supersedes earlier countryside and forest editing handoffs. West/east countryside scenery, shop placement synchronization and portal/monster group corrections are implemented. Compilation, preservation and static route checks passed; standard World Editor selection and gameplay checks remain pending. This is a DEVELOPMENT editor copy, not an installed release. See `docs/CASTLE-COUNTRYSIDE-20261001.md` for preservation evidence and the required saved-shop import workflow. The original forest baseline is archived and untouched.
+
+## Forest editing handoff — 2026-10-01
+
+The user approved forests and loot coves north, east and west of the summoning gate. Continue editing `build/KLS-D-68303d69bf-Forest-Coves-Final-20261001.w3m` (SHA c7d91e762808683fae708105b1d0fdda5cf21291cd4bcdc61e93b3a2db892929), now open in Forge. It preserves the previous terrain/placements and adds woodland paths, cliff outcrops and four one-time neutral monster camps. The 12 Neutral Extra camp units are disposable editor markers; runtime camps use the forest catalog coordinates. Leaders grant personal Common/Uncommon gear and supplies, outside wave accounting. See docs/FOREST-COVES-20261001.md. This is a DEVELOPMENT editor handoff; canonical authored-layer and installed gameplay integration remain separate.
+
+
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 ## Sharing the current plan with another agent
 
 Start with the [September 30 friend-agent handoff](docs/FRIEND-AGENT-HANDOFF-2026-09-30.md). It includes required Markdown reading, strict visual/preservation boundaries, the latest town/story decisions, gameplay contracts, hero/building IDs, AI work, reported bugs and their evidence status, source navigation and ordered acceptance checks. Send the latest **saved and closed Terrain map separately**: the current human edits in `build/` are not included in a Git checkout or the documentation bundle.
 
 ## World Editor workshop
 
-The [wc3-forge MCP connection](docs/WC3-FORGE-CONNECTION.md) is now configured and responds with 153 tools. Opening the archived trial map fails on its native W3I-39 metadata; a forge compatibility fix is required before editing through it. The latest saved Terrain map is fully preserved and unchanged.
+The [patched wc3-forge compatibility build](docs/WC3-FORGE-NATIVE-COMPATIBILITY.md) opens the native map through MCP. The latest draw-loop repair remains subject to visual confirmation; model-load counts alone are not a visual pass. The saved human map is archived unchanged.
 
-Latest authored [layout/story revision](docs/EDITOR-LAYOUT-REVISION.md): Orc village removed, gates replaced by cliffs, troll camp added. Documentation is updated; runtime integration awaits the saved/closed editor handoff. See the [wc3-forge assessment](docs/WC3-FORGE-ASSESSMENT.md) for the potential MCP authoring workflow.
+Latest authored [layout/story revision](docs/EDITOR-LAYOUT-REVISION.md): Orc village removed, gates replaced by cliffs, troll camp added. The immutable saved revision now has a [placement integration review](docs/AUTHORED-LAYOUT-INTEGRATION-REVIEW.md). Reconcile moved/replaced/added units and three-town story coordinates before rebuilding; the original map and currently open Forge copy remain preserved.
 
 Follow the approved [eight-chapter Editor Workshop](docs/EDITOR-WORKSHOP.md), starting with Chapter 0 on the current Terrain copy. The [handoff protocol](docs/EDITOR-WORKSHOP-HANDOFF.md) preserves a native baseline and reports terrain, reference moves, object/rank fields and trigger changes before source integration. Chapter 0 awaits the user's save/close; the gameplay package remains KLS-D-68303d69bf.
 

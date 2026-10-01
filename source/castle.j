@@ -21,6 +21,7 @@ function KLS_KingContribute takes player payer, boolean upgrade, integer expecte
     local integer woodPaid = 0
     local real life = GetWidgetLife(KLS_King)
     local integer maxLife = BlzGetUnitMaxHP(KLS_King)
+    local timer healCooldown = LoadTimerHandle(KLS_GearData,GetHandleId(KLS_King),71)
     if upgrade then
         set goldCost = 400+200*KLS_KingTier
         set woodCost = 150
@@ -55,6 +56,11 @@ function KLS_KingContribute takes player payer, boolean upgrade, integer expecte
         call DisplayTimedTextToPlayer(payer,0,0,6,"King Aldric is at full health. No resources charged.")
         return
     endif
+    if not upgrade and healCooldown != null and TimerGetRemaining(healCooldown) > 0 then
+        call KLS_KingRefund(payer,goldPaid,woodPaid)
+        call DisplayTimedTextToPlayer(payer,0,0,3,"King healing is available again after one second. No resources charged.")
+        return
+    endif
     if GetPlayerState(payer,PLAYER_STATE_RESOURCE_GOLD) < goldCost-goldPaid or GetPlayerState(payer,PLAYER_STATE_RESOURCE_LUMBER) < woodCost-woodPaid then
         call KLS_KingRefund(payer,goldPaid,woodPaid)
         call DisplayTimedTextToPlayer(payer,0,0,6,"Not enough personal resources for this contribution. No resources charged.")
@@ -75,10 +81,16 @@ function KLS_KingContribute takes player payer, boolean upgrade, integer expecte
         call KLS_Log("King upgrade by p"+I2S(p+1)+": tier "+I2S(KLS_KingTier)+", gold="+I2S(goldCost))
     else
         call SetWidgetLife(KLS_King,RMinBJ(maxLife,life+2000))
+        if healCooldown == null then
+            set healCooldown = CreateTimer()
+            call SaveTimerHandle(KLS_GearData,GetHandleId(KLS_King),71,healCooldown)
+        endif
+        call TimerStart(healCooldown,1.0,false,null)
         call DisplayTimedTextToPlayer(payer,0,0,6,"King Aldric healed for "+I2S(R2I(GetWidgetLife(KLS_King)-life))+" health.")
         call KLS_Log("King healed by p"+I2S(p+1)+": "+I2S(R2I(GetWidgetLife(KLS_King)-life))+" health")
     endif
     call KLS_HUDUpdate()
+    set healCooldown = null
 endfunction
 
 // Castle healing and upgrades use the castle's native item command card. The

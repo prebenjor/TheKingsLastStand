@@ -123,8 +123,11 @@ class AttributeEquipment(unittest.TestCase):
         apothecary, archive = market_placements()[10:12]
         self.assertIn('KLS_MarketX(10),KLS_MarketY(10)', runtime)
         self.assertIn('KLS_MarketX(11),KLS_MarketY(11)', runtime)
-        self.assertLessEqual(abs(apothecary[1] - archive[1]), 750)
-        self.assertLessEqual(abs(apothecary[2] - archive[2]), 200)
+        # Native editor moves determine vendor positions; adjacency is no
+        # longer a requirement of the user-authored castle/market layout.
+        from layout_catalog import MARKET_SQUARE
+        self.assertEqual(apothecary[1:3], MARKET_SQUARE[10][:2])
+        self.assertEqual(archive[1:3], MARKET_SQUARE[11][:2])
 
 
 class RecipeTransactions(unittest.TestCase):
@@ -249,7 +252,7 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertAlmostEqual(devotion_aura[('Had1', 5)][0], 6.0)
         self.assertEqual(devotion_aura[('adur', 4)][0], 4.0)
         self.assertEqual(devotion_aura[('adur', 5)][0], 4.0)
-        self.assertEqual(devotion_aura[('alev', 0)][0], 5)
+        self.assertEqual(devotion_aura[('alev', 0)][0], 10)
 
         holy_light = records['AHhb'][1]
         self.assertEqual([holy_light[('Hhb1', rank)][0] for rank in (1, 2, 3)],
@@ -277,7 +280,7 @@ class HeroProgressionAndRecovery(unittest.TestCase):
             self.assertAlmostEqual(aura[('hsa1', 5)][0], 0.42)
             self.assertAlmostEqual(aura[('hsa2', 4)][0], 27.5)
             self.assertAlmostEqual(aura[('hsa2', 5)][0], 30.0)
-            self.assertEqual(aura[('alev', 0)][0], 5)
+            self.assertEqual(aura[('alev', 0)][0], 10)
 
     def test_sacred_aura_tooltips_describe_each_generated_rank(self):
         records = decode(abilities(), extended=True)
@@ -312,9 +315,9 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         self.assertEqual(cast_ranks[(1, 0)], 0.0)
         self.assertEqual(cast_ranks[(2, 0)], 0.0)
 
-    def test_hero_spells_extend_only_registered_effects_through_rank_five(self):
+    def test_hero_spells_extend_only_registered_effects_through_rank_ten(self):
         self.assertEqual(MAX_HERO_LEVEL, 50)
-        self.assertEqual(MAX_SPELL_RANK, 5)
+        self.assertEqual(MAX_SPELL_RANK, 10)
         self.assertEqual(len(HERO_ABILITIES), 25)
         installed = slk('AbilityData.slk')
         installed_ids = {row[1] for row in installed.values() if 1 in row}
@@ -326,7 +329,7 @@ class HeroProgressionAndRecovery(unittest.TestCase):
         for spell in {spell for spells in HERO_ABILITIES.values() for spell in spells}:
             fields = records[spell][1]
             if spell == 'AKfn':
-                self.assertEqual(fields[('alev',0)][0], 5)
+                self.assertEqual(fields[('alev',0)][0], 10)
                 continue
             native_cap = int(float(rows[spell].get(levels_column, '1') or '1'))
             emitted_cap = MAX_SPELL_RANK if spell in SCALABLE_EFFECT_FIELDS else native_cap

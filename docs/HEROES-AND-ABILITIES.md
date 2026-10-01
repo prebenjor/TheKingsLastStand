@@ -1,5 +1,7 @@
 # Heroes and abilities
 
+Current 2026-10-01 policy and packaged evidence: safely scalable skills now allow ten ranks; unsupported mechanics keep native caps. Original-handle purchase retries, king healing, tome stock and consumable changes are in the R2 DEVELOPMENT handoff. Native sale popup and engine testing remain open. See [Hero/market repair report](HERO-MARKET-REPAIRS-20261001.md); this supersedes older five-rank or source-only repair status below.
+
 All selectable heroes start at level 1 and belong to a defending player's ownership. The 25-choice roster preserves the original seventeen and adds eight race-themed heroes; their detailed signatures, company/support recruits and IDs are recorded in [CROWNLANDS-EXPANSION.md](CROWNLANDS-EXPANSION.md). A confirmed choice sets that player's worker and matching race build menu independently. Duplicate hero choices are valid.
 
 ## Selection roster

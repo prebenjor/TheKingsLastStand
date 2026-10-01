@@ -68,7 +68,7 @@ function KLS_CompanyBuildingRole takes unit building returns integer
         return 1
     elseif KLS_IsFactionSiegeYard(rawcode) then
         return 2
-    elseif p >= 0 and p < 4 and rawcode == KLS_FactionArcaneId[KLS_PlayerRace[p]] then
+    elseif p >= 0 and p < 4 and KLS_IsFactionArcane(rawcode) then
         return 3
     endif
     return -1
@@ -133,6 +133,7 @@ function KLS_CompanyApplyUpgrades takes unit recruit returns nothing
     local integer p = GetPlayerId(GetOwningPlayer(recruit))
     local integer heroIndex
     local integer rawcode = GetUnitTypeId(recruit)
+    local integer specialist = KLS_SpecialistIndex(rawcode)
     local integer key = GetHandleId(recruit)
     local integer baseHP
     local integer baseDamage
@@ -142,11 +143,14 @@ function KLS_CompanyApplyUpgrades takes unit recruit returns nothing
     local integer deltaHP
     local real veteran = 0.0
     local real chapter
-    if recruit == null or p < 0 or p >= 4 or not KLS_Active[p] or KLS_HeroChoice[p] < 0 then
+    if recruit == null or p < 0 or p >= 4 or not KLS_Active[p] or (KLS_HeroChoice[p] < 0 and specialist < 0) then
         return
     endif
     set heroIndex = KLS_HeroChoice[p]
-    if rawcode == KLS_CompanyUnitId[heroIndex] then
+    if specialist >= 0 then
+        set baseHP = KLS_SpecialistHP[specialist]
+        set baseDamage = KLS_SpecialistDamage[specialist]
+    elseif rawcode == KLS_CompanyUnitId[heroIndex] then
         set baseHP = KLS_CompanyUnitHP[heroIndex]
         set baseDamage = KLS_CompanyUnitDamage[heroIndex]
     elseif rawcode == KLS_CompanySupportId[heroIndex] then
@@ -275,7 +279,7 @@ function KLS_CompanyCounterSiege takes nothing returns nothing
     local unit target = GetTriggerUnit()
     local integer p = GetPlayerId(GetOwningPlayer(attacker))
     if p >= 0 and p < 4 and KLS_Active[p] and KLS_HeroChoice[p] >= 0 and KLS_CompanyResearchRank[p*5+3] > 0 and BlzGetEventIsAttack() and GetEventDamage() > 0.0 then
-        if GetUnitTypeId(attacker) == KLS_CompanySupportId[KLS_HeroChoice[p]] and IsUnitEnemy(target,Player(p)) and (IsUnitType(target,UNIT_TYPE_STRUCTURE) or KLS_IsSiegeInvader(GetUnitTypeId(target))) then
+        if (GetUnitTypeId(attacker) == KLS_CompanySupportId[KLS_HeroChoice[p]] or (KLS_SpecialistIndex(GetUnitTypeId(attacker)) >= 0 and ModuloInteger(KLS_SpecialistIndex(GetUnitTypeId(attacker)),2) == 1)) and IsUnitEnemy(target,Player(p)) and (IsUnitType(target,UNIT_TYPE_STRUCTURE) or KLS_IsSiegeInvader(GetUnitTypeId(target))) then
             call BlzSetEventDamage(GetEventDamage()*1.50)
         endif
     endif
@@ -284,11 +288,19 @@ function KLS_CompanyCounterSiege takes nothing returns nothing
 endfunction
 
 function KLS_CompanyAddBarracksStock takes unit barracks, integer p returns nothing
-    if p >= 0 and p < 4 and barracks != null and KLS_CompanyHall[p] != null and KLS_HeroChoice[p] >= 0 then
+    local integer i = 0
+    if p >= 0 and p < 4 and barracks != null and GetWidgetLife(barracks) > 0.405 then
+        loop
+            exitwhen i == KLS_HeroCount
+            call RemoveUnitFromStock(barracks,KLS_CompanyUnitId[i])
+            set i = i+1
+        endloop
+    endif
+    if p >= 0 and p < 4 and barracks != null and KLS_CompanyHall[p] != null and GetWidgetLife(KLS_CompanyHall[p]) > 0.405 and KLS_HeroChoice[p] >= 0 then
         call UnitAddAbility(barracks,'Aneu')
+        call UnitAddAbility(barracks,'Asud')
         call AddUnitToStock(barracks,KLS_CompanyUnitId[KLS_HeroChoice[p]],99,99)
         call SetUnitAcquireRange(barracks,0)
-        call KLS_Log("Company stock unlocked: "+GetUnitName(barracks)+" has "+GetObjectName(KLS_CompanyUnitId[KLS_HeroChoice[p]]))
     endif
 endfunction
 
@@ -319,6 +331,7 @@ endfunction
 
 function KLS_CompanyConstructionStarted takes nothing returns nothing
     call FlushChildHashtable(KLS_CompanyUpgradeData,GetHandleId(GetConstructingStructure()))
+    call SaveBoolean(KLS_CompanyUpgradeData,GetHandleId(GetConstructingStructure()),4,true)
 endfunction
 
 function KLS_CompanyProductPrice takes integer rawcode, boolean support returns integer
@@ -378,7 +391,7 @@ function KLS_CompanySellUnit takes nothing returns nothing
         set lumber = KLS_CompanyProductLumber(rawcode,support)
     endif
     if p >= 0 and p < 4 and rawcode != 0 and gold > 0 then
-        if not KLS_Active[p] or shopOwner != p or buyer != KLS_Hero[p] or KLS_Ended then
+        if not KLS_Active[p] or shopOwner != p or buyer != KLS_Hero[p] or KLS_Ended or (support and not KLS_IsFactionSiegeYard(GetUnitTypeId(shop))) or (not support and (not KLS_IsFactionBarracks(GetUnitTypeId(shop)) or KLS_CompanyHall[p] == null or GetWidgetLife(KLS_CompanyHall[p]) <= 0.405)) or (support and rawcode != KLS_CompanySupportId[KLS_HeroChoice[p]]) or (not support and rawcode != KLS_CompanyUnitId[KLS_HeroChoice[p]]) then
             call RemoveUnit(recruit)
             call SetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD)+gold)
             call SetPlayerState(Player(p),PLAYER_STATE_RESOURCE_LUMBER,GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_LUMBER)+lumber)
@@ -430,6 +443,7 @@ function KLS_CompanyConstructed takes nothing returns nothing
         elseif KLS_IsFactionSiegeYard(rawcode) then
             set KLS_CompanyYard[p] = building
             call UnitAddAbility(building,'Aneu')
+            call UnitAddAbility(building,'Asud')
             call AddUnitToStock(building,KLS_CompanySupportId[KLS_HeroChoice[p]],99,99)
             call SetUnitAcquireRange(building,0)
             call KLS_Log("Siege Yard completed for p"+I2S(p+1)+" support="+GetObjectName(KLS_CompanySupportId[KLS_HeroChoice[p]]))
@@ -438,8 +452,84 @@ function KLS_CompanyConstructed takes nothing returns nothing
         endif
     endif
     call SaveBoolean(KLS_CompanyUpgradeData,GetHandleId(building),3,true)
+    call SaveBoolean(KLS_CompanyUpgradeData,GetHandleId(building),4,false)
     call KLS_CompanyResearchStock(building)
     set building = null
+endfunction
+
+function KLS_CompanyDiscover takes nothing returns nothing
+    local unit building = GetEnumUnit()
+    local integer p = GetPlayerId(GetOwningPlayer(building))
+    local integer rawcode = GetUnitTypeId(building)
+    if p >= 0 and p < 4 and GetWidgetLife(building) > 0.405 and not LoadBoolean(KLS_CompanyUpgradeData,GetHandleId(building),4) then
+        if KLS_IsFactionHall(rawcode) then
+            set KLS_CompanyHall[p] = building
+            if KLS_HeroChoice[p] >= 0 then
+                call UnitAddAbility(building,KLS_CompanyBannerAbility[KLS_HeroChoice[p]])
+            endif
+        elseif KLS_IsFactionFoundry(rawcode) then
+            set KLS_CompanyFoundry[p] = true
+        elseif KLS_IsFactionSiegeYard(rawcode) then
+            set KLS_CompanyYard[p] = building
+        endif
+        if KLS_CompanyBuildingRole(building) >= 0 then
+            call SaveBoolean(KLS_CompanyUpgradeData,GetHandleId(building),3,true)
+        endif
+    endif
+    set building = null
+endfunction
+
+function KLS_CompanyRefreshFacility takes nothing returns nothing
+    local unit building = GetEnumUnit()
+    local integer p = GetPlayerId(GetOwningPlayer(building))
+    local integer i = 0
+    if p >= 0 and p < 4 and GetWidgetLife(building) > 0.405 and not LoadBoolean(KLS_CompanyUpgradeData,GetHandleId(building),4) then
+        if KLS_IsFactionBarracks(GetUnitTypeId(building)) then
+            call KLS_CompanyAddBarracksStock(building,p)
+        elseif KLS_IsFactionSiegeYard(GetUnitTypeId(building)) then
+            call UnitAddAbility(building,'Aneu')
+            call UnitAddAbility(building,'Asud')
+            loop
+                exitwhen i == KLS_HeroCount
+                call RemoveUnitFromStock(building,KLS_CompanySupportId[i])
+                set i = i+1
+            endloop
+            if KLS_HeroChoice[p] >= 0 then
+                call AddUnitToStock(building,KLS_CompanySupportId[KLS_HeroChoice[p]],99,99)
+            endif
+        elseif KLS_IsFactionFoundry(GetUnitTypeId(building)) then
+            call AddItemToStock(building,KLS_FactionFoundryRecipeId[KLS_PlayerRace[p]],1,1)
+        endif
+        call KLS_CompanyResearchStock(building)
+        call KLS_CompanyApplyUpgrades(building)
+    endif
+    set building = null
+endfunction
+
+function KLS_CompanyReconcile takes nothing returns nothing
+    local integer p = 0
+    local group owned = CreateGroup()
+    loop
+        exitwhen p == 4
+        if KLS_Active[p] then
+            set KLS_CompanyHall[p] = null
+            set KLS_CompanyYard[p] = null
+            call GroupEnumUnitsOfPlayer(owned,Player(p),null)
+            call ForGroup(owned,function KLS_CompanyDiscover)
+            call ForGroup(owned,function KLS_CompanyRefreshFacility)
+        endif
+        set p = p+1
+    endloop
+    call DestroyGroup(owned)
+    set owned = null
+endfunction
+
+function KLS_CompanyTrained takes nothing returns nothing
+    local unit recruit = GetTrainedUnit()
+    if KLS_SpecialistIndex(GetUnitTypeId(recruit)) >= 0 then
+        call KLS_CompanyPrepareNewRecruit(recruit)
+    endif
+    set recruit = null
 endfunction
 
 function KLS_CompanyInit takes nothing returns nothing
@@ -449,9 +539,12 @@ function KLS_CompanyInit takes nothing returns nothing
     local trigger sold = CreateTrigger()
     local trigger powers = CreateTrigger()
     local trigger counter = CreateTrigger()
+    local trigger trained = CreateTrigger()
     set KLS_CompanyUpgradeData = InitHashtable()
     call KLS_CompanyCatalogInit()
     call KLS_FactionCatalogInit()
+    call KLS_RacialInit()
+    call KLS_WorkerPagesInit()
     loop
         exitwhen p == 4
         set KLS_HeroChoice[p] = -1
@@ -470,6 +563,10 @@ function KLS_CompanyInit takes nothing returns nothing
     call TriggerAddAction(powers,function KLS_CompanyPowerCast)
     call TriggerRegisterAnyUnitEventBJ(counter,EVENT_PLAYER_UNIT_DAMAGED)
     call TriggerAddAction(counter,function KLS_CompanyCounterSiege)
+    call TriggerRegisterAnyUnitEventBJ(trained,EVENT_PLAYER_UNIT_TRAIN_FINISH)
+    call TriggerAddAction(trained,function KLS_CompanyTrained)
+    call TimerStart(CreateTimer(),2.0,true,function KLS_CompanyReconcile)
+    set trained = null
     set powers = null
     set counter = null
     set starting = null

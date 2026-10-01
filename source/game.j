@@ -306,6 +306,10 @@ function KLS_Death takes nothing returns nothing
         call KLS_StoryEscortFailed()
     elseif IsUnitInGroup(dead,KLS_StoryEnemies) then
         call KLS_StoryEnemyKilled(dead)
+    elseif KLS_IsForestMonster(GetUnitTypeId(dead)) then
+        call KLS_AwardKillXP(dead)
+        call KLS_AwardBounty(GetKillingUnit(),GetUnitLevel(dead)*20)
+        call KLS_ForestReward(dead,GetKillingUnit())
     elseif IsUnitInGroup(dead, KLS_Enemies) then
         call GroupRemoveUnit(KLS_Enemies, dead)
         set KLS_Alive = KLS_Alive - 1
@@ -348,6 +352,7 @@ function KLS_Spawn takes nothing returns nothing
     local integer rosterWave = 1
     local integer kind = 'ugho'
     local unit u
+    local unit gate = KLS_FindInvasionGate()
     local real hp
     local boolean spawnFailed = false
     if KLS_Ended or KLS_Selecting or KLS_Alive > 0 then
@@ -366,7 +371,7 @@ function KLS_Spawn takes nothing returns nothing
     loop
         exitwhen n == count or spawnFailed or KLS_Ended
         set kind = KLS_Roster[rosterWave*20+ModuloInteger(n,KLS_RosterSize[rosterWave])]
-        set u = KLS_CreateUnit(Player(11), kind, I2R(ModuloInteger(n, 5) - 2) * 140, 6200 + I2R(n / 5) * 40, 270)
+        set u = KLS_CreateUnit(Player(11), kind, GetUnitX(gate) + I2R(ModuloInteger(n, 7) - 3) * 140, GetUnitY(gate) - 1400 + I2R(ModuloInteger(n / 7, 8)) * 60, 270)
         if u != null then
             set hp = (180 + KLS_Wave * 55 + KLS_Players * 35)*KLS_DifficultyHealthScale()
             call BlzSetUnitMaxHP(u, R2I(hp))
@@ -379,7 +384,7 @@ function KLS_Spawn takes nothing returns nothing
             endif
             call SetUnitAcquireRange(u, 900)
             call GroupAddUnit(KLS_Enemies, u)
-            call IssuePointOrder(u, "attack", 0, 350)
+            call KLS_OrderInvader(u)
             set KLS_Alive = KLS_Alive + 1
         else
             set spawnFailed = true
@@ -389,7 +394,7 @@ function KLS_Spawn takes nothing returns nothing
     endloop
     if not spawnFailed and not KLS_Ended and ModuloInteger(KLS_Wave, 10) == 0 then
         set kind = KLS_BossUnitForWave(KLS_Wave)
-        set u = KLS_CreateUnit(Player(11), kind, 0, 6800, 270)
+        set u = KLS_CreateUnit(Player(11), kind, GetUnitX(gate), GetUnitY(gate) - 760, 270)
         if u != null then
             set KLS_Boss = u
             set KLS_BossMechanic = KLS_BossMechanicForWave(KLS_Wave)
@@ -402,7 +407,7 @@ function KLS_Spawn takes nothing returns nothing
             call SetUnitScale(u, 1.6, 1.6, 1.6)
             call GroupAddUnit(KLS_Enemies, u)
             set KLS_Alive = KLS_Alive + 1
-            call IssuePointOrder(u, "attack", 0, 350)
+            call KLS_OrderInvader(u)
             call KLS_Message("|cffff4444BOSS WAVE " + I2S(KLS_Wave) + "!|r")
         else
             set spawnFailed = true
@@ -412,6 +417,7 @@ function KLS_Spawn takes nothing returns nothing
         set KLS_Boss = null
         call KLS_Message("Mixed invasion wave " + I2S(KLS_Wave) + " is approaching.")
     endif
+    set gate = null
     set u = null
 endfunction
 
@@ -493,7 +499,7 @@ endfunction
 
 function KLS_Reorder takes nothing returns nothing
     if GetUnitCurrentOrder(GetEnumUnit()) == 0 then
-        call IssuePointOrder(GetEnumUnit(), "attack", 0, 350)
+        call KLS_OrderInvader(GetEnumUnit())
     endif
 endfunction
 
@@ -606,40 +612,7 @@ function KLS_BuildLandscape takes nothing returns nothing
     local real y = -6500
     local integer i = 0
     local integer j = 0
-    local destructable gate
-    // Extend the existing gate runs to both map edges at unchanged spacing.
-    // The stone gateway spans the northern approach while leaving a broad
-    // permanent opening on the central road.
-    loop
-        exitwhen x > -1450
-        set gate = KLS_CreateDestructable('LTg1', x, 5200, 0, 2.0, 0)
-        if gate == null then
-            return
-        endif
-        call SetDestructableInvulnerable(gate, true)
-        set x = x + 620
-    endloop
-    set x = 1450
-    loop
-        exitwhen x > 7650
-        set gate = KLS_CreateDestructable('LTg1', x, 5200, 0, 2.0, 0)
-        if gate == null then
-            return
-        endif
-        call SetDestructableInvulnerable(gate, true)
-        set x = x + 620
-    endloop
-    call KLS_Log("Northern barrier: 10 left sections, 11 right sections; central opening unchanged")
-    set gate = KLS_CreateDestructable('BTsk', -1250, 5200, 0, 1.5, 0)
-    if gate == null then
-        return
-    endif
-    call SetDestructableInvulnerable(gate, true)
-    set gate = KLS_CreateDestructable('BTsk', 1250, 5200, 0, 1.5, 0)
-    if gate == null then
-        return
-    endif
-    call SetDestructableInvulnerable(gate, true)
+    // The saved cliff frontier and northern forecourt own the scenery.
     // Keep the entire playable area visibly green and frame it with harvestable
     // tree belts. The central gate opening stays clear.
     set x = -7800
@@ -691,7 +664,6 @@ function KLS_BuildLandscape takes nothing returns nothing
         set i = i + 1
     endloop
     // Preserve the authored road, courtyard and market textures at startup.
-    set gate = null
 endfunction
 
 function KLS_PlayerLeft takes nothing returns nothing
@@ -762,6 +734,8 @@ function KLS_Init takes nothing returns nothing
     set KLS_Enemies = CreateGroup()
     call KLS_PersonalRewardInit()
     call KLS_Log("Initialization entered")
+    call KLS_InvasionGateInit()
+    call KLS_ForestInit()
     // GENERATED_PLOT_COORDINATES
     call KLS_BuildLandscape()
     if KLS_Ended then

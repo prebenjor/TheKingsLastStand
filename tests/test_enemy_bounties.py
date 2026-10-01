@@ -159,9 +159,9 @@ class EnemyBounties(unittest.TestCase):
         self.assertIn('local integer potionRoll = GetRandomInt(1,1000)', drops)
 
         potion = function_body(script, 'KLS_EnemyPotionThreshold')
-        self.assertIn('if tier == 2 then\n        return 180', potion)
-        self.assertIn('elseif tier == 1 then\n        return 80', potion)
-        self.assertIn('return 40', potion)
+        self.assertIn('if tier == 2 then\n        return 50', potion)
+        self.assertIn('elseif tier == 1 then\n        return 20', potion)
+        self.assertIn('return 10', potion)
 
         delivery = function_body(script, 'KLS_DropEnemyItem')
         self.assertIn('call SetItemPlayer(drop,Player(p),false)', delivery)

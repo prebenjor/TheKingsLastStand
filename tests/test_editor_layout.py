@@ -47,7 +47,7 @@ class EditorLayout(unittest.TestCase):
     def test_editor_copy_adds_every_preview_with_reserved_owner_and_unique_number(self):
         records = self.records(placement_data(self.terrain(), previews=True))
         previews = records[4:]
-        self.assertEqual(len(previews), 85)
+        self.assertEqual(len(previews), 73)
         self.assertEqual(len(previews), len(editor_placements()))
         for record, (raw, x, y, _) in zip(previews, editor_placements()):
             self.assertEqual(record[:4].decode(), raw)
@@ -55,9 +55,9 @@ class EditorLayout(unittest.TestCase):
             self.assertEqual(struct.unpack_from('<i', record, 45)[0], PREVIEW_OWNER)
         self.assertEqual([struct.unpack_from('<i', r, 115)[0] for r in records], list(range(len(records))))
 
-    def test_shared_catalog_covers_market_four_towns_hub_and_plot_resources(self):
+    def test_shared_catalog_covers_market_surviving_towns_services_hub_and_plot_resources(self):
         self.assertEqual(len(market_placements()), 13)
-        self.assertEqual(len(town_placements()), 32)
+        self.assertEqual(len(town_placements()), 20)
         placements = editor_placements()
         self.assertEqual(sum(label.startswith('Hero choice') for *_, label in placements), 25)
         self.assertEqual(sum(raw == 'ngol' for raw, *_ in placements), 4)

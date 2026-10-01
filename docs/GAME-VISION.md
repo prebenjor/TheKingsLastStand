@@ -1,12 +1,19 @@
 # Game vision — The King's Last Stand
 
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 ## One-sentence promise
 
 Two to four friends choose different Warcraft heroes, build their own kingdom outposts along one defended road, and cooperate to keep King Aldric alive through the forty-wave Crownlands campaign and endless cross-campaign assaults.
 
 ## The experience
 
-The opening is a hero-selection courtyard. Players inspect twenty-five hero choices, their roles, native skill sets, and signature ability before confirming. The roster includes the original fifteen Warcraft heroes, verified Forsaken Kingdom campaign heroes Ilastar and the Forsaken Paladin, and eight new race-themed heroes. A confirmed hero sets that player's Human, Orc, Night Elf, or Undead workers and build menu independently. The invasion approaches through the user's cliff-based frontier passages, four player plots line the defense row, and King Aldric's castle holds the center. Crownshire, Moonbark Glade and Wraithfall connect to the road across the 192 × 192 battlefield. The user removed Redtusk Hold and added a troll camp; those authored choices supersede the old four-village/gate layout.
+The opening is a hero-selection courtyard. Players inspect twenty-five hero choices, their roles, native skill sets, and signature ability before confirming. The roster includes the original fifteen Warcraft heroes, verified Forsaken Kingdom campaign heroes Ilastar and the Forsaken Paladin, and eight new race-themed heroes. A confirmed hero sets that player's Human, Orc, Night Elf, or Undead workers and build menu independently. The invasion approaches through the user's cliff-based frontier passages, four player plots line the defense row, and King Aldric's castle holds the center. Crownshire and Moonbark Glade connect to the road across the 192 × 192 battlefield. The user removed Redtusk Hold and added a troll camp; those authored choices supersede the old four-village/gate layout.
 
 Each player develops a personal base and race-matched army. Workers gather lumber and gold, construct and repair faction-flavored buildings, recruit hero-matched troops, and place defensive structures. The selected hero explores the frontline, earns full nearby shared experience while keeping kill gold personal, learns safe extended spell ranks, chooses level-up stats and talents, and builds equipment through a persistent campaign backpack. King Aldric's own kills contribute a quarter bounty to every active player. Between waves the team prepares, heals at the castle or restorative spring, shops, crafts, advances optional town-recovery objectives, and adjusts defenses. Bosses interrupt the wave cadence with visible mechanics and personal rewards.
 
@@ -47,7 +54,7 @@ The map uses Warcraft world coordinates where positive Y is north and the view's
 
 The sketch is conceptual; implement saved coordinates and footprints in source. The existing layout constants put four plot centers at X = -6000, -3300, 3300, 6000 and Y = -500. The castle centers on X = 0, Y = -500; King Aldric stands north of it at (0, 350). Former gate spawns at Y = 5200 must yield to the user's authored cliffs after handoff. Enemies currently spawn north at Y = 6200 and attack toward the king; review this route against the new passages. The shop plaza is around Y = -3900 and the Restoring Spring at (-900, -1600), subject to saved placement changes.
 
-The terrain target is a readable 192 × 192-cell battlefield. Connected paths reach Crownshire, Moonbark Glade and Wraithfall; the removed Orc village must not be regenerated. The main route and cliff passages must accommodate bosses, siege units, escorts and defenders. Preserve four personal plots, the user's new troll camp and their authored composition. Buildable areas, cliffs, castle, settlements, market, mines, forests, bounds, pathing and minimap must agree. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) for the user decisions and pending source integration.
+The terrain target is a readable 192 × 192-cell battlefield. Connected paths reach Crownshire and Moonbark Glade; the removed Orc village must not be regenerated. The main route and cliff passages must accommodate bosses, siege units, escorts and defenders. Preserve four personal plots, the user's new troll camp and their authored composition. Buildable areas, cliffs, castle, settlements, market, mines, forests, bounds, pathing and minimap must agree. See [EDITOR-LAYOUT-REVISION.md](EDITOR-LAYOUT-REVISION.md) for the user decisions and pending source integration.
 
 ## Non-negotiable product choices
 

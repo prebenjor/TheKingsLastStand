@@ -27,10 +27,30 @@ def units():
     # and consume the same hero skill point without becoming ranked abilities.
     def learned_hero_skills(hero_id):
         return ','.join(dict.fromkeys(HERO_ABILITIES[hero_id]))
-    from hero_catalog import NEW_HEROES, HERO_BASE_HP_OVERRIDES
+    from hero_catalog import NEW_HEROES, HERO_BASE_HP_OVERRIDES, HERO_TYPES, HERO_PARENT_TYPES
+    from hero_progression import _slk, ROOT
+    from signature_spells import spell_id
+    native_unit_abilities = _slk(ROOT / 'tools/reference/installed/UnitAbilities.slk')
+    native_normal_column = next(k for k, v in native_unit_abilities[1].items() if v == 'abilList')
+    native_normal = {row.get(1): row.get(native_normal_column, '')
+                     for row in native_unit_abilities.values() if row.get(1)}
+    signature_indices = {hero_id: i for i, hero_id in enumerate(HERO_TYPES)}
+    signature_indices.update({h['unit_id']: h['signature_index'] for h in NEW_HEROES})
+    def normal_hero_skills(hero_id, parent):
+        return ','.join(dict.fromkeys(
+            [a for a in native_normal[parent].split(',') if a not in ('', '_', '-')]
+            + [spell_id(signature_indices[hero_id])]))
     zero_hero_growth = {'ustp':0.0,'uinp':0.0,'uagp':0.0}
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
+    # Preserve racial construction and standard production, with unique native
+    # build-card positions. Expansion definitions are packaged separately until
+    # the same-handle worker-switching engine acceptance gate is satisfied.
+    for faction in FACTIONS:
+        for index,building in enumerate(faction['standard_menu']):
+            if building == faction['altar']:
+                continue
+            original.append(record(building,'\0'*4,{'ubpx':index%4,'ubpy':index//4}))
     # Each race builds a custom altar child rather than Warcraft's stock altar.
     # Native tier-two town halls still require the stock altar rawcode, which
     # makes the displayed Altar of Kings requirement impossible to satisfy.
@@ -41,7 +61,7 @@ def units():
         # Night Elf Tier Two core upgrades must use Tier One buildings. The
         # former Ancient of Wind/Lore requirements both require Tree of Ages.
         ('etoa', 'eaom', 'edob', 'kA02'),
-        ('unp1', 'usep', 'uslh', 'kA03'),
+        ('unp1', 'usep', 'ugrv', 'kA03'),
     )
     original.extend(record(town_hall, '\0\0\0\0', {
         'ureq': ','.join((barracks, blacksmith, altar))})
@@ -50,9 +70,12 @@ def units():
     for hero_id, abilities in HERO_ABILITIES.items():
         if hero_id not in custom_hero_ids:
             original.append(record(hero_id, '\0\0\0\0', {
-                'uhab': learned_hero_skills(hero_id), **zero_hero_growth}))
+                'uhab': learned_hero_skills(hero_id), 'uhas': learned_hero_skills(hero_id),
+                'uabi': normal_hero_skills(hero_id, HERO_PARENT_TYPES[hero_id]),
+                'uabs': normal_hero_skills(hero_id, HERO_PARENT_TYPES[hero_id]), **zero_hero_growth}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':HERO_BASE_HP_OVERRIDES['H000'],**zero_hero_growth}),
+        record('ndmg', 'kInv', {'unam':'Northern Summoning Gate','uabi':'Avul','utra':'','ureq':'','uaen':0,'utub':'An impenetrable summoning gate. Enemy waves emerge from its southern forecourt.'}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'uhas':learned_hero_skills('H000'),'uabi':normal_hero_skills('H000','Hamg'),'uabs':normal_hero_skills('H000','Hamg'),'ureq':'','uhpm':HERO_BASE_HP_OVERRIDES['H000'],**zero_hero_growth}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
         record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
         record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
@@ -60,8 +83,19 @@ def units():
         record('hctw', 'h002', {'unam':_TOWER_NAMES['Human'][1],'utip':_TOWER_NAMES['Human'][1],'utub':_TOWER_TOOLTIPS['Human'][1],'ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
         record('hatw', 'h003', {'unam':_TOWER_NAMES['Human'][2],'utip':_TOWER_NAMES['Human'][2],'utub':_TOWER_TOOLTIPS['Human'][2],'ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
-    for rank, (health, damage) in enumerate(((300,15),(450,22),(600,30),(660,33),(720,36)), start=1):
-        custom.append(record('efon','kT0'+str(rank),{'unam':'Briar Host Treant','uhpm':health,'ua1b':damage,'ua1d':0,'ua1s':0,'ureq':''}))
+    from forest_catalog import CAMPS
+    for i, camp in enumerate(CAMPS):
+        for prefix, base, name in (('L', camp['leader'], camp['name']+' Guardian'),
+                                   ('M', camp['guard'], camp['name']+' Defender')):
+            fields = {'unam':name, 'ureq':'', 'ubba':0, 'ubdi':0, 'ubsi':0}
+            if prefix == 'L':
+                fields.update({'uhpm':(900,1200,1600,2200)[i], 'ua1b':(20,26,35,45)[i],
+                               'utub':'Defeat this camp leader for personal '+('Common' if camp['quality']==0 else 'Uncommon')+' equipment and healing supplies.'})
+            custom.append(record(base,f'k{prefix}{i:02d}',fields))
+    for rank in range(1, 11):
+        health, damage = ((300,15),(450,22),(600,30))[rank-1] if rank <= 3 else (round(600*(1+.1*(rank-3))),round(30*(1+.1*(rank-3))))
+        from hero_progression import briar_unit_id
+        custom.append(record('efon',briar_unit_id(rank),{'unam':'Briar Host Treant','uhpm':health,'ua1b':damage,'ua1d':0,'ua1s':0,'ureq':''}))
     custom.append(record('hbew','kCar',{'unam':'Northwatch Supply Caravan','uabi':'','uhpm':1800,'umvt':'foot','umvs':140,'uaen':0,'upat':'','ucol':32.0,'ufoo':0}))
     from town_catalog import TOWNS, QUEST_RAWCODES
     for town in TOWNS:
@@ -71,6 +105,9 @@ def units():
     for hero in NEW_HEROES:
         custom.append(record(hero['base'], hero['unit_id'], {
             'unam':hero['name'], 'upro':hero['name'],
+            'uabi':normal_hero_skills(hero['unit_id'], hero['base']),
+            'uabs':normal_hero_skills(hero['unit_id'], hero['base']),
+            'uhas':learned_hero_skills(hero['unit_id']),
             'uhab':learned_hero_skills(hero['unit_id']), 'ureq':'', **zero_hero_growth,
         }))
     from company_catalog import HERO_COMPANIES
@@ -104,6 +141,7 @@ def units():
                 'ulum':entry['lumber'], 'ubld':entry['build_time'],
                 'uhpm':entry['hit_points'], 'ureq':faction['barracks'], 'ures':'', 'urev':0,
                 'uabi':'', 'utra':'', 'uupt':'',
+                'ubpx':('hall','foundry','siege_yard').index(role),'ubpy':0,
             }
             if role in ('hall','foundry','siege_yard'):
                 fields['uabi'] = 'Aneu,Apit,Asid,Asud'
@@ -131,11 +169,42 @@ def units():
         }
         custom.append(record(entry['company_parent'],entry['company_id'],company_fields))
         custom.append(record(entry['support_parent'],entry['support_id'],support_fields))
+    from racial_catalog import racial_unit_records,SPECIALISTS
+    # Add native queues to completed banner halls and support yards. Sell-unit
+    # stock remains personal and occupies other command-card cells.
+    for faction_index,faction in enumerate(FACTIONS):
+        for role,offset in (('hall',0),('siege_yard',1)):
+            identity=faction['company_buildings'][role]['rawcode']
+            for index,row in enumerate(custom):
+                if row[4:8].decode()==identity:
+                    # Reconstruct this known generator row with its existing fields.
+                    entry=faction['company_buildings'][role]
+                    fields=dict(unam=entry['name'],utip='Build '+entry['name'],utub=entry['tooltip'],ugol=entry['gold'],ulum=entry['lumber'],ubld=entry['build_time'],uhpm=entry['hit_points'],ureq=faction['barracks'],ures='',urev=0,uabi='Aneu,Apit,Asid,Asud,Aral',uabs='Aneu,Apit,Asid,Asud,Aral',utra=SPECIALISTS[faction_index*2+offset]['id'],uupt='',ubpx=0,ubpy=0)
+                    custom[index]=record(entry['parent'],identity,fields)
+    custom.extend(racial_unit_records(record))
+    # Apply positions without discarding authored custom object fields.
+    from hero_market_handoff import object_rows
+    for index,row in enumerate(custom):
+        rawcode=row[4:8].decode()
+        placement=None
+        for faction in FACTIONS:
+            if rawcode==faction['altar']:placement=(3,0)
+            elif rawcode in faction['expansion_menu']:
+                n=faction['expansion_menu'].index(rawcode);placement=(n%4,n//4)
+        if rawcode in {e['company_id'] for e in HERO_COMPANIES}|{e['support_id'] for e in HERO_COMPANIES}:placement=(3,0)
+        if placement is not None:
+            _,tables=object_rows(table([], [row]))
+            fields={f[0]:f[4] for f in tables[1][0]['fields']}
+            fields.update(ubpx=placement[0],ubpy=placement[1])
+            custom[index]=record(row[:4].decode(),rawcode,fields)
     custom.append(record('ngme','hS00',{'unam':'Kingdom Merchant','usei':'','umki':'','uabi':'Avul,Aneu,Apit,Asid,Asud','utub':'Select to browse equipment. Bring your hero within 700 range to buy.'}))
     custom.append(record('hars','hS02',{'unam':"Sage's Archive",'utip':"Sage's Archive",'utub':'A quiet shop for permanent Strength, Agility and Intelligence tomes. Select your hero before buying.','uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
     custom.append(record('hcas','hC01',{"unam":"King Aldric's Castle",'uabi':'Avul,Aneu,Apit,Asid,Asud','usei':'','umki':''}))
     custom.append(record('hpea','hS01',{'unam':'Frost effect','uabi':'Aloc,ASl0','umdl':'','umvs':0,'ucol':0.0,'umpm':100,'umpi':100,'ufoo':0}))
     return table(original, custom)
+
+def racial_buffs():
+    return table([], [record(parent,identity,{'fnam':'Binding Thorns','ftip':'Binding Thorns','fube':'Movement bound by Thorn Sentinel roots.'}) for parent,identity in (('Beng','rBr0'),('Bena','rBa0'))])
 
 
 from equipment_catalog import color_rarity_text, item_catalog
@@ -161,7 +230,7 @@ def items():
     for book in attribute_books():
         fields={'icla':'Power-ups','unam':book['name'],'utip':book['name'],
                 'utub':book['description'],'igol':book['price'],'iabi':'',
-                'iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':1}
+                'iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':1,'isto':99,'istr':0,'isst':0}
         custom.append(record(book['parent'],book['rawcode'],fields))
     for recipe in recipe_catalog(item_catalog()):
         fields={'icla':'Power-ups','unam':'Forge Recipe: '+recipe['name'],
@@ -176,7 +245,7 @@ def items():
             'utub':research['description'],'igol':research['gold'],'ilum':research['lumber'],
             'iabi':'','iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,
         }))
-    controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0})]
+    controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. Available again after one second. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0,'isto':1,'istr':1,'isst':0})]
     for tier in range(5):
         raw='KUP'+str(tier+1)
         cost=400+200*tier

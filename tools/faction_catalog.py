@@ -37,22 +37,22 @@ _TOWER_TOOLTIPS = {
     'Human': (
         'A Human roadside watchtower. Its arrows deal 18 base damage to attackers.',
         'A Human bombardment tower. Heavy shots deal 70 base damage to attackers.',
-        'A Human Sanctuary Tower. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        "A consecrated watchtower that shelters Aldric's defenders. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.",
     ),
     'Orc': (
         'An Orc lookout tower. Its attacks deal 18 base damage to approaching enemies.',
         'An Orc Redtusk heavy tower. Its crushing shots deal 70 base damage to attackers.',
-        'An Orc Spirit Ward. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Ancestral spirits shelter warriors beneath this ward. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
     'Night Elf': (
         'A Night Elf Ancient Protector guarding the woodland road. Its attacks deal 18 base damage.',
         'A Night Elf Moonfire Spire that lashes invaders for 70 base damage.',
-        'A Night Elf Moonwell Sentinel. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Moonlit waters sustain the defenders of the glade. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
     'Undead': (
         'An Undead Ziggurat Tower guarding the approach. Its attacks deal 18 base damage.',
         'An Undead Frost Tower that strikes invaders for 70 base damage.',
-        'An Undead Soulwell Spire. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Bound souls sustain the armies of the crown. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
 }
 _COMPANY_TOOLTIPS = {
@@ -89,7 +89,7 @@ FACTIONS = [
      'food':'emow','barracks':'eaom','blacksmith':'edob','arcane':'kR02','arcane_parent':'eaoe',
      'towers':('kT20','kT21','kT22'),'tower_parents':('etrp','etrp','etrp')},
     {'race':'Undead','worker':'uaco','town_hall':'unpl','altar':'kA03','altar_parent':'uaod',
-     'food':'uzig','barracks':'usep','blacksmith':'uslh','arcane':'kR03','arcane_parent':'utod',
+     'food':'uzig','barracks':'usep','blacksmith':'ugrv','arcane':'kR03','arcane_parent':'utod',
      'towers':('kT30','kT31','kT32'),'tower_parents':('uzig','uzg2','uzig')},
 ]
 
@@ -109,9 +109,17 @@ for race_index, faction in enumerate(FACTIONS):
     faction['company_buildings']['hall']['tooltip'] += ' Research three Company Chapters: each adds 5% base health/damage and 15% power potency. Chapters unlock through town recovery or waves 10/20/30.'
     faction['company_buildings']['foundry']['tooltip'] += ' Research three weapon ranks (+10% base damage each) and armor ranks (+10% base health and +2 armor each).'
     faction['company_buildings']['siege_yard']['tooltip'] += ' Research Counter-Siege Drill for +50% support attack damage against invading siege units and enemy structures.'
-    faction['build_menu'] = [faction['town_hall'], faction['altar'], faction['food'],
-        faction['barracks'], faction['blacksmith'], faction['arcane'], *faction['towers'],
-        *[faction['company_buildings'][key]['rawcode'] for key in ('hall','foundry','siege_yard')]]
+    faction['standard_menu'] = (
+        ['htow','hhou','hbar','h000','hlum','hbla','harm','hars','hgra','hwtw','hvlt'],
+        ['ogre','otrb','obar','kA01','ofor','owtw','obea','osld','otto','ovln'],
+        ['etol','emow','eaom','kA02','edob','etrp','eaoe','eaow','edos','eden'],
+        ['unpl','uzig','usep','kA03','ugrv','uslh','utod','usap','ubon','utom','ugol'],
+    )[race_index]
+    faction['native_arcane'] = ('hars','osld','eaoe','utod')[race_index]
+    faction['expansion_worker'] = f'rW0{race_index}'
+    faction['expansion_menu'] = [faction['company_buildings'][key]['rawcode']
+        for key in ('hall','foundry','siege_yard')] + list(faction['towers'])
+    faction['build_menu'] = faction['standard_menu']
     for index, entry in enumerate(faction['company_buildings'].values()):
         entry['race'] = faction['race']
         entry['role'] = ('hall','foundry','siege_yard')[index]
@@ -135,7 +143,7 @@ def faction_script():
             lines.append(f"    set KLS_Faction{key.title().replace('_','')}Id[{index}] = '{faction['company_buildings'][key]['rawcode']}'")
         lines.append(f"    set KLS_FactionFoundryRecipeId[{index}] = '{foundry_recipes[faction['race']]}'")
     lines.append('endfunction')
-    for role in ('Hall','Foundry','SiegeYard','Barracks','Altar','Tower','SanctuaryTower'):
+    for role in ('Hall','Foundry','SiegeYard','Barracks','Altar','Tower','SanctuaryTower','Arcane'):
         lines.append(f'function KLS_IsFaction{role} takes integer rawcode returns boolean')
         ids=[]
         if role=='Hall': ids=[f['company_buildings']['hall']['rawcode'] for f in FACTIONS]
@@ -145,6 +153,7 @@ def faction_script():
         elif role=='Altar': ids=[f['altar'] for f in FACTIONS]
         elif role=='Tower': ids=[raw for f in FACTIONS for raw in f['towers']]
         elif role=='SanctuaryTower': ids=[f['towers'][2] for f in FACTIONS]
+        elif role=='Arcane': ids=[code for f in FACTIONS for code in (f['arcane'],f['native_arcane'])]
         lines.append('    return ' + ' or '.join("rawcode == '"+code+"'" for code in ids))
         lines.append('endfunction')
     return '\n'.join(lines)

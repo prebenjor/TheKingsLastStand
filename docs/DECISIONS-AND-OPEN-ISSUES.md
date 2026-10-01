@@ -1,5 +1,23 @@
 # September 30 audit completion
 
+Current 2026-10-01 policy and packaged evidence: safely scalable skills now allow ten ranks; unsupported mechanics keep native caps. Original-handle purchase retries, king healing, tome stock and consumable changes are in the R2 DEVELOPMENT handoff. Native sale popup and engine testing remain open. See [Hero/market repair report](HERO-MARKET-REPAIRS-20261001.md); this supersedes older five-rank or source-only repair status below.
+
+## Current countryside handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Castle-Countryside-Final-R4-20261001.w3m` (SHA256 `8d04cabf92ef4ddf68559a66636f80d6603645d08804c13528cc60d7bfe822d6`). This supersedes earlier countryside and forest editing handoffs. West/east countryside scenery, shop placement synchronization and portal/monster group corrections are implemented. Compilation, preservation and static route checks passed; standard World Editor selection and gameplay checks remain pending. This is a DEVELOPMENT editor copy, not an installed release. See `docs/CASTLE-COUNTRYSIDE-20261001.md` for preservation evidence and the required saved-shop import workflow. The original forest baseline is archived and untouched.
+
+## Forest editing handoff — 2026-10-01
+
+The user approved forests and loot coves north, east and west of the summoning gate. Continue editing `build/KLS-D-68303d69bf-Forest-Coves-Final-20261001.w3m` (SHA c7d91e762808683fae708105b1d0fdda5cf21291cd4bcdc61e93b3a2db892929), now open in Forge. It preserves the previous terrain/placements and adds woodland paths, cliff outcrops and four one-time neutral monster camps. The 12 Neutral Extra camp units are disposable editor markers; runtime camps use the forest catalog coordinates. Leaders grant personal Common/Uncommon gear and supplies, outside wave accounting. See docs/FOREST-COVES-20261001.md. This is a DEVELOPMENT editor handoff; canonical authored-layer and installed gameplay integration remain separate.
+
+
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 The seven audited source gaps are implemented; evidence and remaining exact-build checks are tracked in [AUDIT-COMPLETION.md](AUDIT-COMPLETION.md). Older status entries below retain historical context.
 
 - Initial normal point budget is one at level 1 plus one per gained level. Spell ranks and unranked +3 attribute buttons compete; no automatic attribute growth. Talent milestones use a separate nonmodal owner-local row and attack-only evasion.
@@ -104,3 +122,6 @@ Ready/difficulty/stat frame allocation repaired in KLS-D-c98ba28f73, pending liv
 
 ## Backpack visibility candidate — 2026-09-30
 KLS-D-d213c3b353 adds a local presentation guard; the reported cross-player closing remains pending exact-build engine confirmation. See [BACKPACK-PANEL-REPAIR.md](BACKPACK-PANEL-REPAIR.md) for assumptions, regression evidence and the live check.
+
+## Shop purchase duplication — 2026-10-01
+Multiplayer duplicate purchases remain open pending current-build live evidence. Source candidate removes replacement-item creation during deferred equip. Reported sale UI/payout mismatch requires the item identity; no payout compensation added. See docs/SHOP-DUPLICATION-20261001.md.

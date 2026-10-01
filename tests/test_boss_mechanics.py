@@ -57,7 +57,7 @@ class BossMechanics(unittest.TestCase):
         self.assertIn("set kind = 'nfgu'", summon)
         self.assertEqual(summon.count('GroupAddUnit(KLS_Enemies,summon)'), 1)
         self.assertEqual(summon.count('set KLS_Alive = KLS_Alive+1'), 1)
-        self.assertIn('IssuePointOrder(summon,"attack",0,350)', summon)
+        self.assertIn('call KLS_OrderInvader(summon)', summon)
         self.assertNotIn('IssuePointOrder(summon,"attack",0,-2700)', summon)
 
     def test_failed_wave_enemy_creation_does_not_count_a_null_unit_or_finish_as_victory(self):
@@ -160,7 +160,7 @@ class BossMechanics(unittest.TestCase):
         cases = {
             'KLS_AddTree': (r'if tree == null then\s+return\s+endif[\s\S]*?SetDestructableMaxLife',),
             'KLS_BuildLandscape': (
-                r'set gate = KLS_CreateDestructable[\s\S]*?if gate == null then\s+return\s+endif[\s\S]*?SetDestructableInvulnerable',
+                r'call KLS_AddTree\([^\n]+\)[\s\S]*?if KLS_Ended then\s+return\s+endif',
             ),
             'KLS_CreateShops': (
                 r'set KLS_Shops\[tier\*2\+i\] = KLS_CreateUnit[\s\S]*?if KLS_Shops\[tier\*2\+i\] == null then\s+return\s+endif[\s\S]*?BlzSetUnitName',
