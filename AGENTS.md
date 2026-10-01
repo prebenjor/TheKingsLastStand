@@ -1,5 +1,9 @@
 # Instructions for future agents
 
+## Current toggle follow-up — 2026-10-02
+
+Continue from `build/KLS-Worker-Toggle-Repair-Gated-R2-20261002.w3m` (KLS-D-768ef40c73; SHA256 `e64e3901a574dba632653e38a9d1f792bfa4054992156cd1c3c0e0c00bce70b5`). Read `docs/WORKER-TOGGLE-REPAIR-20261002.md`. Prototype R7/KLS-D-06e5f5f190 supersedes R5/R6. The user reported Night Elf failure, prior map unconfirmed; production remains gated. Two reproduced defects corrected: Cha1 uses native data slot 0, and refresh must not disable V during its own Channel cast. Read `levels`, not just flat `value`, in MCP ability readback. Native all-race acceptance is still required before enabling production. PR #1 merged; new follow-up source/README changes use their own reviewable PR.
+
 ## Current racial handoff — 2026-10-02
 
 Continue from `build/KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m`, build KLS-D-1f003ecdb7, SHA256 `2793d5d6f815709d46953568743864ccbf09b8ea55f3915206322158ca7b5c14`. Read `docs/RACIAL-CONSTRUCTION-20261002.md` and the building matrix. Expansion construction is deliberately gated; Prototype R5 is the separate native test artifact. User tested Undead in obsolete Prototype R2 and switching failed. R5 corrects the Chaos parent; do not enable the production gate without all four races' native evidence. Preserve the targeted R2 signature behavior, countryside, placements, inventory/economy and known sale-popup discrepancy.

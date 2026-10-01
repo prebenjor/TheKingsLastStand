@@ -37,4 +37,17 @@ class RacialConstruction(unittest.TestCase):
         self.assertIn("call UnitAddAbility(barracks,'Asud')",source)
         self.assertIn('KLS_SpecialistIndex',source)
 
+    def test_worker_morph_target_uses_installed_metadata_slot(self):
+        from racial_catalog import racial_spell_records
+        from hero_progression import _slk,ROOT
+        metadata=_slk(ROOT/'tools/reference/installed/AbilityMetaData.slk')
+        row=next(row for row in metadata.values() if row.get(1)=='Cha1')
+        pointer=int(row[next(k for k,v in metadata[1].items() if v=='data')])
+        records=racial_spell_records(lambda base,identity,fields:(base,identity,fields))
+        morphs=[row for row in records if row[1].startswith(('rX','rS'))]
+        self.assertEqual(len(morphs),8)
+        for base,identity,fields in morphs:
+            target=next(f for f in fields if f[0]=='Cha1')
+            self.assertEqual(target[3],pointer,identity+' destination must use native UnitID slot')
+
 if __name__=='__main__':unittest.main()

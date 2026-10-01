@@ -1,5 +1,13 @@
 # Build changelog
 
+## 2026-10-02 — Worker-toggle native-slot and cast repair
+
+- Regular gated build **KLS-D-768ef40c73**: `KLS-Worker-Toggle-Repair-Gated-R2-20261002.w3m`, SHA256 `e64e3901a574dba632653e38a9d1f792bfa4054992156cd1c3c0e0c00bce70b5`.
+- Separate native test build **KLS-D-06e5f5f190**: `KLS-Worker-Toggle-Prototype-R7-20261002.w3m`, SHA256 `24a7017ee0517612426070e6a807944942f49dd264b60ce505a06d9a7f86f180`.
+- Correct eight Chaos destination data pointers from 1 to native UnitID slot 0 in main/skin objects. Keep V active during its own Channel cast and add visible order/callback/morph diagnostics. Audit readback now retains per-level fields. Preserve the latest saved racial handoff, all hero/company/economy behavior and authored content.
+- Installed-API compilation, typed/archive preservation, reopened readback and native-format round trips pass. 245 tests, 243 pass, two baseline failures remain. Night Elf toggle failure reported; exact prior test build unconfirmed. R7 native retest required for all races; production gate remains closed and sale-popup discrepancy remains tracked.
+- [Immutable prerelease](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261002-worker-toggle-repair); [verification report](docs/WORKER-TOGGLE-REPAIR-20261002.md).
+
 ## 2026-10-02 — Racial repairs, native gate pending
 
 - Regular handoff **KLS-D-1f003ecdb7**: `KLS-Racial-Repairs-Native-Gate-Pending-R3-20261002.w3m`, SHA256 `2793d5d6f815709d46953568743864ccbf09b8ea55f3915206322158ca7b5c14`.
