@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--forest-camps', action='store_true', help='Include the approved one-time forest camps in the editor handoff')
     parser.add_argument('--dress-forest', help='Apply catalog dressing to the currently open dedicated Forge folder')
     parser.add_argument('--forge-lock', help='Selected Forge MCP lockfile for live dressing')
-    parser.add_argument('--racial-action', choices=('prepare','refresh','apply','package','audit'), help='Preservation-first racial construction/recruitment handoff')
+    parser.add_argument('--racial-action', choices=('prepare','worker-revision','refresh','apply','package','audit'), help='Preservation-first racial construction/recruitment handoff')
     parser.add_argument('--racial-folder', help='New or prepared racial MCP work folder')
     parser.add_argument('--worker-page-prototype', action='store_true', help='Grant worker page buttons ONLY in the separate native-acceptance prototype')
     parser.add_argument('--import-market-layout', help='Import saved native shop moves by creation identity into the source catalog')
@@ -32,10 +32,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.racial_action:
         if not args.racial_folder:parser.error('--racial-folder is required')
-        from racial_handoff import prepare,refresh,apply,package,audit
-        if args.racial_action=='prepare':
+        from racial_handoff import prepare,prepare_worker_revision,refresh,apply,package,audit
+        if args.racial_action in ('prepare','worker-revision'):
             if not args.editor_baseline or not args.forge_lock:parser.error('Prepare requires --editor-baseline and --forge-lock')
-            print(prepare(args.editor_baseline,args.racial_folder,args.forge_lock))
+            action=prepare_worker_revision if args.racial_action=='worker-revision' else prepare
+            print(action(args.editor_baseline,args.racial_folder,args.forge_lock))
         elif args.racial_action=='refresh':print(refresh(args.racial_folder))
         elif args.racial_action=='apply':
             if not args.forge_lock:parser.error('Apply requires --forge-lock')

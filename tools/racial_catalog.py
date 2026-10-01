@@ -53,7 +53,8 @@ def racial_spell_records(ability):
         ('adur',2,2,0,1.0),('ahdu',2,2,0,1.0),('abuf',3,1,0,'rBa0,rBr0'),('abuf',3,2,0,'rBa0,rBr0')]))
     for i,f in enumerate(FACTIONS):
         for identity,target in ((f'rX0{i}',f['expansion_worker']),(f'rS0{i}',f['worker'])):
-            rows.append(ability('Sca5',identity,[('anam',3,0,0,'Worker construction page'),('aher',0,0,0,0),('alev',0,0,0,1),('areq',3,0,0,''),('Cha1',3,1,1,target)]))
+            # Cha1 maps to native UnitID, not DataA: metadata data slot is zero.
+            rows.append(ability('Sca5',identity,[('anam',3,0,0,'Worker construction page'),('aher',0,0,0,0),('alev',0,0,0,1),('areq',3,0,0,''),('Cha1',3,1,0,target)]))
     rows.append(ability('ANcl','rPg0',[
         ('anam',3,0,0,'Standard / Expansion Construction'),('aher',0,0,0,0),('alev',0,0,0,1),('areq',3,0,0,''),
         ('aart',3,0,0,'ReplaceableTextures\\CommandButtons\\BTNRepair.dds'),('abpx',0,0,0,2),('abpy',0,0,0,2),('ahky',3,0,0,'V'),

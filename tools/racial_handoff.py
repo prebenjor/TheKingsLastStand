@@ -96,6 +96,47 @@ def refresh(folder):
     (folder/'racial-plan.json').write_text(json.dumps(plan,indent=2),encoding='utf-8')
     return {k:len(v) for k,v in plan['changes'].items()}
 
+def prepare_worker_revision(source,folder,lock):
+    """Correct only known malformed morph fields in the latest saved handoff."""
+    folder=Path(folder);source=Path(source)
+    if folder.exists():raise ValueError('Use a new versioned folder')
+    _,contents,build_id=read_map(source)
+    with Forge(lock) as api:
+        if Path(api.call('bridge.ping')['map_path']).resolve()!=source.resolve():raise ValueError('Open latest saved baseline first')
+        capture={}
+        for faction in FACTIONS:
+            result=api.call('objects.units.get',id=faction['worker'])
+            capture[faction['worker']]=dict(name=result['name'],fields={f['id']:f['value'] for f in result['fields'] if f['id'] in ('uabi','uabs','ubui')})
+    sha=hashlib.sha256(source.read_bytes()).hexdigest()
+    backup=folder.parents[1]/'backups'/'racial'/('20261002-worker-'+sha[:12])
+    backup.mkdir(parents=True,exist_ok=True);shutil.copy2(source,backup/source.name)
+    folder.mkdir(parents=True);(folder/'expected').mkdir()
+    (folder/'building-matrix-before.json').write_text(json.dumps(capture,indent=2),encoding='utf-8')
+    for name,data in contents.items():
+        if '/' not in name and '\\' not in name:(folder/name).write_bytes(data)
+    changes=[]
+    for skin in ('','Skin'):
+        for suffix in ('w3u','w3a','w3h'):
+            name=f'war3map{skin}.{suffix}';payload=contents[name]
+            if suffix=='w3a':
+                _,tables=object_rows(payload,True)
+                for i,faction in enumerate(FACTIONS):
+                    for identity,target in ((f'rX0{i}',faction['expansion_worker']),(f'rS0{i}',faction['worker'])):
+                        row=next(r for table in tables for r in table if r['custom']==identity)
+                        assert row['base']=='Sca5'
+                        field=next(f for f in row['fields'] if f[0]=='Cha1')
+                        assert field[1:5]==(3,1,1,target),'Unexpected morph baseline '+identity
+                        assert payload.count(field[5])==1
+                        corrected=field[5][:12]+struct.pack('<I',0)+field[5][16:]
+                        payload=payload.replace(field[5],corrected,1)
+                        if not skin:changes.append(dict(id=identity,field='Cha1',type=3,level=1,pointer=0,value=target,base='Sca5'))
+            (folder/'expected'/name).write_bytes(payload)
+    plan=dict(source=str(source.resolve()),sha256=sha,baseline_build_id=build_id,backup=str(backup.resolve()),
+      changes=dict(units=[],abilities=changes,buffs=[]),selection=[identity for f in FACTIONS for identity in (f['worker'],f['expansion_worker'])]+[s['id'] for s in SPECIALISTS],
+      allowed_fields=dict(units={},abilities={change['id']:['Cha1'] for change in changes},buffs={}))
+    (folder/'racial-plan.json').write_text(json.dumps(plan,indent=2),encoding='utf-8')
+    return dict(baseline=sha,folder=str(folder.resolve()),morphs=len(changes))
+
 def apply(folder,lock):
     folder=Path(folder);plan=json.loads((folder/'racial-plan.json').read_text())
     with Forge(lock) as api:
@@ -161,7 +202,7 @@ def audit(folder,lock):
         skills|={s['ability'] for s in SPECIALISTS}|{code for e in HERO_COMPANIES for code in (e['company_ability'],e['support_ability'])}
         for identity in sorted(skills):
             result=api.call('objects.abilities.get',id=identity)
-            report['abilities'][identity]=dict(name=result['name'],base_id=result.get('base_id'),fields=[{k:f[k] for k in ('id','value','display_name')} for f in result['fields'] if f['value']])
+            report['abilities'][identity]=dict(name=result['name'],base_id=result.get('base_id'),fields=[{k:f[k] for k in ('id','value','display_name','levels') if k in f} for f in result['fields'] if f['value'] or f.get('levels')])
     (folder/'mcp-racial-readback.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
     return {k:len(report[k]) for k in ('units','abilities','heroes')}
 

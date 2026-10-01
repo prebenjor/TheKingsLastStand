@@ -101,6 +101,7 @@ class RacialRuntime(unittest.TestCase):
           GetOwningPlayer=lambda u:u['owner'],GetWidgetLife=lambda u:u['life'],GetUnitState=lambda u,s:u['mana'],
           UNIT_STATE_MANA=0,GetSpellAbilityId=lambda: 'rPg0',GetUnitCurrentOrder=lambda u:88,
           GetIssuedOrderId=lambda:order[0],OrderId=lambda s:88 if s=='channel' else 99,
+          GetUnitAbilityLevel=lambda u,a:1,
           SaveInteger=lambda h,k,c,v:h.__setitem__((k,c),v),LoadInteger=lambda h,k,c:h.get((k,c),0),
           BlzUnitDisableAbility=lambda u,a,d,h:disabled.append(d),DisplayTimedTextToPlayer=lambda *a:messages.append(a[-1]),
           IsUnitLoaded=lambda u:False,UnitAddAbility=lambda u,a:morphs.append(a),UnitRemoveAbility=lambda *a:None,
@@ -122,5 +123,17 @@ class RacialRuntime(unittest.TestCase):
         self.assertIn('LoadInteger(KLS_WorkerPageData,workerHandle,0)',text)
         self.assertNotIn('RemoveUnit(worker)',text)
         self.assertNotIn('CreateUnit(',text)
+
+    def test_idle_refresh_does_not_disable_the_toggle_during_its_own_cast(self):
+        worker=dict(type=1,handle=17);disabled=[]
+        env=dict(KLS_WorkerPageData={},KLS_WorkerPagesAccepted=False,KLS_WorkerStandardId=[1,2,3,4],KLS_WorkerExpansionId=[5,6,7,8],
+          GetEnumUnit=lambda:worker,GetUnitTypeId=lambda u:u['type'],GetHandleId=lambda u:u['handle'],
+          GetUnitCurrentOrder=lambda u:88,OrderId=lambda s:88 if s=='channel' else 99,
+          SaveInteger=lambda *a:None,IsUnitLoaded=lambda u:False,
+          BlzUnitDisableAbility=lambda u,a,d,h:disabled.append(d))
+        source=(Path(__file__).resolve().parents[1]/'source/worker_pages.j').read_text()
+        compile_handler(source,'KLS_WorkerPageRefreshEnum',env)
+        env['KLS_WorkerPageRefreshEnum']()
+        self.assertEqual(disabled,[False])
 
 if __name__=='__main__':unittest.main()

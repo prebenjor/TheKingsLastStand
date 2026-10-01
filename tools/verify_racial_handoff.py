@@ -47,7 +47,7 @@ def verify(folder,target):
                 current=new_rows[identity]
                 assert (row['base'],row['custom'],row['extras'])==(current['base'],current['custom'],current['extras']),identity
                 permitted=allowed.get(identity,set())
-                if manifest['prototype'] and identity in ('hpea','opeo','ewsp','uaco'):permitted=permitted|{'uabi','uabs'}
+                if manifest['prototype'] and identity in ('hpea','opeo','ewsp','uaco','rW00','rW01','rW02','rW03'):permitted=permitted|{'uabi','uabs'}
                 field_bytes=lambda record:{(f[0],f[2],f[3]):f[5] for f in record['fields'] if f[0] not in permitted}
                 assert field_bytes(row)==field_bytes(current),identity
         for suffix,identities,extended in [('w3u',HERO_ABILITIES,False),('w3a',skills,True)]:
