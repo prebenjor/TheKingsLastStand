@@ -1,5 +1,10 @@
 # Build changelog
 
+## 2026-10-01 — Invasion AI source polish and authored layout review (not packaged)
+
+- Replaced fixed king-target coordinates for waves, bosses and reinforcements with the actual living king position. Preserve active orders and reject null/dead units or ended matches.
+- 205 regression checks and installed-API JASS compilation passed. Audited the immutable authored save: 64 moved references, 12 reused IDs, 13 added units/buildings. No map edits, new gameplay package or installation; complete preservation integration remains pending.
+
 ## 2026-10-01 — Forge draw-loop crash correction
 
 - User screenshot showed that successful model loading had not restored visible rendering. Diagnostics confirmed a crashed draw loop dereferencing a missing neutral-player texture.

@@ -21,6 +21,18 @@ globals
     boolean KLS_Debug = true
 endglobals
 
+// Follow the living objective wherever the authored layout places it.
+// Attack-move retains ordinary pathing and lets invaders engage defenders en route.
+function KLS_OrderInvader takes unit invader returns nothing
+    if KLS_Ended or invader == null or KLS_King == null then
+        return
+    endif
+    if GetWidgetLife(invader) <= 0.405 or GetWidgetLife(KLS_King) <= 0.405 then
+        return
+    endif
+    call IssuePointOrder(invader,"attack",GetUnitX(KLS_King),GetUnitY(KLS_King))
+endfunction
+
 function KLS_StatChoiceRefresh takes nothing returns nothing
     local integer p = GetPlayerId(GetLocalPlayer())
     local unit hero
@@ -581,7 +593,7 @@ function KLS_BossSummon takes nothing returns nothing
             call GroupAddUnit(KLS_Enemies,summon)
             set KLS_Alive = KLS_Alive+1
             set spawned = spawned+1
-            call IssuePointOrder(summon,"attack",0,350)
+            call KLS_OrderInvader(summon)
         else
             set spawnFailed = true
             call KLS_Log("WARN boss reinforcement sequence stopped after a failed optional spawn; spawned="+I2S(spawned))

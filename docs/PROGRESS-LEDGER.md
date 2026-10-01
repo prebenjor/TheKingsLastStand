@@ -1,5 +1,13 @@
 # Current status — 2026-10-01
 
+## Continued gameplay polish — source AI and authored layout review
+
+- Wave troops, bosses and reinforcements now attack the living king's actual XY position; the existing eight-second idle-only redirection cadence remains. Missing/dead units or objectives and ended matches receive no orders.
+- Five new behavior checks failed before implementation and pass after. Existing boss checks pass 13/13; full regression suite **205 passed** (`test-results/invasion-ai-pass.txt`). Installed common.j/blizzard.j compilation passed for the generated AI check script. These are source/automated checks, not Warcraft route or gameplay proof.
+- Immutable human snapshot f9c9276256ed reviewed: 64 same-type moved references, 12 reused/replaced reference IDs, 13 added units/buildings. The eight deleted Redtusk IDs were reused, as were four hero-preview IDs. Details and preservation requirements: [AUTHORED-LAYOUT-INTEGRATION-REVIEW.md](AUTHORED-LAYOUT-INTEGRATION-REVIEW.md).
+- Ruling: do not rebuild/install from the older art bundle while the authored unit/reference reconciliation is incomplete. It would lose new homes/camps/mines and restore deleted village objects. The current open Forge and original Terrain saves remain untouched; gameplay package remains KLS-D-68303d69bf.
+- Next implementation pass: port unambiguous moved references and preserve replacement/additional units, then reconcile three-town story and cliff routes before one new versioned package.
+
 ## Viewport correction after screenshot feedback
 
 - Previous model counts were insufficient: the user screenshot showed missing rendering; diagnostics caught a stopped draw loop reading an undefined team texture.

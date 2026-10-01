@@ -379,7 +379,7 @@ function KLS_Spawn takes nothing returns nothing
             endif
             call SetUnitAcquireRange(u, 900)
             call GroupAddUnit(KLS_Enemies, u)
-            call IssuePointOrder(u, "attack", 0, 350)
+            call KLS_OrderInvader(u)
             set KLS_Alive = KLS_Alive + 1
         else
             set spawnFailed = true
@@ -402,7 +402,7 @@ function KLS_Spawn takes nothing returns nothing
             call SetUnitScale(u, 1.6, 1.6, 1.6)
             call GroupAddUnit(KLS_Enemies, u)
             set KLS_Alive = KLS_Alive + 1
-            call IssuePointOrder(u, "attack", 0, 350)
+            call KLS_OrderInvader(u)
             call KLS_Message("|cffff4444BOSS WAVE " + I2S(KLS_Wave) + "!|r")
         else
             set spawnFailed = true
@@ -493,7 +493,7 @@ endfunction
 
 function KLS_Reorder takes nothing returns nothing
     if GetUnitCurrentOrder(GetEnumUnit()) == 0 then
-        call IssuePointOrder(GetEnumUnit(), "attack", 0, 350)
+        call KLS_OrderInvader(GetEnumUnit())
     endif
 endfunction
 

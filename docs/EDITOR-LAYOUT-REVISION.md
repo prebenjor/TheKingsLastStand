@@ -11,7 +11,7 @@ These supersede the original four-settlement/open-gate layout. Four playable rac
 
 ## Evidence and limits
 
-The changes above are **user-reported edits in the currently open editor**. They are not yet extracted, archived or integrated into the gameplay package. We have no fresh save-and-close confirmation for this revision. Do not capture/rebuild/replace that open map.
+The full saved revision is now archived under `backups/wc3-forge/20261001-f9c9276256ed/` with SHA-256 `f9c9276256edd2531f37efa9a029e0334bb1f71dfa3ac7c297a98cff26ea55da`. The original saved map and separately opened Forge copy remain unchanged. A read-only creation-ID review found moved references, reused IDs and new units; see [AUTHORED-LAYOUT-INTEGRATION-REVIEW.md](AUTHORED-LAYOUT-INTEGRATION-REVIEW.md). This revision has not yet been integrated into the gameplay package and is not a clean Chapter 0 baseline. Do not rebuild from art alone or replace the open Forge file.
 
 Live Computer Use observation was attempted, reset and retried. Both attempts failed before app enumeration with `failed to write kernel assets: The system cannot find the path specified. (os error 3)`. No current editor screenshot was obtained. Exact cliff openings, troll type/ownership, scenery style, placement identities and coordinates remain unobserved; ask for screenshots or retry the supported helper when available. Do not invent a visual inspection.
 
