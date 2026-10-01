@@ -36,6 +36,11 @@ function KLS_SignatureCast takes nothing returns nothing
     if n == KLS_HeroCount then
         return
     endif
+    if GetSpellAbilityId() == 'AK21' then
+        // Moonlance Volley damage is delivered by its native Object Editor spell.
+        // Never run the scripted area hit as well.
+        return
+    endif
     call KLS_Log(KLS_SignatureName[n]+" cast by p"+I2S(p+1))
     call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Monsoon\\MonsoonBoltTarget.mdl",x,y))
     set targets = CreateGroup()
@@ -61,12 +66,12 @@ function KLS_SignatureCast takes nothing returns nothing
                         call UnitApplyTimedLife(dummy,'BTLF',3)
                     endif
                 endif
-            elseif GetPlayerId(GetOwningPlayer(u)) < 4 and IsUnitAlly(u,owner) then
+            elseif (u == KLS_King or GetPlayerId(GetOwningPlayer(u)) < 4) and IsUnitAlly(u,owner) then
                 if KLS_SignatureHeal[n] > 0 then
                     call SetWidgetLife(u,RMinBJ(BlzGetUnitMaxHP(u),GetWidgetLife(u)+KLS_SignatureHeal[n]+15.0*level))
                     call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl",u,"origin"))
                 endif
-                if KLS_SignatureMana[n] > 0 then
+                if KLS_SignatureMana[n] > 0 and u != KLS_King then
                     call SetUnitState(u,UNIT_STATE_MANA,RMinBJ(GetUnitState(u,UNIT_STATE_MAX_MANA),GetUnitState(u,UNIT_STATE_MANA)+KLS_SignatureMana[n]))
                 endif
             endif

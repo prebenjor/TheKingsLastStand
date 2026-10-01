@@ -1,12 +1,17 @@
 """Rank selected Warcraft hero skills through level 50 using installed data."""
 from pathlib import Path
 import re
+import json
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_HERO_LEVEL = 50
-MAX_SPELL_RANK = 5
+MAX_SPELL_RANK = 10
 MAX_NATIVE_DATA_RANK = MAX_SPELL_RANK
 EXTRA_RANK_POWER_STEP = 0.10
+
+def briar_unit_id(rank):
+    # kT10 is an existing faction tower. Keep old treants; reserve bT for new ranks.
+    return f'kT{rank:02d}' if rank <= 5 else f'bT{rank:02d}'
 
 # Only fields whose installed meaning is a spell's power are extended. Every
 # other field is copied from the final authored rank, preserving costs,
@@ -234,6 +239,10 @@ def _modification_fields(ability_id, data_row, headers, metadata):
                 value = raw
             if rank > native_level_cap and field_id in effect_field_ids and value_kind in ('unreal', 'real', 'int') and value > 0:
                 scaled = value * (1.0 + EXTRA_RANK_POWER_STEP * (rank - native_level_cap))
+                if field_id == 'Hbh1':
+                    scaled = min(scaled, 95)
+                elif field_id in ('Eev1', 'hsa1', 'Hbn1'):
+                    scaled = min(scaled, 0.95)
                 value = int(scaled + 0.5) if value_kind == 'int' else scaled
             key = (field_id, rank, pointer)
             if key not in seen:
@@ -286,6 +295,34 @@ def _sacred_aura_tooltips(fields):
         ))
     return result
 
+def _extended_rank_tooltips(spell, fields, row, headers):
+    """Use captured native UI labels and actual generated power, not stale rank-three tips."""
+    metadata_path = ROOT / 'tools/hero_ability_ui.json'
+    if not metadata_path.exists():
+        raise ValueError('Capture the hero ability UI audit before building extended ranks')
+    ui = json.loads(metadata_path.read_text(encoding='utf-8'))[spell]
+    columns = {name:index for index,name in headers.items()}
+    native = _native_level_cap(row, headers)
+    cap = next(value for field,typ,rank,pointer,value in fields if field=='alev')
+    required = int(row.get(columns['reqLevel'], '1') or '1')
+    skip = int(row.get(columns['levelSkip'], '0') or '0') or 2
+    output = []
+    for rank in range(native+1,cap+1):
+        lines = [f'Rank {rank}.']
+        for field,typ,level,pointer,value in fields:
+            if level!=rank or field not in SCALABLE_EFFECT_FIELDS.get(spell,()):continue
+            label = ui['fields'].get(field,'Power').lstrip('% ').strip()
+            fractional = field in ('Eev1','hsa1','Hbn1','Oae1','Oae2','Ear1','Uau1','Eah1')
+            shown = value*100 if fractional else value
+            percent = fractional or field=='Hbh1' or ui['fields'].get(field,'').startswith('%')
+            lines.append(f'{label}: {shown:g}'+('%' if percent else ''))
+        lines.append('Mana cost, cooldown, range and duration stay the same.')
+        text='|n'.join(lines)
+        output.extend([('atp1',3,rank,0,f"{ui['name']} - Rank {rank}"),
+                       ('aub1',3,rank,0,text),('aut1',3,rank,0,f"Learn {ui['name']} - Rank {rank}"),
+                       ('auu1',3,rank,0,f'Requires hero level {required+(rank-1)*skip}.|n'+text)])
+    return output
+
 
 def hero_ability_records(ability_builder):
     """Return safe rank overrides for the selected heroes' native skills."""
@@ -297,23 +334,25 @@ def hero_ability_records(ability_builder):
         raise ValueError('Hero spell IDs absent from installed AbilityData.slk: ' + ', '.join(missing))
     for spell in ability_ids:
         if spell == 'AKfn':
-            fields = [('alev',0,0,0,5),('anam',3,0,0,'Briar Host'),('aher',0,0,0,1),
+            fields = [('alev',0,0,0,MAX_SPELL_RANK),('anam',3,0,0,'Briar Host'),('aher',0,0,0,1),
                       ('aart',3,0,0,r'ReplaceableTextures\CommandButtons\BTNEnt.dds'),
                       ('arhk',3,0,0,'F'),('ahky',3,0,0,'F'),('abpx',0,0,0,1),('abpy',0,0,0,2)]
-            for rank in range(1,6):
-                fields.extend([('Osf1',3,rank,0,'kT0'+str(rank)),('Osf2',0,rank,2,2),
+            for rank in range(1,MAX_SPELL_RANK+1):
+                fields.extend([('Osf1',3,rank,0,briar_unit_id(rank)),('Osf2',0,rank,2,2),
                                ('acdn',2,rank,0,30.0),('amcs',0,rank,0,100),
                                ('adur',2,rank,0,60.0),('ahdu',2,rank,0,60.0),
                                ('atp1',3,rank,0,f'Briar Host - Rank {rank}'),
                                ('aub1',3,rank,0,f'Calls two treants from the land for 60 seconds. No trees required. Rank {rank}.'),
                                ('aut1',3,rank,0,f'Learn Briar Host - Rank {rank}'),
-                               ('auu1',3,rank,0,f'Calls two treants without trees. Rank {rank}. Ranks 4 and 5 improve rank 3 health and damage by 10% and 20%.')])
+                               ('auu1',3,rank,0,f'Calls two treants without trees. Rank {rank}. Each rank beyond 3 adds 10% of rank 3 health and damage.')])
             records.append(ability_builder('AOsf','AKfn',fields))
             continue
         row = data[spell]
         fields = _modification_fields(spell, row, headers, metadata)
         if spell in ('AHas', 'AHpa'):
             fields.extend(_sacred_aura_tooltips(fields))
+        else:
+            fields.extend(_extended_rank_tooltips(spell, fields, row, headers))
         if len(fields) < 2:
             raise ValueError('No installed per-rank ability data found for ' + spell)
         records.append(ability_builder(spell, '\0' * 4, fields))

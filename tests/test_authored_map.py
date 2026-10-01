@@ -67,7 +67,7 @@ class AuthoredMapRoundTrip(unittest.TestCase):
         self.assertFalse('call SetTerrainType(' in game,
                          'Match startup must not repaint authored roads or plot edges.')
         self.assertNotIn('call KLS_StampPlot(', game)
-        self.assertIn("KLS_CreateDestructable('LTg1'", game)
+        self.assertNotIn("KLS_CreateDestructable('LTg1'", game)
         self.assertIn('call KLS_AddTree(', game)
         heroes = (ROOT / 'source/heroes.j').read_text(encoding='utf-8')
         self.assertNotIn('call SetTerrainType(', heroes)

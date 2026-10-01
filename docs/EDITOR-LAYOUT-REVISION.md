@@ -1,5 +1,12 @@
 # Editor layout revision — 2026-09-30
 
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 ## Explicit user decisions
 
 - The user removed the **entire Orc village, Redtusk Hold**, in World Editor.
@@ -7,7 +14,7 @@
 - The user placed a **troll camp**.
 - The user's current hand-authored terrain, doodads and units are the visual direction for subsequent work. Preserve their composition and use observed examples when extending it. Do not restore the repeated grass islands or automatically reconstruct removed scenery.
 
-These supersede the original four-settlement/open-gate layout. Four playable races and four personal bases remain. The remaining planned settlements are Crownshire, Moonbark Glade and Wraithfall. The troll camp is an authored encounter landmark; it is not automatically a replacement Orc town or a mandatory story objective.
+These supersede the original four-settlement/open-gate layout. Four playable races and four personal bases remain. The remaining planned settlements are Crownshire and Moonbark Glade. The troll camp is an authored encounter landmark; it is not automatically a replacement Orc town or a mandatory story objective.
 
 ## Evidence and limits
 
@@ -21,8 +28,8 @@ Keep the existing four-stage optional recovery arc, shared match progress, perso
 
 1. **Reclaim Northwatch:** the request comes from a surviving allied settlement/frontier contact, no longer Redtusk Hold. Relocate the Northwatch Vanguard rather than respawning the deleted village. Choose its exact host/position from the saved layout. The four-threat encounter and restored watchposts must use reachable locations in the new cliff landscape.
 2. **Escort the supplies:** retain Crownshire's supply caravan. Reconcile its destination and route with the authored roads and cliffs; keep participation, vulnerability and retry rules.
-3. **Restore the surviving quarters:** retain the Moonbark contribution objective. Activate refuges at the three remaining settlements, not at an invisible/deleted Orc settlement. The original restoration prices, quiet regeneration and personal rewards remain.
-4. **Break the Wraithfall ritual:** retain the northern ritual objective, but move guards and its contact as needed to match reachable authored ground. Existing completion perks remain; garrison placement must use extant sites, not dereference a removed town slot.
+3. **Restore the surviving quarters:** retain the Moonbark contribution objective. Activate refuges at the two remaining settlements, not at an invisible/deleted Orc settlement. The original restoration prices, quiet regeneration and personal rewards remain.
+4. **Break the Crown Ritual Service ritual:** retain the northern ritual objective, but move guards and its contact as needed to match reachable authored ground. Existing completion perks remain; garrison placement must use extant sites, not dereference a removed town slot.
 
 The troll camp's allegiance, respawn behavior, rewards and story role are **undecided**. Preserve the user's placed units. During integration, identify intended gameplay units and add explicit spawning/ownership rules so art-only capture does not lose them; do not put independent camp units into wave accounting by default.
 

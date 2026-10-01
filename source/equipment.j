@@ -241,8 +241,8 @@ function KLS_GearPawned takes nothing returns nothing
     local integer p = GetPlayerId(GetOwningPlayer(seller))
     local integer rawcode = GetItemTypeId(gear)
     if p >= 0 and p < 4 and gear != null and LoadInteger(KLS_GearData,rawcode,0) > 0 then
-        call KLS_Log("Native pawn event: item="+GetItemName(gear)+" seller=p"+I2S(p+1)+" item-owner="+I2S(GetItemUserData(gear)))
-        call DisplayTimedTextToPlayer(Player(p),0,0,6,"Sold "+GetItemName(gear)+" back to the market.")
+        call KLS_Log("Native pawn event: item="+GetItemName(gear)+" rawcode="+I2S(rawcode)+" seller=p"+I2S(p+1)+" item-owner="+I2S(GetItemUserData(gear))+" gold-at-event="+I2S(GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD)))
+        call DisplayTimedTextToPlayer(Player(p),0,0,6,"Sold "+GetItemName(gear)+" back to the market. Gold balance: "+I2S(GetPlayerState(Player(p),PLAYER_STATE_RESOURCE_GOLD))+".")
     endif
     set seller = null
     set gear = null

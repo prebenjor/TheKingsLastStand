@@ -198,6 +198,7 @@ function KLS_TalentLevel takes nothing returns nothing
     local integer heroLevel
     if p >= 0 and p < 4 and u == KLS_Hero[p] and KLS_HeroChoice[p] >= 0 then
         set heroLevel = GetHeroLevel(u)
+        call KLS_NativeSignatureRefresh(u)
         set milestone = GetHeroLevel(u) / 5
         if milestone > KLS_LastTalentMilestone[p] then
             set KLS_TalentPoints[p] = KLS_TalentPoints[p] + milestone - KLS_LastTalentMilestone[p]
@@ -267,49 +268,6 @@ function KLS_ProgressionInit takes nothing returns nothing
     set talentSync = null
     set statClicks = null
     set statSync = null
-endfunction
-
-function KLS_MovePurchaseToRegularInventory takes unit buyer, item gear returns item
-    local integer slot = 0
-    local integer emptySlot = -1
-    local integer rawcode = GetItemTypeId(gear)
-    local item current
-    local item moved = null
-    // Native shop purchases can land in the 30-slot Forsaken bag. If there is
-    // a free six-slot inventory position, place the same catalog item there
-    // first; this lets native equipment and merchant drag interactions work.
-    loop
-        exitwhen slot == 6
-        set current = UnitItemInSlot(buyer,slot)
-        if current == gear then
-            set current = null
-            return gear
-        endif
-        if current == null and emptySlot < 0 then
-            set emptySlot = slot
-        endif
-        set slot = slot+1
-    endloop
-    if emptySlot >= 0 then
-        // Remove the original handle from the extended backpack before asking
-        // Warcraft to create its regular-inventory replacement. If the copy
-        // cannot be placed, restore that same original item to the buyer.
-        call UnitRemoveItem(buyer,gear)
-        if UnitAddItemToSlotById(buyer,rawcode,emptySlot) then
-            set moved = UnitItemInSlot(buyer,emptySlot)
-            if moved != null and GetItemTypeId(moved) == rawcode then
-                call SetItemUserData(moved,GetItemUserData(gear))
-                call SetItemCharges(moved,GetItemCharges(gear))
-                call RemoveItem(gear)
-                set current = null
-                return moved
-            endif
-        endif
-        call UnitAddItem(buyer,gear)
-    endif
-    set current = null
-    set moved = null
-    return gear
 endfunction
 
 function KLS_MarketEquipContext takes unit buyer, item gear, integer attempt returns string
@@ -394,9 +352,14 @@ function KLS_MarketEquipPurchased takes nothing returns nothing
         set p = GetPlayerId(GetOwningPlayer(buyer))
         set rawcode = GetItemTypeId(gear)
         if p >= 0 and p < 4 and buyer == KLS_Hero[p] and GetWidgetLife(buyer) > 0.405 and LoadInteger(KLS_GearData,rawcode,0) > 0 then
-            set gear = KLS_MovePurchaseToRegularInventory(buyer,gear)
-            if UnitEquipItem(buyer,gear) then
-                call KLS_Log("Shop purchase equipped after transfer:"+KLS_MarketEquipContext(buyer,gear,attempt))
+            // Keep the exact handle delivered by Warcraft. Never create a
+            // replacement while the native backpack still owns the purchase.
+            if UnitHasItemEquipped(buyer,gear) then
+                call KLS_Log("Shop purchase already equipped:"+KLS_MarketEquipContext(buyer,gear,attempt))
+            elseif GetItemUserData(gear) != p+1 or not (UnitHasItem(buyer,gear) or UnitHasItemBagged(buyer,gear)) then
+                call KLS_Log("Shop auto-equip cancelled: purchase no longer owned/carried by buyer:"+KLS_MarketEquipContext(buyer,gear,attempt))
+            elseif UnitEquipItem(buyer,gear) then
+                call KLS_Log("Shop purchase equipped using original handle:"+KLS_MarketEquipContext(buyer,gear,attempt))
             else
                 if attempt < 8 then
                     set attempt = attempt+1
@@ -433,12 +396,15 @@ function KLS_MarketBuy takes nothing returns nothing
     local integer p = GetPlayerId(GetOwningPlayer(buyer))
     local integer quotedTier = -1
     local timer equipTimer = null
+    if buyer == null or gear == null or rawcode == 0 then
+        return
+    endif
     if KLS_CompanyServiceIndex(rawcode) >= 0 then
         call KLS_CompanyResearchBuy(shop,buyer,gear)
     elseif shop == KLS_Castle then
         if rawcode == 'KHE1' then
             call KLS_KingContribute(GetOwningPlayer(buyer),false,KLS_KingTier,true)
-            call AddItemToStock(shop,'KHE1',1,1)
+            // Native KHE1 stock regeneration is one second; do not refill immediately.
         elseif rawcode == 'KUP1' or rawcode == 'KUP2' or rawcode == 'KUP3' or rawcode == 'KUP4' or rawcode == 'KUP5' then
             if rawcode == 'KUP1' then
                 set quotedTier = 0
@@ -497,7 +463,8 @@ function KLS_MarketBuy takes nothing returns nothing
             endif
         endif
         call RemoveItem(gear)
-        call AddItemToStock(shop, rawcode, 1, 1)
+        call RemoveItemFromStock(shop, rawcode)
+        call AddItemToStock(shop, rawcode, 99, 99)
     else
         if p >= 0 and p < 4 then
             call SetItemUserData(gear,p+1)

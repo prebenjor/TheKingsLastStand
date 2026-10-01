@@ -1,5 +1,13 @@
 # Build changelog
 
+## Current hero and market handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.
+
+## Current countryside handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Castle-Countryside-Final-R4-20261001.w3m` (SHA256 `8d04cabf92ef4ddf68559a66636f80d6603645d08804c13528cc60d7bfe822d6`). This supersedes earlier countryside and forest editing handoffs. West/east countryside scenery, shop placement synchronization and portal/monster group corrections are implemented. Compilation, preservation and static route checks passed; standard World Editor selection and gameplay checks remain pending. This is a DEVELOPMENT editor copy, not an installed release. See `docs/CASTLE-COUNTRYSIDE-20261001.md` for preservation evidence and the required saved-shop import workflow. The original forest baseline is archived and untouched.
+
 ## 2026-10-01 — Invasion AI source polish and authored layout review (not packaged)
 
 - Replaced fixed king-target coordinates for waves, bosses and reinforcements with the actual living king position. Preserve active orders and reject null/dead units or ended matches.
@@ -553,3 +561,32 @@ SHA-256: `0b71c26a3353d088cedb376d0d27d597039b9662687d475c60569c732fcb3a9d`.
 - Verification: eight focused backpack tests passed, including four-client isolation and Escape. Installed-API syntax, MPQ archive/readback and installation passed. Installed/workspace hashes match.
 - Full suite before documentation synchronization: 121 tests, 13 assertion failures (including seven build-record failures/subtests) and four errors. Build-record checks rerun after updating docs; six other failures and four errors remain recorded in `docs/BACKPACK-PANEL-REPAIR.md`. No clean full-suite claim.
 - Pending: native frame lookup/context and item/name binding, simultaneous two/four-player open/close, Escape and shop/selection checks, Editor round-trip, Custom Game, gameplay and endurance.
+
+
+## 2026-10-01 — KLS-D-68303d69bf Development editor derivative
+
+The user reauthorized Forge MCP against the newest standard World Editor save. All 25 selected heroes now explicitly list AK00–AK24 in Object Editor normal abilities, preserving each current normal ability list. The four learnable skills are unchanged. Matching source generation covers all 25 and no longer adds signatures during hero selection.
+
+Final editing copy: `build/KLS-D-68303d69bf-WorldEditor-20261001-HeroObjects-Preserved.w3m`.
+SHA-256: `261da9078b64ee617c292c24a203323a823123763be5220315a6e86b1805c610`.
+Input remains `8813c8955931e8cacb695e4ec9bdb46504884810d8031bfe8118f6f5313a3dfc`.
+
+Archive inspection found only war3map.w3u changed: 25 added uabi fields and two required original-object base records (Hjsm/Npal). All other content members, including unit/doodad placements, terrain, items, abilities, skins, triggers and JASS, are byte-identical. Report: `build/forge-session/20261001-hero-objects-preservation.json`.
+
+Initial Forge export rewrote integral real fields as integers. That export (`HeroObjects-Assigned.w3m`, SHA 50151c597d7286e29ca6a2a17eeb48d81930f07cc09b55a03067c866684884cf) is superseded and must not be used. Repaired the Forge parser/writer to retain authored flat and leveled wire types, compiled wc3-forge-types-fixed.exe, selected its MCP session, and repeated edits from untouched input. Supplemental source patch: tools/wc3-forge/object-wire-types.patch. New numeric fields without original type information still require metadata-aware encoding review.
+
+The final map retains existing scripted signature effects and runtime code. It does not contain the native Selyra conversion or purchase repair. Those source candidates must be packaged with matching runtime changes after latest layout integration. Generated all-hero definitions were inspected and candidate JASS compiled with PJASS; no gameplay tests were run. Computer Use initialization remains unavailable. Next human check: open the final editing copy in standard World Editor and inspect hero Normal Abilities alongside unchanged Hero Abilities, then report any load warnings. Development status remains.
+
+
+## 2026-10-01 — Northern invasion editor handoff (base KLS-D-68303d69bf)
+
+Artifact: build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m. SHA-256: a3fb2bd5c4d36e234c66823f680bd11f08439a0cd85f9513e8174aed61b4b491. DEVELOPMENT editor handoff, no installed-package change.
+
+Gate-relative regular/boss spawning, invulnerable northern Demon Gate and preserved forecourt, relocated northern ritual contact/services, surviving-hall-only refuges/garrisons and no recreated barrier structures. Targeted JASS/WCT update preserves all other content members. Installed-API compilation, archive preservation/readback, exact Forge reopen and six focused regressions passed; all 57 static spawn-pathing samples walkable. Full suite 209/211 passed; prior signature-base and tower-tooltip expectations remain failing. Native editor/Test Map, game, multiplayer and endurance pending. See docs/NORTHERN-SPAWN-20261001.md. Next human check: save/reopen/Test Map this exact artifact and verify invulnerability and wave navigation.
+
+
+## 2026-10-01 — Northern forest/coves editor handoff (base KLS-D-68303d69bf)
+
+Artifact: build/KLS-D-68303d69bf-Forest-Coves-Final-20261001.w3m. SHA-256: c7d91e762808683fae708105b1d0fdda5cf21291cd4bcdc61e93b3a2db892929. DEVELOPMENT editor handoff; installed gameplay package unchanged.
+
+Approved north/east/west woodland: 251 trees, 50 rocks, nine isolated cliff outcrops, winding flank/rear paths and four wolf/troll/spider/ogre coves. One-time native guarded camps have personal Common/Uncommon leader equipment, consumables and existing nearby XP, outside wave accounting. Preserved all 139 original units and 1,448 original doodads; added 12 disposable camp markers and 301 scenery records. Installed-API compilation/readback passed; final Forge reopen passed; 713 trail pathing samples walkable. Full suite 214/216 passed, with the same prior spell-base and tower-tooltip failures. Native editor/Test Map, collision/creep-leash, live loot, multiplayer and endurance pending. See docs/FOREST-COVES-20261001.md. Next human check: Test Map this exact handoff, walk the woodland routes, clear a leader and verify personal loot without changing wave counts.

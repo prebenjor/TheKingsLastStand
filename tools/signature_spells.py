@@ -28,7 +28,7 @@ def description(entry):
     name,icon,damage,heal,mana,summon,count,extra,flavor=entry
     text=flavor+'|n700 cast range; 350 effect radius. 70 mana, 30-second cooldown.'
     if damage:text+=f'|nDamage: {damage} + 20 per hero level.'
-    if heal:text+=f'|nHealing: {heal} + 15 per hero level. Does not heal the king or buildings.'
+    if heal:text+=f'|nHealing: {heal} + 15 per hero level. Heals King Aldric and defending allies; excludes buildings.'
     if mana:text+=f'|nRestores {mana} mana per allied unit.'
     if summon:text+='|nSummons: 300 + 30 health per hero level; 12 + 2 base damage per hero level.'
     return text
@@ -36,6 +36,20 @@ def description(entry):
 def spell_records(ability):
     records=[]
     for i,e in enumerate(SIGNATURES):
+        if i == 21:  # Selyra: native point-targeted, single-wave area damage.
+            records.append(ability('ANrf', spell_id(i), [
+                ('anam',3,0,0,e[0]),('aher',0,0,0,0),('aite',0,0,0,0),('alev',0,0,0,1),
+                ('areq',3,0,0,''),('aart',3,0,0,'ReplaceableTextures\\CommandButtons\\BTNStarfall.dds'),
+                ('abpx',0,0,0,2),('abpy',0,0,0,1),('ahky',3,0,0,'Z'),
+                ('atp1',3,1,0,e[0]+' (Z)'),
+                ('aub1',3,1,0,description(e)+'|nA single native spell wave delivers the impact.'),
+                ('amcs',0,1,0,70),('acdn',2,1,0,30.0),('aran',2,1,0,700.0),
+                ('aare',2,1,0,350.0),('atar',3,1,0,'air,ground,enemy,nonstructure'),
+                ('adur',2,1,0,0.0),('ahdu',2,1,0,0.0),
+                ('Hbz1',0,1,1,1),('Hbz2',2,1,2,float(e[2])),('Hbz3',0,1,3,6),
+                ('Hbz4',2,1,4,0.5),('Hbz5',2,1,5,0.0),('Hbz6',2,1,6,1000000.0),
+            ]))
+            continue
         records.append(ability('ANcl',spell_id(i),[
           ('anam',3,0,0,e[0]),('aher',0,0,0,0),('aite',0,0,0,0),('alev',0,0,0,1),
           ('areq',3,0,0,''),('aart',3,0,0,'ReplaceableTextures\\CommandButtons\\BTN'+e[1]+'.dds'),

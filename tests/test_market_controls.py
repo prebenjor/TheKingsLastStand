@@ -69,7 +69,7 @@ class NativeMarketControls(unittest.TestCase):
         self.assertNotIn('UnitEquipItem(buyer,gear)', market)
         self.assertRegex(market, r'TimerStart\([^,]+,0\.25,false,function KLS_MarketEquipPurchased\)')
         self.assertIn('UnitEquipItem(buyer,gear)', equip)
-        self.assertIn('KLS_MovePurchaseToRegularInventory(buyer,gear)', equip)
+        self.assertNotIn('KLS_MovePurchaseToRegularInventory', equip)
         self.assertIn('LoadInteger(KLS_GearData,key,22)', equip)
         self.assertIn('TimerStart(equipTimer,0.25,false,function KLS_MarketEquipPurchased)', equip)
         self.assertIn('KLS_Log("ERROR native equip rejected shop item after transfer:', equip)
@@ -85,13 +85,14 @@ class NativeMarketControls(unittest.TestCase):
                       'catalog-family=', 'equipment-slot=', 'attempt='):
             self.assertIn(field, context)
 
-    def test_purchase_fallback_places_a_backpack_item_in_a_real_free_inventory_slot(self):
-        move = function_body(self.script, 'KLS_MovePurchaseToRegularInventory')
-        self.assertIn('UnitItemInSlot(buyer,slot)', move)
-        self.assertIn('UnitAddItemToSlotById(buyer,rawcode,emptySlot)', move)
-        self.assertIn('SetItemUserData(moved,GetItemUserData(gear))', move)
-        self.assertIn('SetItemCharges(moved,GetItemCharges(gear))', move)
-        self.assertIn('RemoveItem(gear)', move)
+    def test_purchase_equip_keeps_original_handle_and_checks_native_location(self):
+        equip = function_body(self.script, 'KLS_MarketEquipPurchased')
+        self.assertNotIn('KLS_MovePurchaseToRegularInventory', self.script)
+        self.assertNotIn('UnitAddItemToSlotById', equip)
+        self.assertNotIn('CreateItem(', equip)
+        self.assertIn('UnitHasItemEquipped(buyer,gear)', equip)
+        self.assertIn('GetItemUserData(gear) != p+1', equip)
+        self.assertIn('UnitHasItem(buyer,gear) or UnitHasItemBagged(buyer,gear)', equip)
 
     def test_debug_gear_report_shows_normal_and_equipped_slots_with_catalog_owner_data(self):
         report = function_body(self.script, 'KLS_ShowGearDiagnostics')

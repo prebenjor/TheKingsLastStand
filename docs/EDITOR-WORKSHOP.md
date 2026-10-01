@@ -131,7 +131,7 @@ Gameplay checks: choose one hero of **each race**, inspect worker/mine/build men
 |---|---|---|
 | Crownshire | `(0, -9000)` | Homes, farms, market activity, worn roads |
 | Moonbark Glade | `(9000, 0)` | Curving paths, groves, moonwell space, clearings |
-| Wraithfall | `(0, 9000)` | Crypts, broken stone, sparse vegetation, dark ground |
+| Crown Ritual Service | `(0, 9000)` | Crypts, broken stone, sparse vegetation, dark ground |
 
 For each village:
 
@@ -140,7 +140,7 @@ For each village:
 3. Connect entrances with paths; connect the village to the kingdom road.
 4. Cluster scenery around edges instead of scattering identical pieces uniformly.
 5. Make its quest site noticeable and reachable.
-6. Check the route with several units. Leave Wraithfall's invasion approach and cliff passages clear. Do not replace cliffs with the former gates.
+6. Check the route with several units. Leave Crown Ritual Service's invasion approach and cliff passages clear. Do not replace cliffs with the former gates.
 
 Redtusk Hold was removed entirely; do not recreate it. Inspect the troll camp as a separate authored landmark and record its units, ownership, scenery and accessible approach. Its story role has not been decided. Orc player structures and heroes remain.
 

@@ -22,7 +22,7 @@ ENEMY_DROP_THRESHOLDS = {
     'elite': (50, 100, 100, 100, 100),
     'boss': (0, 0, 0, 0, 0),
 }
-ENEMY_POTION_THRESHOLDS_PER_1000 = {'normal': 40, 'elite': 80, 'boss': 180}
+ENEMY_POTION_THRESHOLDS_PER_1000 = {'normal': 10, 'elite': 20, 'boss': 50}
 RARITY_COLORS = {
     'Common':'|cffffffff',
     'Uncommon':'|cff1eff00',
@@ -296,7 +296,7 @@ def catalog_script():
         merchant=e['tier']*2+(0 if e['family_index']<7 else 1)
         lines.append(f"    call AddItemToStock(KLS_Shops[{merchant}], '{e['rawcode']}', 1, 1)")
     for book in attribute_books():
-        lines.append(f"    call AddItemToStock(KLS_Shops[11], '{book['rawcode']}', 1, 1)")
+        lines.append(f"    call AddItemToStock(KLS_Shops[11], '{book['rawcode']}', 99, 99)")
     lines += [
         'endfunction',
         'function KLS_BookAmount takes integer itemCode returns integer',

@@ -39,7 +39,7 @@ Full machine-local report: `build/layout-review/saved-placement-audit.json`. It 
 1. Port the 64 unambiguous moved references by role, including facing and dependent gameplay coordinates. The castle is now (0, -704), spring (-1536, -1728); Aldric remains (0, 350). Markets are clustered south-west rather than the old spread-out grid.
 2. Preserve replacements and additions in a dedicated authored placement catalog; retain their existing owner, rawcode, scale and facing. Separate disposable references from authored Neutral Extra buildings before changing cleanup.
 3. Disable Redtusk town spawns, relocate its services to existing market/contact objects, and guard absent town sites in restoration/garrison logic. Keep four playable race indices.
-4. Reconcile Crownshire, Moonbark and Wraithfall contacts, encounters and escort waypoints with their moved placements. Do not infer navigation from XY positions alone.
+4. Reconcile Crownshire, Moonbark and Crown Ritual Service contacts, encounters and escort waypoints with their moved placements. Do not infer navigation from XY positions alone.
 5. Capture all six art layers from this immutable saved revision. Port reviewed unit/object changes separately before packaging; no art-only package is acceptable because it would omit the additions.
 6. Remove procedural gate spawns so they cannot overlay the authored cliffs. Preserve the 25-choice selection system without putting functional previews on replacement buildings.
 7. Build a new versioned copy only after authored unit/reference dispositions are complete. Never overwrite the currently open Forge file. Verify pathing and visual placement in Warcraft separately.

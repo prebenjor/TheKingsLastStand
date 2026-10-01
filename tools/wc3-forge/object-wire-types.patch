@@ -1,0 +1,105 @@
+--- a/internal/formats/w3objmod/w3objmod.go
++++ b/internal/formats/w3objmod/w3objmod.go
+@@ -64,6 +64,7 @@
+ // Overrides map. The list is ordered: Parse appends in wire order and Encode
+ // emits in slice order, so Parse→Encode→Parse is stable.
+ type LevelOverride struct {
++	WireType    *uint32 `json:",omitempty"` // Preserve the authored value type, including integral real values.
+ 	FourCC      string  // 4-char modification ID, OR the column-name when a FieldMap is supplied to Parse
+ 	Level       uint32  // level_variation slot (1-based level for abilities/upgrades; variation index for doodads)
+ 	DataPointer uint32  // data_pointer slot — preserved verbatim; meaningful only for a handful of multi-field abilities
+@@ -72,6 +73,7 @@
+ 
+ // CustomObject is a new derived type defined in the map.
+ type CustomObject struct {
++	WireTypes map[string]uint32 `json:",omitempty"`
+ 	ID        string            // 4-char FourCC of the new object (e.g. "D006")
+ 	BaseID    string            // FourCC of the stock type it inherits from
+ 	Overrides Overrides         // explicitly-overridden columns (base/level-0 slot)
+@@ -80,6 +82,7 @@
+ 
+ // OriginalEdit is an edit applied to a stock type's row.
+ type OriginalEdit struct {
++	WireTypes map[string]uint32 `json:",omitempty"`
+ 	BaseID    string            // FourCC of the stock type being edited
+ 	Overrides Overrides
+ 	Levels    []LevelOverride `json:",omitempty"` // per-level/per-variation overrides (opt-format only)
+@@ -157,6 +160,7 @@
+ 			return err
+ 		}
+ 		ov := Overrides{}
++		types := map[string]uint32{}
+ 		var levels []LevelOverride
+ 		for j := uint32(0); j < modCount; j++ {
+ 			modID, err := r.fourCC()
+@@ -196,19 +200,20 @@
+ 				// distinct per-level values for the same field don't collapse
+ 				// into the single flat Overrides slot.
+ 				levels = append(levels, LevelOverride{
+-					FourCC: col, Level: lv, DataPointer: dp, Value: val,
++					FourCC: col, Level: lv, DataPointer: dp, Value: val, WireType: &typ,
+ 				})
+ 			} else {
+ 				ov[col] = val
++				types[col] = typ
+ 			}
+ 		}
+ 		if custom {
+ 			out.Customs = append(out.Customs, CustomObject{
+-				ID: mod, BaseID: orig, Overrides: ov, Levels: levels,
++				ID: mod, BaseID: orig, Overrides: ov, Levels: levels, WireTypes: types,
+ 			})
+ 		} else {
+ 			out.OriginalEdits = append(out.OriginalEdits, OriginalEdit{
+-				BaseID: orig, Overrides: ov, Levels: levels,
++				BaseID: orig, Overrides: ov, Levels: levels, WireTypes: types,
+ 			})
+ 		}
+ 	}
+@@ -297,7 +302,7 @@
+ 	w.u32(origCount)
+ 	if f != nil {
+ 		for _, e := range f.OriginalEdits {
+-			if err := writeObject(w, e.BaseID, "\x00\x00\x00\x00", e.Overrides, e.Levels, version, opt, fields, rev); err != nil {
++			if err := writeObject(w, e.BaseID, "\x00\x00\x00\x00", e.Overrides, e.Levels, e.WireTypes, version, opt, fields, rev); err != nil {
+ 				return nil, fmt.Errorf("encode original edit %q: %w", e.BaseID, err)
+ 			}
+ 		}
+@@ -311,7 +316,7 @@
+ 	w.u32(customCount)
+ 	if f != nil {
+ 		for _, c := range f.Customs {
+-			if err := writeObject(w, c.BaseID, c.ID, c.Overrides, c.Levels, version, opt, fields, rev); err != nil {
++			if err := writeObject(w, c.BaseID, c.ID, c.Overrides, c.Levels, c.WireTypes, version, opt, fields, rev); err != nil {
+ 				return nil, fmt.Errorf("encode custom %q (base=%q): %w", c.ID, c.BaseID, err)
+ 			}
+ 		}
+@@ -328,7 +333,7 @@
+ // with its real level_variation + data_pointer. For non-opt files levels is
+ // ignored on the wire (there are no level slots to emit) but is still counted
+ // — callers should not populate Levels on a non-opt File.
+-func writeObject(w *writer, origID, modifiedID string, ov Overrides, levels []LevelOverride, version uint32, opt bool, fields FieldMap, rev map[string]string) error {
++func writeObject(w *writer, origID, modifiedID string, ov Overrides, levels []LevelOverride, types map[string]uint32, version uint32, opt bool, fields FieldMap, rev map[string]string) error {
+ 	if len(origID) != 4 {
+ 		return fmt.Errorf("original_id %q is not 4 chars", origID)
+ 	}
+@@ -368,6 +373,9 @@
+ 		}
+ 		val := ov[key]
+ 		typ := inferType(val)
++		if original, ok := types[key]; ok {
++			typ = original
++		}
+ 		w.bytes([]byte(modID))
+ 		w.u32(typ)
+ 		if opt {
+@@ -389,6 +397,9 @@
+ 				return fmt.Errorf("level override key %q has no 4-char modification ID (rev map miss)", lo.FourCC)
+ 			}
+ 			typ := inferType(lo.Value)
++			if lo.WireType != nil {
++				typ = *lo.WireType
++			}
+ 			w.bytes([]byte(modID))
+ 			w.u32(typ)
+ 			// Real level_variation + data_pointer — this is the fix for the

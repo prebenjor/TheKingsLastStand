@@ -21,6 +21,7 @@ from recipes import recipe_script
 from gui_sources import gui_sources
 from terrain import expanded_terrain, expanded_pathing
 from town_catalog import town_script
+from forest_catalog import camp_script
 from authored_map import read_authored_layer
 from layout_catalog import layout_globals, plot_script, market_script
 from editor_layout import placement_data
@@ -93,6 +94,7 @@ def runtime_script(build_id):
         if name == 'signatures.j':
             text = text.replace('// GENERATED_SIGNATURES', signature_spell_script())
         if name == 'crownlands.j':
+            text = text.replace('// GENERATED_FOREST_CAMPS', camp_script())
             text = text.replace('// GENERATED_TOWN_PLACEMENTS', town_script())
         if name == 'game.j':
             text = text.replace('// GENERATED_LAYOUT_GLOBALS', layout_globals())

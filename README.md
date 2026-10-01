@@ -1,5 +1,29 @@
 # The King's Last Stand
 
+Latest downloadable DEVELOPMENT handoff: [Hero and Market Repairs R2](https://github.com/prebenjor/TheKingsLastStand/releases/tag/dev-20261001-hero-market-r2). [Download map](https://github.com/prebenjor/TheKingsLastStand/releases/download/dev-20261001-hero-market-r2/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m).
+
+Latest changes: 25-hero object audit, safe ten-rank skills, king healing, original-handle purchase retries, 99-stock tomes, one-second paid healing and reduced consumable drops. Countryside is preserved. Native gameplay acceptance and the sale-popup discrepancy remain open; see [verification report](docs/HERO-MARKET-REPAIRS-20261001.md).
+
+## Current hero and market handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Hero-Market-Repairs-R2-20261001.w3m` (SHA256 `4048e415d03d920b2c258b4e78fbaa46d5153a13b4d3927bea425aa524bfc4ea`). This DEVELOPMENT revision supersedes the countryside handoff while preserving its terrain and placements. Hero normal/skin lists, safe ten-rank progression, king healing, original-handle purchase retries, 99-stock tomes, one-second castle healing and reduced consumable rolls are packaged in JASS and editable triggers. Compilation and reopened MCP readback passed. Native gameplay remains pending; the native sale-popup amount discrepancy remains unresolved. See [repair evidence and open checks](docs/HERO-MARKET-REPAIRS-20261001.md). Earlier handoff sections are historical.
+
+## Current countryside handoff — 2026-10-01
+
+Continue editing `build/KLS-D-68303d69bf-Castle-Countryside-Final-R4-20261001.w3m` (SHA256 `8d04cabf92ef4ddf68559a66636f80d6603645d08804c13528cc60d7bfe822d6`). This supersedes earlier countryside and forest editing handoffs. West/east countryside scenery, shop placement synchronization and portal/monster group corrections are implemented. Compilation, preservation and static route checks passed; standard World Editor selection and gameplay checks remain pending. This is a DEVELOPMENT editor copy, not an installed release. See `docs/CASTLE-COUNTRYSIDE-20261001.md` for preservation evidence and the required saved-shop import workflow. The original forest baseline is archived and untouched.
+
+## Forest editing handoff — 2026-10-01
+
+The user approved forests and loot coves north, east and west of the summoning gate. Continue editing `build/KLS-D-68303d69bf-Forest-Coves-Final-20261001.w3m` (SHA c7d91e762808683fae708105b1d0fdda5cf21291cd4bcdc61e93b3a2db892929), now open in Forge. It preserves the previous terrain/placements and adds woodland paths, cliff outcrops and four one-time neutral monster camps. The 12 Neutral Extra camp units are disposable editor markers; runtime camps use the forest catalog coordinates. Leaders grant personal Common/Uncommon gear and supplies, outside wave accounting. See docs/FOREST-COVES-20261001.md. This is a DEVELOPMENT editor handoff; canonical authored-layer and installed gameplay integration remain separate.
+
+
+## Northern-site continuation — 2026-10-01
+
+The current editing handoff removes both deleted racial settlements from runtime placement. Crownshire and Moonbark Glade remain; the four playable races and their gear/services remain independent. Northwatch and the Crown Ritual Warden are relocated kingdom contacts. Only surviving settlement halls receive restoration refuges and garrisons. Waves originate south of the invulnerable Northern Summoning Gate at (0, 7680), and moving that placed building also moves the wave origin. Startup no longer recreates the removed barrier structures over authored cliffs.
+
+Open `build/KLS-D-68303d69bf-Northern-Spawn-Final-20261001.w3m`. This is a separate DEVELOPMENT editor handoff based on KLS-D-68303d69bf, not a new installed gameplay package. See `docs/NORTHERN-SPAWN-20261001.md` for exact preservation and verification evidence. Older sections describing pending layout integration are superseded for these specific changes only.
+
+
 ## Sharing the current plan with another agent
 
 Start with the [September 30 friend-agent handoff](docs/FRIEND-AGENT-HANDOFF-2026-09-30.md). It includes required Markdown reading, strict visual/preservation boundaries, the latest town/story decisions, gameplay contracts, hero/building IDs, AI work, reported bugs and their evidence status, source navigation and ordered acceptance checks. Send the latest **saved and closed Terrain map separately**: the current human edits in `build/` are not included in a Git checkout or the documentation bundle.

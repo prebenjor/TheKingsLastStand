@@ -160,7 +160,7 @@ class BossMechanics(unittest.TestCase):
         cases = {
             'KLS_AddTree': (r'if tree == null then\s+return\s+endif[\s\S]*?SetDestructableMaxLife',),
             'KLS_BuildLandscape': (
-                r'set gate = KLS_CreateDestructable[\s\S]*?if gate == null then\s+return\s+endif[\s\S]*?SetDestructableInvulnerable',
+                r'call KLS_AddTree\([^\n]+\)[\s\S]*?if KLS_Ended then\s+return\s+endif',
             ),
             'KLS_CreateShops': (
                 r'set KLS_Shops\[tier\*2\+i\] = KLS_CreateUnit[\s\S]*?if KLS_Shops\[tier\*2\+i\] == null then\s+return\s+endif[\s\S]*?BlzSetUnitName',

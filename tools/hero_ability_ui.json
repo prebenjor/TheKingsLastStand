@@ -1,0 +1,443 @@
+{
+  "AEah": {
+    "name": "Thorns Aura",
+    "fields": {
+      "Eah1": "Damage Dealt to Attackers"
+    }
+  },
+  "AEar": {
+    "name": "Trueshot Aura",
+    "fields": {
+      "Ear1": "Damage Bonus (%)"
+    }
+  },
+  "AEbl": {
+    "name": "Blink",
+    "fields": {}
+  },
+  "AEer": {
+    "name": "Entangling Roots",
+    "fields": {
+      "Eer1": "Damage per Second"
+    }
+  },
+  "AEev": {
+    "name": "Evasion",
+    "fields": {
+      "Eev1": "Chance to Evade"
+    }
+  },
+  "AEfk": {
+    "name": "Fan of Knives",
+    "fields": {
+      "Efk1": "Damage Per Target",
+      "Efk2": "Maximum Total Damage"
+    }
+  },
+  "AEim": {
+    "name": "Immolation",
+    "fields": {
+      "Eim1": "Damage per Interval"
+    }
+  },
+  "AEmb": {
+    "name": "Mana Burn",
+    "fields": {
+      "Emb1": "Max Mana Drained"
+    }
+  },
+  "AEme": {
+    "name": "Metamorphosis",
+    "fields": {
+      "Eme5": "Alternate Form Hit Point Bonus"
+    }
+  },
+  "AEsf": {
+    "name": "Starfall",
+    "fields": {
+      "Esf1": "Damage Dealt"
+    }
+  },
+  "AEsh": {
+    "name": "Shadow Strike",
+    "fields": {
+      "Esh1": "Decaying Damage",
+      "Esh5": "Initial Damage"
+    }
+  },
+  "AEst": {
+    "name": "Scout",
+    "fields": {}
+  },
+  "AEsv": {
+    "name": "Vengeance",
+    "fields": {}
+  },
+  "AEtq": {
+    "name": "Tranquility",
+    "fields": {
+      "Etq1": "Life Healed"
+    }
+  },
+  "AHab": {
+    "name": "Brilliance Aura",
+    "fields": {}
+  },
+  "AHad": {
+    "name": "Devotion Aura",
+    "fields": {
+      "Had1": "Armor Bonus"
+    }
+  },
+  "AHas": {
+    "name": "Sacred Aura",
+    "fields": {
+      "hsa2": "% Healing Increase for Allies",
+      "hsa1": "% Magic Resist Increase for Allies"
+    }
+  },
+  "AHav": {
+    "name": "Avatar",
+    "fields": {
+      "Hav3": "Damage Bonus",
+      "Hav1": "Defense Bonus",
+      "Hav2": "Hit Point Bonus"
+    }
+  },
+  "AHbh": {
+    "name": "Bash",
+    "fields": {
+      "Hbh1": "Chance to Bash",
+      "Hbh3": "Damage Bonus"
+    }
+  },
+  "AHbn": {
+    "name": "Banish",
+    "fields": {
+      "Hbn1": "Movement Speed Reduction (%)"
+    }
+  },
+  "AHcl": {
+    "name": "Cleansing Fire",
+    "fields": {}
+  },
+  "AHcr": {
+    "name": "Consecration",
+    "fields": {}
+  },
+  "AHdr": {
+    "name": "Siphon Mana",
+    "fields": {}
+  },
+  "AHds": {
+    "name": "Divine Shield",
+    "fields": {}
+  },
+  "AHfa": {
+    "name": "Searing Arrows",
+    "fields": {
+      "Hfa1": "Damage Bonus"
+    }
+  },
+  "AHfs": {
+    "name": "Flame Strike",
+    "fields": {
+      "Hfs1": "Full Damage Dealt",
+      "Hfs3": "Half Damage Dealt",
+      "Hfs6": "Maximum Damage"
+    }
+  },
+  "AHhb": {
+    "name": "Holy Light",
+    "fields": {
+      "Hhb1": "Amount Healed/Damaged"
+    }
+  },
+  "AHmc": {
+    "name": "Mind Control",
+    "fields": {}
+  },
+  "AHpa": {
+    "name": "Sacred Aura",
+    "fields": {
+      "hsa2": "% Healing Increase for Allies",
+      "hsa1": "% Magic Resist Increase for Allies"
+    }
+  },
+  "AHpx": {
+    "name": "Phoenix",
+    "fields": {}
+  },
+  "AHre": {
+    "name": "Resurrection",
+    "fields": {}
+  },
+  "AHsf": {
+    "name": "Light's Mercy",
+    "fields": {}
+  },
+  "AHsl": {
+    "name": "Surge of Light",
+    "fields": {}
+  },
+  "AHtb": {
+    "name": "Storm Bolt",
+    "fields": {
+      "Htb1": "Damage"
+    }
+  },
+  "AHtc": {
+    "name": "Thunder Clap",
+    "fields": {
+      "Htc1": "AOE Damage"
+    }
+  },
+  "AK00": {
+    "name": "Dawn Verdict",
+    "fields": {}
+  },
+  "AK01": {
+    "name": "Runebreaker",
+    "fields": {}
+  },
+  "AK02": {
+    "name": "Sanctuary of Hope",
+    "fields": {}
+  },
+  "AK03": {
+    "name": "Phoenix Flare",
+    "fields": {}
+  },
+  "AK04": {
+    "name": "Steel Tempest",
+    "fields": {}
+  },
+  "AK05": {
+    "name": "Stormpack",
+    "fields": {}
+  },
+  "AK06": {
+    "name": "Ancestral Reckoning",
+    "fields": {}
+  },
+  "AK07": {
+    "name": "Serpent Communion",
+    "fields": {}
+  },
+  "AK08": {
+    "name": "Fel Hunger",
+    "fields": {}
+  },
+  "AK09": {
+    "name": "Grove Awakening",
+    "fields": {}
+  },
+  "AK10": {
+    "name": "Moonwell Convergence",
+    "fields": {}
+  },
+  "AK11": {
+    "name": "Umbral Harvest",
+    "fields": {}
+  },
+  "AK12": {
+    "name": "Soul Covenant",
+    "fields": {}
+  },
+  "AK13": {
+    "name": "Winters Grasp",
+    "fields": {}
+  },
+  "AK14": {
+    "name": "Black Hunt",
+    "fields": {}
+  },
+  "AK15": {
+    "name": "Ilastar's Last Light",
+    "fields": {}
+  },
+  "AK16": {
+    "name": "Cleansing Pyre",
+    "fields": {}
+  },
+  "AK17": {
+    "name": "Crownward Rally",
+    "fields": {}
+  },
+  "AK18": {
+    "name": "Flintlock Barrage",
+    "fields": {}
+  },
+  "AK19": {
+    "name": "Redtusk Earthshatter",
+    "fields": {}
+  },
+  "AK20": {
+    "name": "Ashen Spiritpack",
+    "fields": {}
+  },
+  "AK21": {
+    "name": "Moonlance Volley",
+    "fields": {}
+  },
+  "AK22": {
+    "name": "Briarward Stand",
+    "fields": {}
+  },
+  "AK23": {
+    "name": "Wraithveil Curse",
+    "fields": {}
+  },
+  "AK24": {
+    "name": "Bonecrown Guard",
+    "fields": {}
+  },
+  "AKfn": {
+    "name": "Briar Host",
+    "fields": {}
+  },
+  "ANba": {
+    "name": "Black Arrow",
+    "fields": {}
+  },
+  "ANch": {
+    "name": "Charm",
+    "fields": {}
+  },
+  "ANcp": {
+    "name": "Righteous Fury",
+    "fields": {}
+  },
+  "ANdr": {
+    "name": "Life Drain",
+    "fields": {}
+  },
+  "ANsi": {
+    "name": "Silence",
+    "fields": {}
+  },
+  "AOae": {
+    "name": "Endurance Aura",
+    "fields": {
+      "Oae2": "Attack Speed Increase (%)",
+      "Oae1": "Movement Speed Increase (%)"
+    }
+  },
+  "AOcl": {
+    "name": "Chain Lightning",
+    "fields": {
+      "Ocl1": "Damage per Target"
+    }
+  },
+  "AOcr": {
+    "name": "Critical Strike",
+    "fields": {
+      "Ocr2": "Damage Multiplier"
+    }
+  },
+  "AOeq": {
+    "name": "Earthquake",
+    "fields": {}
+  },
+  "AOfs": {
+    "name": "Far Sight",
+    "fields": {}
+  },
+  "AOhw": {
+    "name": "Healing Wave",
+    "fields": {
+      "Ocl1": "Damage per Target"
+    }
+  },
+  "AOhx": {
+    "name": "Hex",
+    "fields": {}
+  },
+  "AOmi": {
+    "name": "Mirror Image",
+    "fields": {}
+  },
+  "AOre": {
+    "name": "Reincarnation",
+    "fields": {}
+  },
+  "AOsf": {
+    "name": "Feral Spirit",
+    "fields": {}
+  },
+  "AOsh": {
+    "name": "Shockwave",
+    "fields": {
+      "Osh1": "Damage"
+    }
+  },
+  "AOsw": {
+    "name": "Serpent Ward",
+    "fields": {}
+  },
+  "AOvd": {
+    "name": "Big Bad Voodoo",
+    "fields": {}
+  },
+  "AOwk": {
+    "name": "Wind Walk",
+    "fields": {
+      "Owk3": "Backstab Damage"
+    }
+  },
+  "AOws": {
+    "name": "War Stomp",
+    "fields": {
+      "Wrs1": "Damage"
+    }
+  },
+  "AOww": {
+    "name": "Bladestorm",
+    "fields": {
+      "Oww1": "Damage Per Second"
+    }
+  },
+  "AUan": {
+    "name": "Animate Dead",
+    "fields": {}
+  },
+  "AUau": {
+    "name": "Unholy Aura",
+    "fields": {
+      "Uau2": "Life Regeneration Increase (%)",
+      "Uau1": "Movement Speed Increase (%)"
+    }
+  },
+  "AUdc": {
+    "name": "Death Coil",
+    "fields": {
+      "Udc1": "Amount Healed/Damaged"
+    }
+  },
+  "AUdd": {
+    "name": "Death And Decay",
+    "fields": {
+      "Udd1": "Max Life Drained per Second (%)"
+    }
+  },
+  "AUdp": {
+    "name": "Death Pact",
+    "fields": {}
+  },
+  "AUdr": {
+    "name": "Dark Ritual",
+    "fields": {
+      "Udp1": "Life Converted to Mana"
+    }
+  },
+  "AUfn": {
+    "name": "Frost Nova",
+    "fields": {
+      "Ufn1": "Area of Effect Damage"
+    }
+  },
+  "AUfu": {
+    "name": "Frost Armor",
+    "fields": {}
+  }
+}

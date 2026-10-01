@@ -1,10 +1,10 @@
-"""Placements and identity for the four allied Crownlands settlements."""
+"""Surviving settlements and relocated Crownlands services; stable racial service indices."""
 
 TOWNS = (
     {'race':'Human','name':'Crownshire','x':0.0,'y':-9000.0,'hall':'htow','barracks':'hbar','food':'hhou','blacksmith':'hbla','altar':'h000','worker':'hpea','shop':'Crownshire Provisioner','quest':'Crownshire Supplymaster','quest_id':0},
-    {'race':'Orc','name':'Redtusk Hold','x':-9000.0,'y':0.0,'hall':'ogre','barracks':'obar','food':'otrb','blacksmith':'ofor','altar':'kA01','worker':'opeo','shop':'Redtusk Quartermaster','quest':'Northwatch Vanguard','quest_id':1},
+    {'race':'Orc','name':'Northwatch Service','active':False,'x':1792.0,'y':-2304.0,'shop_xy':(1792.0,-2304.0),'quest_xy':(-4096.0,-8064.0),'hall':'ogre','barracks':'obar','food':'otrb','blacksmith':'ofor','altar':'kA01','worker':'opeo','shop':'Crown Quartermaster','quest':'Northwatch Vanguard','quest_id':1},
     {'race':'Night Elf','name':'Moonbark Glade','x':9000.0,'y':0.0,'hall':'etol','barracks':'eaow','food':'emow','blacksmith':'eaoe','altar':'kA02','worker':'ewsp','shop':'Moonbark Curator','quest':'Moonbark Warden','quest_id':2},
-    {'race':'Undead','name':'Wraithfall','x':0.0,'y':9000.0,'hall':'unpl','barracks':'usep','food':'uzig','blacksmith':'uslh','altar':'kA03','worker':'uaco','shop':'Wraithfall Broker','quest':'Wraithfall Keeper','quest_id':3},
+    {'race':'Undead','name':'Crown Ritual Service','active':False,'x':2112.0,'y':-2560.0,'shop_xy':(2112.0,-2560.0),'quest_xy':(1024.0,-1792.0),'hall':'unpl','barracks':'usep','food':'uzig','blacksmith':'uslh','altar':'kA03','worker':'uaco','shop':'Crown Relic Broker','quest':'Crown Ritual Warden','quest_id':3},
 )
 
 QUEST_RAWCODES = ('kQ00','kQ01','kQ02','kQ03')
@@ -15,6 +15,10 @@ def town_placements():
     result = []
     for town in TOWNS:
         x, y = town['x'], town['y']
+        if not town.get('active', True):
+            result.append((town['race'],'shop',*town['shop_xy']))
+            result.append((town['race'],QUEST_RAWCODES[town['quest_id']],*town['quest_xy']))
+            continue
         if town['race'] in ('Human','Undead'):
             sign = -1 if town['race'] == 'Human' else 1
             positions = (

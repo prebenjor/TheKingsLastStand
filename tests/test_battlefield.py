@@ -19,12 +19,12 @@ class BattlefieldRegression(unittest.TestCase):
     def test_playable_terrain_is_192_cells_square(self):
         self.assertEqual(getattr(map_info, 'MAP_CELLS', None), 192)
 
-    def test_four_outer_settlements_are_reachable_on_branch_roads(self):
+    def test_settlement_and_relocated_service_coordinates_match_catalog(self):
         towns = getattr(map_info, 'TOWNS', ())
         self.assertEqual(len(towns), 4)
         self.assertEqual({(name, round(x), round(y)) for name, x, y in towns},
-                         {('Human', 0, -9000), ('Orc', -9000, 0),
-                          ('Night Elf', 9000, 0), ('Undead', 0, 9000)})
+                         {('Human', 0, -9000), ('Orc', 1792, -2304),
+                          ('Night Elf', 9000, 0), ('Undead', 2112, -2560)})
 
     def test_expanded_ground_pathing_and_editor_bounds_match_layout(self):
         template = ROOT / 'source/template'
@@ -96,11 +96,11 @@ class BattlefieldRegression(unittest.TestCase):
             for y in range(350, 7100, 32):
                 self.assertFalse(flags(x, y) & 2)
 
-    def test_runtime_builds_gates_castle_and_player_plot_coordinates(self):
+    def test_runtime_uses_northern_origin_castle_and_player_plot_coordinates(self):
         script = runtime_script('TEST-BUILD')
-        for marker in ["CreateDestructable('LTg1'", "'hC01'",
+        for marker in ['call KLS_InvasionGateInit()', "'hC01'",
                        'set KLS_X[0] = -6000', 'set KLS_X[3] = 6000',
-                       '6200 + I2R(n / 5) * 40', 'KLS_CreateShops()']:
+                       'GetUnitY(gate) - 1400', 'KLS_CreateShops()']:
             self.assertIn(marker, script)
 
     def test_base_lumber_stands_are_closer_without_occupying_the_hall_or_altar_side(self):

@@ -37,22 +37,22 @@ _TOWER_TOOLTIPS = {
     'Human': (
         'A Human roadside watchtower. Its arrows deal 18 base damage to attackers.',
         'A Human bombardment tower. Heavy shots deal 70 base damage to attackers.',
-        'A Human Sanctuary Tower. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        "A consecrated watchtower that shelters Aldric's defenders. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.",
     ),
     'Orc': (
         'An Orc lookout tower. Its attacks deal 18 base damage to approaching enemies.',
         'An Orc Redtusk heavy tower. Its crushing shots deal 70 base damage to attackers.',
-        'An Orc Spirit Ward. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Ancestral spirits shelter warriors beneath this ward. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
     'Night Elf': (
         'A Night Elf Ancient Protector guarding the woodland road. Its attacks deal 18 base damage.',
         'A Night Elf Moonfire Spire that lashes invaders for 70 base damage.',
-        'A Night Elf Moonwell Sentinel. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Moonlit waters sustain the defenders of the glade. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
     'Undead': (
         'An Undead Ziggurat Tower guarding the approach. Its attacks deal 18 base damage.',
         'An Undead Frost Tower that strikes invaders for 70 base damage.',
-        'An Undead Soulwell Spire. Restores 15 health to nearby allied units every 3 seconds within 650 range.',
+        'Bound souls sustain the armies of the crown. Automatically restores 15 health to living allied heroes and troops within 650 range every 3 seconds. Does not heal buildings. Healing stops during boss tower suppression.',
     ),
 }
 _COMPANY_TOOLTIPS = {

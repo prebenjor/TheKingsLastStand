@@ -27,7 +27,19 @@ def units():
     # and consume the same hero skill point without becoming ranked abilities.
     def learned_hero_skills(hero_id):
         return ','.join(dict.fromkeys(HERO_ABILITIES[hero_id]))
-    from hero_catalog import NEW_HEROES, HERO_BASE_HP_OVERRIDES
+    from hero_catalog import NEW_HEROES, HERO_BASE_HP_OVERRIDES, HERO_TYPES, HERO_PARENT_TYPES
+    from hero_progression import _slk, ROOT
+    from signature_spells import spell_id
+    native_unit_abilities = _slk(ROOT / 'tools/reference/installed/UnitAbilities.slk')
+    native_normal_column = next(k for k, v in native_unit_abilities[1].items() if v == 'abilList')
+    native_normal = {row.get(1): row.get(native_normal_column, '')
+                     for row in native_unit_abilities.values() if row.get(1)}
+    signature_indices = {hero_id: i for i, hero_id in enumerate(HERO_TYPES)}
+    signature_indices.update({h['unit_id']: h['signature_index'] for h in NEW_HEROES})
+    def normal_hero_skills(hero_id, parent):
+        return ','.join(dict.fromkeys(
+            [a for a in native_normal[parent].split(',') if a not in ('', '_', '-')]
+            + [spell_id(signature_indices[hero_id])]))
     zero_hero_growth = {'ustp':0.0,'uinp':0.0,'uagp':0.0}
     original = [record(faction['worker'], '\0\0\0\0', {
         'ubui':','.join(faction['build_menu']), 'ureq':''}) for faction in FACTIONS]
@@ -50,9 +62,12 @@ def units():
     for hero_id, abilities in HERO_ABILITIES.items():
         if hero_id not in custom_hero_ids:
             original.append(record(hero_id, '\0\0\0\0', {
-                'uhab': learned_hero_skills(hero_id), **zero_hero_growth}))
+                'uhab': learned_hero_skills(hero_id), 'uhas': learned_hero_skills(hero_id),
+                'uabi': normal_hero_skills(hero_id, HERO_PARENT_TYPES[hero_id]),
+                'uabs': normal_hero_skills(hero_id, HERO_PARENT_TYPES[hero_id]), **zero_hero_growth}))
     custom = [
-        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'ureq':'','uhpm':HERO_BASE_HP_OVERRIDES['H000'],**zero_hero_growth}),
+        record('ndmg', 'kInv', {'unam':'Northern Summoning Gate','uabi':'Avul','utra':'','ureq':'','uaen':0,'utub':'An impenetrable summoning gate. Enemy waves emerge from its southern forecourt.'}),
+        record('Hamg', 'H000', {'unam':'Priest','uhab':learned_hero_skills('H000'),'uhas':learned_hero_skills('H000'),'uabi':normal_hero_skills('H000','Hamg'),'uabs':normal_hero_skills('H000','Hamg'),'ureq':'','uhpm':HERO_BASE_HP_OVERRIDES['H000'],**zero_hero_growth}),
         record('Hvwd', 'H001', {'unam':'Ranger','uhab':'ANba,ANsi,ANdr,ANch','ureq':''}),
         record('halt', 'h000', {'unam':'Altar of Kings','utip':'Build Altar of Kings','utub':_ALTAR_TOOLTIPS['Human']+' Only one hero per player.','utra':'','ures':'','urev':0,'ureq':'','ugol':160,'ulum':70,'ubld':30,'uhpm':900}),
         record('hars', 'h004', {'unam':'Arcane Sanctum','utip':'Build Arcane Sanctum','utub':_ARCANE_TOOLTIPS['Human'],'utra':'hmpr,hsor','ures':'Rhpt,Rhst','ureq':'','ugol':160,'ulum':70,'ubld':30}),
@@ -60,8 +75,19 @@ def units():
         record('hctw', 'h002', {'unam':_TOWER_NAMES['Human'][1],'utip':_TOWER_NAMES['Human'][1],'utub':_TOWER_TOOLTIPS['Human'][1],'ureq':'','uupt':'','ua1b':70,'ugol':260,'ulum':100,'ubld':35,'uhpm':850}),
         record('hatw', 'h003', {'unam':_TOWER_NAMES['Human'][2],'utip':_TOWER_NAMES['Human'][2],'utub':_TOWER_TOOLTIPS['Human'][2],'ureq':'','uupt':'','ua1b':14,'ugol':220,'ulum':100,'ubld':30,'uhpm':750}),
     ]
-    for rank, (health, damage) in enumerate(((300,15),(450,22),(600,30),(660,33),(720,36)), start=1):
-        custom.append(record('efon','kT0'+str(rank),{'unam':'Briar Host Treant','uhpm':health,'ua1b':damage,'ua1d':0,'ua1s':0,'ureq':''}))
+    from forest_catalog import CAMPS
+    for i, camp in enumerate(CAMPS):
+        for prefix, base, name in (('L', camp['leader'], camp['name']+' Guardian'),
+                                   ('M', camp['guard'], camp['name']+' Defender')):
+            fields = {'unam':name, 'ureq':'', 'ubba':0, 'ubdi':0, 'ubsi':0}
+            if prefix == 'L':
+                fields.update({'uhpm':(900,1200,1600,2200)[i], 'ua1b':(20,26,35,45)[i],
+                               'utub':'Defeat this camp leader for personal '+('Common' if camp['quality']==0 else 'Uncommon')+' equipment and healing supplies.'})
+            custom.append(record(base,f'k{prefix}{i:02d}',fields))
+    for rank in range(1, 11):
+        health, damage = ((300,15),(450,22),(600,30))[rank-1] if rank <= 3 else (round(600*(1+.1*(rank-3))),round(30*(1+.1*(rank-3))))
+        from hero_progression import briar_unit_id
+        custom.append(record('efon',briar_unit_id(rank),{'unam':'Briar Host Treant','uhpm':health,'ua1b':damage,'ua1d':0,'ua1s':0,'ureq':''}))
     custom.append(record('hbew','kCar',{'unam':'Northwatch Supply Caravan','uabi':'','uhpm':1800,'umvt':'foot','umvs':140,'uaen':0,'upat':'','ucol':32.0,'ufoo':0}))
     from town_catalog import TOWNS, QUEST_RAWCODES
     for town in TOWNS:
@@ -71,6 +97,9 @@ def units():
     for hero in NEW_HEROES:
         custom.append(record(hero['base'], hero['unit_id'], {
             'unam':hero['name'], 'upro':hero['name'],
+            'uabi':normal_hero_skills(hero['unit_id'], hero['base']),
+            'uabs':normal_hero_skills(hero['unit_id'], hero['base']),
+            'uhas':learned_hero_skills(hero['unit_id']),
             'uhab':learned_hero_skills(hero['unit_id']), 'ureq':'', **zero_hero_growth,
         }))
     from company_catalog import HERO_COMPANIES
@@ -161,7 +190,7 @@ def items():
     for book in attribute_books():
         fields={'icla':'Power-ups','unam':book['name'],'utip':book['name'],
                 'utub':book['description'],'igol':book['price'],'iabi':'',
-                'iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':1}
+                'iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':1,'isto':99,'istr':0,'isst':0}
         custom.append(record(book['parent'],book['rawcode'],fields))
     for recipe in recipe_catalog(item_catalog()):
         fields={'icla':'Power-ups','unam':'Forge Recipe: '+recipe['name'],
@@ -176,7 +205,7 @@ def items():
             'utub':research['description'],'igol':research['gold'],'ilum':research['lumber'],
             'iabi':'','iequ':0,'iusa':0,'iper':0,'iuse':0,'idro':0,'ipaw':0,'isel':0,
         }))
-    controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0})]
+    controls=[record('phea','KHE1',{'icla':'Miscellaneous','unam':'Heal King Aldric','utip':'Heal King Aldric','utub':'Restore up to 2,000 King Aldric health. Costs 150 gold and 50 lumber. Available again after one second. If he is at full health, the cost is refunded.','igol':150,'ilum':50,'iequ':0,'iusa':0,'iper':0,'idro':0,'ipaw':0,'isel':0,'isto':1,'istr':1,'isst':0})]
     for tier in range(5):
         raw='KUP'+str(tier+1)
         cost=400+200*tier
